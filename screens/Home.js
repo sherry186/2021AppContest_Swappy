@@ -20,41 +20,7 @@ function Home({navigation}) {
         <View>
             <SearchBar/>
             <ItemsList/>
-            <Text> </Text>
-            <TouchableOpacity 
-                style={styles.button} 
-                onPress = {()=>{navigation.navigate("Home")}}
-                >
-
-                <Text style={styles.buttonText}>Home</Text>
-
-            </TouchableOpacity>
-            <TouchableOpacity 
-                style={styles.button} 
-                onPress = {()=>{navigation.navigate("Social")}}
-                >
-
-                <Text style={styles.buttonText}>Social</Text>
-
-            </TouchableOpacity>
-            <TouchableOpacity 
-                style={styles.button} 
-                onPress = {()=>{navigation.navigate("Record")}}
-                >
-
-                <Text style={styles.buttonText}>Record</Text>
-
-            </TouchableOpacity>
-            <TouchableOpacity 
-                style={styles.button} 
-                onPress = {()=>{navigation.navigate("Personal")}}
-                >
-
-                <Text style={styles.buttonText}>Personal</Text>
-
-            </TouchableOpacity>
-
-            {/* <BottomBar/> */}
+            
             
         </View>
         
