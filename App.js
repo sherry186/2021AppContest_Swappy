@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import Tabs from './navigators/root';
+import TopTabNavigator from './navigators/ggtab'
 // React nav
 //import Root from './navigators/root';
 
