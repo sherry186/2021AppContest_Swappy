@@ -15,10 +15,19 @@ import BottomBar from '../Components/BottomBar.js';
 
 
 function Home({navigation}) {
+    const [value, setValue] = useState()
+    function updateSearch(value) {
+        //do your search logic or anything
+        console.log(value)
+    }
 
     return (
         <View>
-            <SearchBar/>
+            <Searchbar
+                    value={value}
+                    updateSearch={updateSearch}
+                    style={{ marginTop: '8%' }}
+                />
             <ItemsList/>
             
             
