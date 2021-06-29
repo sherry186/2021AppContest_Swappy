@@ -15,7 +15,7 @@ import BottomBar from '../Components/BottomBar.js';
 
 
 function Home({navigation}) {
-    const [value, setValue] = useState()
+    const [value, setValue] = useState('')
     function updateSearch(value) {
         //do your search logic or anything
         console.log(value)
