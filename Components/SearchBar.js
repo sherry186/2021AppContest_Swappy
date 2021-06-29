@@ -4,6 +4,8 @@ import {
     Button,
     TextInput,
     StyleSheet,
+    Image,
+    TouchableOpacity,
   } from "react-native";
 
   export default function Searchbar({ value, updateSearch, style }) {

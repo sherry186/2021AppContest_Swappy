@@ -23,7 +23,7 @@ function Home({navigation}) {
 
     return (
         <View>
-            <Searchbar
+            <SearchBar
                     value={value}
                     updateSearch={updateSearch}
                     style={{ marginTop: '8%' }}
