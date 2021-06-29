@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 function Personal() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
+      <Text>presonal screen</Text>
     </View>
   );
 }
