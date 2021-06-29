@@ -1,11 +1,14 @@
 import * as React from 'react';
-
+import { NavigationContainer } from '@react-navigation/native';
+import Tabs from './navigators/root';
 // React nav
-import Root from './navigators/root';
+//import Root from './navigators/root';
 
 export default function App() {
   return (
-    <Root />
+    <NavigationContainer>
+      <Tabs />
+    </NavigationContainer>
   );
 }
 
