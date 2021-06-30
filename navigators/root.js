@@ -114,4 +114,4 @@ const styles = StyleSheet.create({
 })
 
   
-  export default Tabs;
+export default Tabs;
