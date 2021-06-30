@@ -28,8 +28,7 @@ function Home({navigation}) {
                     updateSearch={updateSearch}
                     style={{ marginTop: '8%' }}
                 />
-            <ItemsList/>
-            
+            <ItemsList/>          
             
         </View>
         
