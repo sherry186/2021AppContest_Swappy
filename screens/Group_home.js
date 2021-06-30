@@ -3,27 +3,25 @@ import * as React from 'react';
 import { View, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { SearchBar } from 'react-native-elements';
 import { useState } from "react";
+import _ from "lodash"
 
-const GENERAL_DATA = [
-  {
-    id: '0',
-    title: 'Group 1',
-  },
-  {
-    id: '1',
-    title: 'Group 2',
-  },
-  {
-    id: '2',
-    title: 'Group 3',
-  },
-];
+import GroupItems from '../Data/GroupItems';
 
 const Item = ({ title }) => (
   <View style={styles.item}>
     <Text style={styles.title}>{title}</Text>
   </View>
 );
+
+const contains = (data, query) => {
+  formatData = data.toLowerCase();
+  formatQuery = query.toLowerCase();
+
+  if (formatData.includes(formatQuery)) {
+    return true;
+  }
+  return false;
+}
 
 
 const renderItem = ({ item }) => (
@@ -34,15 +32,28 @@ export default class Group_HOME extends React.Component {
 
   state = {
     search: '',
+    data: [],
+    fullData: [],
   };
 
   static navigationOptions = {
     title: 'Group_HOME',
   }
 
-  updateSearch = (search) => {
-    this.setState({ search });
+  handleSearch = (search) => {
+    console.log("search", search)
+    const data = _.filter(this.state.fullData, group => {
+      return contains(group.title, search)
+    })
+    this.setState({ data,  search});
   };
+
+  componentDidMount() {
+    this.setState({
+      data: GroupItems,
+      fullData: GroupItems,
+    });
+  }
   
 
   render() {
@@ -55,11 +66,12 @@ export default class Group_HOME extends React.Component {
       <SafeAreaView style={styles.container}>
         <SearchBar
         placeholder="Type Here..."
-        onChangeText={this.updateSearch}
+        onChangeText={this.handleSearch}
         value={search}
+        lightTheme
       />
       <FlatList
-        data={GENERAL_DATA}
+        data={this.state.data}
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />

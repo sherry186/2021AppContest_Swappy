@@ -4,21 +4,8 @@ import SearchBar from '../Components/SearchBar';
 import { StyleSheet,  SafeAreaView, FlatList, StatusBar } from "react-native";
 import { useState } from "react";
 
+import GeneralItems from '../Data/GeneralItems';
 
-const GENERAL_DATA = [
-    {
-      id: '0',
-      title: 'Jacket',
-    },
-    {
-      id: '1',
-      title: 'Purse',
-    },
-    {
-      id: '2',
-      title: 'Book',
-    },
-];
 
 const Item = ({ title }) => (
     <View style={styles.item}>
@@ -43,7 +30,7 @@ function General() {
             <SearchBar value={value}
                     updateSearch={updateSearch}/>
       <FlatList
-        data={GENERAL_DATA}
+        data={GeneralItems}
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
