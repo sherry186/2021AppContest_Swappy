@@ -2,8 +2,7 @@ import * as React from 'react';
 
 import { View, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { SearchBar } from 'react-native-elements';
-import { useState } from "react";
-import _ from "lodash"
+import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 
 import GroupItems from '../Data/GroupItems';
 
@@ -14,8 +13,8 @@ const Item = ({ title }) => (
 );
 
 const contains = (data, query) => {
-  formatData = data.toLowerCase();
-  formatQuery = query.toLowerCase();
+  let formatData = data.toLowerCase();
+  let formatQuery = query.toLowerCase();
 
   if (formatData.includes(formatQuery)) {
     return true;
@@ -65,11 +64,11 @@ export default class Group_HOME extends React.Component {
     return(
       <SafeAreaView style={styles.container}>
         <SearchBar
-        placeholder="Type Here..."
-        onChangeText={this.handleSearch}
-        value={search}
-        lightTheme
-      />
+          placeholder="Type Here..."
+          onChangeText={this.handleSearch}
+          value={search}
+          lightTheme
+        />
       <FlatList
         data={this.state.data}
         renderItem={renderItem}

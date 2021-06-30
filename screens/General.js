@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { View, Text } from 'react-native';
-import SearchBar from '../Components/SearchBar';
-import { StyleSheet,  SafeAreaView, FlatList, StatusBar } from "react-native";
-import { useState } from "react";
+import { View, Text, StyleSheet,  SafeAreaView, FlatList, StatusBar } from 'react-native';
+import { useState, useEffect } from "react";
+import { SearchBar } from 'react-native-elements';
+import _ from "lodash";
 
 import GeneralItems from '../Data/GeneralItems';
 
@@ -18,23 +18,49 @@ const renderItem = ({ item }) => (
     <Item title={item.title} />
 );
 
-function updateSearch(value) {
-    //do your search logic or anything
-    console.log(value)
+const contains = (data, query) => {
+  let formatData = data.toLowerCase();
+  let formatQuery = query.toLowerCase();
+
+  if (formatData.includes(formatQuery)) {
+    return true;
+  }
+  return false;
 }
 
 function General() {
-    const [value, setValue] = useState('')
+  const [search, setSearch] = useState('');
+  const [data, setData] = useState([]);
+  const [fullData, setFullData] = useState([]);
+
+  function handleSearch(search) {
+    console.log(search);
+    const data = _.filter(fullData, general => {
+      return contains(general.title, search)
+    })
+    setData(data);
+    setSearch(search);
+  }
+
+  useEffect(() => {
+    setData(GeneralItems);
+    setFullData(GeneralItems);
+  }, [])
+
     return (
-        <SafeAreaView style={styles.container}>
-            <SearchBar value={value}
-                    updateSearch={updateSearch}/>
-      <FlatList
-        data={GeneralItems}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-      />
-    </SafeAreaView>
+      <SafeAreaView style={styles.container}>
+        <SearchBar
+          placeholder="Type Here..."
+          onChangeText={(text)=>handleSearch(text)}
+          value={search}
+          lightTheme
+        />
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+        />
+      </SafeAreaView>
     );
 }
 
