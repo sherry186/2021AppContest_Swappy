@@ -25,12 +25,12 @@ export default class Group_ADD extends React.Component {
         <Text style={styles.buttonText}>Group Name</Text>
         <TextInput
             style={styles.input}
-            onChangeText={(text) => this.setState({Gname})}
+            onChangeText={(text) => this.setState({Gname: text})}
             value = {this.state.Gname}/>
         <Text style={styles.buttonText}>Tags</Text>
         <TextInput
             style={styles.input}
-            onChangeText={(text) => this.setState({Tags})}
+            onChangeText={(text) => this.setState({Tags: text})}
             value = {this.state.Tags}/>
         
         {/* <Button
