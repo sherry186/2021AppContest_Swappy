@@ -14,7 +14,7 @@ export default class Group_ADD extends React.Component {
   }
   constructor(props) {
     super(props);
-    this.state = { text: '' };
+    this.state = { Gname: 'Change group', Tags: 'item1, item2, item3', };
   }
 
 
@@ -25,8 +25,13 @@ export default class Group_ADD extends React.Component {
         <Text style={styles.buttonText}>Group Name</Text>
         <TextInput
             style={styles.input}
-            onChangeText={(text) => this.setState({text})}
-            value = {this.state.text}/>
+            onChangeText={(text) => this.setState({Gname})}
+            value = {this.state.Gname}/>
+        <Text style={styles.buttonText}>Tags</Text>
+        <TextInput
+            style={styles.input}
+            onChangeText={(text) => this.setState({Tags})}
+            value = {this.state.Tags}/>
         
         {/* <Button
             title = 'Go to home screen'
