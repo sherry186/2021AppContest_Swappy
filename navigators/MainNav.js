@@ -28,8 +28,8 @@ function Main() {
         options={{
           title:"",
           headerStyle:{
-            backgroundColor: 'transparent',
-            
+            backgroundColor: 'transparent', 
+            height: 60  
           }
         }}/>
       <MStack.Screen 
