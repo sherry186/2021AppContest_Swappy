@@ -46,6 +46,9 @@ export default class Main_ADD extends React.Component {
     this.props.navigation.navigate('Home')
   } 
   
+  handleupload = () =>{
+
+  }
 
 
   render() {
@@ -77,7 +80,15 @@ export default class Main_ADD extends React.Component {
           <Text 
             style = {styles.Text}>
               hide name {this.label[this.state.hide]}</Text> 
-      
+
+        <TouchableOpacity
+            title = 'upload'
+            onPress={this.handleupload}
+            style = {styles.item}>
+            <Text
+              style = {styles.buttonText}>Upload</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity
             title = 'Submit'
             onPress={this.handlesubmit}
