@@ -10,8 +10,26 @@ const MyStack = createStackNavigator();
 function Group() {
   return (
     <MyStack.Navigator>
-      <MyStack.Screen name="Home" component={Group_HOME} />
-      <MyStack.Screen name="ADD" component={Group_ADD} />
+      <MyStack.Screen 
+        name="Home" 
+        component={Group_HOME}
+        options={{
+          title:"",
+          headerStyle:{
+            backgroundColor: 'transparent',
+            height: 0
+          }
+        }} />
+      <MyStack.Screen 
+        name="ADD" 
+        component={Group_ADD}
+        options={{
+          title:"",
+          headerStyle:{
+            backgroundColor: 'transparent',
+            
+          }
+        }}/>
     </MyStack.Navigator>
   );
 }
