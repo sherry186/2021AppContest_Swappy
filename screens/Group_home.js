@@ -6,11 +6,7 @@ import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 
 import GroupItems from '../Data/GroupItems';
 
-const Item = ({ title }) => (
-  <View style={styles.item}>
-    <Text style={styles.title}>{title}</Text>
-  </View>
-);
+
 
 const contains = (data, query) => {
   let formatData = data.toLowerCase();
@@ -23,9 +19,6 @@ const contains = (data, query) => {
 }
 
 
-const renderItem = ({ item }) => (
-  <Item title={item.title} />
-);
 
 export default class Group_HOME extends React.Component {
 
@@ -46,6 +39,15 @@ export default class Group_HOME extends React.Component {
     })
     this.setState({ data,  search});
   };
+
+  renderItem = ({ item }) => (
+    //console.log(this.props.navigation);
+    <TouchableOpacity 
+      style={styles.item}
+      onPress={() => this.props.navigation.navigate('Detail', {ItemsID: item.id, title: item.title})}>
+        <Text style={styles.title}>{item.title}</Text>
+    </TouchableOpacity>
+  );
 
   componentDidMount() {
     this.setState({
@@ -71,7 +73,7 @@ export default class Group_HOME extends React.Component {
         />
       <FlatList
         data={this.state.data}
-        renderItem={renderItem}
+        renderItem={this.renderItem}
         keyExtractor={item => item.id}
       />
         <TouchableOpacity 
