@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
       marginTop: '2%',
       width: '89%',
       color: 'white',
-
   },
   vwClear: {
       flex: 0.2,
@@ -99,8 +98,7 @@ const styles = StyleSheet.create({
   container: {
       height: 80,
       alignItems: 'center',
+      
       // height: '100%', width: '100%' 
   },
 });
-
-

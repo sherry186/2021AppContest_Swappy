@@ -5,7 +5,7 @@ import { SearchBar } from 'react-native-elements';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 
 import SocialItems from '../../Data/SocialItems';
-
+import SocialCollection from '../../Data/SocialCollection';
 
 
 const contains = (data1, data2, query) => {
@@ -20,14 +20,17 @@ const contains = (data1, data2, query) => {
   return false;
 }
 
-const isMine = (data, query) => {
-    let formatData = data.toLowerCase();  
-    let formatQuery = query.toLowerCase();
-  
-    if (formatData == formatQuery){
-      return true;
+
+
+const inMyList = (data, collection) => {
+    let query = collection
+    let data1 = data
+    for(let i = 0; i < query.length; i++){
+      if(data1 == query[i]){
+        return true;
+      }
     }
-    return false;
+    return false;  
 }
 
 
@@ -64,7 +67,7 @@ export default class Main_HOME extends React.Component {
 
   componentDidMount() {
     const datafilter = _.filter(SocialItems, post => {
-        return isMine(post.person, 'Sylvia')
+        return inMyList(post.id, SocialCollection)
     })
     this.setState({
       data: datafilter,
