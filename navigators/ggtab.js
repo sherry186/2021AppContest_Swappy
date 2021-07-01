@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import { Text, View, Button } from 'react-native'
-import { StyleSheet,  SafeAreaView, FlatList, StatusBar } from "react-native";
-import { NavigationContainer } from '@react-navigation/native'
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 

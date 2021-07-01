@@ -5,11 +5,12 @@ import { Assets, createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import TopBarNavigator from '../navigators/ggtab';  //dot dot slash is going up a path
+import Social from '../navigators/SocialNav';
 import Personal from '../screens/Personal';
 import Record from '../screens/Record';
-import Social from '../screens/Social';
 
-const Stack = createStackNavigator();
+
+
 
 const Tab = createBottomTabNavigator();
 
@@ -20,7 +21,7 @@ const Tabs = () => {
         showLabel:false,
         style:{
           position: 'absolute',
-          bottom: 25,
+          bottom: 0,
           left: 20,
           right: 20,
           elevation: 0,

@@ -1,20 +1,19 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import Group_ADD from '../screens/Group/Group_add';
-import Group_HOME from '../screens/Group/Group_home';
-import GroupDetails from '../screens/Group/GroupDetail';
+import Main_ADD from '../screens/Main/Main_add';
+import MyCollection_HOME from '../screens/MyCollection/MyCollection_home';
+import MainDetails from '../screens/Main/Main_detail';
 
 
+const MStack = createStackNavigator();
 
-const MyStack = createStackNavigator();
-
-function Group() {
+function MyCollection() {
   return (
-    <MyStack.Navigator>
+    <MStack.Navigator>
 
-      <MyStack.Screen 
+      <MStack.Screen 
         name="Home" 
-        component={Group_HOME}
+        component={MyCollection_HOME}
         options={{
           title:"",
           headerStyle:{
@@ -22,9 +21,9 @@ function Group() {
             height: 0
           }
         }} />
-      <MyStack.Screen 
+      <MStack.Screen 
         name="ADD" 
-        component={Group_ADD}
+        component={Main_ADD}
         options={{
           title:"",
           headerStyle:{
@@ -32,9 +31,9 @@ function Group() {
             
           }
         }}/>
-      <MyStack.Screen 
+      <MStack.Screen 
         name="Detail" 
-        component={GroupDetails}
+        component={MainDetails}
         options={{
           title:"",
           headerStyle:{
@@ -42,9 +41,9 @@ function Group() {
             
           }
         }}/>
-    </MyStack.Navigator>
+    </MStack.Navigator>
   );
 }
 
 
-export default Group;
+export default MyCollection;
