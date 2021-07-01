@@ -5,8 +5,8 @@ import { NavigationContainer } from '@react-navigation/native'
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import General from '../screens/General';
-import Group from '../screens/Group';
+import General from './General';
+import Group from './Group';
 
 const GgTab = createMaterialTopTabNavigator();
 

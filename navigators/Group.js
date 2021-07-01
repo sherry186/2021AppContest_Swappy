@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import Group_ADD from '../screens/Group_add';
-import Group_HOME from '../screens/Group_home';
-import GroupDetails from '../screens/GroupDetail';
+import Group_ADD from '../screens/Group/Group_add';
+import Group_HOME from '../screens/Group/Group_home';
+import GroupDetails from '../screens/Group/GroupDetail';
 
 
 

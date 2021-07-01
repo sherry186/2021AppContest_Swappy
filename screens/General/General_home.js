@@ -4,9 +4,13 @@ import { View, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity } fro
 import { SearchBar } from 'react-native-elements';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 
-import GroupItems from '../Data/GroupItems';
+import GeneralItems from '../../Data/GeneralItems';
 
-
+const Item = ({ title }) => (
+  <View style={styles.item}>
+    <Text style={styles.title}>{title}</Text>
+  </View>
+);
 
 const contains = (data, query) => {
   let formatData = data.toLowerCase();
@@ -19,8 +23,11 @@ const contains = (data, query) => {
 }
 
 
+const renderItem = ({ item }) => (
+  <Item title={item.title} />
+);
 
-export default class Group_HOME extends React.Component {
+export default class General_HOME extends React.Component {
 
   state = {
     search: '',
@@ -29,30 +36,21 @@ export default class Group_HOME extends React.Component {
   };
 
   static navigationOptions = {
-    title: 'Group_HOME',
+    title: 'General_HOME',
   }
 
   handleSearch = (search) => {
     console.log("search", search)
-    const data = _.filter(this.state.fullData, group => {
-      return contains(group.title, search)
+    const data = _.filter(this.state.fullData, general => {
+      return contains(general.title, search)
     })
     this.setState({ data,  search});
   };
 
-  renderItem = ({ item }) => (
-    //console.log(this.props.navigation);
-    <TouchableOpacity 
-      style={styles.item}
-      onPress={() => this.props.navigation.navigate('Detail', {itemID: item.id, title: item.title})}>
-        <Text style={styles.title}>{item.title}</Text>
-    </TouchableOpacity>
-  );
-
   componentDidMount() {
     this.setState({
-      data: GroupItems,
-      fullData: GroupItems,
+      data: GeneralItems,
+      fullData: GeneralItems,
     });
   }
   
@@ -73,7 +71,7 @@ export default class Group_HOME extends React.Component {
         />
       <FlatList
         data={this.state.data}
-        renderItem={this.renderItem}
+        renderItem={renderItem}
         keyExtractor={item => item.id}
       />
         <TouchableOpacity 
