@@ -5,6 +5,7 @@ import { SearchBar } from 'react-native-elements';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 
 import SocialItems from '../../Data/SocialItems';
+import { TextInput } from 'react-native';
 
 
 
@@ -46,9 +47,10 @@ export default class Main_HOME extends React.Component {
     //console.log(this.props.navigation);
     <TouchableOpacity 
       style={styles.Chat}
-      onPress={() => this.props.navigation.navigate('Detail', {title: item.person, post: item.post})}>
+      onPress={() => this.props.navigation.navigate('Detail', {title: item.title,person: item.person, post: item.post})}>
+        <Text style={styles.post}>{item.title}</Text>
         <Text style={styles.person}>{item.person}</Text>
-        <Text style={styles.post}>{item.post}</Text>
+        <Text style={styles.person}>{item.post}</Text>
     </TouchableOpacity>
   );
 

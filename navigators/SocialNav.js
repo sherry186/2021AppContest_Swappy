@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-
+import { Text, View } from "react-native";
 import Main from './MainNav';
 import MyCollection from './MyCollectionNav';
 
@@ -10,6 +10,7 @@ const SocialTab = createMaterialTopTabNavigator();
 function SocialTabs(){
         const insets = useSafeAreaInsets();
     return(  
+        
         <SocialTab.Navigator
             initialRouteName="Main"
             tabBarOptions={{

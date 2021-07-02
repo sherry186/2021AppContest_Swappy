@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import TopBarNavigator from '../navigators/ggtab';  //dot dot slash is going up a path
 import Social from '../navigators/SocialNav';
 import Personal from '../screens/Personal';
-import Record from '../screens/Record';
+import Record from '../navigators/RecordNav';
 
 
 
@@ -21,13 +21,14 @@ const Tabs = () => {
         showLabel:false,
         style:{
           position: 'absolute',
-          bottom: 0,
-          left: 20,
-          right: 20,
+          bottom:0,
           elevation: 0,
+          left:0,
+          right:0,
           backgroundColor: '#ffffff',
-          borderRadius: 15,
           height:90,
+          //width: 500,
+
           ...styles.shadow
         }
 
