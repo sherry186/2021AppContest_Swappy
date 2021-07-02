@@ -17,20 +17,20 @@ const Tab = createBottomTabNavigator();
 const Tabs = () => {
   return(
     <Tab.Navigator
+      initialRouteName="Home"
       tabBarOptions={{
-        showLabel:false,
-        style:{
-          position: 'absolute',
-          bottom:0,
-          elevation: 0,
-          left:0,
-          right:0,
-          backgroundColor: '#ffffff',
-          height:90,
-          //width: 500,
-
-          ...styles.shadow
-        }
+          activeTintColor: "#e91e63",
+          keyboardHidesTabBar: true,
+          labelStyle: { fontSize: 20 },
+          style: { 
+              position: 'absolute',
+              bottom: 0,
+              elevation: 0,
+              left:0,
+              right:0,
+              backgroundColor: 'white',
+              height:60,
+              }
 
       }}>
       <Tab.Screen name = "Home" component = {TopBarNavigator} options={{

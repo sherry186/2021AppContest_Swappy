@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Assets, createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 
 import Record_BREAKAWAY from '../screens/Record/Record_breakaway';
@@ -11,7 +12,7 @@ import Record_CHANGE from '../screens/Record/Record_change';
 import Record_UPLOAD from '../screens/Record/Record_upload';
 
 
-const RTab = createBottomTabNavigator();
+const RTab = createMaterialTopTabNavigator();
 
 const Record = () => {
   const insets = useSafeAreaInsets();
@@ -20,15 +21,13 @@ const Record = () => {
     initialRouteName="BreakAway"
     tabBarOptions={{
         activeTintColor: "#e91e63",
-        labelStyle: { fontSize: 20 },
+        labelStyle: { fontSize: 15},
         style: {
-          position: 'absolute',
-          top: 60,
+          marginTop:12,
           elevation: 0,
-          left:0,
-          right:0,
+          
           backgroundColor: 'white',
-          height:90,
+          height:60,
         }
     }}>
       <RTab.Screen 

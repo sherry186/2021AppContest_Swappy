@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import {
     Text,
     StyleSheet,
-    View, 
+    View,
+    TouchableOpacity, 
     TextInput} from 'react-native';
 
 
@@ -14,26 +15,52 @@ export default class General_ADD extends React.Component {
   }
   constructor(props) {
     super(props);
-    this.state = { Gname: 'ItemName', Discription: 'second hand, not brandnew', };
+    this.state = { Gname: '', Discription: '', };
   }
 
+  handlesubmit =() =>{
+    
+    this.props.navigation.navigate('Home')
+  } 
+
+  handleupload = () =>{
+
+  }
 
   render() {
     const{ navigate } = this.props.navigation;
     return(
       <View style={styles.container}>
-        <Text style={styles.buttonText}>General Name</Text>
+        <Text style={styles.buttonText}>Item Name</Text>
         <TextInput
             style={styles.input}
+            placeholder='ItemName'
             onChangeText={(text) => this.setState({Gname: text})}
             value = {this.state.Gname}/>
 
         <Text style={styles.buttonText}>Discription</Text>
         <TextInput
             style={styles.input}
+            placeholder='second hand, not brandnew'
             onChangeText={(text) => this.setState({Discription: text})}
             value = {this.state.Discription}/>
-        
+
+        <TouchableOpacity
+            title = 'upload'
+            onPress={this.handleupload}
+            style = {styles.item}>
+            <Text
+              style = {styles.buttonText}>Upload</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+            title = 'Submit'
+            onPress={this.handlesubmit}
+            style = {styles.item}>
+            <Text
+              style = {styles.buttonText}>Submit</Text>
+        </TouchableOpacity>
+
         {/* <Button
             title = 'Go to home screen'
             onPress={() => navigate('Home')}/> */}

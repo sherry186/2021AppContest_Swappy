@@ -4,7 +4,8 @@ import {
     Text,
     StyleSheet,
     View, 
-    TextInput} from 'react-native';
+    TextInput,
+    TouchableOpacity} from 'react-native';
 
 
 export default class Group_ADD extends React.Component {
@@ -14,7 +15,15 @@ export default class Group_ADD extends React.Component {
   }
   constructor(props) {
     super(props);
-    this.state = { Gname: 'Change group', Tags: 'item1, item2, item3', };
+    this.state = { Gname: '', Tags: '', };
+  }
+
+  handlesubmit =() =>{
+        
+    this.props.navigation.navigate('Home')
+  } 
+  handleupload = () =>{
+
   }
 
 
@@ -25,14 +34,32 @@ export default class Group_ADD extends React.Component {
         <Text style={styles.buttonText}>Group Name</Text>
         <TextInput
             style={styles.input}
+            placeholder="Change group"
             onChangeText={(text) => this.setState({Gname: text})}
             value = {this.state.Gname}/>
         <Text style={styles.buttonText}>Tags</Text>
         <TextInput
             style={styles.input}
+            placeholder="item1, item2, item3"
             onChangeText={(text) => this.setState({Tags: text})}
             value = {this.state.Tags}/>
         
+        <TouchableOpacity
+            title = 'upload'
+            onPress={this.handleupload}
+            style = {styles.item}>
+            <Text
+              style = {styles.buttonText}>Upload</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity
+            title = 'Submit'
+            onPress={this.handlesubmit}
+            style = {styles.item}>
+            <Text
+              style = {styles.buttonText}>Submit</Text>
+        </TouchableOpacity>
+
         {/* <Button
             title = 'Go to home screen'
             onPress={() => navigate('Home')}/> */}
