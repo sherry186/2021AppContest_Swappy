@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { View, Text, Button } from "react-native";
 
-function DetailsScreen({ route, navigation }) {
+function GroupDetailsScreen({ route, navigation }) {
     /* 2. Get the param */
     const { itemID, title } = route.params;
     return (
@@ -16,4 +16,4 @@ function DetailsScreen({ route, navigation }) {
     );
   }
 
-export default DetailsScreen;
+export default GroupDetailsScreen;

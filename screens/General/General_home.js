@@ -44,7 +44,7 @@ export default class General_HOME extends React.Component {
     //console.log(this.props.navigation);
     <TouchableOpacity 
       style={styles.item}
-      onPress={() => this.props.navigation.navigate('Detail', {itemID: item.id, title: item.title})}>
+      onPress={() => this.props.navigation.navigate('GeneralDetail', {itemID: item.id, title: item.title})}>
         <Text style={styles.title}>{item.title}</Text>
     </TouchableOpacity>
   );

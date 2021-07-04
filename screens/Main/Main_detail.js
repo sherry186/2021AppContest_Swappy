@@ -4,7 +4,7 @@ import { View, Text, Button, TextInput, StyleSheet } from "react-native";
 
 const state = {comment: ""}
 
-function DetailsScreen({ route, navigation }) {
+function MainDetail({ route, navigation }) {
     /* 2. Get the param */
     const { title ,person, post } = route.params;
     return (
@@ -24,7 +24,7 @@ function DetailsScreen({ route, navigation }) {
     );
   }
 
-export default DetailsScreen;
+export default MainDetail;
 
 const styles = StyleSheet.create({
   post: {

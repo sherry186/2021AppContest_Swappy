@@ -21,16 +21,8 @@ function MyCollection() {
             height: 0
           }
         }} />
-      <MStack.Screen 
-        name="Detail" 
-        component={MainDetails}
-        options={{
-          title:"",
-          headerStyle:{
-            backgroundColor: 'transparent',
-            
-          }
-        }}/>
+      
+      
     </MStack.Navigator>
   );
 }

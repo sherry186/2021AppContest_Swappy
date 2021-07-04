@@ -43,7 +43,7 @@ export default class Main_ADD extends React.Component {
         SocialItems.push(item)
     }
     
-    this.props.navigation.navigate('Home')
+    this.props.navigation.goBack()
   } 
   
   handleupload = () =>{

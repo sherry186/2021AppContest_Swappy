@@ -21,16 +21,7 @@ function General() {
             height: 0
           }
         }} />
-      <MyStack.Screen 
-        name="Detail" 
-        component={GeneralDetails}
-        options={{
-          title:"",
-          headerStyle:{
-            backgroundColor: 'transparent',
-            
-          }
-        }}/>
+      
     </MyStack.Navigator>
   );
 }

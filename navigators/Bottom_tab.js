@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import TopBarNavigator from './ggtab';  //dot dot slash is going up a path
 import Social from './SocialNav';
 import Personal from '../screens/Personal';
-import Record from './RecordNav';
+import BreakAway from '../screens/BreakAway/BreakAway';
 
 
 
@@ -50,7 +50,7 @@ const Tabs = () => {
         )
       }}></Tab.Screen>
       
-      <Tab.Screen name = "Record" component = {Record}options={{
+      <Tab.Screen name = "BreakAway" component = {BreakAway}options={{
         tableBarIcon:({focus})=>(
           <View style={{alignItems:'center', justifyContenet: 'center', top: 10}}>
             <Image

@@ -2,9 +2,13 @@ import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import General_ADD from '../screens/General/General_add';
+import GeneralDetailsScreen from '../screens/General/GeneralDetail';
+import GroupDetailsScreen from '../screens/Group/GroupDetail';
 import Group_ADD from '../screens/Group/Group_add';
 import Main_ADD from '../screens/Main/Main_add';
 import Tabs from './Bottom_tab';
+import BreakAwayADD from '../screens/BreakAway/BreakAwayADD';
+import MainDetail from '../screens/Main/Main_detail';
 
 const RootStack = createStackNavigator();
 
@@ -15,6 +19,7 @@ function Root() {
         <RootStack.Screen 
           name="BottomTab" 
           component={Tabs}
+          //options={{headerShown: false}}
         />
 
         <RootStack.Screen 
@@ -35,6 +40,27 @@ function Root() {
           options={{headerShown: false}}
          />
 
+        <RootStack.Screen 
+          name="MainDetail" 
+          component={MainDetail}
+          options={{headerShown: false}}
+         />
+
+        <RootStack.Screen 
+          name="GeneralDetail" 
+          component={GeneralDetailsScreen}
+          options={{headerShown: false}}
+        />
+
+        <RootStack.Screen 
+          name="GroupDetail" 
+          component={GroupDetailsScreen}
+          options={{headerShown: false }}/>
+
+        <RootStack.Screen 
+          name="BreakAwayADD" 
+          component={BreakAwayADD}
+          options={{headerShown: false }}/>
       </RootStack.Navigator>
     );
   }

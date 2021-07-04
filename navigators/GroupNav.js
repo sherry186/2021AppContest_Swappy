@@ -9,23 +9,12 @@ import { useLayoutEffect } from 'react';
 
 const MyStack = createStackNavigator();
 
-function Group({navigation, route}) {
-
-  if(route.state && route.state.index > 0){
-    navigation.setOptions({tabBarVidisble: false})
-  }
-  else{
-    navigation.setOptions({tabBarVidisble: true})
-  }
-  
-
-  
+function Group() {
 
   return (
     <MyStack.Navigator
       initialRouteName="Home"
     >
-
       <MyStack.Screen 
         name="Home" 
         component={Group_HOME}
@@ -36,16 +25,7 @@ function Group({navigation, route}) {
             height: 0
           }
         }} />
-      <MyStack.Screen 
-        name="Detail" 
-        component={GroupDetails}
-        options={{
-          title:"",
-          headerStyle:{
-            backgroundColor: 'transparent',
-            
-          }
-        }}/>
+      
     </MyStack.Navigator>
   );
 }
