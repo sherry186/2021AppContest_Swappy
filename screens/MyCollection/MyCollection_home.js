@@ -98,7 +98,7 @@ export default class Main_HOME extends React.Component {
       />
         <TouchableOpacity 
             style={styles.button}
-            onPress={() => navigate('ADD')}>
+            onPress={() => navigate('MainAdd')}>
             <Text style={styles.buttonText}>ADD</Text>
         </TouchableOpacity>
       </SafeAreaView>

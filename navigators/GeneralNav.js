@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import General_ADD from '../screens/General/General_add';
 import General_HOME from '../screens/General/General_home';
 import GeneralDetails from '../screens/General/GeneralDetail';
 
@@ -22,16 +21,6 @@ function General() {
             height: 0
           }
         }} />
-      <MyStack.Screen 
-        name="ADD" 
-        component={General_ADD}
-        options={{
-          title:"",
-          headerStyle:{
-            backgroundColor: 'transparent',
-            
-          }
-        }}/>
       <MyStack.Screen 
         name="Detail" 
         component={GeneralDetails}

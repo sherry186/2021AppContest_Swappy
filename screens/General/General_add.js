@@ -8,6 +8,8 @@ import {
     TextInput} from 'react-native';
 
 
+
+
 export default class General_ADD extends React.Component {
 
   static navigationOptions = {

@@ -78,7 +78,7 @@ export default class Group_HOME extends React.Component {
       />
         <TouchableOpacity 
             style={styles.button}
-            onPress={() => navigate('ADD')}>
+            onPress={() => navigate('GroupAdd')}>
             <Text style={styles.buttonText}>ADD</Text>
         </TouchableOpacity>
       </SafeAreaView>

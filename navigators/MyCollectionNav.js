@@ -22,16 +22,6 @@ function MyCollection() {
           }
         }} />
       <MStack.Screen 
-        name="ADD" 
-        component={Main_ADD}
-        options={{
-          title:"",
-          headerStyle:{
-            backgroundColor: 'transparent',
-            
-          }
-        }}/>
-      <MStack.Screen 
         name="Detail" 
         component={MainDetails}
         options={{

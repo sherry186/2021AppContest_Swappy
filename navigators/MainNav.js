@@ -23,16 +23,6 @@ function Main() {
           }
         }} />
       <MStack.Screen 
-        name="ADD" 
-        component={Main_ADD}
-        options={{
-          title:"",
-          headerStyle:{
-            backgroundColor: 'transparent', 
-            height: 60  
-          }
-        }}/>
-      <MStack.Screen 
         name="Detail" 
         component={MainDetails}
         options={{

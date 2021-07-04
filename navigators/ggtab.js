@@ -15,7 +15,7 @@ function GgTabs(){
             initialRouteName="General"
             
             tabBarOptions={{
-                //keyboardHidesTabBar: true,
+                tabBarVisible: false,
                 activeTintColor: "#e91e63",
                 labelStyle: { fontSize: 15 },
                 style: { 

@@ -37,18 +37,6 @@ function Group({navigation, route}) {
           }
         }} />
       <MyStack.Screen 
-        name="ADD" 
-        component={Group_ADD}
-        options={{
-          title:"",
-          headerStyle:{
-            backgroundColor: 'transparent',
-            
-          },
-          
-          
-        }}/>
-      <MyStack.Screen 
         name="Detail" 
         component={GroupDetails}
         options={{
