@@ -21,6 +21,11 @@ export default class BreakAwayHesitate extends React.Component {
     title: 'BreakAway_Hesitate',
   }
 
+  handlesubmit =() =>{
+    
+    this.props.navigation.goBack()
+  }
+
 
   renderItem = ({ item }) => (
     //console.log(this.props.navigation);
@@ -94,6 +99,13 @@ export default class BreakAwayHesitate extends React.Component {
             onChangeText={(text) => this.setState({story: text})}
             value = {this.state.story}/>
 
+        <TouchableOpacity
+            title = 'Submit'
+            onPress={this.handlesubmit}
+            style = {styles.item}>
+            <Text
+              style = {styles.buttonText}>Submit</Text>
+        </TouchableOpacity>
         
 
        

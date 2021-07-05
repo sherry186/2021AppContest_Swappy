@@ -50,13 +50,13 @@ function Root() {
         <RootStack.Screen 
           name="GeneralDetail" 
           component={GeneralDetailsScreen}
-          options={{headerShown: false}}
+          options={{headerShown: true}}
         />
 
         <RootStack.Screen 
           name="GroupDetail" 
           component={GroupDetailsScreen}
-          options={{headerShown: false }}/>
+          options={{headerShown: true }}/>
 
         <RootStack.Screen 
           name="BreakAwayADD" 

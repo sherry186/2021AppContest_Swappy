@@ -44,7 +44,7 @@ export default class Group_HOME extends React.Component {
     //console.log(this.props.navigation);
     <TouchableOpacity 
       style={styles.item}
-      onPress={() => this.props.navigation.navigate('GroupDetail', {itemID: item.id, title: item.title})}>
+      onPress={() => this.props.navigation.navigate('GroupDetail', {title: item.title, data: item.items })}>
         <Text style={styles.title}>{item.title}</Text>
     </TouchableOpacity>
   );
