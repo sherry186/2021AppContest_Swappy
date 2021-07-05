@@ -9,6 +9,7 @@ import Main_ADD from '../screens/Main/Main_add';
 import Tabs from './Bottom_tab';
 import BreakAwayADD from '../screens/BreakAway/BreakAwayADD';
 import MainDetail from '../screens/Main/Main_detail';
+import BreakAwayHesitate from '../screens/BreakAway/BreakAwayHesitate';
 
 const RootStack = createStackNavigator();
 
@@ -60,6 +61,11 @@ function Root() {
         <RootStack.Screen 
           name="BreakAwayADD" 
           component={BreakAwayADD}
+          options={{headerShown: false }}/>
+
+        <RootStack.Screen 
+          name="BreakAwayHesitate" 
+          component={BreakAwayHesitate}
           options={{headerShown: false }}/>
       </RootStack.Navigator>
     );

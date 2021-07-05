@@ -1,19 +1,24 @@
 import * as React  from 'react';
-import { ScrollView, View, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { TextInput, ScrollView, View, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity, Image } from "react-native";
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 import { ProgressBar } from "react-native-paper";
 import BreakAwaySpace from '../../Data/BreakAwaySpace';
 
 
-export default class BreakAway extends React.Component {
+export default class BreakAwayHesitate extends React.Component {
 
   state = {
     data: [],
     fullData: [],
+    Limit: '100',
+    story:'',
+    //this.state = { Space: '', Discription: '', };
   };
 
+  
+
   static navigationOptions = {
-    title: 'BreakAway',
+    title: 'BreakAway_Hesitate',
   }
 
 
@@ -23,15 +28,11 @@ export default class BreakAway extends React.Component {
             style={styles.button}
             >
       <Text>{item.title}</Text>
-      <ProgressBar
-        progress = {item.complete} 
-        style={styles.probarStyle} 
-        color = {'#FEBC5F'}/> 
     </TouchableOpacity>   
   );
 
   renderImage = ({ item }) => (
-    <SafeAreaView style = {{flex:1, flexDirection: 'row'}}>
+    <SafeAreaView style = {{flex:1, left: 10, flexDirection: 'row'}}>
       <Image 
       style={{flexDirection: 'row', width: 60, height: 60,  }}
       source={item.source}/>
@@ -72,48 +73,28 @@ export default class BreakAway extends React.Component {
           </View>
         </View>
 
-        
+        <Text>TimeLimit:</Text>
+        <TextInput
+            style={styles.input}
+            //placeholder='100'
+            onChangeText={(text) => this.setState({Limit: text})}
+            value = {this.state.Limit}/>
+
+        <Text>ItemPlaces:</Text>
         <FlatList
             data={this.state.data}
             renderItem={this.renderItem}
             keyExtractor={item => item.id}
         /> 
-        <View style={styles.center, {flex:0.2, flexDirection: 'row'}}>
-          <TouchableOpacity 
-                style={styles.center, styles.button}
-                onPress={() => navigate("BreakAwayADD")}>
-                <Text>ADD</Text>
-          </TouchableOpacity>
-        </View>
+        
+        <Text>Story:</Text>
+        <TextInput
+            style={styles.input}
+            //placeholder='100'
+            onChangeText={(text) => this.setState({story: text})}
+            value = {this.state.story}/>
 
-        <View style={{flex:0.2, flexDirection: 'row'}}>
-          <View style={styles.center, {flex:1}}>
-            <TouchableOpacity 
-              style={styles.buttonRound}
-              onPress={() => navigate("BreakAwayHesitate")}
-              >
-              <Text>Hesitate</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.center, {flex:1}}>
-            <TouchableOpacity 
-              style={styles.buttonRound}
-              // onPress={() => navigate("BreakAwayADD")}
-              >
-              <Text>ChangeOut</Text>
-            </TouchableOpacity>
-          </View>                
-        </View>
-
-        <View style={{margin: 20, flex: 1, flexDirection:'column'}}>
-            <TouchableOpacity 
-              style={styles.buttonRound}
-              // onPress={() => navigate("BreakAwayADD")}
-              >
-              <Text>Camera</Text>
-            </TouchableOpacity>
-        </View>
+        
 
        
       </ScrollView>
@@ -174,4 +155,10 @@ const styles = StyleSheet.create({
       fontSize: 10,
       fontWeight: 'bold',
     },
+    input: {
+        margin: 15,
+        height: 40,
+        borderColor: '#7a42f4',
+        borderWidth: 1
+      },
   });
