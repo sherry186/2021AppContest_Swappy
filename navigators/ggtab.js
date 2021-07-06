@@ -17,12 +17,12 @@ function GgTabs(){
             tabBarOptions={{
                 tabBarVisible: false,
                 activeTintColor: "#e91e63",
-                labelStyle: { fontSize: 15 },
+                labelStyle: { fontSize: 25 },
                 style: { 
                     marginTop:12,
                     elevation: 0,
                     backgroundColor: 'white',
-                    height:60,
+                    height:60
                 }
              }}
         >   

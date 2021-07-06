@@ -8,58 +8,22 @@ import {
     TextInput} from 'react-native';
 
 
-// const dummyData = [
-//   {way:'faceToFace'},
-//   {way:'byPost'}
-// ];
 
 
-export default class General_ADD extends React.Component {
+export default class GroupAddItem extends React.Component {
 
   static navigationOptions = {
-    title: 'General_ADD',
+    title: 'GroupAddItem',
   }
   constructor(props) {
     super(props);
-    this.state = { 
-      Gname: '', 
-      Discription: '',
-      dummyData: [
-        {way: 'faceToFace'},
-        {way: 'byPost'},
-      ] };
-  }
-
-  
-
-  componentDidMount(){
-    let arr = this.state.dummyData.map((item, index)=>{
-      item.isSelected = false
-      return {...item};
-    })
-    this.setState({dummyData: arr});
-    console.log('arr data ==>', arr)
-  }
-
-  selectionHandler = (ind) => {
-    //alert("jie")
-    const {Gname, Discription, dummyData} = this.state;
-    let arr = dummyData.map((item, index)=>{
-      if(ind == index){
-        item.isSelected = !item.isSelected;
-      }
-      return {...item}
-    })
-    console.log("selection handler ==>", arr)
-    this.setState({dummyData: arr})
+    this.state = { Gname: '', Discription: '', };
   }
 
   handlesubmit =() =>{
     
-    this.props.navigation.navigate('Home')
+    this.props.navigation.goBack()
   } 
-
-  
 
   handleupload = () =>{
 
@@ -82,21 +46,6 @@ export default class General_ADD extends React.Component {
             placeholder='second hand, not brandnew'
             onChangeText={(text) => this.setState({Discription: text})}
             value = {this.state.Discription}/>
-        
-        {
-          this.state.dummyData.map((item, index)=>{
-            return(
-              <TouchableOpacity
-                onPress={()=>this.selectionHandler(index)}
-                title = 'upload'
-                //onPress={this.handleupload}
-                style = {item.isSelected ? styles.item : styles.itemS}>
-                <Text style = {styles.buttonText}>{item.way}</Text> 
-              </TouchableOpacity>
-            );
-          })
-        }
-
 
         <TouchableOpacity
             title = 'upload'
@@ -138,12 +87,6 @@ const styles = StyleSheet.create({
   },
   item: {
     backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  itemS: {
-    backgroundColor: '#7a42f4',
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,

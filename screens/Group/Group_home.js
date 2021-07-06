@@ -22,11 +22,15 @@ const contains = (data, query) => {
 
 export default class Group_HOME extends React.Component {
 
-  state = {
-    search: '',
-    data: [],
-    fullData: [],
-  };
+  constructor(props){
+    super(props);
+    this.state = {
+      search: '',
+      data: [],
+      fullData: [],
+    };
+  }
+  
 
   static navigationOptions = {
     title: 'Group_HOME',
@@ -44,8 +48,8 @@ export default class Group_HOME extends React.Component {
     //console.log(this.props.navigation);
     <TouchableOpacity 
       style={styles.item}
-      onPress={() => this.props.navigation.navigate('GroupDetail', {title: item.title, data: item.items })}>
-        <Text style={styles.title}>{item.title}</Text>
+      onPress={() => this.props.navigation.navigate('GroupDetail', {title: item.title, items: item.items, post: item.post})}>
+      <Text style={styles.title}>{item.title}</Text>
     </TouchableOpacity>
   );
 
