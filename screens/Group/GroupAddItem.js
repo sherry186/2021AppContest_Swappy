@@ -24,7 +24,8 @@ export default class GroupAddItem extends React.Component {
     this.state = { 
       Gname: '', 
       Discription: '', 
-      tags: [],
+      Ihave: [],
+      Iwant: [],
       dummyData: [
         {way: 'faceToFace'},
         {way: 'byPost'},
@@ -41,35 +42,54 @@ export default class GroupAddItem extends React.Component {
       item.isSelected = false
       return {...item};
     })
+
+    const tags2 = tags
+    let arr3 = tags2.map((item, index)=>{
+      item.isSelected = false
+      return {...item}
+    })
     
-    this.setState({dummyData: arr, tags: arr2});
+    this.setState({dummyData: arr, Ihave: arr2, Iwant: arr3});
     console.log('arr data ==>', arr)
+  }
+
+  selectionHandlerSort2 = (ind) => {
+    //alert("jie")
+    const {Gname, Discription, Ihave, Iwant, dummyData} = this.state;
+    let arr3 = Iwant.map((item, index)=>{
+      if(ind == index){
+        item.isSelected = !item.isSelected;
+      }
+      return {...item}
+    })
+    console.log("selection handler ==>", arr3)
+    this.setState({Iwant: arr3})
   }
 
   selectionHandlerSort = (ind) => {
     //alert("jie")
-    const {Gname, Discription, tags, dummyData} = this.state;
-    let arr = tags.map((item, index)=>{
+    const {Gname, Discription, Ihave, Iwant, dummyData} = this.state;
+    let arr2 = Ihave.map((item, index)=>{
       if(ind == index){
         item.isSelected = !item.isSelected;
       }
       return {...item}
     })
-    console.log("selection handler ==>", arr)
-    this.setState({tags: arr})
+    console.log("selection handler ==>", arr2)
+    this.setState({Ihave: arr2})
   }
 
   selectionHandler = (ind) => {
     //alert("jie")
-    const {Gname, Discription, dummyData} = this.state;
-    let arr = dummyData.map((item, index)=>{
+    const {Gname, Discription, Ihave, Iwant, dummyData} = this.state;
+    let arr1 = dummyData.map((item, index)=>{
       if(ind == index){
         item.isSelected = !item.isSelected;
       }
       return {...item}
     })
-    console.log("selection handler ==>", arr)
-    this.setState({dummyData: arr})
+    console.log("selection handler1 ==>", arr1)
+    this.setState({dummyData: arr1})
   }
 
   handlesubmit =() =>{
@@ -100,9 +120,10 @@ export default class GroupAddItem extends React.Component {
             onChangeText={(text) => this.setState({Discription: text})}
             value = {this.state.Discription}/>
 
+        <Text style={styles.buttonText}>I have</Text>
         <ScrollView horizontal={true} style={{flexDirection: 'row'}}>
           {
-            this.state.tags.map((item, index)=>{
+            this.state.Ihave.map((item, index)=>{
               return(
                 <TouchableOpacity
                   onPress={()=>this.selectionHandlerSort(index)}
@@ -115,6 +136,24 @@ export default class GroupAddItem extends React.Component {
             })
           }
         </ScrollView>
+
+        <Text style={styles.buttonText}>I want</Text>
+        <ScrollView horizontal={true} style={{flexDirection: 'row'}}>
+          {
+            this.state.Iwant.map((item, index)=>{
+              return(
+                <TouchableOpacity
+                  onPress={()=>this.selectionHandlerSort2(index)}
+                  title = 'sort2'
+                  //onPress={this.handleupload}
+                  style = {item.isSelected ? styles.item : styles.itemS}>
+                  <Text style = {styles.buttonText}>{item.name}</Text> 
+                </TouchableOpacity>
+              );
+            })
+          }
+        </ScrollView>
+
 
 
         <View style={{flexDirection: 'row'}}>
