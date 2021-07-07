@@ -101,10 +101,13 @@ export default class General_ADD extends React.Component {
             style={{height: 25,width:200}}
             selectedValue={this.state.dropdown}
             onValueChange={(value)=>this.onValueChange(2,value)}>
-            <Picker.Item label="3C" value="key0" />
-            <Picker.Item label="美妝" value="key1" />
-            <Picker.Item label="生活" value="key2" />
-            <Picker.Item label="其他" value="key3" />
+            <Picker.Item label="書籍" value="key0" />
+            <Picker.Item label="衣服與配件" value="key1" />
+            <Picker.Item label="玩具" value="key2" />
+            <Picker.Item label="特色周邊品" value="key3" />
+            <Picker.Item label="小型生活器具" value="key4" />
+            <Picker.Item label="家電用品" value="key5" />
+            <Picker.Item label="其他" value="key6" />
           </Picker>
 
         <View style={{flexDirection: 'row'}}>
