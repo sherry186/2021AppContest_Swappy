@@ -74,10 +74,17 @@ export default class GroupDetailsScreen extends React.Component {
           
           <TouchableOpacity
             title = 'add'
-            onPress={() => {this.props.navigation.navigate('GroupAddItem')}}
-            style = {styles.item}>
+            onPress={() => {this.props.navigation.navigate('GroupAddItem',{tags: items})}}
+            style = {{
+                width: 60, 
+                height: 60, 
+                borderRadius: 30,
+                backgroundColor: '#f9c2ff',
+                marginVertical: 16,
+                marginHorizontal: 170,
+                alignContent: 'center',}}>
             <Text
-              style = {styles.buttonText}>add</Text>
+              style = {{fontSize: 20, marginHorizontal: 10, marginVertical: 15}}>add</Text>
           </TouchableOpacity>
 
           <TouchableOpacity

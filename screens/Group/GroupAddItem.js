@@ -5,7 +5,8 @@ import {
     StyleSheet,
     View,
     TouchableOpacity, 
-    TextInput} from 'react-native';
+    TextInput,
+    ScrollView} from 'react-native';
 
 
 
@@ -15,11 +16,15 @@ export default class GroupAddItem extends React.Component {
   static navigationOptions = {
     title: 'GroupAddItem',
   }
+
+  
+
   constructor(props) {
     super(props);
     this.state = { 
       Gname: '', 
       Discription: '', 
+      tags: [],
       dummyData: [
         {way: 'faceToFace'},
         {way: 'byPost'},
@@ -31,8 +36,27 @@ export default class GroupAddItem extends React.Component {
       item.isSelected = false
       return {...item};
     })
-    this.setState({dummyData: arr});
+    const {tags} = this.props.route.params
+    let arr2 = tags.map((item, index)=>{
+      item.isSelected = false
+      return {...item};
+    })
+    
+    this.setState({dummyData: arr, tags: arr2});
     console.log('arr data ==>', arr)
+  }
+
+  selectionHandlerSort = (ind) => {
+    //alert("jie")
+    const {Gname, Discription, tags, dummyData} = this.state;
+    let arr = tags.map((item, index)=>{
+      if(ind == index){
+        item.isSelected = !item.isSelected;
+      }
+      return {...item}
+    })
+    console.log("selection handler ==>", arr)
+    this.setState({tags: arr})
   }
 
   selectionHandler = (ind) => {
@@ -59,6 +83,7 @@ export default class GroupAddItem extends React.Component {
 
   render() {
     const{ navigate } = this.props.navigation;
+    //const{ tags } = this.props.route.params;
     return(
       <View style={styles.container}>
         <Text style={styles.buttonText}>Item Name</Text>
@@ -75,13 +100,30 @@ export default class GroupAddItem extends React.Component {
             onChangeText={(text) => this.setState({Discription: text})}
             value = {this.state.Discription}/>
 
+        <ScrollView horizontal={true} style={{flexDirection: 'row'}}>
+          {
+            this.state.tags.map((item, index)=>{
+              return(
+                <TouchableOpacity
+                  onPress={()=>this.selectionHandlerSort(index)}
+                  title = 'sort'
+                  //onPress={this.handleupload}
+                  style = {item.isSelected ? styles.item : styles.itemS}>
+                  <Text style = {styles.buttonText}>{item.name}</Text> 
+                </TouchableOpacity>
+              );
+            })
+          }
+        </ScrollView>
+
+
         <View style={{flexDirection: 'row'}}>
           {
             this.state.dummyData.map((item, index)=>{
               return(
                 <TouchableOpacity
                   onPress={()=>this.selectionHandler(index)}
-                  title = 'upload'
+                  title = 'method'
                   //onPress={this.handleupload}
                   style = {item.isSelected ? styles.item : styles.itemS}>
                   <Text style = {styles.buttonText}>{item.way}</Text> 
@@ -91,6 +133,7 @@ export default class GroupAddItem extends React.Component {
           }
         </View>
 
+        
 
 
 
