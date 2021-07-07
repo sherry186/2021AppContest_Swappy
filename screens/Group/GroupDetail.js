@@ -23,8 +23,15 @@ export default class GroupDetailsScreen extends React.Component {
   renderItem = ({ item }) => (
     //console.log(this.props.navigation);
     <TouchableOpacity 
-      style={styles.tag}>      
-      <Text style={styles.title}>{item.name}</Text>
+      style={styles.tag}>  
+      <View>
+        <Text style={{
+            fontSize:10,
+            flexDirection:  'row' ,
+            justifyContent: 'space-between'}}>
+              {item.name}</Text>
+        </View>    
+      
     </TouchableOpacity>
   );
   
@@ -47,9 +54,11 @@ export default class GroupDetailsScreen extends React.Component {
       <ScrollView style={styles.container}>
           <Text>{title}</Text>
           
-          <View style= {{flex:1, flexDirection: 'row'}}>
+          <View style= {{flexDirection: 'row'}}>
            <FlatList
               data={items}
+              //style={{flexDirection: 'row'}}
+              horizontal={ true }
               renderItem={this.renderItem}
               keyExtractor={item => item.ID}
             />
@@ -98,7 +107,7 @@ const styles = StyleSheet.create({
     paddingTop: 23
   },
   tag:{
-    flex:1,
+    //flex:1,
     flexDirection:'row',
     margin:5,
     backgroundColor: '#f9c2ff',
@@ -120,4 +129,5 @@ const styles = StyleSheet.create({
     left: 10,
     fontWeight: 'bold',
   },
+
 });

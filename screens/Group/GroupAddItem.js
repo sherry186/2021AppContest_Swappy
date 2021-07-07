@@ -17,7 +17,35 @@ export default class GroupAddItem extends React.Component {
   }
   constructor(props) {
     super(props);
-    this.state = { Gname: '', Discription: '', };
+    this.state = { 
+      Gname: '', 
+      Discription: '', 
+      dummyData: [
+        {way: 'faceToFace'},
+        {way: 'byPost'},
+      ]};
+  }
+
+  componentDidMount(){
+    let arr = this.state.dummyData.map((item, index)=>{
+      item.isSelected = false
+      return {...item};
+    })
+    this.setState({dummyData: arr});
+    console.log('arr data ==>', arr)
+  }
+
+  selectionHandler = (ind) => {
+    //alert("jie")
+    const {Gname, Discription, dummyData} = this.state;
+    let arr = dummyData.map((item, index)=>{
+      if(ind == index){
+        item.isSelected = !item.isSelected;
+      }
+      return {...item}
+    })
+    console.log("selection handler ==>", arr)
+    this.setState({dummyData: arr})
   }
 
   handlesubmit =() =>{
@@ -46,6 +74,25 @@ export default class GroupAddItem extends React.Component {
             placeholder='second hand, not brandnew'
             onChangeText={(text) => this.setState({Discription: text})}
             value = {this.state.Discription}/>
+
+        <View style={{flexDirection: 'row'}}>
+          {
+            this.state.dummyData.map((item, index)=>{
+              return(
+                <TouchableOpacity
+                  onPress={()=>this.selectionHandler(index)}
+                  title = 'upload'
+                  //onPress={this.handleupload}
+                  style = {item.isSelected ? styles.item : styles.itemS}>
+                  <Text style = {styles.buttonText}>{item.way}</Text> 
+                </TouchableOpacity>
+              );
+            })
+          }
+        </View>
+
+
+
 
         <TouchableOpacity
             title = 'upload'
@@ -91,13 +138,19 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
   },
+  itemS: {
+    backgroundColor: '#7a42f4',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
   title: {
     fontSize: 32,
   },
   buttonText: {
     //color: '#fff',
     fontSize: 15,
-    left: 10,
+    left: 5,
     fontWeight: 'bold',
   },
 });

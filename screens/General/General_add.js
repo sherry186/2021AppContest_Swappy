@@ -5,7 +5,11 @@ import {
     StyleSheet,
     View,
     TouchableOpacity, 
-    TextInput} from 'react-native';
+    TextInput,
+    } from 'react-native';
+
+import { Picker } from '@react-native-picker/picker';
+
 
 
 // const dummyData = [
@@ -24,10 +28,12 @@ export default class General_ADD extends React.Component {
     this.state = { 
       Gname: '', 
       Discription: '',
+      dropdown:' ',
       dummyData: [
         {way: 'faceToFace'},
         {way: 'byPost'},
       ] };
+
   }
 
   
@@ -59,7 +65,13 @@ export default class General_ADD extends React.Component {
     this.props.navigation.navigate('Home')
   } 
 
-  
+  onValueChange = (flag,value) => {
+    if(flag ==1){
+    this.setState({selected:value});
+    }else{
+      this.setState({dropdown:value});
+    }
+  };  
 
   handleupload = () =>{
 
@@ -82,21 +94,36 @@ export default class General_ADD extends React.Component {
             placeholder='second hand, not brandnew'
             onChangeText={(text) => this.setState({Discription: text})}
             value = {this.state.Discription}/>
-        
-        {
-          this.state.dummyData.map((item, index)=>{
-            return(
-              <TouchableOpacity
-                onPress={()=>this.selectionHandler(index)}
-                title = 'upload'
-                //onPress={this.handleupload}
-                style = {item.isSelected ? styles.item : styles.itemS}>
-                <Text style = {styles.buttonText}>{item.way}</Text> 
-              </TouchableOpacity>
-            );
-          })
-        }
 
+        <Text style={styles.buttonText}>item sort</Text>
+        <Picker
+            mode={'dropdown'}
+            style={{height: 25,width:200}}
+            selectedValue={this.state.dropdown}
+            onValueChange={(value)=>this.onValueChange(2,value)}>
+            <Picker.Item label="3C" value="key0" />
+            <Picker.Item label="美妝" value="key1" />
+            <Picker.Item label="生活" value="key2" />
+            <Picker.Item label="其他" value="key3" />
+          </Picker>
+
+        <View style={{flexDirection: 'row'}}>
+          {
+            this.state.dummyData.map((item, index)=>{
+              return(
+                <TouchableOpacity
+                  onPress={()=>this.selectionHandler(index)}
+                  title = 'upload'
+                  //onPress={this.handleupload}
+                  style = {item.isSelected ? styles.item : styles.itemS}>
+                  <Text style = {styles.buttonText}>{item.way}</Text> 
+                </TouchableOpacity>
+              );
+            })
+          }
+        </View>
+        
+        
 
         <TouchableOpacity
             title = 'upload'
@@ -124,6 +151,10 @@ export default class General_ADD extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  picker: {
+    width: 100,
+    height: 10,
+  },
   input: {
     margin: 15,
     height: 40,
@@ -154,7 +185,8 @@ const styles = StyleSheet.create({
   buttonText: {
     //color: '#fff',
     fontSize: 15,
-    left: 10,
+    left: 3,
+
     fontWeight: 'bold',
   },
 });

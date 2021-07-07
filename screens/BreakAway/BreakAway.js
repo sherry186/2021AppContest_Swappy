@@ -59,6 +59,7 @@ export default class BreakAway extends React.Component {
           <FlatList
               data={this.state.data}
               renderItem={this.renderImage}
+              horizontal = {true}
               keyExtractor={item => item.id}
           />
 
