@@ -23,7 +23,7 @@ export default class GroupDetailsScreen extends React.Component {
   renderItem = ({ item }) => (
     //console.log(this.props.navigation);
     <TouchableOpacity 
-      style={styles.tag}>  
+      style={styles.tag}>
       <View>
         <Text style={{
             fontSize:10,
@@ -38,10 +38,11 @@ export default class GroupDetailsScreen extends React.Component {
 
   renderPost = ({ item }) => (
     <TouchableOpacity 
-      style={styles.item}>      
+      style={styles.item} 
+      onPress={() => {this.props.navigation.navigate('Group_itemDetail',{dis: item.dis, method: item.method, tagname: this.props.route.params.items[item.tagid].name, image: item.image})}}>    
       <Text style={styles.title}>{item.dis}</Text>
       <TouchableOpacity>
-        <Text style={styles.title}>{this.props.route.params.items[item.tag].name}</Text>
+        <Text style={styles.title}>{this.props.route.params.items[item.tagid].name}</Text>
       </TouchableOpacity>
     </TouchableOpacity>
   );

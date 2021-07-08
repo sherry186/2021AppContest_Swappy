@@ -155,7 +155,7 @@ export default class GroupAddItem extends React.Component {
         </ScrollView>
 
 
-
+        <Text style={styles.buttonText}>method: </Text>
         <View style={{flexDirection: 'row'}}>
           {
             this.state.dummyData.map((item, index)=>{

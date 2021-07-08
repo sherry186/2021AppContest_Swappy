@@ -11,6 +11,7 @@ import BreakAwayADD from '../screens/BreakAway/BreakAwayADD';
 import MainDetail from '../screens/Main/Main_detail';
 import BreakAwayHesitate from '../screens/BreakAway/BreakAwayHesitate';
 import GroupAddItem from '../screens/Group/GroupAddItem';
+import Group_itemDetail from '../screens/Group/Group_itemDetail';
 
 const RootStack = createStackNavigator();
 
@@ -54,7 +55,11 @@ function Root() {
           name="GroupAddItem" 
           component={GroupAddItem}
           options={{headerShown: true }}/>
-
+        
+        <RootStack.Screen 
+          name="Group_itemDetail" 
+          component={Group_itemDetail}
+          options={{headerShown: true }}/>
         
         {/*social */}
         <RootStack.Screen 

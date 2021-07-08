@@ -12,8 +12,13 @@ import { View,
 
 
 /* 2. Get the param */
-export default class GeneralDetailsScreen extends React.Component {
-    
+export default class Group_itemDetail extends React.Component {
+  
+  constructor(props) {
+    super(props);
+    this.state = { Gname: '', Tags: '', };
+  }
+
   renderImage = ({ item }) => (
     <SafeAreaView style = {{flex:1, flexDirection: 'row'}}>
       <Image 
@@ -31,13 +36,12 @@ export default class GeneralDetailsScreen extends React.Component {
   );// 理論上應該是一個Navigation，還要再改
   
   render(){  
-    const { itemID, title, sort, des, method, image } = this.props.route.params;
+    const { dis, method, tagid, tagname, image } = this.props.route.params;
     return (
       <ScrollView style={{ flex: 1}}>
         <Text>Details Screen</Text>
-        <Text>Item Name: {title}</Text>
-        <Text>sort: {sort}</Text>
-        <Text>des: {des}</Text>
+        <Text>tag Name: {tagname}</Text>
+        <Text>dis: {dis}</Text>
         <FlatList
               data={image}
               renderItem={this.renderImage}
