@@ -11,10 +11,14 @@ export default[
               {ID: '5', name: 'Felix', count: 4},
               {ID: '6', name: 'Seungmin', count: 2},
               {ID: '7', name: 'I.N', count: 1}],
-      post: [{ID: '0', dis:'燦卡棒棒無折損', tag: 0},
-             {ID: '1', dis:'彬尼卡太多求換出', tag: 2},
-             {ID: '2', dis:'忙內三角卡無折損', tag: 7},
-             {ID: '3', dis:'小菲卡求換出', tag: 5},]
+      post: [{ID: '0', dis:'燦卡棒棒無折損', method:{faceToface: false, post: true}, tagid: 0, image: [{id: '0', source:require('../assets/Space.jpg')},
+                                                                                                                        { id: '1',source: require('../assets/ic_clear.png')}]},
+             {ID: '1', dis:'彬尼卡太多求換出', method:{faceToface: false, post: true}, tagid: 2, image: [{id: '0', source:require('../assets/Space.jpg')},
+                                                                                                                        { id: '1',source: require('../assets/ic_clear.png')}]},
+             {ID: '2', dis:'忙內三角卡無折損', method:{faceToface: false, post: true}, tagid: 7, image: [{id: '0', source:require('../assets/Space.jpg')},
+                                                                                                                        { id: '1',source: require('../assets/ic_clear.png')}]},
+             {ID: '3', dis:'小菲卡求換出', method:{faceToface: false, post: true}, tagid: 5, image: [{id: '0', source:require('../assets/Space.jpg')},
+                                                                                                                        { id: '1',source: require('../assets/ic_clear.png')}]}]
     },
     {
       id: '1',
@@ -28,10 +32,14 @@ export default[
               {ID: '5', name: 'Felix', count: 4},
               {ID: '6', name: 'Seungmin', count: 2},
               {ID: '7', name: 'I.N', count: 1}],
-      post: [{ID: '0', dis:'燦卡棒棒無折損', tag: 0},
-              {ID: '1', dis:'彬尼卡太多求換出', tag: 2},
-              {ID: '2', dis:'忙內三角卡無折損', tag: 7},
-              {ID: '3', dis:'小菲卡求換出', tag: 5},]
+      post: [{ID: '0', dis:'燦卡棒棒無折損', method:{faceToface: false, post: true}, tagid: 0, image: [{id: '0', source:require('../assets/Space.jpg')},
+                                                                                                                        { id: '1',source: require('../assets/ic_clear.png')}]},
+             {ID: '1', dis:'彬尼卡太多求換出', method:{faceToface: false, post: true}, tagid: 2, image: [{id: '0', source:require('../assets/Space.jpg')},
+                                                                                                                        { id: '1',source: require('../assets/ic_clear.png')}]},
+             {ID: '2', dis:'忙內三角卡無折損', method:{faceToface: false, post: true}, tagid: 7, image: [{id: '0', source:require('../assets/Space.jpg')},
+                                                                                                                        { id: '1',source: require('../assets/ic_clear.png')}]},
+             {ID: '3', dis:'小菲卡求換出', method:{faceToface: false, post: true}, tagid: 5, image: [{id: '0', source:require('../assets/Space.jpg')},
+                                                                                                                        { id: '1',source: require('../assets/ic_clear.png')}]}]
     },
     {
       id: '2',
@@ -45,9 +53,14 @@ export default[
               {ID: '5', name: 'Felix', count: 4},
               {ID: '6', name: 'Seungmin', count: 2},
               {ID: '7', name: 'I.N', count: 1}],
-      post: [{ID: '0', dis:'燦卡棒棒無折損', tag: 0},
-              {ID: '1', dis:'彬尼卡太多求換出', tag: 2},
-              {ID: '2', dis:'忙內三角卡無折損', tag: 7},
-              {ID: '3', dis:'小菲卡求換出', tag: 5},]
+      post: [{ID: '0', dis:'燦卡棒棒無折損', method:{faceToface: false, post: true}, tagid: 0, image: [{id: '0', source:require('../assets/Space.jpg')},
+                                                                                                                        { id: '1',source: require('../assets/ic_clear.png')}]},
+             {ID: '1', dis:'彬尼卡太多求換出', method:{faceToface: false, post: true}, tagid: 2, image: [{id: '0', source:require('../assets/Space.jpg')},
+                                                                                                                        { id: '1',source: require('../assets/ic_clear.png')}]},
+             {ID: '2', dis:'忙內三角卡無折損', method:{faceToface: false, post: true}, tagid: 7, image: [{id: '0', source:require('../assets/Space.jpg')},
+                                                                                                                        { id: '1',source: require('../assets/ic_clear.png')}]},
+             {ID: '3', dis:'小菲卡求換出', method:{faceToface: false, post: true}, tagid: 5, image: [{id: '0', source:require('../assets/Space.jpg')},
+                                                                                                                        { id: '1',source: require('../assets/ic_clear.png')}]}]
+      
     },
   ];

@@ -3,13 +3,13 @@ import { ScrollView, View, Text, SafeAreaView,  FlatList, StyleSheet, TouchableO
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 import { ProgressBar } from "react-native-paper";
 import BreakAwaySpace from '../../Data/BreakAwaySpace';
-
+import BreakAwayItems from '../../Data/BreakAwayItems';
 
 export default class BreakAway extends React.Component {
 
   state = {
-    data: [],
-    fullData: [],
+    spaceData: [],
+    itemData: [],
   };
 
   static navigationOptions = {
@@ -40,8 +40,8 @@ export default class BreakAway extends React.Component {
 
   componentDidMount() {
     this.setState({
-      data: BreakAwaySpace,
-      fullData: BreakAwaySpace,
+      spaceData: BreakAwaySpace,
+      itemData: BreakAwayItems,
     });
   }
   
@@ -57,25 +57,17 @@ export default class BreakAway extends React.Component {
 
         <View style={{flex:0.5, flexDirection: 'row'}}>
           <FlatList
-              data={this.state.data}
+              data={this.state.itemData}
               renderItem={this.renderImage}
               horizontal = {true}
               keyExtractor={item => item.id}
           />
 
-          <View style={{flex:0.5, flexDirection: 'row'}}>
-            <TouchableOpacity 
-                style={styles.buttonRound}
-                // onPress={() => navigate("BreakAwayADD")}
-                >
-                <Text>ADD</Text>
-              </TouchableOpacity>
-          </View>
         </View>
 
         
         <FlatList
-            data={this.state.data}
+            data={this.state.spaceData}
             renderItem={this.renderItem}
             keyExtractor={item => item.id}
         /> 
