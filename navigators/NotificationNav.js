@@ -3,19 +3,19 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { View, Text } from "react-native";
-import General from './GeneralNav';
-import Group from './GroupNav';
+
+import Notification_invitation from "../screens/Notification/Notification_invitation";
+import Notification_requesting from "../screens/Notification/Notification_requesting";
 
 
-
-export default class TopBarNavigator extends React.Component{
+export default class Notification extends React.Component{
     
 
     render (){
-        const GgTab = createMaterialTopTabNavigator();
+        const Tab = createMaterialTopTabNavigator();
         return(  
-            <GgTab.Navigator
-                initialRouteName="General"
+            <Tab.Navigator
+                initialRouteName="invitation"
                 
                 tabBarOptions={{
                     tabBarVisible: false,
@@ -30,24 +30,20 @@ export default class TopBarNavigator extends React.Component{
                     }
                  }}
             >   
-                <GgTab.Screen 
-                    name = "General"
-                    component = {General}
-                    options={{ tarBarLabel: 'General'}}
+                <Tab.Screen 
+                    name = "invitation"
+                    component = {Notification_invitation}
+                    options={{ tarBarLabel: 'invitation'}}
                 />
-                <GgTab.Screen 
-                    name = "Group"
-                    component = {Group}
-                    options={{ tarBarLabel: 'Group'}}
+                <Tab.Screen 
+                    name = "requesting"
+                    component = {Notification_requesting}
+                    options={{ tarBarLabel: 'requesting'}}
                 
                 />
-            </GgTab.Navigator>
+            </Tab.Navigator>
             
         )
     }
     
 } 
-
-// export default function TopBarNavigator(){
-//     return <GgTabs />
-// }
