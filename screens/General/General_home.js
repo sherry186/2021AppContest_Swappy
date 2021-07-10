@@ -1,11 +1,12 @@
 import * as React from 'react';
 
-import { View, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity} from "react-native";
 import { SearchBar } from 'react-native-elements';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 
-import GeneralItems from '../../Data/GeneralItems';
-
+// import GeneralItems from '../../Data/GeneralItems';
+import * as SQLite from 'expo-sqlite'
+const generalDb = SQLite.openDatabase('db.GeneralDataBase') // returns Database object
 
 
 const contains = (data, query) => {
@@ -42,18 +43,47 @@ export default class General_HOME extends React.Component {
 
   renderItem = ({ item }) => (
     //console.log(this.props.navigation);
-    <TouchableOpacity 
-      style={styles.item}
-      onPress={() => this.props.navigation.navigate('GeneralDetail', {itemID: item.id, title: item.title, sort: item.sort, des: item.description, method: item.method, image: item.image})}>
-        <Text style={styles.title}>{item.title}</Text>
-    </TouchableOpacity>
+    <View style={styles.boxContainer}>
+      <Text style={styles.title}>{item.title}</Text>
+      <View style={styles.buttons}>
+        <TouchableOpacity 
+          style={styles.item}
+          onPress={() => this.props.navigation.navigate('GeneralDetail', {itemID: item.id, title: item.title, sort: item.category, des: item.description, method: item.method, image: item.image})}>
+            <Text>Item Detail</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.item}
+          onPress={() => {
+            generalDb.transaction(tx => {
+              tx.executeSql('DELETE FROM GeneralItems WHERE id = ?', [item.id]);
+            })
+          }}>
+            <Text>Delete Item</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 
+  fetchData = () => {
+    generalDb.transaction(tx => {
+      // sending 4 arguments in executeSql
+      tx.executeSql('SELECT * FROM GeneralItems', null, // passing sql query and parameters:null
+        // success callback which sends two things Transaction object and ResultSet Object
+        (txObj, { rows: { _array } }) => {
+          console.log(_array); 
+          this.setState({
+            data: _array,
+            fullData: _array,
+          });
+        },
+        // failure callback which sends two things Transaction object and Error
+        (txObj, error) => console.log('Error ', error)
+        ) // end executeSQL
+    }) // end transaction
+  }
+
   componentDidMount() {
-    this.setState({
-      data: GeneralItems,
-      fullData: GeneralItems,
-    });
+    this.fetchData();
   }
   
 
@@ -62,6 +92,7 @@ export default class General_HOME extends React.Component {
     // const[grvalue, grsetValue] = useState('');
     const{ navigate } = this.props.navigation;
     //console.log(this.props.navigation);
+    this.fetchData();
 
     return(
       <SafeAreaView style={styles.container}>
@@ -93,14 +124,23 @@ const styles = StyleSheet.create({
       // alignItems: 'center',
       // justifyContent: 'center'
     },
-    item: {
+    boxContainer: {
+      margin: 5,
       backgroundColor: '#f9c2ff',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    item: {
+      backgroundColor: '#E2E6EC',
       padding: 20,
       marginVertical: 8,
       marginHorizontal: 16,
     },
     title: {
       fontSize: 32,
+    },
+    buttons: {
+      flexDirection: 'row'
     },
     button: {
       width: 60,

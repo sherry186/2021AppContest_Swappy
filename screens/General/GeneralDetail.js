@@ -1,4 +1,7 @@
 import * as React from 'react';
+import * as SQLite from 'expo-sqlite'
+const generalDb = SQLite.openDatabase('db.GeneralDataBase') // returns Database object
+
 
 import { View,
        Text,
@@ -13,6 +16,28 @@ import { View,
 
 /* 2. Get the param */
 export default class GeneralDetailsScreen extends React.Component {
+
+  fetchData = () => {
+    generalDb.transaction(tx => {
+      // sending 4 arguments in executeSql
+      tx.executeSql('SELECT * FROM GeneralItems', null, // passing sql query and parameters:null
+        // success callback which sends two things Transaction object and ResultSet Object
+        (txObj, { rows: { _array } }) => {
+          console.log(_array); 
+          this.setState({
+            data: _array,
+            fullData: _array,
+          });
+        },
+        // failure callback which sends two things Transaction object and Error
+        (txObj, error) => console.log('Error ', error)
+        ) // end executeSQL
+    }) // end transaction
+  }
+
+  componentDidMount() {
+    this.fetchData();
+  }
     
   renderImage = ({ item }) => (
     <SafeAreaView style = {{flex:1, flexDirection: 'row'}}>
@@ -35,9 +60,10 @@ export default class GeneralDetailsScreen extends React.Component {
     return (
       <ScrollView style={{ flex: 1}}>
         <Text>Details Screen</Text>
+        <Text>Item Image: {image}</Text>
         <Text>Item Name: {title}</Text>
-        <Text>sort: {sort}</Text>
-        <Text>des: {des}</Text>
+        <Text>category: {sort}</Text>
+        <Text>description: {des}</Text>
         <FlatList
               data={image}
               renderItem={this.renderImage}

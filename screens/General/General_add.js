@@ -9,7 +9,10 @@ import {
     } from 'react-native';
 
 import { Picker } from '@react-native-picker/picker';
+import * as SQLite from "expo-sqlite";
 
+
+const generalDataBase = SQLite.openDatabase('db.GeneralDataBase'); // returns Database object
 
 
 // const dummyData = [
@@ -26,14 +29,31 @@ export default class General_ADD extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-      Gname: '', 
-      Discription: '',
+      ItemName: '', 
+      Description: '',
       dropdown:' ',
-      dummyData: [
+      deliveryMethod: 0, // 0: Not yet selected, 1: FacetoFace only, 2: byPost only, 3: FacetoFace AND byPost
+      dummyData: [ 
         {way: 'faceToFace'},
         {way: 'byPost'},
-      ] };
+      ] 
+  };
+       
 
+    generalDataBase.transaction(tx => {
+      // tx.executeSql(
+      //   "DROP TABLE GeneralItems"
+      // );
+      tx.executeSql(
+        `CREATE TABLE IF NOT EXISTS GeneralItems (
+          id INTEGER PRIMARY KEY AUTOINCREMENT, 
+          title TEXT, 
+          category TEXT, 
+          description TEXT, 
+          method INT, 
+          image TEXT DEFAULT "No image")`
+      )
+    })
   }
 
   
@@ -49,7 +69,7 @@ export default class General_ADD extends React.Component {
 
   selectionHandler = (ind) => {
     //alert("jie")
-    const {Gname, Discription, dummyData} = this.state;
+    const {ItemName, Description, dummyData} = this.state;
     let arr = dummyData.map((item, index)=>{
       if(ind == index){
         item.isSelected = !item.isSelected;
@@ -60,8 +80,33 @@ export default class General_ADD extends React.Component {
     this.setState({dummyData: arr})
   }
 
+  // summarizes the delivery method into 3 categories:
+  // 0: Not yet selected, 1: FacetoFace only, 2: byPost only, 3: FacetoFace AND byPost
+  deliveryMethodHandler = () => {
+    let facetoFace = this.state.dummyData[0].isSelected;
+    let byPost = this.state.dummyData[1].isSelected;
+    if(facetoFace == true && byPost == true) {
+      return 3;
+    } 
+    if(facetoFace == true) {
+      return 2;
+    }
+    if(byPost == true) {
+      return 1;
+    }
+    return 0;
+  }
+
   handlesubmit =() =>{
-    
+    //add item to DataBase
+    generalDataBase.transaction(tx => {
+      tx.executeSql(
+        `INSERT INTO GeneralItems (title, category, description, method, image) VALUES (?, ?, ?, ?, ?)`, 
+        [this.state.ItemName, this.state.dropdown, this.state.Description, this.deliveryMethodHandler(),  this.state.ItemName + ' image'],
+        (txObj, resultSet) => console.log('Success', resultSet),
+        (txObj, error) => console.log('Error', error))
+    })
+    //Navigate back to home page
     this.props.navigation.navigate('Home')
   } 
 
@@ -85,15 +130,15 @@ export default class General_ADD extends React.Component {
         <TextInput
             style={styles.input}
             placeholder='ItemName'
-            onChangeText={(text) => this.setState({Gname: text})}
-            value = {this.state.Gname}/>
+            onChangeText={(text) => this.setState({ItemName: text})}
+            value = {this.state.ItemName}/>
 
-        <Text style={styles.buttonText}>Discription</Text>
+        <Text style={styles.buttonText}>Description</Text>
         <TextInput
             style={styles.input}
             placeholder='second hand, not brandnew'
-            onChangeText={(text) => this.setState({Discription: text})}
-            value = {this.state.Discription}/>
+            onChangeText={(text) => {this.setState({Description: text}); console.log(this.state.Description)}}
+            value = {this.state.Description}/>
 
         <Text style={styles.buttonText}>item sort</Text>
         <Picker

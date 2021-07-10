@@ -30,10 +30,9 @@ export default class General_ADD extends React.Component {
       Discription: '',
       dropdown:' ',
       dummyData: [
-        {way: 'faceToFace'},
-        {way: 'byPost'},
+        {way: 'Face'},
+        {way: 'Post'},
       ] };
-
   }
 
   
@@ -96,7 +95,7 @@ export default class General_ADD extends React.Component {
             value = {this.state.Discription}/>
 
         <Text style={styles.buttonText}>item sort</Text>
-        <Picker
+        {/* <Picker
             mode={'dropdown'}
             style={{height: 25,width:200}}
             selectedValue={this.state.dropdown}
@@ -108,7 +107,7 @@ export default class General_ADD extends React.Component {
             <Picker.Item label="小型生活器具" value="key4" />
             <Picker.Item label="家電用品" value="key5" />
             <Picker.Item label="其他" value="key6" />
-          </Picker>
+          </Picker> */}
 
         <View style={{flexDirection: 'row'}}>
           {
