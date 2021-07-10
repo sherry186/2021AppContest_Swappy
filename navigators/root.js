@@ -12,6 +12,9 @@ import MainDetail from '../screens/Main/Main_detail';
 import BreakAwayHesitate from '../screens/BreakAway/BreakAwayHesitate';
 import GroupAddItem from '../screens/Group/GroupAddItem';
 import Group_itemDetail from '../screens/Group/Group_itemDetail';
+import Notification from './NotificationNav';
+//import { Text } from 'react-native';
+
 
 const RootStack = createStackNavigator();
 
@@ -26,6 +29,7 @@ function Root() {
           component={Tabs}
           //options={{headerShown: false}}
         />
+
 
         {/*general*/}
         <RootStack.Screen 
@@ -85,6 +89,13 @@ function Root() {
           name="BreakAwayHesitate" 
           component={BreakAwayHesitate}
           options={{headerShown: false }}/>
+
+        {/*notification & message*/}
+        <RootStack.Screen 
+          name="Notification" 
+          component={Notification}
+          options={{headerShown: false }}/>
+
       </RootStack.Navigator>
     );
   }

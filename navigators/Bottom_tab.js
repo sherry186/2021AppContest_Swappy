@@ -4,11 +4,11 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Assets, createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import TopBarNavigator from './ggtab';  //dot dot slash is going up a path
+//import TopBarNavigator from './ggtab';  //dot dot slash is going up a path
 import Social from './SocialNav';
 import Personal from '../screens/Personal';
 import BreakAway from '../screens/BreakAway/BreakAway';
-
+import Home from "./Home_Nav";
 
 
 
@@ -21,6 +21,7 @@ const Tabs = () => {
       tabBarOptions={{
           activeTintColor: "#e91e63",
           keyboardHidesTabBar: true,
+          
           labelStyle: { fontSize: 20 },
           style: { 
               position: 'absolute',
@@ -33,7 +34,7 @@ const Tabs = () => {
               }
 
       }}>
-      <Tab.Screen name = "Home" component = {TopBarNavigator} options={{
+      <Tab.Screen name = "Home" component = {Home} options={{
         tableBarIcon:({focus})=>(
           <View style={{alignItems:'center', justifyContenet: 'center', top: 10}}>
             <Image

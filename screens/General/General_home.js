@@ -65,17 +65,33 @@ export default class General_HOME extends React.Component {
 
     return(
       <SafeAreaView style={styles.container}>
-        <SearchBar
-          placeholder="Type Here..."
-          onChangeText={this.handleSearch}
-          value={search}
-          lightTheme
+        <View style = {{flexDirection:'row'}}>
+            <View style = {{flex: 8}}>
+                <SearchBar
+                  placeholder="Type Here..."
+                  onChangeText={this.handleSearch}
+                  value={search}
+                  lightTheme
+                />
+            </View>
+            
+            <TouchableOpacity 
+               style={{flex: 1, width: 60, height: 60, borderRadius:30, backgroundColor: '#f9c2ff', justifyContent: 'center', alignItems: 'center', right: 0}}
+               onPress={() => navigate('GeneralAdd')}>
+              <Text style={styles.buttonText}>M</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+               style={{flex: 1, width: 60, height: 60, borderRadius:30, backgroundColor: '#f9c2ff', justifyContent: 'center', alignItems: 'center', right: 0}}
+               onPress={() => navigate('Notification')}>
+              <Text style={styles.buttonText}>N</Text>
+            </TouchableOpacity>
+        </View>
+        
+        <FlatList
+          data={this.state.data}
+          renderItem={this.renderItem}
+          keyExtractor={item => item.id}
         />
-      <FlatList
-        data={this.state.data}
-        renderItem={this.renderItem}
-        keyExtractor={item => item.id}
-      />
         <TouchableOpacity 
             style={styles.button}
             onPress={() => navigate('GeneralAdd')}>
