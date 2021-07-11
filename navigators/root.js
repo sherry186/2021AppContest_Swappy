@@ -94,7 +94,7 @@ function Root() {
         <RootStack.Screen 
           name="Notification" 
           component={Notification}
-          options={{headerShown: false }}/>
+          options={{headerShown: true }}/>
 
       </RootStack.Navigator>
     );
