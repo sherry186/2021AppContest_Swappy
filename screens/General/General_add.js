@@ -10,6 +10,7 @@ import {
 
 import { Picker } from '@react-native-picker/picker';
 import * as SQLite from "expo-sqlite";
+import colors from '../../config/colors';
 
 
 const generalDataBase = SQLite.openDatabase('db.GeneralDataBase'); // returns Database object
@@ -216,13 +217,13 @@ const styles = StyleSheet.create({
     paddingTop: 23
   },
   item: {
-    backgroundColor: '#f9c2ff',
+    backgroundColor: colors.mono_60,
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
   },
   itemS: {
-    backgroundColor: '#7a42f4',
+    backgroundColor: colors.function_100,
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,

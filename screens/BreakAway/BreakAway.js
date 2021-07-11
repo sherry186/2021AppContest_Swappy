@@ -4,6 +4,7 @@ import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 import { ProgressBar } from "react-native-paper";
 import BreakAwaySpace from '../../Data/BreakAwaySpace';
 import BreakAwayItems from '../../Data/BreakAwayItems';
+import colors from '../../config/colors'
 
 export default class BreakAway extends React.Component {
 
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
       backgroundColor: "#E0E0E0"
     },
     item: {
-      backgroundColor: '#f9c2ff',
+      backgroundColor: colors.function_100,
       padding: 20,
       marginVertical: 8,
       marginHorizontal: 16,
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     buttonText: {
-      color: '#fff',
+      color: colors.mono_40,
       fontSize: 10,
       fontWeight: 'bold',
     },
