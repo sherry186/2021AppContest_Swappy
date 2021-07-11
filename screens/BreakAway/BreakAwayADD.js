@@ -17,7 +17,7 @@ export default class BreakAwayADD extends React.Component {
   }
   constructor(props) {
     super(props);
-    this.state = { Space: '', Discription: '', };
+    this.state = { Space: '', };
   }
 
   handlesubmit =() =>{
@@ -39,13 +39,7 @@ export default class BreakAwayADD extends React.Component {
             placeholder='Space'
             onChangeText={(text) => this.setState({Space: text})}
             value = {this.state.Space}/>
-
-        <Text style={styles.buttonText}>Discription</Text>
-        <TextInput
-            style={styles.input}
-            placeholder='second hand, not brandnew'
-            onChangeText={(text) => this.setState({Discription: text})}
-            value = {this.state.Discription}/>
+        
 
         <TouchableOpacity
             title = 'upload'

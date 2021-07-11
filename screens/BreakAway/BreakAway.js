@@ -5,16 +5,19 @@ import { ProgressBar } from "react-native-paper";
 import BreakAwaySpace from '../../Data/BreakAwaySpace';
 import BreakAwayItems from '../../Data/BreakAwayItems';
 import colors from '../../config/colors'
+import { useState } from 'react';
 
 export default class BreakAway extends React.Component {
 
   state = {
     spaceData: [],
     itemData: [],
+    shouldShow: false,
   };
 
   static navigationOptions = {
     title: 'BreakAway',
+    
   }
 
 
@@ -48,10 +51,10 @@ export default class BreakAway extends React.Component {
   
 
   render() {
-    const { search } = this.state;
     // const[grvalue, grsetValue] = useState('');
     const{ navigate } = this.props.navigation;
     //console.log(this.props.navigation);
+    const{ shouldShow } = this.state;
 
     return(
       <ScrollView style={{flex:1, flexDirection: 'column'}}> 
@@ -80,30 +83,36 @@ export default class BreakAway extends React.Component {
           </TouchableOpacity>
         </View>
 
-        <View style={{flex:0.2, flexDirection: 'row'}}>
-          <View style={styles.center, {flex:1}}>
-            <TouchableOpacity 
-              style={styles.buttonRound}
-              onPress={() => navigate("BreakAwayHesitate")}
-              >
-              <Text>Hesitate</Text>
-            </TouchableOpacity>
-          </View>
 
-          <View style={styles.center, {flex:1}}>
-            <TouchableOpacity 
-              style={styles.buttonRound}
-              // onPress={() => navigate("BreakAwayADD")}
-              >
-              <Text>ChangeOut</Text>
-            </TouchableOpacity>
-          </View>                
-        </View>
+        {
+          this.state.shouldShow ? (
+          <View style={{flex:0.2, flexDirection: 'row'}}>
+            <View style={styles.center, {flex:1}}>
+              <TouchableOpacity 
+                style={styles.buttonRound}
+                onPress={() => navigate("BreakAwayHesitate")}
+                >
+                <Text>Hesitate</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.center, {flex:1}}>
+              <TouchableOpacity 
+                style={styles.buttonRound}
+                // onPress={() => navigate("BreakAwayADD")}
+                >
+                <Text>ChangeOut</Text>
+              </TouchableOpacity>
+            </View>                
+          </View>
+          ) : null
+        }
+        
 
         <View style={{margin: 20, flex: 1, flexDirection:'column'}}>
             <TouchableOpacity 
               style={styles.buttonRound}
-              // onPress={() => navigate("BreakAwayADD")}
+              onPress={() => this.setState({shouldShow: !shouldShow})}
               >
               <Text>Camera</Text>
             </TouchableOpacity>

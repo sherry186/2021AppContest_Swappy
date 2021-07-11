@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import {View,ScrollView, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { SearchBar } from 'react-native-elements';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 
@@ -45,13 +45,19 @@ export default class Main_HOME extends React.Component {
 
   renderChat = ({ item }) => (
     //console.log(this.props.navigation);
-    <TouchableOpacity 
-      style={styles.Chat}
-      onPress={() => this.props.navigation.navigate('MainDetail', {title: item.title,person: item.person, post: item.post})}>
-        <Text style={styles.post}>{item.title}</Text>
-        <Text style={styles.person}>{item.person}</Text>
-        <Text style={styles.person}>{item.post}</Text>
-    </TouchableOpacity>
+    <View 
+      style={styles.ChatC}>
+        <TouchableOpacity style = {styles.Chat} onPress={() => this.props.navigation.navigate('MainDetail', {title: item.title, person: item.person, post: item.post})}>
+          <Text style={styles.post}>{item.title}</Text>
+          <Text style={styles.person}>{item.person}</Text>
+          <Text style={styles.person}>{item.post}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{width: 60, height: 60, position:'absolute', right: 20, top: 20}}>
+          <Text>Collect</Text>
+        </TouchableOpacity>
+    </View>
+      
+          
   );
 
   componentDidMount() {
@@ -69,24 +75,31 @@ export default class Main_HOME extends React.Component {
     //console.log(this.props.navigation);
 
     return(
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <SearchBar
           placeholder="Type Here..."
           onChangeText={this.handleSearch}
           value={search}
           lightTheme
         />
-      <FlatList
-        data={this.state.data}
-        renderItem={this.renderChat}
-        keyExtractor={item => item.id}
-      />
+        <FlatList
+          data={this.state.data}
+          renderItem={this.renderChat}
+          keyExtractor={item => item.id}
+        />
+        
         <TouchableOpacity 
-            style={styles.button}
-            onPress={() => navigate('MainAdd')}>
-            <Text style={styles.buttonText}>ADD</Text>
+          style={styles.button}
+          onPress={() => navigate('MainAdd')}>
+          <Text style={styles.buttonText}>ADD</Text>
         </TouchableOpacity>
-      </SafeAreaView>
+        
+      
+      </View>
+
+        
+
+      
     )
   }
 
@@ -99,6 +112,14 @@ const styles = StyleSheet.create({
       // justifyContent: 'center'
     },
     Chat: {
+        
+        backgroundColor: '#f9c2ff',
+        
+        marginVertical: 8,
+        marginHorizontal: 16,
+      },
+    ChatC: {
+        flexDirection: 'row',
         backgroundColor: '#f9c2ff',
         padding: 20,
         marginVertical: 8,

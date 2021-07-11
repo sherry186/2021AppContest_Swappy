@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { SearchBar } from 'react-native-elements';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 
@@ -57,13 +57,17 @@ export default class Main_HOME extends React.Component {
 
   renderChat = ({ item }) => (
     //console.log(this.props.navigation);
-    <TouchableOpacity 
-      style={styles.Chat}
-      onPress={() => this.props.navigation.navigate('MainDetail', {title: item.person, post: item.post})}>
-        <Text style={styles.post}>{item.title}</Text>
-        <Text style={styles.person}>{item.person}</Text>
-        <Text style={styles.person}>{item.post}</Text>
-    </TouchableOpacity>
+    <View 
+      style={styles.ChatC}>
+        <TouchableOpacity style = {styles.Chat} onPress={() => this.props.navigation.navigate('MainDetail', {title: item.title, person: item.person, post: item.post})}>
+          <Text style={styles.post}>{item.title}</Text>
+          <Text style={styles.person}>{item.person}</Text>
+          <Text style={styles.person}>{item.post}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{width: 60, height: 60, position:'absolute', right: 20, top: 20}}>
+          <Text>Collect</Text>
+        </TouchableOpacity>
+    </View>
   );
 
   componentDidMount() {
@@ -96,11 +100,6 @@ export default class Main_HOME extends React.Component {
         renderItem={this.renderChat}
         keyExtractor={item => item.id}
       />
-        <TouchableOpacity 
-            style={styles.button}
-            onPress={() => navigate('MainAdd')}>
-            <Text style={styles.buttonText}>ADD</Text>
-        </TouchableOpacity>
       </SafeAreaView>
     )
   }
@@ -108,40 +107,48 @@ export default class Main_HOME extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      // alignItems: 'center',
-      // justifyContent: 'center'
+  container: {
+    flex: 1,
+    // alignItems: 'center',
+    // justifyContent: 'center'
+  },
+  Chat: {
+      
+      backgroundColor: '#f9c2ff',
+      
+      marginVertical: 8,
+      marginHorizontal: 16,
     },
-    Chat: {
-        backgroundColor: '#f9c2ff',
-        padding: 20,
-        marginVertical: 8,
-        marginHorizontal: 16,
-      },
-    person: {
-        fontSize: 12,
-      },
-    post: {
-        fontSize: 16,
+  ChatC: {
+      flexDirection: 'row',
+      backgroundColor: '#f9c2ff',
+      padding: 20,
+      marginVertical: 8,
+      marginHorizontal: 16,
     },
-    title: {
-      fontSize: 32,
+  person: {
+      fontSize: 12,
     },
-    button: {
-      width: 60,
-      height: 60,
-      position: 'absolute',
-      borderRadius: 30,
-      backgroundColor: '#ee6e73',
-      bottom: 150,
-      right: 175,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    buttonText: {
-      color: '#fff',
-      fontSize: 10,
-      fontWeight: 'bold',
-    },
-  });
+  post: {
+      fontSize: 16,
+  },
+  title: {
+    fontSize: 32,
+  },
+  button: {
+    width: 60,
+    height: 60,
+    position: 'absolute',
+    borderRadius: 30,
+    backgroundColor: '#ee6e73',
+    bottom: 150,
+    right: 175,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
+});
