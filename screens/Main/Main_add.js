@@ -67,6 +67,7 @@ export default class Main_ADD extends React.Component {
         <TextInput
             style={styles.post}
             placeholder="What's on your mind?"
+            multiline = {true}
             onChangeText={(text) => this.setState({article: text})}
             value = {this.state.article}/>
         <Text></Text>
