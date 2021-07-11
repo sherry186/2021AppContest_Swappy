@@ -6,7 +6,7 @@ import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 
 // import GeneralItems from '../../Data/GeneralItems';
 import * as SQLite from 'expo-sqlite'
-const generalDb = SQLite.openDatabase('db.GeneralDataBase') // returns Database object
+const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
 
 
 const contains = (data, query) => {
@@ -54,7 +54,7 @@ export default class General_HOME extends React.Component {
         <TouchableOpacity 
           style={styles.item}
           onPress={() => {
-            generalDb.transaction(tx => {
+            database.transaction(tx => {
               tx.executeSql('DELETE FROM GeneralItems WHERE id = ?', [item.id]);
             })
           }}>
@@ -65,7 +65,7 @@ export default class General_HOME extends React.Component {
   );
 
   fetchData = () => {
-    generalDb.transaction(tx => {
+    database.transaction(tx => {
       // sending 4 arguments in executeSql
       tx.executeSql('SELECT * FROM GeneralItems', null, // passing sql query and parameters:null
         // success callback which sends two things Transaction object and ResultSet Object

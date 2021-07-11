@@ -13,7 +13,7 @@ import * as SQLite from "expo-sqlite";
 import colors from '../../config/colors';
 
 
-const generalDataBase = SQLite.openDatabase('db.GeneralDataBase'); // returns Database object
+const dataBase = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
 
 
 // const dummyData = [
@@ -41,7 +41,7 @@ export default class General_ADD extends React.Component {
   };
        
 
-    generalDataBase.transaction(tx => {
+    dataBase.transaction(tx => {
       // tx.executeSql(
       //   "DROP TABLE GeneralItems"
       // );
@@ -100,7 +100,7 @@ export default class General_ADD extends React.Component {
 
   handlesubmit =() =>{
     //add item to DataBase
-    generalDataBase.transaction(tx => {
+    dataBase.transaction(tx => {
       tx.executeSql(
         `INSERT INTO GeneralItems (title, category, description, method, image) VALUES (?, ?, ?, ?, ?)`, 
         [this.state.ItemName, this.state.dropdown, this.state.Description, this.deliveryMethodHandler(),  this.state.ItemName + ' image'],

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import * as SQLite from 'expo-sqlite'
-const generalDb = SQLite.openDatabase('db.GeneralDataBase') // returns Database object
+import * as SQLite from 'expo-sqlite';
+const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
 
 
 import { View,
@@ -18,7 +18,7 @@ import { View,
 export default class GeneralDetailsScreen extends React.Component {
 
   fetchData = () => {
-    generalDb.transaction(tx => {
+    database.transaction(tx => {
       // sending 4 arguments in executeSql
       tx.executeSql('SELECT * FROM GeneralItems', null, // passing sql query and parameters:null
         // success callback which sends two things Transaction object and ResultSet Object

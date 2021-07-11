@@ -6,7 +6,7 @@ import {
     View, 
     TextInput,
     TouchableOpacity} from 'react-native';
-
+    import * as SQLite from "expo-sqlite";
 
 export default class Group_ADD extends React.Component {
 
