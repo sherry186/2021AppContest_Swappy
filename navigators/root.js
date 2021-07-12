@@ -13,6 +13,9 @@ import BreakAwayHesitate from '../screens/BreakAway/BreakAwayHesitate';
 import GroupAddItem from '../screens/Group/GroupAddItem';
 import Group_itemDetail from '../screens/Group/Group_itemDetail';
 import Notification from './NotificationNav';
+import BreakAwayItemDetail from '../screens/BreakAway/BreakAwayItemDetail';
+import BreakAwayItemChangeOut from '../screens/BreakAway/BreakAwayItemChangeOut';
+import BreakAwaySpaceDetail from '../screens/BreakAway/BreakAwaySpaceDetail';
 //import { Text } from 'react-native';
 
 
@@ -84,10 +87,25 @@ function Root() {
           name="BreakAwayADD" 
           component={BreakAwayADD}
           options={{headerShown: false }}/>
+        
+        <RootStack.Screen 
+          name="BreakAwayItemDetail" 
+          component={BreakAwayItemDetail}
+          options={{headerShown: false }}/>
+
+        <RootStack.Screen 
+          name="BreakAwayItemChangeOut" 
+          component={BreakAwayItemChangeOut}
+          options={{headerShown: false }}/>
 
         <RootStack.Screen 
           name="BreakAwayHesitate" 
           component={BreakAwayHesitate}
+          options={{headerShown: false }}/>
+        
+        <RootStack.Screen 
+          name="BreakAwaySpaceDetail" 
+          component={BreakAwaySpaceDetail}
           options={{headerShown: false }}/>
 
         {/*notification & message*/}

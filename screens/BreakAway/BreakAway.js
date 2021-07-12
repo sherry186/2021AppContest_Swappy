@@ -1,5 +1,13 @@
 import * as React  from 'react';
-import { ScrollView, View, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { ScrollView,
+         Pressable,
+         View,
+         Text,
+         SafeAreaView, 
+         FlatList, 
+         StyleSheet, 
+         TouchableOpacity, 
+         Image } from "react-native";
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 import { ProgressBar } from "react-native-paper";
 import BreakAwaySpace from '../../Data/BreakAwaySpace';
@@ -9,11 +17,13 @@ import { useState } from 'react';
 
 export default class BreakAway extends React.Component {
 
-  state = {
-    spaceData: [],
-    itemData: [],
-    shouldShow: false,
-  };
+
+    state = {
+      spaceData: [],
+      itemData: [],
+      shouldShow: false,
+    }
+  
 
   static navigationOptions = {
     title: 'BreakAway',
@@ -23,10 +33,12 @@ export default class BreakAway extends React.Component {
 
   renderItem = ({ item }) => (
     //console.log(this.props.navigation);
-    <TouchableOpacity 
-            style={styles.button}
-            >
+    <TouchableOpacity
+        onPress =  {() => this.props.navigation.navigate("BreakAwaySpaceDetail", {spaceId: item.id, complete: item.complete})}
+        style={styles.button}
+        >
       <Text>{item.title}</Text>
+      <Text></Text>
       <ProgressBar
         progress = {item.complete} 
         style={styles.probarStyle} 
@@ -35,11 +47,14 @@ export default class BreakAway extends React.Component {
   );
 
   renderImage = ({ item }) => (
-    <SafeAreaView style = {{flex:1, flexDirection: 'row'}}>
+    <TouchableOpacity
+      onPress = {() => this.props.navigation.navigate("BreakAwayItemDetail", {source: item.source, spaceId: item.spaceId, story: item.story, uploadDate: item.uploadDate})} 
+      style={{flexDirection: 'row', width:70, height: 80, margin:10}}
+      >
       <Image 
-      style={{flexDirection: 'row', width: 60, height: 60,  }}
-      source={item.source}/>
-    </SafeAreaView> 
+        style={{ width: 60, height: 60  }}
+        source={item.source}/>
+    </TouchableOpacity>
   );
 
   componentDidMount() {
@@ -57,36 +72,35 @@ export default class BreakAway extends React.Component {
     const{ shouldShow } = this.state;
 
     return(
-      <ScrollView style={{flex:1, flexDirection: 'column'}}> 
-
-        <View style={{flex:0.5, flexDirection: 'row'}}>
+      <View style={{flex:1, flexDirection: 'column'}}> 
+        
           <FlatList
+              style = {{margin: 20}}
               data={this.state.itemData}
               renderItem={this.renderImage}
               horizontal = {true}
               keyExtractor={item => item.id}
           />
-
-        </View>
-
-        
-        <FlatList
-            data={this.state.spaceData}
-            renderItem={this.renderItem}
-            keyExtractor={item => item.id}
-        /> 
-        <View style={styles.center, {flex:0.2, flexDirection: 'row'}}>
-          <TouchableOpacity 
-                style={styles.center, styles.button}
+          <View style = {{flex:3}}>
+              <FlatList
+                  style = {{bottom: 150}}
+                  data={this.state.spaceData}
+                  renderItem={this.renderItem}
+                  keyExtractor={item => item.id}
+              /> 
+              <TouchableOpacity 
+                style={styles.button2}
                 onPress={() => navigate("BreakAwayADD")}>
                 <Text>ADD</Text>
-          </TouchableOpacity>
-        </View>
+               </TouchableOpacity>
+          </View>
+          
 
+          
 
         {
           this.state.shouldShow ? (
-          <View style={{flex:0.2, flexDirection: 'row'}}>
+          <View style={{flexDirection: 'row', height: 20}}>
             <View style={styles.center, {flex:1}}>
               <TouchableOpacity 
                 style={styles.buttonRound}
@@ -109,7 +123,7 @@ export default class BreakAway extends React.Component {
         }
         
 
-        <View style={{margin: 20, flex: 1, flexDirection:'column'}}>
+        <View style={{margin: 20, flexDirection:'column'}}>
             <TouchableOpacity 
               style={styles.buttonRound}
               onPress={() => this.setState({shouldShow: !shouldShow})}
@@ -119,7 +133,7 @@ export default class BreakAway extends React.Component {
         </View>
 
        
-      </ScrollView>
+      </View>
         
        
     )
@@ -153,20 +167,32 @@ const styles = StyleSheet.create({
       fontSize: 32,
     },
     button: {
-      flex:1,
+      //flex:1,
       margin: 4,
       width: 350,
       height: 60,
+      
+      backgroundColor: "#E0E0E0",
+      alignItems: 'center',
+      alignSelf: 'center',
+      //justifyContent: 'center',
+    },
+    button2: {
+      margin: 4,
+      width: 350,
+      height: 60,
+      bottom: 200,
       backgroundColor: "#E0E0E0",
       alignItems: 'center',
       alignSelf: 'center',
       justifyContent: 'center',
     },
     buttonRound: {
-      margin: 50,
+      position: 'absolute',
       width: 60,
       height: 60,
       borderRadius: 30,
+      bottom: 50,
       backgroundColor: "#E0E0E0",
       alignItems: 'center',
       alignSelf: 'center',

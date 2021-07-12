@@ -1,23 +1,22 @@
 export default [
     {
-      id: '0',
+      id: 0,
       title: 'Bedroom',
-      complete: 0.12,
+      complete: 30,
     },
     {
-        id: '1',
+        id: 1,
         title: 'Living Room',
-        complete: 0.32,
+        complete: 30,
     },
     {
-        id: '2',
+        id: 2,
         title: 'Kitchen',
-        complete: 0.70,
+        complete: 40,
     },
     {
-        id: '3',
+        id: 3,
         title: 'Belcony',
-        complete: 0.42,
+        complete: 42,
     },
-
 ];
