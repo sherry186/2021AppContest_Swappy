@@ -27,16 +27,24 @@ export default class MainDetail extends React.Component {
     
   }
 
-  
+  renderComment = ({ item }) => (
+    //console.log(this.props.navigation);
+    <Text>{item.person} {item.content}</Text>
+  );
+
   render(){  
-    const { title, person, post } = this.props.route.params;
+    const { title, person, post, comment, hideName } = this.props.route.params;
     return (
       <ScrollView style={{ flex: 1}}>
         <Text></Text>
         <Text></Text>
         <Text>{title}</Text>
-        <Text>{person}</Text>
+        <Text>{hideName? person : "匿名"}</Text>
         <Text>{post}</Text>
+        <FlatList 
+          data={comment}
+          renderItem={this.renderComment}
+          keyExtractor={item => item.id}/>
         <TextInput
             style={styles.title}
             placeholder="comment"

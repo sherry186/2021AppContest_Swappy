@@ -8,13 +8,14 @@ import SocialItems from '../../Data/SocialItems';
 import SocialCollection from '../../Data/SocialCollection';
 
 
-const contains = (data1, data2, query) => {
+const contains = (data1, data2, data3, query) => {
   let formatData1 = data1.toLowerCase();
   let formatData2 = data2.toLowerCase();
+  let formatData3 = data3.toLowerCase();
 
   let formatQuery = query.toLowerCase();
 
-  if (formatData1.includes(formatQuery) || formatData2.includes(formatQuery)) {
+  if (formatData1.includes(formatQuery) || formatData2.includes(formatQuery) || formatData3.includes(formatQuery)) {
     return true;
   }
   return false;
@@ -50,7 +51,7 @@ export default class Main_HOME extends React.Component {
   handleSearch = (search) => {
     console.log("search", search)
     const data = _.filter(this.state.fullData, post => {
-      return contains(post.person, post.post, search)
+      return contains(post.person, post.post, post.title, search)
     })
     this.setState({ data,  search});
   };
@@ -69,11 +70,10 @@ export default class Main_HOME extends React.Component {
 
   renderChat = ({ item }) => (
     //console.log(this.props.navigation);
-    <View 
-      style={styles.ChatC}>
-        <TouchableOpacity style = {styles.Chat} onPress={() => this.props.navigation.navigate('MainDetail', {title: item.title, person: item.person, post: item.post})}>
+    <View style={styles.ChatC}>
+        <TouchableOpacity style = {styles.Chat} onPress={() => this.props.navigation.navigate('MainDetail', {title: item.title, person: item.person, post: item.post, comment: item.comment, hideName: item.hideName})}>
           <Text style={styles.post}>{item.title}</Text>
-          <Text style={styles.person}>{item.person}</Text>
+          <Text style={styles.person}>{item.hideName? "匿名" : item.person}</Text>
           <Text style={styles.person}>{item.post}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={item.collected?{width: 70, height: 30, position:'absolute', right: 20, top: 20, backgroundColor: '#ee6e73'} : {width: 70, height: 30, position:'absolute', right: 20, top: 20}}
