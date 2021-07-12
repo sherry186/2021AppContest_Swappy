@@ -43,17 +43,29 @@ export default class Main_HOME extends React.Component {
     this.setState({ data,  search});
   };
 
+  handleCollected = (id) =>{
+    const {data} = this.state;
+    let arr = data.map((item, index)=>{
+      if(id == index){
+        item.collected = !item.collected;
+      }
+      return {...item}
+    })
+    console.log("selection handler1 ==>", arr)
+    this.setState({data: arr})
+  };
+
   renderChat = ({ item }) => (
     //console.log(this.props.navigation);
-    <View 
-      style={styles.ChatC}>
+    <View style={styles.ChatC}>
         <TouchableOpacity style = {styles.Chat} onPress={() => this.props.navigation.navigate('MainDetail', {title: item.title, person: item.person, post: item.post})}>
           <Text style={styles.post}>{item.title}</Text>
           <Text style={styles.person}>{item.person}</Text>
           <Text style={styles.person}>{item.post}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{width: 60, height: 60, position:'absolute', right: 20, top: 20}}>
-          <Text>Collect</Text>
+        <TouchableOpacity style={item.collected?{width: 70, height: 30, position:'absolute', right: 20, top: 20, backgroundColor: '#ee6e73'} : {width: 70, height: 30, position:'absolute', right: 20, top: 20}}
+                          onPress={()=>this.handleCollected(item.id)}>
+          <Text>{item.collected? "uncollect": "collect"}</Text>
         </TouchableOpacity>
     </View>
       
@@ -61,8 +73,14 @@ export default class Main_HOME extends React.Component {
   );
 
   componentDidMount() {
+    const posts = SocialItems
+    let arr = posts.map((item, index)=>{
+      item.collected = false
+      return {...item}
+    })
+
     this.setState({
-      data: SocialItems,
+      data: arr,
       fullData: SocialItems,
     });
   }

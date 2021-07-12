@@ -18,7 +18,11 @@ export default class Main_ADD extends React.Component {
   constructor(props) {
     super(props);
     this.label = {false: 'off', true: 'on'};
-    this.state = { title: "", article: "", hide: false, };
+    this.state = { 
+      title: "",
+      article: "",
+      hide: false, 
+       };
   }
 
   handlesubmit =() =>{
