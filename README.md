@@ -2,6 +2,8 @@
 
 ### how to run
 
+# **** NAVIGATE TO frontend directory FIRST***
+
 ```
 yarn install
 expo start
