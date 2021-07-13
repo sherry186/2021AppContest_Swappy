@@ -16,6 +16,9 @@ import Notification from './NotificationNav';
 import BreakAwayItemDetail from '../screens/BreakAway/BreakAwayItemDetail';
 import BreakAwayItemChangeOut from '../screens/BreakAway/BreakAwayItemChangeOut';
 import BreakAwaySpaceDetail from '../screens/BreakAway/BreakAwaySpaceDetail';
+import BreakAwayChangeOut from '../screens/BreakAway/BreakAwayChangeOut';
+import login from '../screens/Login/login';
+import signup from '../screens/Login/signup';
 //import { Text } from 'react-native';
 
 
@@ -24,13 +27,24 @@ const RootStack = createStackNavigator();
 function Root() {
     return (
       <RootStack.Navigator>
-        
+        {/*login*/}
+        <RootStack.Screen 
+          name="login" 
+          component={login}
+          options={{headerShown: false}}
+        />
+        <RootStack.Screen 
+          name="signup" 
+          component={signup}
+          options={{headerShown: false}}
+        />
+
 
         {/*tab*/}
         <RootStack.Screen 
           name="BottomTab" 
           component={Tabs}
-          //options={{headerShown: false}}
+          options={{headerShown: false}}
         />
 
 
@@ -101,6 +115,11 @@ function Root() {
         <RootStack.Screen 
           name="BreakAwayHesitate" 
           component={BreakAwayHesitate}
+          options={{headerShown: false }}/>
+
+        <RootStack.Screen 
+          name="BreakAwayChangeOut" 
+          component={BreakAwayChangeOut}
           options={{headerShown: false }}/>
         
         <RootStack.Screen 
