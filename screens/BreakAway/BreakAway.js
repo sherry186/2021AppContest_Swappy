@@ -113,7 +113,7 @@ export default class BreakAway extends React.Component {
             <View style={styles.center, {flex:1}}>
               <TouchableOpacity 
                 style={styles.buttonRound}
-                // onPress={() => navigate("BreakAwayADD")}
+                onPress={() => navigate("BreakAwayChangeOut")}
                 >
                 <Text>ChangeOut</Text>
               </TouchableOpacity>
