@@ -17,7 +17,7 @@ export default class login extends React.Component {
       <View style={{ flex: 1 }}>
         <TextInput
           style={styles.input}
-          placeholder='email/ID/phone number'
+          placeholder='email'
           onChangeText={(text) => { this.setState({ account: text }) }}
           value={this.state.account} />
 
