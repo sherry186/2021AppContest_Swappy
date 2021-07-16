@@ -14,34 +14,40 @@ export default class login extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <TextInput
-          style={styles.input}
-          placeholder='email'
-          onChangeText={(text) => { this.setState({ account: text }) }}
-          value={this.state.account} />
+      <View style={{ flex: 1 , backgroundColor: colors.function_100}}>
+        <View style = {{flex: 1, borderTopStartRadius:20, borderTopRightRadius:20, backgroundColor: colors.mono_40, alignItems:'center', justifyContent:'center'}}>
+          <TextInput
+            style={styles.input}
+            placeholder='電子郵件'
+            onChangeText={(text) => { this.setState({ account: text }) }}
+            value={this.state.account} />
 
-        <TextInput
-          style={styles.input}
-          placeholder='password'
-          onChangeText={(text) => { this.setState({ password: text }) }}
-          value={this.state.password} />
+          <TextInput
+            style={styles.input}
+            placeholder='密碼'
+            onChangeText={(text) => { this.setState({ password: text }) }}
+            value={this.state.password} />
 
-        <TouchableOpacity
-          title='signup'
-          onPress={() => this.props.navigation.navigate("signup")}
-        >
-          <Text
-            style={{ color: colors.function_100 }}>Don't have an account? signup now</Text>
-        </TouchableOpacity>
+          <View style = {{left: 100, flexDirection: 'row'}}>
+              <Text style = {{color: colors.mono_80}}>找不到密碼嗎？ </Text>
+              <TouchableOpacity
+                title='resetpassword'
+              >
+                <Text
+                  style={{ color: colors.function_100 }}>重設密碼</Text>
+              </TouchableOpacity>
+          </View>
+          
 
-        <TouchableOpacity
-          title='Submit'
-          onPress={this.handlesubmit}
-          style={styles.item}>
-          <Text
-            style={styles.buttonText}>Submit</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            title='Submit'
+            onPress={this.handlesubmit}
+            style={styles.submit}>
+            <Text
+              style={styles.buttonText}>登入</Text>
+          </TouchableOpacity>
+        </View>
+        
 
       </View>
     );
@@ -51,20 +57,27 @@ export default class login extends React.Component {
 
 const styles = StyleSheet.create({
   input: {
-    margin: 15,
+    margin:10,
     height: 40,
-    borderColor: '#7a42f4',
-    borderWidth: 1
+    width: 300,
+    alignContent: 'center',
+    justifyContent: 'center',
+    borderWidth: 0
   },
-  item: {
+  submit: {
+    borderRadius: 10,
+    display:'flex',
+    margin: 30,
     backgroundColor: colors.function_100,
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+    height: 40,
+    width: 80,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonText: {
     color: colors.mono_40,
-    fontSize: 10,
+    justifyContent: 'center',
+    fontSize: 15,
     fontWeight: 'bold',
   },
 });

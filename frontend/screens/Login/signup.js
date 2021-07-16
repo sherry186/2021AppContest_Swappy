@@ -14,58 +14,47 @@ export default class signup extends React.Component{
       
   render(){  
     return (
-      <View style={{ flex: 1}}>
-        <TextInput
-            style={styles.input}
-            placeholder='user name'
-            onChangeText={(text) => {this.setState({userName: text})}}
-            value = {this.state.userName}/>
-        
-        <TextInput
-            style={styles.input}
-            placeholder='email'
-            onChangeText={(text) => {this.setState({email: text})}}
-            value = {this.state.email}/>
+      <View style={{ flex: 1 , backgroundColor: colors.function_100}}>
+        <View style = {{flex: 1, borderTopStartRadius:20, borderTopRightRadius:20, backgroundColor: colors.mono_40, alignItems:'center', justifyContent:'center'}}>
+            <TextInput
+                style={styles.input}
+                placeholder='使用者名稱'
+                onChangeText={(text) => {this.setState({userName: text})}}
+                value = {this.state.userName}/>
 
-        <TextInput
-            style={styles.input}
-            placeholder='phone number'
-            onChangeText={(text) => {this.setState({phoneNumber: text})}}
-            value = {this.state.phoneNumber}/>
+            <TextInput
+                style={styles.input}
+                placeholder='電子郵件'
+                onChangeText={(text) => {this.setState({email: text})}}
+                value = {this.state.email}/>
 
-        <TextInput
-            style={styles.input}
-            placeholder='password'
-            onChangeText={(text) => {this.setState({password: text})}}
-            value = {this.state.password}/>
+            <TextInput
+                style={styles.input}
+                placeholder='手機號碼'
+                onChangeText={(text) => {this.setState({phoneNumber: text})}}
+                value = {this.state.phoneNumber}/>
 
-        <TextInput
-            style={styles.input}
-            placeholder='check your password again'
-            onChangeText={(text) => {this.setState({checkPassword: text})}}
-            value = {this.state.checkPassword}/>
+            <TextInput
+                style={styles.input}
+                placeholder='密碼'
+                onChangeText={(text) => {this.setState({password: text})}}
+                value = {this.state.password}/>
 
-
-
+            <TextInput
+                style={styles.input}
+                placeholder='重新確認密碼'
+                onChangeText={(text) => {this.setState({checkPassword: text})}}
+                value = {this.state.checkPassword}/>
 
 
-        
-        <TouchableOpacity
-            title = 'login'
-            onPress={()=>this.props.navigation.navigate("login")}
-            >
-            <Text
-              style = {{color: colors.function_100}}>already have an account? login</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity
-            title = 'Submit'
-            onPress={this.handlesubmit}
-            style = {styles.item}>
-            <Text
-              style = {styles.buttonText}>Submit</Text>
-        </TouchableOpacity>
-        
+            <TouchableOpacity
+                title = 'Submit'
+                onPress={this.handlesubmit}
+                style = {styles.submit}>
+                <Text
+                  style = {styles.buttonText}>註冊</Text>
+            </TouchableOpacity>
+        </View>
       </View>
     );
     }
@@ -74,11 +63,23 @@ export default class signup extends React.Component{
 
 const styles = StyleSheet.create({
   input: {
-      margin: 15,
-      height: 40,
-      borderColor: '#7a42f4',
-      borderWidth: 1
-  },    
+    margin:10,
+    height: 40,
+    width: 300,
+    alignContent: 'center',
+    justifyContent: 'center',
+    borderWidth: 0
+  },
+  submit: {
+    borderRadius: 10,
+    display:'flex',
+    margin: 30,
+    backgroundColor: colors.function_100,
+    height: 40,
+    width: 80,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   item: {
     backgroundColor: colors.function_100,
     padding: 20,
@@ -87,7 +88,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: colors.mono_40,
-    fontSize: 10,
+    justifyContent: 'center',
+    fontSize: 15,
     fontWeight: 'bold',
   },
 });

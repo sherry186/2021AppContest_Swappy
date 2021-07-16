@@ -19,6 +19,7 @@ import BreakAwaySpaceDetail from '../screens/BreakAway/BreakAwaySpaceDetail';
 import BreakAwayChangeOut from '../screens/BreakAway/BreakAwayChangeOut';
 import login from '../screens/Login/login';
 import signup from '../screens/Login/signup';
+import LoginSignupNav from './loginSignupNav';
 //import { Text } from 'react-native';
 
 
@@ -29,15 +30,12 @@ function Root() {
       <RootStack.Navigator>
         {/*login*/}
         <RootStack.Screen 
-          name="login" 
-          component={login}
-          options={{headerShown: false}}
+          name="loginSignup" 
+          component={LoginSignupNav}
+          options={{headerShown: false,
+            cardStyle: {backgroundColor: '#629D89'}}}
         />
-        <RootStack.Screen 
-          name="signup" 
-          component={signup}
-          options={{headerShown: false}}
-        />
+         {/* cardStyle: {backgroundColor: '#629D89'} */}
 
 
         {/*tab*/}
