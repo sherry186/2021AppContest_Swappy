@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ViewPagerAndroidComponent } from 'react-native';
 //import { NavigationContainer } from '@react-navigation/native';
 import { Assets, createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -19,10 +19,10 @@ const Tabs = () => {
     <Tab.Navigator
       initialRouteName="Home"
       tabBarOptions={{
-          activeTintColor: "#e91e63",
-          keyboardHidesTabBar: true,
           
-          labelStyle: { fontSize: 20 },
+          keyboardHidesTabBar: true,
+          showLabel: false,
+          //labelStyle: { fontSize: 20 },
           style: { 
               position: 'absolute',
               bottom: 0,
@@ -30,72 +30,72 @@ const Tabs = () => {
               left:0,
               right:0,
               backgroundColor: 'white',
-              height:60,
+              height:70,
               }
 
       }}>
-      <Tab.Screen name = "Home" component = {Home} options={{
-        tableBarIcon:({focus})=>(
-          <View style={{alignItems:'center', justifyContenet: 'center', top: 10}}>
+      <Tab.Screen 
+        name = "Home"
+        component = {Home} 
+        options={{
+          tabBarIcon:({focused})=>(
+          <View style = {{alignContent: 'center', justifyContent:'center', top: 10}}>
             <Image
-              source={require('../assets/Home.png')}
+              source={require('../assets/bottomtab/home.png')}
               resizeMode='contain'
               style={{
-                width: 25,
-                height: 25,
-                tintColor: focused ? '#e32f45': '#748c94'
+                width: 50,
+                height: 50,
+                tintColor: focused? '#84C6B0' : '#EDEDED'
               }}
-            />
-              <Text style ={{color: focused ? '#e32f45': '#748c94', fontSize : 12}}>Home</Text>
+            /> 
           </View>
         )
       }}></Tab.Screen>
       
       <Tab.Screen name = "BreakAway" component = {BreakAway}options={{
-        tableBarIcon:({focus})=>(
-          <View style={{alignItems:'center', justifyContenet: 'center', top: 10}}>
-            <Image
-              source={require('../assets/Record.png')}
-              resizeMode='contain'
-              style={{
-                width: 25,
-                height: 25,
-                tintColor: focused ? '#e32f45': '#748c94'
-              }}
-            />
-              <Text style ={{color: focused ? '#e32f45': '#748c94', fontSize : 12}}>Record</Text>
-          </View>
+        tabBarIcon:({focused})=>(
+          <View style = {{alignContent: 'center', justifyContent:'center', top: 10}}>
+          <Image
+            source={require('../assets/bottomtab/breakAway.png')}
+            resizeMode='contain'
+            style={{
+              width: 50,
+              height: 50,
+              tintColor: focused? '#84C6B0' : '#EDEDED'
+            }}
+          /> 
+        </View>
+      
         )
       }}></Tab.Screen>
       <Tab.Screen name = "Social" component = {Social}options={{
-        tableBarIcon:({focus})=>(
-          <View style={{alignItems:'center', justifyContenet: 'center', top: 10}}>
-            <Image
-              source={require('../assets/Social.png')}
-              resizeMode='contain'
-              style={{
-                width: 25,
-                height: 25,
-                tintColor: focused ? '#e32f45': '#748c94'
-              }}
-            />
-              <Text style ={{color: focused ? '#e32f45': '#748c94', fontSize : 12}}>Social</Text>
-          </View>
+        tabBarIcon:({focused})=>(
+          <View style = {{alignContent: 'center', justifyContent:'center', top: 10}}>
+          <Image
+            source={require('../assets/bottomtab/social.png')}
+            resizeMode='contain'
+            style={{
+              width: 50,
+              height: 50,
+              tintColor: focused? '#84C6B0' : '#EDEDED'
+            }}
+          /> 
+        </View>
         )
       }}></Tab.Screen>
       <Tab.Screen name = "Personal" component = {Personal}options={{
-        tableBarIcon:({focus})=>(
-          <View style={{alignItems:'center', justifyContenet: 'center', top: 10}}>
+        tabBarIcon:({focused})=>(
+          <View style = {{alignContent: 'center', justifyContent:'center', top: 10}}>
             <Image
-              source={require('../assets/Personal.png')}
+              source={require('../assets/bottomtab/personal.png')}
               resizeMode='contain'
               style={{
-                width: 25,
-                height: 25,
-                tintColor: focused ? '#e32f45': '#748c94'
+                width: 50,
+                height: 50,
+                tintColor: focused? '#84C6B0' : '#EDEDED'
               }}
-            />
-              <Text style ={{color: focused ? '#e32f45': '#748c94', fontSize : 12}}>Social</Text>
+            /> 
           </View>
         )
       }}></Tab.Screen>
