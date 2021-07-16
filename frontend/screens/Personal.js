@@ -11,8 +11,8 @@ import {
 } from "react-native";
 
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
-
-
+// import { Icon, InlineIcon } from '@iconify/react';
+// import collectionItem from '@iconify/icons-zmdi/collection-item';
 
 
 export default class Personal extends React.Component {
@@ -51,39 +51,60 @@ export default class Personal extends React.Component {
           <Image
             style={{ top: 50, left: 30, width: 60, height: 60, borderRadius: 30 }}
             source={this.state.source} />
-          <Text style={{ top: 60, left: 30 }}>{this.state.username}</Text>
+          <Text style={{ top: 60, left: 30, fontSize: 20 }}>{this.state.username}</Text>
           <Text style={{ top: 70, left: 30 }}>{this.state.stars}</Text>
+          
         </View>
 
+
         <View style={{ flex: 3 }}>
+          
           <TouchableOpacity
             style={styles.item}
           >
+            <Image 
+                style={styles.image}
+                source={require('../assets/personal/持有物品清單.jpg')}/>
             <Text style={styles.buttonText}>持有物品清單</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.item}
           >
+            <Image 
+                style={styles.image}
+                source={require('../assets/personal/發文紀錄.png')}/>
             <Text style={styles.buttonText}>發文紀錄</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.item}
           >
+            <Image 
+                style={styles.image}
+                source={require('../assets/personal/交換紀錄.png')}/>
             <Text style={styles.buttonText}>交換紀錄</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.item}
           >
+            <Image 
+                style={styles.image}
+                source={require('../assets/personal/願望清單.png')}/>
             <Text style={styles.buttonText}>願望清單設定</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.item}
           >
+            <Image 
+                style={styles.image}
+                source={require('../assets/personal/個人資料設定.png')}/>
             <Text style={styles.buttonText}>個人資料設定</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.item}
           >
+            <Image 
+                style={styles.image}
+                source={require('../assets/personal/關於swappy.png')}/>
             <Text style={styles.buttonText}>關於swappy</Text>
           </TouchableOpacity>
         </View>
@@ -100,6 +121,11 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     // justifyContent: 'center'
   },
+  image: {
+    top:3,
+    width: 20, 
+    height: 20, 
+  },
   boxContainer: {
     margin: 5,
     backgroundColor: '#f9c2ff',
@@ -108,9 +134,9 @@ const styles = StyleSheet.create({
   },
   item: {
     flexDirection: 'row',
-    backgroundColor: '#E2E6EC',
+    backgroundColor: '#fff',
     padding: 20,
-    margin: 10,
+    margin: 1,
   },
   title: {
     fontSize: 32,
@@ -130,8 +156,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   buttonText: {
-    color: '#fff',
-    fontSize: 10,
+    marginHorizontal: 20,
+    alignContent: 'center',
+    color: '#E2E6EC',
+    fontSize: 15,
     fontWeight: 'bold',
   },
 });
