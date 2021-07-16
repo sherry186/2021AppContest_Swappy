@@ -49,13 +49,14 @@ export default class Personal extends React.Component {
       <SafeAreaView style={styles.container}>
         <View style={styles.container}>
           <Image
-            style={{ top: 50, left: 30, width: 60, height: 60, borderRadius: 30 }}
+            style={{ top: 60, left: 40, width: 100, height: 100, borderRadius: 50 }}
             source={this.state.source} />
-          <Text style={{ top: 60, left: 30, fontSize: 20 }}>{this.state.username}</Text>
-          <Text style={{ top: 70, left: 30 }}>{this.state.stars}</Text>
+          <Text style={{ top: 70, left: 40, fontSize: 25, color:"#629D89", fontWeight: 'bold', }}>{this.state.username}</Text>
+          <Text style={{ top: 80, left: 40, frontSize: 20, color:"#629D89" }}>{this.state.stars}</Text>
           
         </View>
 
+        <View style = {styles.line}></View>
 
         <View style={{ flex: 3 }}>
           
@@ -117,9 +118,14 @@ export default class Personal extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center'
+    top: 20,
+    flex: 1.4,
+  },
+  line:{
+    left: 30,
+    backgroundColor:'#D4D4D4',
+    width: 350,
+    height: 1.5,
   },
   image: {
     top:3,
@@ -133,8 +139,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   item: {
+    left: 20,
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    //backgroundColor: '#fff',
     padding: 20,
     margin: 1,
   },
@@ -158,7 +165,7 @@ const styles = StyleSheet.create({
   buttonText: {
     marginHorizontal: 20,
     alignContent: 'center',
-    color: '#E2E6EC',
+    color: '#8D8D8D',
     fontSize: 15,
     fontWeight: 'bold',
   },
