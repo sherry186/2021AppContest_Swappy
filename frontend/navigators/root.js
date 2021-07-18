@@ -20,6 +20,7 @@ import BreakAwayChangeOut from '../screens/BreakAway/BreakAwayChangeOut';
 import login from '../screens/Login/login';
 import signup from '../screens/Login/signup';
 import LoginSignupNav from './loginSignupNav';
+import colors from '../config/colors';
 //import { Text } from 'react-native';
 
 
@@ -32,8 +33,9 @@ function Root() {
         <RootStack.Screen 
           name="loginSignup" 
           component={LoginSignupNav}
-          options={{headerShown: false,
-            cardStyle: {backgroundColor: '#629D89'}}}
+          options={{
+            headerShown: false,
+            cardStyle: {backgroundColor: colors.function_100}}}
         />
          {/* cardStyle: {backgroundColor: '#629D89'} */}
 

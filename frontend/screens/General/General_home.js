@@ -1,11 +1,19 @@
 import * as React from 'react';
 
-import { View, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity} from "react-native";
+import { 
+  View, 
+  Text, 
+  SafeAreaView,  
+  FlatList, 
+  StyleSheet,
+  Image,
+  TouchableOpacity} from "react-native";
 import { SearchBar } from 'react-native-elements';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 
 // import GeneralItems from '../../Data/GeneralItems';
 import * as SQLite from 'expo-sqlite'
+import colors from '../../config/colors';
 const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
 
 
@@ -95,48 +103,69 @@ export default class General_HOME extends React.Component {
     this.fetchData();
 
     return(
-      <SafeAreaView style={styles.container}>
-        <View style = {{flexDirection:'row'}}>
-            <View style = {{flex: 8}}>
+      
+      <View style={styles.container}>
+        <View style = {styles.margin}></View>
+        <View style = {{flex : 1, top: 65, flexDirection:'row'}}>
+            <View style = {{flex : 6}}>
                 <SearchBar
-                  placeholder="Type Here..."
+                  containerStyle = {{left: 18,  height: 28, alignContent: 'center', justifyContent: 'center', backgroundColor: 'transparent', borderBottomColor: 'transparent', borderTopColor: 'transparent'}}
+                  inputContainerStyle = {{height: 28, width: 264, borderRadius: 7, backgroundColor: colors.mono_60}}
+                  inputStyle= {{margin: 0,fontSize: 15}}
+                  placeholder="標題、種類、物品資訊"
                   onChangeText={this.handleSearch}
                   value={search}
-                  lightTheme
                 />
             </View>
             
             <TouchableOpacity 
-               style={{flex: 1, width: 60, height: 60, borderRadius:30, backgroundColor: '#f9c2ff', justifyContent: 'center', alignItems: 'center', right: 0}}
+               style={{flex: 1, width: 60, height: 60, backgroundColor: 'transparent'}}
                onPress={() => navigate('GeneralAdd')}>
-              <Text style={styles.buttonText}>M</Text>
+              <Image
+                style = {{width: 24, height: 21.99}}
+                source = {require("../../assets/general&group/message.png")}/>
+              
             </TouchableOpacity>
+
             <TouchableOpacity 
-               style={{flex: 1, width: 60, height: 60, borderRadius:30, backgroundColor: '#f9c2ff', justifyContent: 'center', alignItems: 'center', right: 0}}
+               style={{flex: 1, left: 0,  width: 60, height: 60, backgroundColor: 'transparent'}}
                onPress={() => navigate('Notification')}>
-              <Text style={styles.buttonText}>N</Text>
-            </TouchableOpacity>
+              <Image
+                style = {{width: 24, height: 21.99}}
+                source = {require("../../assets/general&group/notification.png")}/>
+            </TouchableOpacity>   
         </View>
         
-        <FlatList
-          data={this.state.data}
-          renderItem={this.renderItem}
-          keyExtractor={item => item.id}
-        />
+        <View style = {{flex: 6,}}>
+          <FlatList
+                data={this.state.data}
+                renderItem={this.renderItem}
+                keyExtractor={item => item.id}
+              />
+        </View>
+
+        
         <TouchableOpacity 
             style={styles.button}
             onPress={() => navigate('GeneralAdd')}>
             <Text style={styles.buttonText}>ADD</Text>
         </TouchableOpacity>
-      </SafeAreaView>
+      </View>
     )
   }
 
 }
 
 const styles = StyleSheet.create({
+    margin: {
+      flex: 1,
+      height: 50,
+      backgroundColor: colors.mono_40,
+    },
     container: {
       flex: 1,
+      backgroundColor: colors.mono_40,
+      bottom: 70,
       // alignItems: 'center',
       // justifyContent: 'center'
     },

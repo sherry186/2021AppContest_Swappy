@@ -9,6 +9,7 @@ import Social from './SocialNav';
 import Personal from '../screens/Personal';
 import BreakAway from '../screens/BreakAway/BreakAway';
 import Home from "./Home_Nav";
+import colors from "../config/colors";
 
 
 
@@ -38,6 +39,7 @@ const Tabs = () => {
         name = "Home"
         component = {Home} 
         options={{
+          cardStyle: {backgroundColor: colors.function_100},
           tabBarIcon:({focused})=>(
           <View style = {{alignContent: 'center', justifyContent:'center', top: 10}}>
             <Image
