@@ -47,6 +47,7 @@ const typeDefs = gql`
 
         createGeneralItem(input: GeneralItemInput): GeneralItem!
         deleteGeneralItem(id: ID!): Boolean!
+        requestItem(id: ID!, userId: ID!): GeneralItem!
     }
 
     input SignUpInput {
@@ -96,9 +97,8 @@ const typeDefs = gql`
     }
 
     type Request {
-        id: ID!
-        requestingUser: User!
-        item: GeneralItem!
+        requestingUserID: ID!
+        item: GeneralItem
     }
 `;
 
@@ -185,7 +185,7 @@ const resolvers = {
                 category: input.category, 
                 exchangeMethod: input.exchangeMethod, 
                 owner: user,
-                request: []
+                requests: []
             }
 
             const result = await db.collection('GeneralItems').insertOne(newGeneralItem);
@@ -202,6 +202,19 @@ const resolvers = {
             await db.collection('GeneralItems').deleteOne({_id: ObjectId(id)})
             return true;
 
+        },
+        requestItem: async (_, { id, userId }, {db, user}) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+            const item = await db.collection('GeneralItems').findOne({_id: ObjectId(id)});
+            
+            const previousRequestArray = item.requests;
+            previousRequestArray.push({"requestingUserID": userId, "item": null});
+            //console.log(previousRequestArray);
+            const result = await db.collection('GeneralItems').updateOne({ _id : ObjectId(id) },{ $set: { requests : previousRequestArray }})
+            console.log(result);
+            return await db.collection('GeneralItems').findOne({_id: ObjectId(id)});
         }
         
     },
