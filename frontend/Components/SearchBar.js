@@ -7,6 +7,7 @@ import {
     Image,
     TouchableOpacity,
   } from "react-native";
+import colors from "../config/colors";
 
   export default function Searchbar({ value, updateSearch, style }) {
 
@@ -64,7 +65,7 @@ import {
 const styles = StyleSheet.create({
   txtError: {
       marginTop: '2%',
-      width: '89%',
+      width: '90%',
       color: 'white',
   },
   vwClear: {
@@ -82,22 +83,25 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       // width: 40,
-      // backgroundColor: 'red'
+      backgroundColor: 'white'
   },
   icSearch: {
-      height: 18, width: 18
+      height: 18, 
+      width: 18,
+      color: colors.brown_100,
   },
   searchContainer:
   {
       backgroundColor: 'white',
       width: '90%',
-      height: 40,
+      height: 80,
       flexDirection: 'row'
 
   },
   container: {
       height: 80,
       alignItems: 'center',
+      backgroundColor: 'white',
       
       // height: '100%', width: '100%' 
   },

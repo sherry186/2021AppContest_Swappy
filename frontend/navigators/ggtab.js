@@ -5,41 +5,52 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { View, Text } from "react-native";
 import General from './GeneralNav';
 import Group from './GroupNav';
+import colors from "../config/colors";
 
 
 
 export default class TopBarNavigator extends React.Component{
     
-
     render (){
         const GgTab = createMaterialTopTabNavigator();
         return(  
             <GgTab.Navigator
-                initialRouteName="General"
-                
+                initialRouteName="General"           
                 tabBarOptions={{
-                    tabBarVisible: false,
-                    activeTintColor: "#e91e63",
-                    labelStyle: { fontSize: 25 },
+                    showLabel: false,
+                    showIcon: true,
+                    indicatorStyle:{color: colors.function_100},
+                    
                     style: { 
                         marginTop:12,
                         elevation: 0,
-    
-                        backgroundColor: 'white',
-                        height:60
+                        top: 63,
+                        left: 79,
+                        width: 252,
+                        height: 40,
+                        backgroundColor: 'transparent',
                     }
                  }}
             >   
                 <GgTab.Screen 
                     name = "General"
                     component = {General}
-                    options={{ tarBarLabel: 'General'}}
+                    options={{ 
+                        tabBarIcon:({focused})=>(
+                            <View style =  {{display: 'flex', right: 25, width: 100,}}>
+                                <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20,}}>General</Text>
+                            </View>
+                          )}}
                 />
                 <GgTab.Screen 
                     name = "Group"
                     component = {Group}
-                    options={{ tarBarLabel: 'Group'}}
-                
+                    options={{ 
+                        tabBarIcon:({focused})=>(
+                            <View style =  {{display: 'flex', right: 25, width: 100,}}>
+                                <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20,}}>Group</Text>
+                            </View>
+                          )}}
                 />
             </GgTab.Navigator>
             
