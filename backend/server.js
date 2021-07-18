@@ -17,7 +17,9 @@ const jwt = require('jsonwebtoken');
 const { DB_URI, DB_NAME, JWT_SECRETKEY } = process.env;
 
 const getToken = (id) => {
-    return jwt.sign({id: id}, JWT_SECRETKEY, {expiresIn: '30 days'});
+    token = jwt.sign({id: id}, JWT_SECRETKEY, {expiresIn: '30 days'});
+    console.log(token);
+    return token;
 }
 
 const getUserFromToken = async (token, db) => {
@@ -34,7 +36,9 @@ const getUserFromToken = async (token, db) => {
 
 const typeDefs = gql`
     type Query {
-        generalItemList: [GeneralItem]
+        generalItemsList: [GeneralItem]!
+        myGeneralItems: [GeneralItem]!
+        getGeneralItem(id: ID!): GeneralItem!
     }
 
     type Mutation {
@@ -42,6 +46,7 @@ const typeDefs = gql`
         signIn(input: SignInInput): AuthUser!
 
         createGeneralItem(input: GeneralItemInput): GeneralItem!
+        deleteGeneralItem(id: ID!): Boolean!
     }
 
     input SignUpInput {
@@ -87,7 +92,7 @@ const typeDefs = gql`
         category: String!
         exchangeMethod: String!
         image: String
-        requests: [Request]
+        requests: [Request]!
     }
 
     type Request {
@@ -103,7 +108,27 @@ const typeDefs = gql`
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
     Query: {
-        generalItemList: () => []
+        generalItemsList: async (_, __, {db}) => {
+            return await db.collection('GeneralItems').find().toArray();
+        },
+        myGeneralItems: async (_, __, {db,user}) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+            console.log(user._id);
+            myCollection = await db.collection('GeneralItems').find({ "owner._id" : user._id }).toArray();
+            console.log(myCollection);
+            return myCollection;
+        },
+        getGeneralItem: async (_, { id }, {db, user}) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+   
+            const item =  await db.collection('GeneralItems').findOne({_id: ObjectId(id)});
+            //console.log(item);
+            return item;
+        }
     },
     Mutation: {
         signUp: async (root, { input }, { db }) => {
@@ -154,9 +179,36 @@ const resolvers = {
             if(!user) {
                 throw new Error('AUthentication Error. Please sign in');
             }
+            const newGeneralItem = {
+                title: input.title, 
+                description: input.description, 
+                category: input.category, 
+                exchangeMethod: input.exchangeMethod, 
+                owner: user,
+                request: []
+            }
+
+            const result = await db.collection('GeneralItems').insertOne(newGeneralItem);
+            return {
+                ...newGeneralItem,
+                id: result.insertedId
+            }
+        },
+        deleteGeneralItem: async (_, { id }, {db, user}) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+            //TODO: only owner of this item can delete
+            await db.collection('GeneralItems').deleteOne({_id: ObjectId(id)})
+            return true;
+
         }
+        
     },
     User: {
+        id: ({ _id, id }) => _id || id,
+    },
+    GeneralItem: {
         id: ({ _id, id }) => _id || id,
     },
   };
@@ -174,7 +226,7 @@ const start = async () => {
         resolvers, 
         context: async ({req}) => {
             const user = await getUserFromToken(req.headers.authorization, db);
-            console.log(user);
+            //console.log(getToken("60f2cf2385c21cc1cabc9546"));
             return {
                 db,
                 user,
