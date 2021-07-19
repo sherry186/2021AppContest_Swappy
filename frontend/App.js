@@ -6,9 +6,21 @@ import Root from './navigators/root'
 
 //Apollo client
 import { client } from './apollo';
-import { ApolloProvider } from '@apollo/client';
+import { ApolloProvider,gql } from '@apollo/client';
 
-
+// client
+//   .query({
+//     query: gql`
+//     query generalItemsList {
+//       generalItemsList {
+//         title
+//         description
+//       }
+//     }
+//     `
+//   })
+//   .then(result => console.log(result))
+//   .catch(err => console.log(err));
 
 export default function App() {
   return (

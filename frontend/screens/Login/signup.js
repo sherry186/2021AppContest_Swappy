@@ -1,38 +1,65 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import colors from '../../config/colors';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useMutation, gql } from '@apollo/client';
 
-// import { useMutation, gql } from '@apollo/client';
-
-// const SIGN_UP_MUTATION = gql`mutation signup($email: String!, $password: String!, $phone: String!, $username: String!) {
-//   signUp(input: { 
-//     email: $email, 
-//     password: $password,
-//     username: $username,
-//     phone: $phone,
-//   }) {
-//     token
-//     user {
-//       id 
-//       email
-//       username 
-//       phone
-//     }
-//   }
-// }`;
+const SIGN_UP_MUTATION = gql`
+mutation signUp($email: String!, $password: String!, $phone: String!, $username: String!) {
+  signUp(input: { 
+    email: $email, 
+    password: $password,
+    username: $username,
+    phone: $phone,
+  }) {
+    token
+    user {
+      id 
+      email
+      username 
+      phone
+    }
+  }
+}`;
 
 const signup = () => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [phoneNumber, setPhoneNumber]  = useState('');
+  const [phone, setPhone]  = useState('');
   const [checkPassword, setCheckPassword] = useState('');
 
   const navigation = useNavigation();
 
+
+  // mutation[0] : A function to trigger the mutation
+  // mutation[1] : result object 
+  //{ data,error, loading }
+  const [signUp, { data, error, loading }] = useMutation(SIGN_UP_MUTATION);
+  
+
+  if (error) {
+    Alert.alert('Error signing up. Try again');
+    console.log(error);
+  }
+
+  if (data) {
+    // save token
+    AsyncStorage
+      .setItem('token', data.signUp.token)
+      .then(() => {
+        // redirect home
+        Alert.alert('signed up successfully!');
+        navigation.navigate("login");
+      })
+  }
+
+
+
+
   const handlesubmit = () => {
-    navigation.navigate("login");
+    signUp({variables: { email, password, phone, username}})
   }
   
   return (
@@ -53,8 +80,8 @@ const signup = () => {
           <TextInput
               style={styles.input}
               placeholder='手機號碼'
-              onChangeText={setPhoneNumber}
-              value = {phoneNumber}/>
+              onChangeText={setPhone}
+              value = {phone}/>
 
           <TextInput
               style={styles.input}
@@ -73,6 +100,7 @@ const signup = () => {
               title = 'Submit'
               onPress={handlesubmit}
               style = {styles.submit}>
+                {loading && <ActivityIndicator />}
               <Text
                 style = {styles.buttonText}>註冊</Text>
           </TouchableOpacity>

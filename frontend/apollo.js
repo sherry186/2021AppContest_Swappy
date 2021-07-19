@@ -6,7 +6,7 @@ import {
     gql
   } from "@apollo/client";
 
-  const URI = 'http://localhost:4000/'
+  const URI = 'http://434c59d8aafb.ngrok.io';
 
   export const client = new ApolloClient({
     uri: URI,

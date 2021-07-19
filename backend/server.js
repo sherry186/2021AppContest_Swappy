@@ -143,7 +143,7 @@ const resolvers = {
                 ...input,
                 password: hashedPassword,
             }
-
+            console.log("signed up!");
             //save to database
             const result = await db.collection('Users').insertOne(newUser);
             // id: result.insertedId } );
@@ -152,7 +152,8 @@ const resolvers = {
                     id: result.insertedId,
                     username: newUser.username,
                     email: newUser.email,
-                    password: newUser.password
+                    password: newUser.password, 
+                    phone: newUser.phone
                 },
                 token: getToken(result.insertedId)
             }
