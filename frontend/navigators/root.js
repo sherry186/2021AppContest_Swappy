@@ -17,6 +17,7 @@ import BreakAwayItemDetail from '../screens/BreakAway/BreakAwayItemDetail';
 import BreakAwayItemChangeOut from '../screens/BreakAway/BreakAwayItemChangeOut';
 import BreakAwaySpaceDetail from '../screens/BreakAway/BreakAwaySpaceDetail';
 import BreakAwayChangeOut from '../screens/BreakAway/BreakAwayChangeOut';
+import SplashScreen from '../screens/Splash'
 import login from '../screens/Login/login';
 import signup from '../screens/Login/signup';
 import LoginSignupNav from './loginSignupNav';
@@ -28,7 +29,15 @@ const RootStack = createStackNavigator();
 
 function Root() {
     return (
+      
       <RootStack.Navigator>
+        <RootStack.Screen 
+          name="Splash"
+          component={SplashScreen}
+          options={{
+            headerShown: false
+          }}
+        />
         {/*login*/}
         <RootStack.Screen 
           name="loginSignup" 

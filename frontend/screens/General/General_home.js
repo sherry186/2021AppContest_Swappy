@@ -7,16 +7,35 @@ import {
   SafeAreaView,  
   FlatList, 
   StyleSheet,
+  Alert,
   Image,
   TouchableOpacity} from "react-native";
 import { SearchBar } from 'react-native-elements';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 import  { useNavigation } from '@react-navigation/core';
 
+import { useQuery, gql } from '@apollo/client';
+
 // import GeneralItems from '../../Data/GeneralItems';
-import * as SQLite from 'expo-sqlite'
+// import * as SQLite from 'expo-sqlite'
+// const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
+
 import colors from '../../config/colors';
-const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
+
+const GENERAL_ITEMS = gql`
+query generalItemsList {
+  generalItemsList {
+    id
+    title
+    owner {
+      username
+    }
+    description
+    exchangeMethod
+    category
+    image
+	}
+}`;
 
 
 const contains = (data, query) => {
@@ -34,8 +53,27 @@ const contains = (data, query) => {
 const General_HOME = () => {
 
   const [search, setSearch] = useState('');
-  const [data, setData] = useState([]);
-  const [fullData, setFullData] = useState([]);
+  const [items, setItems] = useState([]);
+  const [allItems, setAllItems] = useState([]);
+
+  const { data, error, loading } = useQuery(GENERAL_ITEMS);
+
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert('Error fetching general items', error.message);
+      console.log(error);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+      setItems(data.generalItemsList);
+      setAllItems(data.generalItemsList);
+      console.log(items);
+    }
+  }, [data]);
 
   const navigation = useNavigation();
 
@@ -49,11 +87,11 @@ const General_HOME = () => {
 
   const handleSearch = (se) => {
     console.log("search", search)
-    const data1 = _.filter(fullData, general => {
+    const searchedItems = _.filter(allItems, general => {
       return contains(general.title, se)
     })
     setSearch(se);
-    setData(data1);
+    setItems(searchedItems);
     // this.setState({ data,  search});
   };
 
@@ -64,68 +102,26 @@ const General_HOME = () => {
       <View style={styles.buttons}>
         <TouchableOpacity 
           style={styles.item}
-          onPress={() => navigation.navigate('GeneralDetail', {itemID: item.id, title: item.title, sort: item.category, des: item.description, method: item.method, image: item.image})}>
+          onPress={() => navigation.navigate('GeneralDetail', {itemID: item.id, title: item.title, sort: item.category, des: item.description, method: item.exchangeMethod, image: item.image})}>
             <Text>Item Detail</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
+        {/* <TouchableOpacity 
           style={styles.item}
           onPress={() => {
-            database.transaction(tx => {
-              tx.executeSql('DELETE FROM GeneralItems WHERE id = ?', [item.id]);
-            })
+            // database.transaction(tx => {
+            //   tx.executeSql('DELETE FROM GeneralItems WHERE id = ?', [item.id]);
+            // })
           }}>
             <Text>Delete Item</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </SafeAreaView>
   );
 
-  // const fetchData = () => {
-  //   database.transaction(tx => {
-  //     // sending 4 arguments in executeSql
-  //     tx.executeSql('SELECT * FROM GeneralItems', null, // passing sql query and parameters:null
-  //       // success callback which sends two things Transaction object and ResultSet Object
-  //       (txObj, { rows: { _array } }) => {
-  //         console.log(_array); 
-  //         setData(_array);
-  //         setFullData(_array);
-  //         // this.setState({
-  //         //   data: _array,
-  //         //   fullData: _array,
-  //         // });
-  //       },
-  //       // failure callback which sends two things Transaction object and Error
-  //       (txObj, error) => console.log('Error ', error)
-  //       ) // end executeSQL
-  //   }) // end transaction
-  // }
-
-  useEffect( () =>{
-    database.transaction(tx => {
-      // sending 4 arguments in executeSql
-      tx.executeSql('SELECT * FROM GeneralItems', null, // passing sql query and parameters:null
-        // success callback which sends two things Transaction object and ResultSet Object
-        (txObj, { rows: { _array } }) => {
-          console.log(_array); 
-          //search==''? setData(_array) : null;
-          setFullData(_array);
-          // this.setState({
-          //   data: _array,
-          //   fullData: _array,
-          // });
-        },
-        // failure callback which sends two things Transaction object and Error
-        (txObj, error) => console.log('Error ', error)
-        ) // end executeSQL
-    }) // end transaction
-  }); 
+ 
 
   
-  // const { search } = this.state;
-    // const[grvalue, grsetValue] = useState('');
-  // const{ navigate } = this.props.navigation;
-    //console.log(this.props.navigation);
-  //fetchData();
+
 
   return(
     
@@ -163,9 +159,8 @@ const General_HOME = () => {
       
       <ScrollView style = {{top: "5%", alignContent: 'center'}}>
         <FlatList
-            data={search == ''? fullData : data}
+            data={search == ''? allItems: items}
             renderItem={renderItem}
-            keyExtractor={item => item.id}
           />
       </ScrollView>
      
@@ -173,7 +168,7 @@ const General_HOME = () => {
           style={styles.button}
           onPress={toAdd}>
           <Image
-            style = {{width: 65, height: 65 }}
+            // style = {{width: 65, height: 65 }}
             source = {require("../../assets/general/add.png")}/>
       </TouchableOpacity>
       
@@ -231,8 +226,8 @@ const styles = StyleSheet.create({
       flexDirection: 'row'
     },
     button: {
-      width: 65,
-      height: 65,
+      // width: 65,
+      // height: 65,
       position: 'absolute',
       borderRadius: 31.5,
       backgroundColor: 'transparent',

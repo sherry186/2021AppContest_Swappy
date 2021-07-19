@@ -40,7 +40,7 @@ function GeneralDetailsScreen ({ route, navigation }) {
     const { itemID, title, sort, des, method, image } = route.params;
     
     return (
-      <View style={{ flex: 1, top: "5%", alignItems: 'center'}}>
+      <View style={{ flex: 1, top: "5%", bottom:"20%", alignItems: 'center'}}>
         <View style = {{flex: 1, flexDirection: 'row', height: "7%", backgroundColor: colors.mono_40}}>
           <TouchableOpacity
             style = {{flex:2, width: "20%", backgroundColor: colors.mono_40, alignItems: 'center', justifyContent:'center'}}
@@ -62,29 +62,63 @@ function GeneralDetailsScreen ({ route, navigation }) {
               style = {{flex: 5, height: "50%", width: "80%"}}
               source = {require('../../assets/general/商品呈現.png')}
             />
-            <View style = {{flex: 0.5, backgroundColor: colors.function_100, width:"100%", flexDirection: 'row', borderEndColor: colors.mono_80, borderEndWidth: 2,}}>
+            <View style = {{flex: 0.6, backgroundColor: colors.mono_40, width:"100%", flexDirection: 'row'}}>
+              <View style = {styles.margin}></View>
+              
               <TouchableOpacity
-                style = {{width: "20%", backgroundColor: colors.mono_40, alignItems: 'center', justifyContent:'center'}}
+                style = {styles.button}
                 >
-                {/* <Image
-                  style ={{height:"50%", width: "50"}}
-                  source = {require("../../assets/general/heartEmpty.png")}/> */}
+                <Image
+                  style = {styles.buttonImage}
+                  source = {require('../../assets/general/heartEmpty.png')}/>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style = {styles.button}
+                >
+                <Image
+                  style = {styles.buttonImage}
+                  source = {require('../../assets/general&group/message.png')}/>
               </TouchableOpacity>
             </View>
+            <View style = {styles.line}></View>
             
-            <View style = {{flex: 4.5}}>
-              <Text>Item Name: {title}</Text>
-              <Text>category: {sort}</Text>
-              <Text>description: {des}</Text>
+            <View style = {{flex: 4.4, width: "100%"}}>
+              <View style = {{flex: 0.5,flexDirection: 'row'}}></View>
+              <View style = {{flex: 1,flexDirection: 'row'}}>
+                <View style = {styles.margin}></View>
+                <Text style = {styles.textT}>交付方式 </Text>
+                <Text>{method == 1 || method == 3? '面交' : ''}{method == 3? "/": ""}{method == 2 || method == 3? '寄送' : ''}</Text>
+              </View>
+              
+              <View style = {{flex: 1, flexDirection: 'row'}}>
+                <View style = {styles.margin}></View>
+                <Text style = {styles.textT}>物品種類 </Text>
+                <Text>{sort}</Text>
+              </View>
+              <View style = {{flex:1, flexDirection: 'row'}}>
+                <View style = {styles.margin}></View>
+                <Text style = {styles.textT}>物品說明 </Text> 
+              </View>
+              
+              <View style = {{flex:7, flexDirection: 'row', height: "10%"}}>
+                <View style = {styles.margin}></View>
+                <View style = {styles.desContainer}>
+                  <Text>{des}</Text>
+                </View>
+                <View style = {styles.margin}></View>
+              </View>
 
-              <Text>method: {method == 1 || method == 3? 'face to face' : ''}{method == 2 || method == 3? 'post' : ''}</Text>
-              <TouchableOpacity
-                    //onPress={()=>this.handleRequest()}
-                    title = 'request'
+              <View style = {{flex: 3,}}></View>
 
-                    style = {styles.item}>
-                    <Text style = {styles.buttonText}>request</Text> 
+              <View style = {styles.buttonsC}>
+                  <TouchableOpacity 
+                      style={styles.buttons}
+                      >
+                      <Text style = {styles.buttonText}>request</Text>
                   </TouchableOpacity>
+              </View>
+                           
             </View>
             
         </View>
@@ -98,37 +132,60 @@ function GeneralDetailsScreen ({ route, navigation }) {
 export default GeneralDetailsScreen;
 
 const styles = StyleSheet.create({
-  input: {
-    margin: 15,
-    height: 40,
-    borderColor: '#7a42f4',
-    borderWidth: 1
+  buttonsC:{
+    width: "100%",
+    position: 'absolute',
+    bottom: "30%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
   },
-  container: {
-    // flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center'
-    paddingTop: 23
-  },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  itemS: {
-    backgroundColor: '#7a42f4',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  title: {
-    fontSize: 32,
-  },
-  buttonText: {
-    //color: '#fff',
+  buttonText:{
+    color: colors.mono_40,
     fontSize: 15,
-    left: 5,
     fontWeight: 'bold',
   },
+  buttons: {
+    width: "25%",
+    height: 42,
+    borderRadius: 8,
+    backgroundColor: colors.function_100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: colors.mono_100,
+    shadowOffset: { width: 10, height: 10 },
+    shadowOpacity: 0.5,
+    shadowRadius: 0,
+    elevation: 3,
+  },
+  button:{
+    width: "10%", 
+    backgroundColor: 'transparent', 
+    alignItems: 'center', 
+    justifyContent:'center'},
+  line:{
+    height: 2,
+    backgroundColor: colors.mono_60,
+    width: "82%",
+  },
+  buttonImage :{
+    width: 23, 
+    height:20.97, 
+    backgroundColor:'transparent'},
+  textT:{
+    color: colors.function_100,
+  },
+  margin: { 
+    width: "10%", 
+    backgroundColor: 'transparent', 
+    alignItems: 'center', 
+    justifyContent:'center'
+  },
+  desContainer: {
+    width: "80%", 
+    borderColor: colors.mono_60, 
+    borderWidth: 2
+  },
+  
+
 });

@@ -46,6 +46,7 @@ const signup = () => {
 
   if (data) {
     // save token
+    
     AsyncStorage
       .setItem('token', data.signUp.token)
       .then(() => {
