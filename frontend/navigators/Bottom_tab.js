@@ -25,13 +25,15 @@ const Tabs = () => {
           showLabel: false,
           //labelStyle: { fontSize: 20 },
           style: { 
+              borderTopColor: colors.mono_60,
+              borderTopWidth: 1,
               position: 'absolute',
               bottom: 0,
               elevation: 0,
               left:0,
               right:0,
-              backgroundColor: 'white',
-              height:70,
+              backgroundColor: colors.mono_40,
+              height:65,
               }
 
       }}>
@@ -48,7 +50,7 @@ const Tabs = () => {
               style={{
                 width: 50,
                 height: 50,
-                tintColor: focused? '#84C6B0' : '#EDEDED'
+                tintColor: focused? colors.function_100 : colors.mono_60
               }}
             /> 
           </View>
@@ -64,7 +66,7 @@ const Tabs = () => {
             style={{
               width: 50,
               height: 50,
-              tintColor: focused? '#84C6B0' : '#EDEDED'
+              tintColor: focused? colors.function_100 : colors.mono_60
             }}
           /> 
         </View>
@@ -80,7 +82,7 @@ const Tabs = () => {
             style={{
               width: 50,
               height: 50,
-              tintColor: focused? '#84C6B0' : '#EDEDED'
+              tintColor: focused? colors.function_100 : colors.mono_60
             }}
           /> 
         </View>
@@ -95,7 +97,7 @@ const Tabs = () => {
               style={{
                 width: 50,
                 height: 50,
-                tintColor: focused? '#84C6B0' : '#EDEDED'
+                tintColor: focused? colors.function_100 : colors.mono_60
               }}
             /> 
           </View>
