@@ -119,7 +119,7 @@ const Group_HOME = () => {
           style={styles.button}
           onPress={() => navigation.navigate('GroupAdd')}>
          <Image
-            style = {{width: 65, height: 65 }}
+            // style = {{width: 65, height: 65 }}
             source = {require("../../assets/general/add.png")}/>
       </TouchableOpacity>
     </SafeAreaView>
@@ -174,8 +174,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   button: {
-    width: 65,
-    height: 65,
+    //width: 65,
+    //height: 65,
     position: 'absolute',
     borderRadius: 31.5,
     backgroundColor: 'transparent',
