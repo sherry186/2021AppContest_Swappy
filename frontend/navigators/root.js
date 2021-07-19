@@ -58,7 +58,7 @@ function Root() {
         <RootStack.Screen 
           name="GeneralDetail" 
           component={GeneralDetailsScreen}
-          options={{headerShown: true}}
+          options={{headerShown: false}}
         />
 
         {/*group*/}

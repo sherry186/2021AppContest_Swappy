@@ -1,6 +1,7 @@
 //import * as React from 'react';
 import React, { useState, useEffect } from 'react';
 import { 
+  ScrollView,
   View, 
   Text, 
   SafeAreaView,  
@@ -160,13 +161,13 @@ const General_HOME = () => {
           </TouchableOpacity>   
       </View>
       
-      <View style = {{top: "5%", alignContent: 'center', justifyContent: 'center'}}>
+      <ScrollView style = {{top: "5%", alignContent: 'center'}}>
         <FlatList
             data={search == ''? fullData : data}
             renderItem={renderItem}
             keyExtractor={item => item.id}
           />
-      </View>
+      </ScrollView>
      
       <TouchableOpacity 
           style={styles.button}
@@ -175,6 +176,7 @@ const General_HOME = () => {
             style = {{width: 65, height: 65 }}
             source = {require("../../assets/general/add.png")}/>
       </TouchableOpacity>
+      
     </SafeAreaView>
   )
   
@@ -193,8 +195,10 @@ const styles = StyleSheet.create({
       flex: 1,
       height: "60%",
       alignItems: "center",
+      //justifyContent: 'center',
       backgroundColor: colors.mono_40,
-      bottom: 65,
+      bottom: 68,
+      
       // alignItems: 'center',
       // justifyContent: 'center'
     },
