@@ -1,9 +1,16 @@
-import * as React from 'react';
-
-import { View, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from 'react';
+import { 
+  View, 
+  Text, 
+  SafeAreaView,  
+  FlatList, 
+  StyleSheet, 
+  TouchableOpacity,
+  Image } from "react-native";
+import  { useNavigation } from '@react-navigation/core';
 import { SearchBar } from 'react-native-elements';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
-
+import colors from '../../config/colors';
 import GroupItems from '../../Data/GroupItems';
 
 
@@ -20,106 +27,164 @@ const contains = (data, query) => {
 
 
 
-export default class Group_HOME extends React.Component {
+const Group_HOME = () => {
 
-  constructor(props){
-    super(props);
-    this.state = {
-      search: '',
-      data: [],
-      fullData: [],
-    };
-  }
+  // constructor(props){
+  //   super(props);
+  //   this.state = {
+  //     search: '',
+  //     data: [],
+  //     fullData: [],
+  //   };
+  // }
   
-
-  static navigationOptions = {
-    title: 'Group_HOME',
+  const [search, setSearch] = useState('');
+  const [data, setData] = useState([]);
+  const [fullData, setFullData] = useState([]);
+  const navigation = useNavigation();
+ 
+  const toNotification = () => {
+    navigation.navigate("Notification")
   }
 
-  handleSearch = (search) => {
+  const handleSearch = (search) => {
     console.log("search", search)
-    const data = _.filter(this.state.fullData, group => {
+    const data = _.filter(fullData, group => {
       return contains(group.title, search)
     })
-    this.setState({ data,  search});
+    setSearch(search);
+    setData(data);
+    //this.setState({ data,  search});
   };
 
-  renderItem = ({ item }) => (
+  const renderItem = ({ item }) => (
     //console.log(this.props.navigation);
     <TouchableOpacity 
-      style={styles.item}
-      onPress={() => this.props.navigation.navigate('GroupDetail', {title: item.title, items: item.items, post: item.post})}>
+      style={styles.boxContainer}
+      onPress={() => navigation.navigate('GroupDetail', {title: item.title, items: item.items, post: item.post})}>
       <Text style={styles.title}>{item.title}</Text>
     </TouchableOpacity>
   );
 
-  componentDidMount() {
-    this.setState({
-      data: GroupItems,
-      fullData: GroupItems,
-    });
-  }
+  useEffect(()=> {
+    setData(GroupItems);
+    setFullData(GroupItems);
+  });
   
 
-  render() {
-    const { search } = this.state;
-    // const[grvalue, grsetValue] = useState('');
-    const{ navigate } = this.props.navigation;
-    //console.log(this.props.navigation);
 
-    return(
-      <SafeAreaView style={styles.container}>
-        <SearchBar
-          placeholder="Type Here..."
-          onChangeText={this.handleSearch}
-          value={search}
-          lightTheme
-        />
-      <FlatList
-        data={this.state.data}
-        renderItem={this.renderItem}
-        keyExtractor={item => item.id}
-      />
+  return(
+    <View style={styles.container}>
+      <View style = {styles.margin}></View>
+      <View style = {{flex : 1, top: 65, flexDirection:'row'}}>
+        <View style = {{flex : 6}}>
+          <SearchBar
+            containerStyle = {{left: 18,  height: 28, alignContent: 'center', justifyContent: 'center', backgroundColor: 'transparent', borderBottomColor: 'transparent', borderTopColor: 'transparent'}}
+            inputContainerStyle = {{height: 28, width: 264, borderRadius: 7, backgroundColor: colors.mono_60}}
+            inputStyle= {{margin: 0,fontSize: 15}}
+            placeholder="標題、種類、物品資訊"
+            onChangeText={handleSearch}
+            value={search}
+          />
+        </View>
+
         <TouchableOpacity 
-            style={styles.button}
-            onPress={() => navigate('GroupAdd')}>
-            <Text style={styles.buttonText}>ADD</Text>
+             style={{flex: 1, width: 60, height: 60, backgroundColor: 'transparent'}}
+             onPress={toNotification}>
+            <Image
+              style = {{width: 24, height: 21.99}}
+              source = {require("../../assets/general&group/message.png")}/>
+            
         </TouchableOpacity>
-      </SafeAreaView>
-    )
-  }
+
+        <TouchableOpacity 
+            style={{flex: 1, left: 0,  width: 60, height: 60, backgroundColor: 'transparent'}}
+            onPress={toNotification}>
+           <Image
+             style = {{width: 24, height: 21.99}}
+             source = {require("../../assets/general&group/notification.png")}/>
+         </TouchableOpacity>  
+
+      </View>
+      
+      <View style = {{flex: 6, alignContent: 'center', justifyContent: 'center'}}>
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+        />
+      </View>
+
+      <TouchableOpacity 
+          style={styles.button}
+          onPress={() => navigation.navigate('GroupAdd')}>
+         <Image
+            style = {{width: 65, height: 65 }}
+            source = {require("../../assets/general/add.png")}/>
+      </TouchableOpacity>
+    </View>
+  )
+  
 
 }
 
+export default Group_HOME;
+
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      // alignItems: 'center',
-      // justifyContent: 'center'
-    },
-    item: {
-      backgroundColor: '#f9c2ff',
-      padding: 20,
-      marginVertical: 8,
-      marginHorizontal: 16,
-    },
-    title: {
-      fontSize: 32,
-    },
-    button: {
-      width: 60,
-      height: 60,
-      position: 'absolute',
-      borderRadius: 30,
-      backgroundColor: '#ee6e73',
-      bottom: 150,
-      right: 175,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    buttonText: {
-      color: '#fff',
-      fontSize: 10,
-      fontWeight: 'bold',
-    },
-  });
+  margin: {
+    flex: 1,
+    height: 50,
+    backgroundColor: colors.mono_40,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: colors.mono_40,
+    bottom: 65,
+    // alignItems: 'center',
+    // justifyContent: 'center'
+  },
+  boxContainer: {
+    marginTop: 30,
+    height: 99,
+    width: 352,
+    backgroundColor: colors.mono_40,
+    left: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    bottom: 10,
+    
+    shadowColor: colors.mono_100,
+    shadowOffset: { width: 10, height: 10 },
+    shadowOpacity: 0.5,
+    shadowRadius: 0,
+    elevation: 3,
+  },
+  item: {
+    backgroundColor: '#E2E6EC',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
+  title: {
+    fontSize: 32,
+  },
+  buttons: {
+    flexDirection: 'row'
+  },
+  button: {
+    width: 65,
+    height: 65,
+    position: 'absolute',
+    borderRadius: 31.5,
+    backgroundColor: 'transparent',
+    top: 700,
+    right: 169,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
+});
