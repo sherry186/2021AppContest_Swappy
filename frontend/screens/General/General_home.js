@@ -32,12 +32,6 @@ const contains = (data, query) => {
 
 const General_HOME = () => {
 
-  // state = {
-  //   search: '',
-  //   data: [],
-  //   fullData: [],
-  // };
-
   const [search, setSearch] = useState('');
   const [data, setData] = useState([]);
   const [fullData, setFullData] = useState([]);
@@ -193,6 +187,7 @@ const styles = StyleSheet.create({
       left: 30,
       alignItems: 'center',
       justifyContent: 'center',
+      bottom: 10,
       
       shadowColor: colors.mono_100,
       shadowOffset: { width: 10, height: 10 },
