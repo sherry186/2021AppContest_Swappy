@@ -43,63 +43,51 @@ const Tabs = () => {
         options={{
           cardStyle: {backgroundColor: colors.function_100},
           tabBarIcon:({focused})=>(
-          <View style = {{alignContent: 'center', justifyContent:'center', top: 10}}>
+          <View style = {styles.tabContainer}>
             <Image
               source={require('../assets/bottomtab/home.png')}
               resizeMode='contain'
-              style={{
-                width: 50,
-                height: 50,
-                tintColor: focused? colors.function_100 : colors.mono_60
-              }}
+              style={focused? styles.image1 : styles.image2}
             /> 
+            <Text style ={focused? styles.iconText1: styles.iconText2}>換物主頁</Text>
           </View>
         )
       }}></Tab.Screen>
       
       <Tab.Screen name = "BreakAway" component = {BreakAway}options={{
         tabBarIcon:({focused})=>(
-          <View style = {{alignContent: 'center', justifyContent:'center', top: 10}}>
+        <View style = {styles.tabContainer}>
           <Image
             source={require('../assets/bottomtab/breakAway.png')}
             resizeMode='contain'
-            style={{
-              width: 50,
-              height: 50,
-              tintColor: focused? colors.function_100 : colors.mono_60
-            }}
+            style={focused? styles.image1 : styles.image2}
           /> 
+          <Text style ={focused? styles.iconText1: styles.iconText2}>斷捨離</Text>
         </View>
       
         )
       }}></Tab.Screen>
       <Tab.Screen name = "Social" component = {Social}options={{
         tabBarIcon:({focused})=>(
-          <View style = {{alignContent: 'center', justifyContent:'center', top: 10}}>
+        <View style = {styles.tabContainer}>
           <Image
             source={require('../assets/bottomtab/social.png')}
             resizeMode='contain'
-            style={{
-              width: 50,
-              height: 50,
-              tintColor: focused? colors.function_100 : colors.mono_60
-            }}
+            style={focused? styles.image1 : styles.image2}
           /> 
+          <Text style ={focused? styles.iconText1: styles.iconText2}>社群互動</Text>
         </View>
         )
       }}></Tab.Screen>
       <Tab.Screen name = "Personal" component = {Personal}options={{
         tabBarIcon:({focused})=>(
-          <View style = {{alignContent: 'center', justifyContent:'center', top: 10}}>
+          <View style = {styles.tabContainer}>
             <Image
               source={require('../assets/bottomtab/personal.png')}
               resizeMode='contain'
-              style={{
-                width: 50,
-                height: 50,
-                tintColor: focused? colors.function_100 : colors.mono_60
-              }}
+              style={focused? styles.image1 : styles.image2}
             /> 
+            <Text style ={focused? styles.iconText1: styles.iconText2}>個人資料</Text>
           </View>
         )
       }}></Tab.Screen>
@@ -117,8 +105,35 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.5,
     elevation: 5
-  }
+  },
+  tabContainer:{
+    alignItems: 'center', 
+    justifyContent:'center', 
+    top: 5
+  },
+  image1:{
+    width: 30,
+    height: 30,
+    tintColor: colors.function_100,
+  },
+  image2:{
+    width: 30,
+    height: 30,
+    tintColor: colors.mono_60,
+  },
+  iconText1:{
+    fontSize:10,
+    fontWeight:'900',
+    color: colors.function_100,
+  },
+  iconText2:{
+    fontSize:10,
+    fontWeight:'900',
+    color: colors.mono_60,
+  },
+
 })
 
   
 export default Tabs;
+
