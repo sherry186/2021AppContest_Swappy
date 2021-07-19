@@ -61,6 +61,7 @@ const General_HOME = () => {
   useEffect(() => {
     if (error) {
       Alert.alert('Error fetching general items', error.message);
+      console.log(error);
     }
   }, [error]);
 
@@ -83,19 +84,19 @@ const General_HOME = () => {
     navigation.navigate("GeneralAdd")
   }
 
-  const handleSearch = (search) => {
+  const handleSearch = (se) => {
     console.log("search", search)
     const searchedItems = _.filter(allItems, general => {
-      return contains(general.title, search)
+      return contains(general.title, se)
     })
-    setSearch(search);
+    setSearch(se);
     setItems(searchedItems);
     // this.setState({ data,  search});
   };
 
   const renderItem = ({ item }) => (
     //console.log(this.props.navigation);
-    <View style={styles.boxContainer}>
+    <SafeAreaView style={styles.boxContainer}>
       <Text style={styles.title}>{item.title}</Text>
       <View style={styles.buttons}>
         <TouchableOpacity 
@@ -113,7 +114,7 @@ const General_HOME = () => {
             <Text>Delete Item</Text>
         </TouchableOpacity> */}
       </View>
-    </View>
+    </SafeAreaView>
   );
 
  
@@ -123,12 +124,12 @@ const General_HOME = () => {
 
   return(
     
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style = {styles.margin}></View>
-      <View style = {{flex : 1, top: 65, flexDirection:'row'}}>
-          <View style = {{flex : 6}}>
+      <View style = {{top: "15%", height: "10%", width: "90%", flexDirection:'row'}}>
+          <View style = {{flex : 5, alignItems: 'center', justifyContent: 'center'}}>
               <SearchBar
-                containerStyle = {{left: 18,  height: 28, alignContent: 'center', justifyContent: 'center', backgroundColor: 'transparent', borderBottomColor: 'transparent', borderTopColor: 'transparent'}}
+                containerStyle = {{ height: "80%", alignItems: 'center', backgroundColor: 'transparent', borderBottomColor: 'transparent', borderTopColor: 'transparent'}}
                 inputContainerStyle = {{height: 28, width: 264, borderRadius: 7, backgroundColor: colors.mono_60}}
                 inputStyle= {{margin: 0,fontSize: 15}}
                 placeholder="標題、種類、物品資訊"
@@ -138,15 +139,16 @@ const General_HOME = () => {
           </View>
           
           <TouchableOpacity 
-             style={{flex: 1, width: 60, height: 60, backgroundColor: 'transparent'}}
+             style={{flex: 1, width: 60, height: 60, alignItems:'center', justifyContent:'center', backgroundColor: 'transparent'}}
              onPress={toNotification}>
             <Image
               style = {{width: 24, height: 21.99}}
               source = {require("../../assets/general&group/message.png")}/>
             
           </TouchableOpacity>
+
          <TouchableOpacity 
-             style={{flex: 1, left: 0,  width: 60, height: 60, backgroundColor: 'transparent'}}
+             style={{flex: 1, left: 0,alignItems:'center', justifyContent:'center',  width: 60, height: 60, backgroundColor: 'transparent'}}
              onPress={toNotification}>
             <Image
               style = {{width: 24, height: 21.99}}
@@ -154,9 +156,9 @@ const General_HOME = () => {
           </TouchableOpacity>   
       </View>
       
-      <View style = {{flex: 6, alignContent: 'center', justifyContent: 'center'}}>
+      <View style = {{top: "5%", alignContent: 'center', justifyContent: 'center'}}>
         <FlatList
-            data={items}
+            data={search == ''? allItems: items}
             renderItem={renderItem}
           />
       </View>
@@ -168,7 +170,7 @@ const General_HOME = () => {
             // style = {{width: 65, height: 65 }}
             source = {require("../../assets/general/add.png")}/>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   )
   
 
@@ -178,12 +180,14 @@ export default General_HOME;
 
 const styles = StyleSheet.create({
     margin: {
-      flex: 1,
-      height: 50,
+      position: 'relative',
+      height: "10%",
       backgroundColor: colors.mono_40,
     },
     container: {
       flex: 1,
+      height: "60%",
+      alignItems: "center",
       backgroundColor: colors.mono_40,
       bottom: 65,
       // alignItems: 'center',
@@ -194,7 +198,7 @@ const styles = StyleSheet.create({
       height: 99,
       width: 352,
       backgroundColor: colors.mono_40,
-      left: 30,
+      //left: 30,
       alignItems: 'center',
       justifyContent: 'center',
       bottom: 10,
@@ -223,8 +227,8 @@ const styles = StyleSheet.create({
       position: 'absolute',
       borderRadius: 31.5,
       backgroundColor: 'transparent',
-      top: 500,
-      // right: 169,
+      bottom: "10%",
+      right: 169,
       alignItems: 'center',
       justifyContent: 'center',
     },

@@ -145,6 +145,7 @@ const General_ADD = () => {
     // })
     //Navigate back to home page
     createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod}});
+    
     navigation.navigate('General');
   } 
 
