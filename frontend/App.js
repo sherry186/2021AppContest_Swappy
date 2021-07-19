@@ -5,18 +5,18 @@ import TopTabNavigator from './navigators/ggtab'
 import Root from './navigators/root'
 
 //Apollo client
-import { client } from './apollo';
-import { ApolloProvider } from '@apollo/client';
+// import { client } from './apollo';
+// import { ApolloProvider } from '@apollo/client';
 
 
 
 export default function App() {
   return (
-    <ApolloProvider client={client}>
+    // <ApolloProvider client={client}>
       <NavigationContainer>
         <Root/>
       </NavigationContainer>
-    </ApolloProvider>
+    // </ApolloProvider>
   );
 }
 
