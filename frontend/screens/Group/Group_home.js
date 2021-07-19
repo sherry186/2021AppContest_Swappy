@@ -49,11 +49,11 @@ const Group_HOME = () => {
 
   const handleSearch = (search) => {
     console.log("search", search)
-    const data = _.filter(fullData, group => {
+    const data1 = _.filter(fullData, group => {
       return contains(group.title, search)
     })
     setSearch(search);
-    setData(data);
+    setData(data1);
     //this.setState({ data,  search});
   };
 
@@ -67,49 +67,49 @@ const Group_HOME = () => {
   );
 
   useEffect(()=> {
-    setData(GroupItems);
+    //setData(GroupItems);
     setFullData(GroupItems);
   });
   
 
 
   return(
-    <View style={styles.container}>
-      <View style = {styles.margin}></View>
-      <View style = {{flex : 1, top: 65, flexDirection:'row'}}>
-        <View style = {{flex : 6}}>
-          <SearchBar
-            containerStyle = {{left: 18,  height: 28, alignContent: 'center', justifyContent: 'center', backgroundColor: 'transparent', borderBottomColor: 'transparent', borderTopColor: 'transparent'}}
-            inputContainerStyle = {{height: 28, width: 264, borderRadius: 7, backgroundColor: colors.mono_60}}
-            inputStyle= {{margin: 0,fontSize: 15}}
-            placeholder="標題、種類、物品資訊"
-            onChangeText={handleSearch}
-            value={search}
-          />
-        </View>
+    <SafeAreaView style={styles.container}>
+      <SafeAreaView style = {styles.margin}></SafeAreaView>
+      <View style = {{top: "15%", height: "10%", width: "90%", flexDirection:'row'}}>
+          <View style = {{flex : 5, alignItems: 'center', justifyContent: 'center'}}>
+              <SearchBar
+                containerStyle = {{ height: "80%", alignItems: 'center', backgroundColor: 'transparent', borderBottomColor: 'transparent', borderTopColor: 'transparent'}}
+                inputContainerStyle = {{height: 28, width: 264, borderRadius: 7, backgroundColor: colors.mono_60}}
+                inputStyle= {{margin: 0,fontSize: 15}}
+                placeholder="標題、種類、物品資訊"
+                onChangeText={handleSearch}
+                value={search}
+              />
+          </View>
 
-        <TouchableOpacity 
-             style={{flex: 1, width: 60, height: 60, backgroundColor: 'transparent'}}
+          <TouchableOpacity 
+             style={{flex: 1, width: 60, height: 60, alignItems:'center', justifyContent:'center', backgroundColor: 'transparent'}}
              onPress={toNotification}>
             <Image
               style = {{width: 24, height: 21.99}}
               source = {require("../../assets/general&group/message.png")}/>
             
-        </TouchableOpacity>
+          </TouchableOpacity>
 
-        <TouchableOpacity 
-            style={{flex: 1, left: 0,  width: 60, height: 60, backgroundColor: 'transparent'}}
-            onPress={toNotification}>
-           <Image
-             style = {{width: 24, height: 21.99}}
-             source = {require("../../assets/general&group/notification.png")}/>
-         </TouchableOpacity>  
+         <TouchableOpacity 
+             style={{flex: 1, left: 0,alignItems:'center', justifyContent:'center',  width: 60, height: 60, backgroundColor: 'transparent'}}
+             onPress={toNotification}>
+            <Image
+              style = {{width: 24, height: 21.99}}
+              source = {require("../../assets/general&group/notification.png")}/>
+          </TouchableOpacity>    
 
       </View>
       
-      <View style = {{flex: 6, alignContent: 'center', justifyContent: 'center'}}>
+      <View style = {{top: "5%", alignContent: 'center', justifyContent: 'center'}}>
         <FlatList
-          data={data}
+          data={search == ''? fullData : data}
           renderItem={renderItem}
           keyExtractor={item => item.id}
         />
@@ -122,7 +122,7 @@ const Group_HOME = () => {
             style = {{width: 65, height: 65 }}
             source = {require("../../assets/general/add.png")}/>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   )
   
 
@@ -132,12 +132,14 @@ export default Group_HOME;
 
 const styles = StyleSheet.create({
   margin: {
-    flex: 1,
-    height: 50,
+    position: 'relative',
+    height: "10%",
     backgroundColor: colors.mono_40,
   },
   container: {
     flex: 1,
+    height: "60%",
+    alignItems: "center",
     backgroundColor: colors.mono_40,
     bottom: 65,
     // alignItems: 'center',
@@ -148,7 +150,7 @@ const styles = StyleSheet.create({
     height: 99,
     width: 352,
     backgroundColor: colors.mono_40,
-    left: 30,
+    //left: 30,
     alignItems: 'center',
     justifyContent: 'center',
     bottom: 10,
@@ -177,7 +179,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     borderRadius: 31.5,
     backgroundColor: 'transparent',
-    top: 700,
+    bottom: "10%",
     right: 169,
     alignItems: 'center',
     justifyContent: 'center',
