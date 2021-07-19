@@ -140,7 +140,19 @@ function Root() {
         <RootStack.Screen 
           name="Notification" 
           component={Notification}
-          options={{headerShown: true }}/>
+          options={{
+            title: '',
+            cardStyle: {backgroundColor: colors.mono_40},
+            headerStyle: {
+                backgroundColor: "transparent",
+                elevation: 0,
+                shadowOpacity: 0, 
+            },
+            headerTintColor: colors.warning_80,
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            }, 
+          }}/>
 
       </RootStack.Navigator>
     );

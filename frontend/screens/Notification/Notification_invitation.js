@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { View, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { SearchBar } from 'react-native-elements';
@@ -6,110 +6,124 @@ import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 
 import InvitationData from '../../Data/InvitationData';
 import GroupItems from '../../Data/GroupItems';
+import colors from '../../config/colors';
 
 
-export default class Notification_invitation extends React.Component {
+const Notification_invitation = () => {
 
-  constructor(props){
-    super(props);
-    this.state = {
-      data: [],
-      groupItems:[],
-    };
-  }
-  
-
-  static navigationOptions = {
-    title: 'Navigation_invitation',
-  }
+  const[data, setData] = useState([]);
+  const[groupItems, setGroupItems] = useState([]);
 
 
-  renderItem = ({ item }) => (
-    //console.log(this.props.navigation);
-    <ScrollView style={{flexDirection: 'row'}}>
-
-      <View style={{flexDirection: 'row'}}>
-        <TouchableOpacity 
-            style={styles.item}>
-            <Text style={styles.title}>{item.requester} </Text>
-            <Text style={styles.title}>{item.itis}</Text>
-            <Text style={styles.title}>{item.general? 'general' : 'group'}</Text>
-
-        </TouchableOpacity>
-        <TouchableOpacity
-            style={{width:60, height:60, borderRadius:30}}>
-            <Text>Y</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-            style={{width:60, height:60, borderRadius:30}}>
-            <Text>N</Text>
-        </TouchableOpacity>
-      </View>
+  const renderItem = ({ item }) => (
+      //console.log(this.props.navigation);
+      <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
         
-    </ScrollView>
-    
+        <View style = {styles.complete}>
+
+            <View style = { styles.item }>
+              <TouchableOpacity 
+                  style = {{ backgroundColor: 'transparent'}}>
+                  <Text style={styles.title}>{item.requester} </Text>
+                  <Text style={styles.title}>{item.itis}</Text>
+                  <Text style={styles.title}>{item.general? 'general' : 'group'}</Text>
+              </TouchableOpacity>
+            </View>
+            <View style = {styles.yn}>
+              <TouchableOpacity
+                  style={styles.ynButton}>
+                  <Text>Y</Text>
+              </TouchableOpacity>
+            </View>
+            <View style = {styles.yn}>
+              <TouchableOpacity
+                  style={styles.ynButton}>
+                  <Text>N</Text>
+              </TouchableOpacity>
+            </View>
+        </View>
+      </View>
+      
 
   );
 
-  componentDidMount() {
-    this.setState({
-      data: InvitationData,
-      groupItems: GroupItems,
-    });
-  }
-  
-
-  render() {
-    const { search } = this.state;
-    // const[grvalue, grsetValue] = useState('');
-    const{ navigate } = this.props.navigation;
-    //console.log(this.props.navigation);
-
-    return(
-      <SafeAreaView style={styles.container}>
-        
-      
+  useEffect(() => {
+    setData(InvitationData);
+    setGroupItems(GroupItems);
+    // this.setState({
+    //   data: InvitationData,
+    //   groupItems: GroupItems,
+    // });
+  });
+ 
+  // const { search } = this.state;
+  // // const[grvalue, grsetValue] = useState('');
+  // const{ navigate } = this.props.navigation;
+  // //console.log(this.props.navigation);
+  return(
+    <View style = {{ height: "100%", width: "100%", backgroundColor: colors.mono_40 }}>
+      <View style={styles.container}>
         <FlatList
-          data={this.state.data}
-          renderItem={this.renderItem}
+          data={data}
+          renderItem={renderItem}
           keyExtractor={item => item.id}
         />
-      </SafeAreaView>
-    )
-  }
+      </View>
+    </View>
+    
+  )
+
 
 }
 
+export default Notification_invitation;
+
 const styles = StyleSheet.create({
+    margin: {
+      width: "5%",
+      backgroundColor:"transparent",
+    },
     container: {
       flex: 1,
-      // alignItems: 'center',
-      // justifyContent: 'center'
+      backgroundColor: "transparent",
+      width: "100%",
+    },
+    margin: {
+
+    },
+    complete:{ 
+      flexDirection: 'row',
+      marginTop: 20,
+      height: 90, 
+      width:"90%",
+      backgroundColor: 'transparent',
+      justifyContent:'center',
     },
     item: {
-      backgroundColor: '#f9c2ff',
+      flex: 6,
+      backgroundColor: colors.mono_60,
       padding: 20,
       marginVertical: 8,
-      marginHorizontal: 16,
+      width: "60%",
     },
-    title: {
-
-      fontSize: 12,
-    },
-    button: {
-      width: 60,
-      height: 60,
-      position: 'absolute',
-      borderRadius: 30,
-      backgroundColor: '#ee6e73',
-      bottom: 150,
-      right: 175,
+    yn:{
+      flex: 1,
+      height: "100%",
+      backgroundColor: "transparent",
       alignItems: 'center',
       justifyContent: 'center',
     },
-    buttonText: {
-      color: '#fff',
-      fontSize: 10,
-      fontWeight: 'bold',
+    ynButton:{
+      width:60, 
+      height:60, 
+      borderRadius:30, 
+      backgroundColor: "transparent", 
+      alignItems:'center', 
+      justifyContent:'center'
     },
+    title: {
+      fontSize: 12,
+    },
+    
+   
   });
