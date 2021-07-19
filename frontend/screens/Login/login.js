@@ -62,10 +62,12 @@ const login = () =>  {
 
   if (data) {
     // save token
+    console.log(data);
     AsyncStorage
       .setItem('token', data.signIn.token)
       .then(() => {
         // redirect home
+        Alert.alert('signed in successfully!');
         navigation.navigate("BottomTab")
       })
   }
