@@ -3,14 +3,20 @@ import { NavigationContainer } from '@react-navigation/native';
 import Tabs from './navigators/Bottom_tab';
 import TopTabNavigator from './navigators/ggtab'
 import Root from './navigators/root'
-// React nav
-//import Root from './navigators/root';
+
+//Apollo client
+import { client } from './apollo';
+import { ApolloProvider } from '@apollo/client';
+
+
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Root/>
-    </NavigationContainer>
+    <ApolloProvider client={client}>
+      <NavigationContainer>
+        <Root/>
+      </NavigationContainer>
+    </ApolloProvider>
   );
 }
 
