@@ -1,14 +1,33 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, 
         Text, 
         StyleSheet, 
-        TextInput, 
+        TextInput,
+        Alert, 
+        ActivityIndicator,
         TouchableOpacity,
         Image } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import colors from '../../config/colors';
 import { useNavigation } from '@react-navigation/core';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useMutation,  gql } from '@apollo/client';
+
+const SIGN_IN_MUTATION = gql`
+  mutation signin($email: String!, $password: String!) {
+    signIn(input: { email: $email, password: $password}) {
+      token
+      user {
+        username
+        id
+        email
+      }
+    }
+  }`;
+
+
 
 const login = () =>  {
   // constructor(props) {
@@ -33,8 +52,28 @@ const login = () =>  {
   
   const navigation = useNavigation();
 
+  const [signIn, { data, error, loading }] = useMutation(SIGN_IN_MUTATION);
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert('Invalid credentials, try again');
+    }
+  }, [error])
+
+  if (data) {
+    // save token
+    AsyncStorage
+      .setItem('token', data.signIn.token)
+      .then(() => {
+        // redirect home
+        navigation.navigate("BottomTab")
+      })
+  }
+
+
   const handlesubmit = () => {
-    navigation.navigate("BottomTab")
+    signIn({ variables: { email: account, password }})
+    //navigation.navigate("BottomTab")
   }
 
   const handlesetSecure = (now) =>{
@@ -98,8 +137,10 @@ const login = () =>  {
         </View>
         <TouchableOpacity
           title='Submit'
+          disabled={loading}
           onPress={handlesubmit}
           style={styles.submit}>
+            {loading && <ActivityIndicator />}
           <Text
             style={styles.buttonText}>登入</Text>
         </TouchableOpacity>
