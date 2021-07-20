@@ -353,7 +353,6 @@ const styles = StyleSheet.create({
       borderWidth: 1
     },
     inputStory:{
-      
       margin: "5%",
       height: 150,
       borderColor: colors.mono_80,

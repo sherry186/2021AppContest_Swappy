@@ -23,23 +23,43 @@ export default class BreakAwaySpaceDetail extends React.Component {
   
   constructor(props) {
     super(props);
-    this.state = { data: [], fullData: []};
+    this.state = { hesitate: [], fullData: []};
   }
 
-  renderImage = ({ item }) => ( 
-    <Image 
-      style={{flexDirection: 'row', width: 60, height: 60,  }}
-      source={item.source}/>
+  renderHesitate = ({ item }) => ( 
+    <TouchableOpacity
+        style ={{flexDirection: 'row', width:70, height: 80, margin:10, alignItems: 'center', justifyContent: 'center'}}
+        onPress = {() => this.props.navigation.navigate("BreakAwayItemDetail", {source: item.source, spaceId: item.spaceId, story: item.story, uploadDate: item.uploadDate})}
+        >
+        <Image 
+          style={{width: 60, height: 60,  }}
+          source={item.source}/>
+    </TouchableOpacity>
+    
+  )
+
+  renderStory = ({ item }) => ( 
+    <TouchableOpacity
+      style ={{flexDirection: 'row', width:70, height: 80, margin:10, alignItems: 'center', justifyContent: 'center'}}
+      onPress = {() => this.props.navigation.navigate("BreakAwayItemStory", {title: item.title, story: item.story, image: item.source})}
+      >
+        <Image 
+          style={{flexDirection: 'row', width: 60, height: 60,  }}
+          source={item.source}/>
+    </TouchableOpacity>
   )
 
   componentDidMount() {
-    const datafilter = _.filter(BreakAwayItems, item => {
-        return item.spaceId == this.props.route.params.spaceId
+    const datafilter1 = _.filter(BreakAwayItems, item => {
+        return item.spaceId == this.props.route.params.spaceId && item.state == "hesitate"
     })
+    const datafilter2 = _.filter(BreakAwayItems, item => {
+      return item.spaceId == this.props.route.params.spaceId
+  })
 
     this.setState({
-      data: datafilter,
-      fullData: datafilter,
+      hesitate: datafilter1,
+      fullData: datafilter2,
     });
   }
 
@@ -57,11 +77,22 @@ export default class BreakAwaySpaceDetail extends React.Component {
               maxValue={100}
             />
         </View>
-        <Text>story:</Text>
+        <Text>猶豫區</Text>
+        <View>
+          <FlatList
+                style = {{flex: 1}}
+                data={this.state.hesitate}
+                renderItem={this.renderHesitate}
+                horizontal = {true}
+                keyExtractor={item => item.id}
+            />
+        </View>
+        
+        <Text>故事集</Text>
         <FlatList
               style = {{flex: 1}}
-              data={this.state.data}
-              renderItem={this.renderImage}
+              data={this.state.fullData}
+              renderItem={this.renderStory}
               horizontal = {true}
               keyExtractor={item => item.id}
           />

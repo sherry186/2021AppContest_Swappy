@@ -22,6 +22,7 @@ import login from '../screens/Login/login';
 import signup from '../screens/Login/signup';
 import LoginSignupNav from './loginSignupNav';
 import colors from '../config/colors';
+import BreakAwayItemStory from '../screens/BreakAway/BreakAwayItemStory';
 //import { Text } from 'react-native';
 
 
@@ -122,6 +123,11 @@ function Root() {
           options={{headerShown: false }}/>
 
         <RootStack.Screen 
+          name="BreakAwayItemStory" 
+          component={BreakAwayItemStory}
+          options={{headerShown: false }}/>
+
+        <RootStack.Screen 
           name="BreakAwayHesitate" 
           component={BreakAwayHesitate}
           options={{
@@ -146,7 +152,19 @@ function Root() {
         <RootStack.Screen 
           name="BreakAwaySpaceDetail" 
           component={BreakAwaySpaceDetail}
-          options={{headerShown: false }}/>
+          options={{
+            title: '',
+            cardStyle: {backgroundColor: colors.mono_40},
+            headerStyle: {
+                backgroundColor: "transparent",
+                elevation: 0,
+                shadowOpacity: 0, 
+            },
+            headerTintColor: colors.warning_80,
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            }, 
+          }}/>
 
         {/*notification & message*/}
         <RootStack.Screen 
