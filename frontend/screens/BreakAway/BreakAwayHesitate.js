@@ -8,13 +8,17 @@ import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/core';
 import { Dimensions } from 'react-native';
 import colors from '../../config/colors';
+import * as SQLite from 'expo-sqlite'
+const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
+
+import { format } from 'fecha';
 
 let ScreenWidth = Dimensions.get("window").width;
 
 export default function BreakAwayHesitate () {
 
   const [data, setData] = useState([]);
-  const [Limit, setLimit] = useState('');
+  const [Limit, setLimit] = useState(0);
   const [image, setImage] = useState([]);
 
   // const [image1, setImage1] = useState(null);
@@ -25,7 +29,7 @@ export default function BreakAwayHesitate () {
 
   const [story, setStory] = useState('');
   const [title, setTitle] = useState('');
-  const [space, setSpace] = useState('');
+  const [space, setSpace] = useState(0);
 
   const windowHeight = useWindowDimensions().height;
   const navigation = useNavigation();
@@ -34,11 +38,30 @@ export default function BreakAwayHesitate () {
   //   title: 'BreakAway_Hesitate',
   // }
 
+  const getDate = () => {
+    //add date function
+    function addDays(date, days) {
+      var result = new Date(date);
+      result.setDate(result.getDate() + days);
+      return result;
+    }
+
+    var date = new Date();
+    date = addDays(date, parseInt(Limit));
+
+    //convert date to sql datatype
+    date = format(date, 'isoDate'); // '2015-11-20'
+
+    return date;
+  }
+
   const handlesubmit = () =>{
     createMyHesitatingItemsTable();
-    //createHesitateItem = (title, story, image, reminderDate, space)
-    createHesitateItem()
-    navigation.goBack()
+    const image = 'temp image';
+
+    const reminderDate = getDate();
+    createHesitateItem(title, story, image, reminderDate, space);
+    navigation.goBack();
   }
 
 
@@ -52,7 +75,9 @@ export default function BreakAwayHesitate () {
 
   
   const onValueChange = (flag,value) => {
-    setSpace(value)
+    console.log(value);
+    //setSpace(value);
+    //console.log(space);
   };
 
   const pickImage = async () => {
@@ -65,7 +90,7 @@ export default function BreakAwayHesitate () {
         quality: 1,
       });
   
-      console.log(result);
+      //console.log(result);
   
       if (!result.cancelled) {
         
@@ -83,7 +108,19 @@ export default function BreakAwayHesitate () {
     // this.setState({
     //   data: BreakAwaySpace,
     // });
-    setData(BreakAwaySpace);
+      database.transaction(tx => {
+          tx.executeSql('SELECT * FROM MySpaces', 
+          null,
+          (txObj, resultSet) => {
+              //console.log('Success', resultSet);
+              let spacesData = resultSet.rows._array;
+              setData(spacesData);
+              //console.log(data);
+      },
+          (txObj, error) => console.log('Error', error))
+      });
+
+    //setData(BreakAwaySpace);
     (async () => {
       if (Platform.OS !== 'web') {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -93,7 +130,7 @@ export default function BreakAwayHesitate () {
       }
     })();
     
-  },[]);
+  },[data]);
 
   return(
     // minHeight: Math.round(windowHeight)
@@ -163,16 +200,17 @@ export default function BreakAwayHesitate () {
            
           <View style ={styles.textInputContainer}>
           <View style = {{flex: 0.5}}></View>
-            <View style = {{flex: 3.5}}>
+            <View style = {{flex: 3.5, justifyContent: 'center'}}>
                 <Picker
                   mode={'dropdown'}
-                  style={styles.input3}
+                  // style={styles.input3}
                   selectedValue={space}
-                  onValueChange={(value)=>onValueChange(2 ,value)}>
+                  // onValueChange={(value)=>onValueChange(2 ,value)}
+                    onValueChange= {(itemValue, itemIndex) => setSpace(itemValue)}>
                   {
                     data.map((item, index)=>{
                       return(
-                        <Picker.Item label= {item.title} value= {item.id} />
+                        <Picker.Item label= {item.spaceName} value= {item.id} />
                       );
                     })
                   }

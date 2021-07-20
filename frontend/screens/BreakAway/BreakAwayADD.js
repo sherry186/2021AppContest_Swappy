@@ -10,7 +10,6 @@ import {
 import { createMySpacesTable, createSpace } from '../../localStorageApi/api'
 
 
-
 export default class BreakAwayADD extends React.Component {
 
   static navigationOptions = {

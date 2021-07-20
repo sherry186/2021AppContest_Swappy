@@ -47,6 +47,13 @@ export const deleteSpace = (id) => {
         (txObj, resultSet) => console.log('Success', resultSet),
         (txObj, error) => console.log('Error', error))
     })
+
+    database.transaction(tx => {
+        tx.executeSql('DELETE FROM MyHesitatingItems WHERE spaceId = ?', 
+        [id],
+        (txObj, resultSet) => console.log('Success', resultSet),
+        (txObj, error) => console.log('Error', error))
+    })
 };
 
 export const updateProgress = (SpaceName, points) => {
@@ -90,4 +97,103 @@ export const deleteHesitateItem = (id) => {
         (txObj, error) => console.log('Error', error))
     })
 }
+
+export const getHesitateItems = () => {
+    database.transaction(tx => {
+        tx.executeSql('SELECT * FROM MyHesitatingItems', 
+        null,
+        (txObj, resultSet) => {
+            //console.log('Success', resultSet);
+            let hesitateData = resultSet.rows._array;
+            // this.setState({
+            //   spaceData: spacesData,
+            // });
+            console.log(hesitateData);
+    },
+        (txObj, error) => console.log('Error', error))
+    });
+}
+
+export const getHesitateItemByID = (id) => {
+    database.transaction(tx => {
+        tx.executeSql('SELECT * FROM MyHesitatingItems WHERE id = ? LIMIT 1', 
+        [id],
+        (txObj, resultSet) => {
+            //console.log('Success', resultSet);
+            let item = resultSet.rows._array;
+            // this.setState({
+            //   spaceData: spacesData,
+            // });
+            console.log(item);
+    },
+        (txObj, error) => console.log('Error', error))
+    })
+};
+
+export const getHesitateItemsBySpace = (spaceName) => {
+    database.transaction(tx => {
+        tx.executeSql('SELECT * FROM MyHesitatingItems WHERE spaceName = ?', 
+        [spaceName],
+        (txObj, resultSet) => {
+            //console.log('Success', resultSet);
+            let item = resultSet.rows._array;
+            // this.setState({
+            //   spaceData: spacesData,
+            // });
+            console.log(item);
+    },
+        (txObj, error) => console.log('Error', error))
+    })
+};
+
+
+export const createMyStoriesTable = () => {
+    database.transaction(tx => {
+      tx.executeSql(
+        `CREATE TABLE IF NOT EXISTS MyStoryItems (
+            id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            title TEXT, 
+            story TEXT, 
+            image TEXT default "no image",
+            spaceName TEXT 
+            )`,
+      )
+    })
+};
+
+
+export const createStoryItem = (title, story, image, spaceName) => {
+    database.transaction(tx => { 
+        tx.executeSql(
+          `INSERT INTO MyStoryItems (title, story, image, spaceName) VALUES (?, ?, ?, ?)`, 
+          [title, story, image, spaceName],
+          (txObj, resultSet) => console.log('Success', resultSet),
+          (txObj, error) => console.log('Error', error))
+      })
+}
+
+
+export const getStoryItemsBySpace = (spaceName) => {
+    database.transaction(tx => {
+        tx.executeSql('SELECT * FROM MyStoryItems WHERE spaceName = ?', 
+        [spaceName],
+        (txObj, resultSet) => {
+            //console.log('Success', resultSet);
+            let item = resultSet.rows._array;
+            // this.setState({
+            //   spaceData: spacesData,
+            // });
+            console.log(item);
+    },
+        (txObj, error) => console.log('Error', error))
+    })
+};
+
+
+
+
+
+
+
+
 

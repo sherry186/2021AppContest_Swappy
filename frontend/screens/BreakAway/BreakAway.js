@@ -18,6 +18,8 @@ import { useState } from 'react';
 
 import * as SQLite from 'expo-sqlite'
 const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
+import { deleteHesitateItem } from '../../localStorageApi/api';
+
 
 export default class BreakAway extends React.Component {
 
@@ -38,7 +40,7 @@ export default class BreakAway extends React.Component {
   renderSpace = ({ item }) => (
     //console.log(this.props.navigation);
     <TouchableOpacity
-        onLongPress = {() => this.deleteSpaceAlert()}
+        onLongPress = {() => this.handleDelete(item)}
         onPress =  {() => this.props.navigation.navigate("BreakAwaySpaceDetail", {spaceId: item.id, complete: item.progress})}
         style={styles.button}
         >
@@ -51,19 +53,26 @@ export default class BreakAway extends React.Component {
     </TouchableOpacity>   
   );
 
-  deleteSpaceAlert = () => 
+  handleDelete = (item) => {
+    //console.log(item);
     Alert.alert(
       "刪除此空間？",
       "",
       [
         {
           text: "確定",
-          onPress: () => console.log("Cancel Pressed"),
+          onPress: () => {
+            console.log("Cancel Pressed");
+            deleteHesitateItem(item.id);
+        },
           style: "cancel"
         },
         { text: "取消", onPress: () => console.log("OK Pressed") }
-      ]
-    );
+      ]);
+  }
+
+  // deleteSpaceAlert = () => 
+    
   
 
   renderImage = ({ item }) => (
@@ -84,12 +93,12 @@ export default class BreakAway extends React.Component {
         tx.executeSql('SELECT * FROM MySpaces', 
         null,
         (txObj, resultSet) => {
-            console.log('Success', resultSet);
+            //console.log('Success', resultSet);
             let spacesData = resultSet.rows._array;
             this.setState({
               spaceData: spacesData,
             });
-            console.log(this.state.spaceData);
+            //console.log(this.state.spaceData);
     },
         (txObj, error) => console.log('Error', error))
     });
