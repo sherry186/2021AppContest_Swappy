@@ -181,14 +181,19 @@ export default function BreakAwayHesitate () {
             <View style = {{flex: 6}}></View>
           </View>
           
+          <View style ={styles.textContainer}>
+            <Text style={styles.text}>屬於他們的故事</Text>
+          </View>
           
-          <Text style={styles.text}>屬於他們的故事</Text>
-          <TextInput
-              style={styles.inputStory}
-              //placeholder='100'
-              multiline = {true}
-              onChangeText={setStory}
-              value = {story}/>
+          <View style = {{flex:3}}>
+            <TextInput
+                style={styles.inputStory}
+                //placeholder='100'
+                multiline = {true}
+                onChangeText={setStory}
+                value = {story}/>
+          </View>
+          
           
           <View style = {styles.uploadContainer}>
               <TouchableOpacity
@@ -310,7 +315,7 @@ const styles = StyleSheet.create({
       borderWidth: 1
     },
     inputStory:{
-      flex:3,
+      
       margin: "5%",
       height: 150,
       borderColor: colors.mono_80,
