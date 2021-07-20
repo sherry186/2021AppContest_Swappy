@@ -4,14 +4,17 @@ import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 import { ProgressBar } from "react-native-paper";
 import BreakAwaySpace from '../../Data/BreakAwaySpace';
 
+import { createMyHesitatingItemsTable, createHesitateItem } from '../../localStorageApi/api';
+
 
 export default class BreakAwayHesitate extends React.Component {
-
   state = {
     data: [],
     fullData: [],
     Limit: '100',
     story:'',
+    title: '',
+    space: '',
     //this.state = { Space: '', Discription: '', };
   };
 
@@ -21,8 +24,10 @@ export default class BreakAwayHesitate extends React.Component {
     title: 'BreakAway_Hesitate',
   }
 
-  handlesubmit =() =>{
-    
+  handlesubmit = () =>{
+    createMyHesitatingItemsTable();
+    //createHesitateItem = (title, story, image, reminderDate, space)
+    createHesitateItem()
     this.props.navigation.goBack()
   }
 

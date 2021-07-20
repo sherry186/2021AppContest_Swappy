@@ -7,6 +7,7 @@ import {
     TouchableOpacity, 
     TextInput} from 'react-native';
 
+import { createMySpacesTable, createSpace } from '../../localStorageApi/api'
 
 
 
@@ -21,8 +22,9 @@ export default class BreakAwayADD extends React.Component {
   }
 
   handlesubmit =() =>{
-    
-    this.props.navigation.goBack()
+    createMySpacesTable();
+    createSpace(this.state.Space);
+    this.props.navigation.goBack();
   } 
 
   handleupload = () =>{

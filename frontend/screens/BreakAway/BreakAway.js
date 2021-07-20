@@ -15,6 +15,9 @@ import BreakAwayItems from '../../Data/BreakAwayItems';
 import colors from '../../config/colors'
 import { useState } from 'react';
 
+import * as SQLite from 'expo-sqlite'
+const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
+
 export default class BreakAway extends React.Component {
 
 
@@ -31,16 +34,16 @@ export default class BreakAway extends React.Component {
   }
 
 
-  renderItem = ({ item }) => (
+  renderSpace = ({ item }) => (
     //console.log(this.props.navigation);
     <TouchableOpacity
-        onPress =  {() => this.props.navigation.navigate("BreakAwaySpaceDetail", {spaceId: item.id, complete: item.complete})}
+        onPress =  {() => this.props.navigation.navigate("BreakAwaySpaceDetail", {spaceId: item.id, complete: item.progress})}
         style={styles.button}
         >
-      <Text>{item.title}</Text>
+      <Text>{item.spaceName}</Text>
       <Text></Text>
       <ProgressBar
-        progress = {item.complete} 
+        progress = {item.progress} 
         style={styles.probarStyle} 
         color = {'#FEBC5F'}/> 
     </TouchableOpacity>   
@@ -57,15 +60,33 @@ export default class BreakAway extends React.Component {
     </TouchableOpacity>
   );
 
+  getSpaces = () => {
+    database.transaction(tx => {
+        tx.executeSql('SELECT * FROM MySpaces', 
+        null,
+        (txObj, resultSet) => {
+            console.log('Success', resultSet);
+            let spacesData = resultSet.rows._array;
+            this.setState({
+              spaceData: spacesData,
+            });
+            console.log(this.state.spaceData);
+    },
+        (txObj, error) => console.log('Error', error))
+    });
+}
+
   componentDidMount() {
     this.setState({
-      spaceData: BreakAwaySpace,
+      //spaceData: BreakAwaySpace,
       itemData: BreakAwayItems,
     });
   }
   
 
   render() {
+    this.getSpaces();
+
     // const[grvalue, grsetValue] = useState('');
     const{ navigate } = this.props.navigation;
     //console.log(this.props.navigation);
@@ -85,7 +106,7 @@ export default class BreakAway extends React.Component {
               <FlatList
                   style = {{bottom: 150}}
                   data={this.state.spaceData}
-                  renderItem={this.renderItem}
+                  renderItem={this.renderSpace}
                   keyExtractor={item => item.id}
               /> 
               <TouchableOpacity 
