@@ -7,7 +7,8 @@ import { ScrollView,
          FlatList, 
          StyleSheet, 
          TouchableOpacity, 
-         Image } from "react-native";
+         Image,
+         Alert } from "react-native";
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 import { ProgressBar } from "react-native-paper";
 import BreakAwaySpace from '../../Data/BreakAwaySpace';
@@ -37,6 +38,7 @@ export default class BreakAway extends React.Component {
   renderSpace = ({ item }) => (
     //console.log(this.props.navigation);
     <TouchableOpacity
+        onLongPress = {() => this.deleteSpaceAlert()}
         onPress =  {() => this.props.navigation.navigate("BreakAwaySpaceDetail", {spaceId: item.id, complete: item.progress})}
         style={styles.button}
         >
@@ -49,10 +51,27 @@ export default class BreakAway extends React.Component {
     </TouchableOpacity>   
   );
 
+  deleteSpaceAlert = () => 
+    Alert.alert(
+      "刪除此空間？",
+      "",
+      [
+        {
+          text: "確定",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "取消", onPress: () => console.log("OK Pressed") }
+      ]
+    );
+  
+
   renderImage = ({ item }) => (
     <TouchableOpacity
+      
       onPress = {() => this.props.navigation.navigate("BreakAwayItemDetail", {source: item.source, spaceId: item.spaceId, story: item.story, uploadDate: item.uploadDate})} 
       style={{flexDirection: 'row', width:70, height: 80, margin:10}}
+      
       >
       <Image 
         style={{ width: 60, height: 60  }}

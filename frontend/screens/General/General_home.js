@@ -117,9 +117,6 @@ const General_HOME = () => {
       </View>
     </SafeAreaView>
   );
-
- 
-
   
 
 
