@@ -1,21 +1,17 @@
 import React, { useState, useEffect }  from 'react';
-import {Platform, ScrollView, TextInput, View, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity, Image } from "react-native";
+import {Platform, KeyboardAvoidingView, useWindowDimensions, ScrollView, TextInput, View, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity, Image } from "react-native";
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 import BreakAwaySpace from '../../Data/BreakAwaySpace';
 import { Picker } from '@react-native-picker/picker';
 import { createMyHesitatingItemsTable, createHesitateItem } from '../../localStorageApi/api';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/core';
+import { Dimensions } from 'react-native';
+import colors from '../../config/colors';
+
+let ScreenWidth = Dimensions.get("window").width;
 
 export default function BreakAwayHesitate () {
-  // state = {
-  //   data: [],
-  //   Limit: '100',
-  //   image: null,
-  //   story:'',
-  //   title: '',
-  //   space: '',
-  // };
 
   const [data, setData] = useState([]);
   const [Limit, setLimit] = useState('');
@@ -31,7 +27,7 @@ export default function BreakAwayHesitate () {
   const [title, setTitle] = useState('');
   const [space, setSpace] = useState('');
 
-
+  const windowHeight = useWindowDimensions().height;
   const navigation = useNavigation();
 
   // static navigationOptions = {
@@ -46,19 +42,10 @@ export default function BreakAwayHesitate () {
   }
 
 
-  const renderItem = ({ item }) => (
-    //console.log(this.props.navigation);
-    <TouchableOpacity 
-            style={styles.button}
-            >
-      <Text>{item.title}</Text>
-    </TouchableOpacity>   
-  );
-
   const renderImage = ({ item }) => (
-    <SafeAreaView style = {{flex:1, left: 10, flexDirection: 'row'}}>
+    <SafeAreaView style = {styles.imageContainer}>
       <Image 
-        style={{width: 120, height: 120,  }}
+        style={styles.image}
         source={{uri: item.uri}}/>
     </SafeAreaView> 
   );
@@ -74,7 +61,7 @@ export default function BreakAwayHesitate () {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
-        aspect: [4, 3],
+        aspect: [3, 3],
         quality: 1,
       });
   
@@ -109,87 +96,101 @@ export default function BreakAwayHesitate () {
   },[]);
 
   return(
-     <View style={{flex:1, flexDirection: 'column'}}>
-       <View style = {{flex: 1}}></View> 
+    // minHeight: Math.round(windowHeight)
+     <View style={{flex:1, flexDirection: 'column',  }}>
+       {/* <KeyboardAvoidingView style={{flex:0.3}}></KeyboardAvoidingView> */}
+       <KeyboardAvoidingView style={{height: windowHeight *0.15 ,flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+          <View style = {styles.flatListContainer}>
+              <FlatList
+                data={image}
+                renderItem={renderImage}
+                horizontal = {true}
+              />
+          </View> 
 
-       <View style={{flex:0.5, flexDirection: 'column'}}>
-         <View style = {{flex: 5, flexDirection:'row'}}>
-              {/* <Image 
-                style = {{ width: 100, height: 60 }}
-                source = {{uri: image1}}/>
-              <Image 
-                style = {{width: 100, height: 60 }}
-                source = {{uri: image2}}/>
-              <Image 
-                style = {{  width: 100, height: 60 }}
-                source = {{uri: image3}}/>
-              <Image 
-                style = {{ width: 100, height: 60 }}
-                source = {{uri: image4}}/>
-              <Image 
-                style = {{  width: 100, height: 60 }}
-                source = {{uri: image5}}/> */}
+          <View style = {styles.buttonAdd}>
+          <TouchableOpacity 
+              style={styles.buttonAddContainer}
+              onPress={pickImage}
+              >
+              <Image
+                style = {{height:ScreenWidth*0.05, width: ScreenWidth*0.05}}
+                source={require("../../assets/breakAway/add.png")}/>
+          </TouchableOpacity>
+          </View>
+           
+       </KeyboardAvoidingView>
 
-            <FlatList
-              style = {{margin: 20}}
-              data={image}
-              renderItem={renderImage}
-              horizontal = {true}
-              keyExtractor={item => item.id}
-            />
+       <KeyboardAvoidingView style = {styles.line}></KeyboardAvoidingView>
 
-            <View >
-              <TouchableOpacity 
-                  style={styles.buttonRound}
-                  onPress={pickImage}
-                  >
-                  <Text>ADD</Text>
-              </TouchableOpacity>
-            </View>
-         </View>  
-       </View>
-
-       <View style = {{flex: 5,}}>
-          <Text>猶豫上限時間</Text>
-          <TextInput
-              style={styles.input}
-              //placeholder='100'
-              onChangeText={setLimit}
-              value = {Limit}/>
-
-          <Text>物品位置</Text>  
-          <Picker
-            mode={'dropdown'}
-            style={{height: 40,width:200}}
-            selectedValue={space}
-            onValueChange={(value)=>onValueChange(2 ,value)}>
-            {
-              data.map((item, index)=>{
-                return(
-                  <Picker.Item label= {item.title} value= {item.id} />
-                );
-              })
-            }
-          </Picker>
+       <ScrollView >
+          <View style ={styles.textContainer}>
+              <Text style = {styles.text}>物品標題</Text>
+          </View>
           
-          <Text>屬於他們的故事</Text>
+          <View style ={styles.textInputContainer}>
+              <TextInput
+                  style={styles.input}
+                  //placeholder='100'
+                  onChangeText={setTitle}
+                  value = {title}/>
+          </View>
+          
+
+          <View style ={styles.textContainer}>
+              <Text style={styles.text}>猶豫上限時間</Text>
+          </View>
+          
+          <View style ={styles.textInputContainer}>
+              <TextInput
+                  style={styles.input2}
+                  //placeholder='100'
+                  onChangeText={setLimit}
+                  value = {Limit}/>
+          </View>
+
+          <View style ={styles.textContainer}>
+            <Text style={styles.text}>物品位置</Text> 
+          </View>
+           
+          <View style ={styles.textInputContainer}>
+            <Picker
+              mode={'dropdown'}
+              style={styles.input3}
+              selectedValue={space}
+              onValueChange={(value)=>onValueChange(2 ,value)}>
+              {
+                data.map((item, index)=>{
+                  return(
+                    <Picker.Item label= {item.title} value= {item.id} />
+                  );
+                })
+              }
+            </Picker>
+          </View>
+          
+          
+          <Text style={styles.text}>屬於他們的故事</Text>
           <TextInput
-              style={styles.input}
+              style={styles.inputStory}
               //placeholder='100'
               multiline = {true}
               onChangeText={setStory}
               value = {story}/>
-          <TouchableOpacity
-              title = 'Submit'
-              onPress={handlesubmit}
-              style = {styles.item}>
-              <Text
-                style = {styles.buttonText}>Submit</Text>
-          </TouchableOpacity>
-       </View>
-       
-       
-      
+          
+          <View style = {styles.uploadContainer}>
+              <TouchableOpacity
+                  title = 'Submit'
+                  onPress={handlesubmit}
+                  style = {styles.item}>
+                  <Image
+                    style = {{height: 70, width:70,}} 
+                    source = {require('../../assets/breakAway/upload.png')}/>
+              </TouchableOpacity>
+          </View>
+          
+       </ScrollView>
+
      </View>
        
       
@@ -199,59 +200,108 @@ export default function BreakAwayHesitate () {
 }
 
 const styles = StyleSheet.create({
-  center: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-   },
-    container: {
-      flex: 1,
-      // alignItems: 'center',
-      // justifyContent: 'center'
-    },
-    probarStyle: {
-      width: 300,
-      height: 10,
-      backgroundColor: "#E0E0E0"
-    },
     item: {
-      backgroundColor: '#f9c2ff',
-      padding: 20,
-      marginVertical: 8,
-      marginHorizontal: 16,
+      height:70,
+      width:70,
+      alignItems: 'center',
+      justifyContent: 'center',
+      
     },
     title: {
       fontSize: 32,
     },
-    button: {
+    image:{
+      width: ScreenWidth*0.2, 
+      height: ScreenWidth*0.2,  
+    },
+    imageContainer:{
+      flex:1, 
+      left: 10, 
+      margin : 10, 
+      justifyContent:'center', 
+      alignItems:'center', 
+      flexDirection: 'row'
+    },
+    flatListContainer:{
+      flex:4, 
+      backgroundColor: "transparent",
+      justifyContent: 'center',
+      alignItems:'center',      
+    },
+    buttonAdd: {
+      flex: 1.2,
+      height: "100%",
+      backgroundColor: "transparent",
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    buttonAddContainer: {
+      borderColor: colors.mono_80,
+      borderWidth: 1,
+      width: ScreenWidth*0.2,
+      height: ScreenWidth*0.2,
+      backgroundColor: "transparent",
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    line: {
+      height: 1,
+      backgroundColor: colors.function_100,
+      width: "90%",
+      alignSelf:"center",
+    },
+    textContainer:{
       flex:1,
-      margin: 4,
-      width: 350,
-      height: 60,
-      backgroundColor: "#E0E0E0",
-      alignItems: 'center',
-      alignSelf: 'center',
-      justifyContent: 'center',
+      justifyContent:'center',
+      backgroundColor:'transparent',      
     },
-    buttonRound: {
-      //margin: 50,
-      width: 60,
-      height: 60,
-      borderRadius: 30,
-      backgroundColor: "#E0E0E0",
-      alignItems: 'center',
-      alignSelf: 'center',
-      justifyContent: 'center',
+    textInputContainer:{
+      flex:1,
+      justifyContent:'center',
+      height:"100%",
+      backgroundColor:"transparent",      
     },
-    buttonText: {
-      color: '#fff',
-      fontSize: 10,
-      fontWeight: 'bold',
+    uploadContainer:{
+      flex:1,
+      justifyContent:'center',
+      height:"100%",
+      backgroundColor:"transparent",  
+      alignItems:'center',
+      justifyContent:'center',    
+    },
+    text:{
+      margin: "5%",
+      color: colors.mono_80,
+      fontWeight: "bold",
     },
     input: {
-        margin: 15,
-        height: 40,
-        borderColor: '#7a42f4',
-        borderWidth: 1
-      },
+      flex: 1,
+      marginHorizontal:"5%",
+      height: 40,
+      borderColor: colors.mono_80,
+      borderWidth: 1
+    },
+    input2: {
+      flex: 1,
+      marginLeft:"5%",
+      width: "25%",
+      height: 40,
+      borderColor: colors.mono_80,
+      borderWidth: 1
+    },
+    input3: {
+      flex: 1,
+      marginLeft:"5%",
+      width: "40%",
+      height: 40,
+      borderColor: colors.mono_80,
+      borderWidth: 1
+    },
+    inputStory:{
+      flex:3,
+      margin: "5%",
+      height: 150,
+      borderColor: colors.mono_80,
+      borderWidth: 1,
+    },
   });
