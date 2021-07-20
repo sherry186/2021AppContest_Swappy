@@ -162,11 +162,11 @@ export default function BreakAwayHesitate () {
           </View>
            
           <View style ={styles.textInputContainer}>
-          <View style = {{flex: 0.5}}></View>
-            <View style = {{flex: 3.5}}>
+            <View style = {{flex: 0.5}}></View>
+            <View style = {{flex: 3.5, justifyContent: 'center'}}>
                 <Picker
                   mode={'dropdown'}
-                  style={styles.input3}
+                  //style={styles.input3}
                   selectedValue={space}
                   onValueChange={(value)=>onValueChange(2 ,value)}>
                   {
@@ -315,7 +315,6 @@ const styles = StyleSheet.create({
       borderWidth: 1
     },
     inputStory:{
-      
       margin: "5%",
       height: 150,
       borderColor: colors.mono_80,
