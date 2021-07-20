@@ -142,11 +142,19 @@ export default function BreakAwayHesitate () {
           </View>
           
           <View style ={styles.textInputContainer}>
-              <TextInput
-                  style={styles.input2}
-                  //placeholder='100'
-                  onChangeText={setLimit}
-                  value = {Limit}/>
+              <View style = {{flex: 0.5}}></View>
+              <View style = {{flex: 3.5}}>
+                <TextInput
+                    style={styles.input2}
+                    //placeholder='100'
+                    onChangeText={setLimit}
+                    value = {Limit}/>
+                
+              </View>
+              <View style = {{flex: 6, justifyContent: 'center'}}>
+                <Text style = {{fontWeight: 'bold', color: colors.function_100}}>天</Text>
+              </View>
+              
           </View>
 
           <View style ={styles.textContainer}>
@@ -154,19 +162,23 @@ export default function BreakAwayHesitate () {
           </View>
            
           <View style ={styles.textInputContainer}>
-            <Picker
-              mode={'dropdown'}
-              style={styles.input3}
-              selectedValue={space}
-              onValueChange={(value)=>onValueChange(2 ,value)}>
-              {
-                data.map((item, index)=>{
-                  return(
-                    <Picker.Item label= {item.title} value= {item.id} />
-                  );
-                })
-              }
-            </Picker>
+          <View style = {{flex: 0.5}}></View>
+            <View style = {{flex: 3.5}}>
+                <Picker
+                  mode={'dropdown'}
+                  style={styles.input3}
+                  selectedValue={space}
+                  onValueChange={(value)=>onValueChange(2 ,value)}>
+                  {
+                    data.map((item, index)=>{
+                      return(
+                        <Picker.Item label= {item.title} value= {item.id} />
+                      );
+                    })
+                  }
+                </Picker>
+            </View>
+            <View style = {{flex: 6}}></View>
           </View>
           
           
@@ -258,7 +270,9 @@ const styles = StyleSheet.create({
     textInputContainer:{
       flex:1,
       justifyContent:'center',
+      flexDirection:'row',
       height:"100%",
+      width: "100%",
       backgroundColor:"transparent",      
     },
     uploadContainer:{
@@ -283,16 +297,14 @@ const styles = StyleSheet.create({
     },
     input2: {
       flex: 1,
-      marginLeft:"5%",
-      width: "25%",
+      width: ScreenWidth*0.3,
       height: 40,
       borderColor: colors.mono_80,
       borderWidth: 1
     },
     input3: {
       flex: 1,
-      marginLeft:"5%",
-      width: "40%",
+      width: ScreenWidth*0.5,
       height: 40,
       borderColor: colors.mono_80,
       borderWidth: 1
