@@ -4,7 +4,9 @@ import {
   Text, 
   SafeAreaView,  
   FlatList, 
-  StyleSheet, 
+  StyleSheet,
+  ScrollView, 
+  useWindowDimensions,
   TouchableOpacity,
   Image } from "react-native";
 import  { useNavigation } from '@react-navigation/core';
@@ -43,6 +45,7 @@ const Group_HOME = () => {
   const [fullData, setFullData] = useState([]);
   const navigation = useNavigation();
  
+  const windowHeight = useWindowDimensions().height;
   const toNotification = () => {
     navigation.navigate("Notification")
   }
@@ -59,11 +62,16 @@ const Group_HOME = () => {
 
   const renderItem = ({ item }) => (
     //console.log(this.props.navigation);
-    <TouchableOpacity 
-      style={styles.boxContainer}
-      onPress={() => navigation.navigate('GroupDetail', {title: item.title, items: item.items, post: item.post})}>
+    <SafeAreaView style={styles.boxContainer}>
       <Text style={styles.title}>{item.title}</Text>
-    </TouchableOpacity>
+      <View style={styles.buttons}>
+          <TouchableOpacity 
+            style={styles.item}
+            onPress={() => navigation.navigate('GroupDetail', {title: item.title, items: item.items, post: item.post})}>
+            <Text>{item.title}</Text>
+          </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 
   useEffect(()=> {
@@ -74,8 +82,16 @@ const Group_HOME = () => {
 
 
   return(
-    <SafeAreaView style={styles.container}>
-      <SafeAreaView style = {styles.margin}></SafeAreaView>
+    <SafeAreaView style={{
+        minHeight: Math.round(windowHeight),
+        flex: 1,
+        height: "60%",
+        alignItems: "center",
+        //justifyContent: 'center',
+        backgroundColor: colors.mono_40,
+        bottom: 68,
+      }}>
+      <View style = {styles.margin}></View>
       <View style = {{top: "15%", height: "10%", width: "90%", flexDirection:'row'}}>
           <View style = {{flex : 5, alignItems: 'center', justifyContent: 'center'}}>
               <SearchBar
@@ -107,13 +123,17 @@ const Group_HOME = () => {
 
       </View>
       
-      <View style = {{top: "5%", alignContent: 'center', justifyContent: 'center'}}>
-        <FlatList
-          data={search == ''? fullData : data}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-        />
-      </View>
+      <ScrollView style = {{top: "5%", alignContent: 'center'}}>
+        <View>
+            <FlatList
+              data={search == ''? fullData : data}
+              renderItem={renderItem}
+              keyExtractor={item => item.id}
+            />
+        </View>
+        
+        <View style = {{height: 78,backgroundColor: colors.mono_40,}}></View>
+      </ScrollView>
 
       <TouchableOpacity 
           style={styles.button}
@@ -135,15 +155,6 @@ const styles = StyleSheet.create({
     position: 'relative',
     height: "10%",
     backgroundColor: colors.mono_40,
-  },
-  container: {
-    flex: 1,
-    height: "60%",
-    alignItems: "center",
-    backgroundColor: colors.mono_40,
-    bottom: 65,
-    // alignItems: 'center',
-    // justifyContent: 'center'
   },
   boxContainer: {
     marginTop: 30,

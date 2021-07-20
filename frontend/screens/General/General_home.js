@@ -7,6 +7,7 @@ import {
   SafeAreaView,  
   FlatList, 
   StyleSheet,
+  useWindowDimensions,
   Alert,
   Image,
   TouchableOpacity} from "react-native";
@@ -58,6 +59,7 @@ const General_HOME = () => {
 
   const { data, error, loading } = useQuery(GENERAL_ITEMS);
 
+  const windowHeight = useWindowDimensions().height;
 
   useEffect(() => {
     if (error) {
@@ -122,7 +124,16 @@ const General_HOME = () => {
 
   return(
     
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView 
+      style={{
+        minHeight: Math.round(windowHeight),
+        flex: 1,
+        height: "60%",
+        alignItems: "center",
+        //justifyContent: 'center',
+        backgroundColor: colors.mono_40,
+        bottom: 68,
+        }}>
       <View style = {styles.margin}></View>
       <View style = {{top: "15%", height: "10%", width: "90%", flexDirection:'row'}}>
           <View style = {{flex : 5, alignItems: 'center', justifyContent: 'center'}}>
@@ -155,10 +166,15 @@ const General_HOME = () => {
       </View>
       
       <ScrollView style = {{top: "5%", alignContent: 'center'}}>
-        <FlatList
-            data={search == ''? allItems: items}
-            renderItem={renderItem}
-          />
+        <View>
+          <FlatList
+              data={search == ''? allItems: items}
+              renderItem={renderItem}
+            />
+        </View>
+        
+        
+        <View style = {{height: 78,backgroundColor: colors.mono_40,}}></View>
       </ScrollView>
      
       <TouchableOpacity 
@@ -182,17 +198,6 @@ const styles = StyleSheet.create({
       position: 'relative',
       height: "10%",
       backgroundColor: colors.mono_40,
-    },
-    container: {
-      flex: 1,
-      height: "60%",
-      alignItems: "center",
-      //justifyContent: 'center',
-      backgroundColor: colors.mono_40,
-      bottom: 68,
-      
-      // alignItems: 'center',
-      // justifyContent: 'center'
     },
     boxContainer: {
       marginTop: 30,
