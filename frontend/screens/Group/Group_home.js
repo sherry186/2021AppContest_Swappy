@@ -46,8 +46,13 @@ const Group_HOME = () => {
   const navigation = useNavigation();
  
   const windowHeight = useWindowDimensions().height;
+
   const toNotification = () => {
     navigation.navigate("Notification")
+  }
+
+  const toMessage = () => {
+    navigation.navigate("MessageHome")
   }
 
   const handleSearch = (search) => {
@@ -106,7 +111,7 @@ const Group_HOME = () => {
 
           <TouchableOpacity 
              style={{flex: 1, width: 60, height: 60, alignItems:'center', justifyContent:'center', backgroundColor: 'transparent'}}
-             onPress={toNotification}>
+             onPress={toMessage}>
             <Image
               style = {{width: 24, height: 21.99}}
               source = {require("../../assets/general&group/message.png")}/>

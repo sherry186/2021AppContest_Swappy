@@ -83,6 +83,12 @@ const General_HOME = () => {
     navigation.navigate("Notification")
   }
 
+  const toMessage = () => {
+    navigation.navigate("MessageHome")
+  }
+
+  
+
   const toAdd = () =>{
     navigation.navigate("GeneralAdd")
   }
@@ -107,15 +113,6 @@ const General_HOME = () => {
           onPress={() => navigation.navigate('GeneralDetail', {itemID: item.id, title: item.title, sort: item.category, des: item.description, method: item.exchangeMethod, image: item.image})}>
             <Text>Item Detail</Text>
         </TouchableOpacity>
-        {/* <TouchableOpacity 
-          style={styles.item}
-          onPress={() => {
-            // database.transaction(tx => {
-            //   tx.executeSql('DELETE FROM GeneralItems WHERE id = ?', [item.id]);
-            // })
-          }}>
-            <Text>Delete Item</Text>
-        </TouchableOpacity> */}
       </View>
     </SafeAreaView>
   );
@@ -149,7 +146,7 @@ const General_HOME = () => {
           
           <TouchableOpacity 
              style={{flex: 1, width: 60, height: 60, alignItems:'center', justifyContent:'center', backgroundColor: 'transparent'}}
-             onPress={toNotification}>
+             onPress={toMessage}>
             <Image
               style = {{width: 24, height: 21.99}}
               source = {require("../../assets/general&group/message.png")}/>
