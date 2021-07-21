@@ -39,6 +39,9 @@ const typeDefs = gql`
         generalItemsList: [GeneralItem]!
         myGeneralItems: [GeneralItem]!
         getGeneralItem(id: ID!): GeneralItem!
+        getInvitedRequests: [Request]! 
+        getRequestingRequests: [Request]!
+        getRequest(id: ID!):  Request!
     }
 
     type Mutation {
@@ -47,7 +50,11 @@ const typeDefs = gql`
 
         createGeneralItem(input: GeneralItemInput): GeneralItem!
         deleteGeneralItem(id: ID!): Boolean!
-        requestItem(id: ID!, userId: ID!): GeneralItem!
+
+        createRequestItem(requestedItemId: ID!): Request!
+        updateStatus(id: ID!, status: Status!): Boolean!
+        removeRequest(id: ID!): Boolean!
+        updateRequestersItem(itemId: ID!, requestId: ID!): Boolean!
     }
 
     input SignUpInput {
@@ -93,12 +100,21 @@ const typeDefs = gql`
         category: String!
         exchangeMethod: String!
         image: String
-        requests: [Request]!
     }
 
     type Request {
-        requestingUserID: ID!
-        item: GeneralItem
+        id: ID!
+        guyWhoseItemIsRequested: User!
+        requestedItem: GeneralItem!
+        requester: User!
+        requestersItem: GeneralItem
+        status: Status!
+    }
+
+    enum Status {
+        WAITING
+        FAIL
+        SUCCESS
     }
 `;
 
@@ -116,7 +132,7 @@ const resolvers = {
                 throw new Error('AUthentication Error. Please sign in');
             }
             console.log(user._id);
-            myCollection = await db.collection('GeneralItems').find({ "owner._id" : user._id }).toArray();
+            const myCollection = await db.collection('GeneralItems').find({ "owner._id" : user._id }).toArray();
             console.log(myCollection);
             return myCollection;
         },
@@ -126,11 +142,89 @@ const resolvers = {
             }
    
             const item =  await db.collection('GeneralItems').findOne({_id: ObjectId(id)});
+            console.log(getToken(item.owner._id));
+            return item;
+        }, 
+        getInvitedRequests: async (_, __, {db, user}) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+            const myInvitedRequests = await db.collection('Requests').find({ "guyWhoseItemIsRequested._id" : user._id }).toArray();
+            console.log(myInvitedRequests);
+            return myInvitedRequests;
+        }, 
+        getRequestingRequests: async (_, __, {db, user}) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+            const myRequestingRequests = await db.collection('Requests').find({ "requester._id" : user._id }).toArray();
+            console.log(myRequestingRequests);
+            return myRequestingRequests;
+        },
+        getRequest: async (_, { id }, {db, user}) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+            const item =  await db.collection('Requests').findOne({_id: ObjectId(id)});
             //console.log(item);
             return item;
         }
+
     },
     Mutation: {
+        updateRequestersItem: async (_, { itemId, requestId }, { db, user }) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+            const item = await db.collection('GeneralItems').findOne({_id: ObjectId(itemId)});
+            await db.collection('Requests').updateOne({ _id : ObjectId(requestId) },{ $set: { requestersItem: item }});
+
+            return true;
+        },
+        removeRequest: async (_, { id }, { db, user }) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+
+            //TODO: only owner of this item can delete
+            await db.collection('Requests').deleteOne({_id: ObjectId(id)})
+            return true;
+        },
+        updateStatus: async (_, { id, status }, { db, user }) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+
+            await db.collection('Requests').updateOne({ _id : ObjectId(id) },{ $set: { status: status }});
+            return true;
+
+        }, 
+        createRequestItem: async (_, { requestedItemId }, { db, user }) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+
+            const requestedItem = await db.collection('GeneralItems').findOne({_id: ObjectId(requestedItemId)});
+            console.log(requestedItem);
+            const guyWhoseItemIsRequested = await db.collection('Users').findOne({_id: ObjectId(requestedItem.owner._id)});
+            const requester = user;
+
+            const newRequest = {
+                guyWhoseItemIsRequested: guyWhoseItemIsRequested,
+                requestedItem: requestedItem,
+                requester: requester,
+                requestersItem: null, 
+                status: 'WAITING'
+            }
+
+            const result = await db.collection('Requests').insertOne(newRequest);
+            
+            return  {
+                ...newRequest,
+                id: result.insertedId
+            }
+        },
+
         signUp: async (root, { input }, { db }) => {
 
             //hash password
@@ -186,7 +280,6 @@ const resolvers = {
                 category: input.category, 
                 exchangeMethod: input.exchangeMethod, 
                 owner: user,
-                requests: []
             }
 
             const result = await db.collection('GeneralItems').insertOne(newGeneralItem);
@@ -202,21 +295,20 @@ const resolvers = {
             //TODO: only owner of this item can delete
             await db.collection('GeneralItems').deleteOne({_id: ObjectId(id)})
             return true;
-
         },
-        requestItem: async (_, { id, userId }, {db, user}) => {
-            if(!user) {
-                throw new Error('AUthentication Error. Please sign in');
-            }
-            const item = await db.collection('GeneralItems').findOne({_id: ObjectId(id)});
+        // requestItem: async (_, { id, userId }, {db, user}) => {
+        //     if(!user) {
+        //         throw new Error('AUthentication Error. Please sign in');
+        //     }
+        //     const item = await db.collection('GeneralItems').findOne({_id: ObjectId(id)});
             
-            const previousRequestArray = item.requests;
-            previousRequestArray.push({"requestingUserID": userId, "item": null});
-            //console.log(previousRequestArray);
-            const result = await db.collection('GeneralItems').updateOne({ _id : ObjectId(id) },{ $set: { requests : previousRequestArray }})
-            console.log(result);
-            return await db.collection('GeneralItems').findOne({_id: ObjectId(id)});
-        }
+        //     const previousRequestArray = item.requests;
+        //     previousRequestArray.push({"requestingUserID": userId, "item": null});
+        //     //console.log(previousRequestArray);
+        //     const result = await db.collection('GeneralItems').updateOne({ _id : ObjectId(id) },{ $set: { requests : previousRequestArray }})
+        //     console.log(result);
+        //     return await db.collection('GeneralItems').findOne({_id: ObjectId(id)});
+        // }
         
     },
     User: {
@@ -258,6 +350,8 @@ const start = async () => {
     console.log(`🚀  Server ready at ${url}`);
     });
 }
+
+console.log(getToken('60f55abf6cb420ec4427fe72'));
 
 start();
 

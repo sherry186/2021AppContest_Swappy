@@ -52,7 +52,7 @@ export default class BreakAway extends React.Component {
       <Text>{item.spaceName}</Text>
       <Text></Text>
       <ProgressBar
-        progress = {(item.progress) % LEVELPOINTS} 
+        progress = {((item.progress) % LEVELPOINTS) / LEVELPOINTS} 
         style={styles.probarStyle} 
         color = {'#FEBC5F'}/> 
     </TouchableOpacity>   
