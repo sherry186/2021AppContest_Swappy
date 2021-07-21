@@ -115,7 +115,8 @@ function GeneralDetailsScreen ({ route, navigation }) {
                   <TouchableOpacity 
                       style={styles.buttons}
                       >
-                      <Text style = {styles.buttonText}>request</Text>
+                      <Image
+                        source = {require('../../assets/general/request.png')}/>
                   </TouchableOpacity>
               </View>
                            
@@ -149,14 +150,10 @@ const styles = StyleSheet.create({
     width: "25%",
     height: 42,
     borderRadius: 8,
-    backgroundColor: colors.function_100,
+    backgroundColor: 'transparent',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: colors.mono_100,
-    shadowOffset: { width: 10, height: 10 },
-    shadowOpacity: 0.5,
-    shadowRadius: 0,
-    elevation: 3,
+  
   },
   button:{
     width: "10%", 
