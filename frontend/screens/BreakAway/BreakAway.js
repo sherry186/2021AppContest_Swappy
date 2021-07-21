@@ -18,10 +18,13 @@ import { useState } from 'react';
 
 import * as SQLite from 'expo-sqlite'
 const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
-import { deleteHesitateItem } from '../../localStorageApi/api';
+import { deleteHesitateItem, deleteSpace } from '../../localStorageApi/api';
 
 import { Dimensions } from 'react-native';
 let ScreenWidth = Dimensions.get("window").width;
+
+const LEVELPOINTS = 20
+
 export default class BreakAway extends React.Component {
 
 
@@ -49,14 +52,15 @@ export default class BreakAway extends React.Component {
       <Text>{item.spaceName}</Text>
       <Text></Text>
       <ProgressBar
-        progress = {item.progress} 
+        progress = {(item.progress) % LEVELPOINTS} 
         style={styles.probarStyle} 
         color = {'#FEBC5F'}/> 
     </TouchableOpacity>   
   );
 
   handleDelete = (item) => {
-    //console.log(item);
+
+    console.log(item);
     Alert.alert(
       "刪除此空間？",
       "",
@@ -64,8 +68,8 @@ export default class BreakAway extends React.Component {
         {
           text: "確定",
           onPress: () => {
-            console.log("Cancel Pressed");
-            deleteHesitateItem(item.id);
+            //console.log("Cancel Pressed");
+            deleteSpace(item.id);
         },
           style: "cancel"
         },
@@ -103,7 +107,7 @@ export default class BreakAway extends React.Component {
             this.setState({
               spaceData: spacesData,
             });
-            //console.log(this.state.spaceData);
+            console.log(this.state.spaceData);
     },
         (txObj, error) => console.log('Error', error))
     });
@@ -119,7 +123,7 @@ getHesitateItems = () => {
           this.setState({
             hesitateData: hesitateData,
           });
-          console.log(hesitateData);
+          //console.log(hesitateData);
           
   },
       (txObj, error) => console.log('Error', error))
@@ -129,6 +133,7 @@ getHesitateItems = () => {
 
 
   componentDidMount() {
+    //database._db.close();
     //this.getSpaces();
     this.setState({
       //spaceData: BreakAwaySpace,

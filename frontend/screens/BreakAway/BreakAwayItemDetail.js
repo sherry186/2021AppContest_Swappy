@@ -14,7 +14,7 @@ import BreakAwaySpace from '../../Data/BreakAwaySpace';
 import * as SQLite from 'expo-sqlite'
 const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
 
-import { deleteHesitateItem, createMyStoriesTable, createStoryItem } from '../../localStorageApi/api';
+import { deleteHesitateItem, createMyStoriesTable, createStoryItem, updateProgress } from '../../localStorageApi/api';
 
 
 /* 2. Get the param */
@@ -37,6 +37,8 @@ export default class BreakAwayItemDetail extends React.Component {
   handleChangeOut = (itemId, title, source, story, spaceId) =>{
     const JSONimage = JSON.stringify(source);
     createStoryItem(title, story, JSONimage, spaceId);
+    const changeOutPoints = 2.0;
+    updateProgress(spaceId, changeOutPoints);
     this.props.navigation.navigate("BreakAwayItemChangeOut", {id: itemId, title: title, source: source})
   }
 
@@ -44,6 +46,9 @@ export default class BreakAwayItemDetail extends React.Component {
     const JSONimage = JSON.stringify(source);
     createStoryItem(title, story, JSONimage, spaceId);
     deleteHesitateItem(itemId);
+
+    const keepPoints = 2.0
+    updateProgress(spaceId, keepPoints);
     this.props.navigation.goBack()
   }
 

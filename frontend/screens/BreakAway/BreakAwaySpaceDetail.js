@@ -19,6 +19,7 @@ import BreakAwayItems from '../../Data/BreakAwayItems';
 import CircularProgress from 'react-native-circular-progress-indicator';
 /* 2. Get the param */
 
+const LEVELPOINTS = 20;
 
 
 export default class BreakAwaySpaceDetail extends React.Component {
@@ -114,7 +115,7 @@ export default class BreakAwaySpaceDetail extends React.Component {
       <ScrollView style={{ flex: 1}}>
         <View style = {{flex:1, alignContent: 'center', alignItems: 'center', alignSelf:'center'}}>
             <CircularProgress
-              value={complete}
+              value={complete / LEVELPOINTS }
               radius={150}
               duration={2000}
               textStyle={{ fontWeight: '100', color: 'red' }}

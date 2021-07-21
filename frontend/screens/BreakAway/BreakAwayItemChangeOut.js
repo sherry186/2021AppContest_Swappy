@@ -16,6 +16,7 @@ import colors from '../../config/colors';
 import * as SQLite from 'expo-sqlite'
 const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
 
+
 import { deleteHesitateItem } from '../../localStorageApi/api';
 
 // const dummyData = [
@@ -41,7 +42,8 @@ export default class BreakAwayItemChangeOut extends React.Component {
         {way: 'byPost'},
       ] 
   };
-       
+    
+  
 
     database.transaction(tx => {
       // tx.executeSql(
