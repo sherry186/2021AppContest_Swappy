@@ -18,7 +18,7 @@ import { useState } from 'react';
 
 import * as SQLite from 'expo-sqlite'
 const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
-import { deleteHesitateItem } from '../../localStorageApi/api';
+import { deleteHesitateItem, deleteSpace } from '../../localStorageApi/api';
 
 import { Dimensions } from 'react-native';
 let ScreenWidth = Dimensions.get("window").width;
@@ -65,7 +65,7 @@ export default class BreakAway extends React.Component {
           text: "確定",
           onPress: () => {
             console.log("Cancel Pressed");
-            deleteHesitateItem(item.id);
+            deleteSpace(item.id);
         },
           style: "cancel"
         },

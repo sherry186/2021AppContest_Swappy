@@ -203,7 +203,7 @@ export default function BreakAwayHesitate () {
             <View style = {{flex: 3.5, justifyContent: 'center'}}>
                 <Picker
                   mode={'dropdown'}
-                  // style={styles.input3}
+                  style={styles.input3}
                   selectedValue={space}
                   // onValueChange={(value)=>onValueChange(2 ,value)}
                     onValueChange= {(itemValue, itemIndex) => setSpace(itemValue)}>

@@ -42,13 +42,6 @@ export default class BreakAwayADD extends React.Component {
             value = {this.state.Space}/>
         
 
-        <TouchableOpacity
-            title = 'upload'
-            onPress={this.handleupload}
-            style = {styles.item}>
-            <Text
-              style = {styles.buttonText}>Upload</Text>
-        </TouchableOpacity>
 
         <TouchableOpacity
             title = 'Submit'

@@ -17,5 +17,6 @@ export default[
     {
         id:'3',
         mything: {title:"小米音箱", source: require('../assets/notification/mything.png')},
-        requestFor: {title: "百度音箱", source: require('../assets/notification/requestfor.png')}},
+        requestFor: {title: "百度音箱", source: require('../assets/notification/requestfor.png')}
+    },
 ]
