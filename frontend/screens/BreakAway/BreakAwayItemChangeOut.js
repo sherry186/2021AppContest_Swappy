@@ -10,12 +10,13 @@ import {
     } from 'react-native';
 
 import { Picker } from '@react-native-picker/picker';
-import * as SQLite from "expo-sqlite";
 import colors from '../../config/colors';
 
 
-const dataBase = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
+import * as SQLite from 'expo-sqlite'
+const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
 
+import { deleteHesitateItem } from '../../localStorageApi/api';
 
 // const dummyData = [
 //   {way:'faceToFace'},
@@ -42,7 +43,7 @@ export default class BreakAwayItemChangeOut extends React.Component {
   };
        
 
-    dataBase.transaction(tx => {
+    database.transaction(tx => {
       // tx.executeSql(
       //   "DROP TABLE GeneralItems"
       // );
@@ -99,15 +100,18 @@ export default class BreakAwayItemChangeOut extends React.Component {
     return 0;
   }
 
-  handlesubmit =() =>{
+  handlesubmit =(itemId) =>{
     //add item to DataBase
-    dataBase.transaction(tx => {
+    database.transaction(tx => {
       tx.executeSql(
         `INSERT INTO GeneralItems (title, category, description, method, image) VALUES (?, ?, ?, ?, ?)`, 
         [this.state.ItemName, this.state.dropdown, this.state.Description, this.deliveryMethodHandler(),  this.state.ItemName + ' image'],
         (txObj, resultSet) => console.log('Success', resultSet),
         (txObj, error) => console.log('Error', error))
     })
+
+    
+    deleteHesitateItem(itemId);
     //Navigate back to home page
     this.props.navigation.navigate('Home')
   } 
@@ -126,7 +130,8 @@ export default class BreakAwayItemChangeOut extends React.Component {
 
   render() {
     const{ navigate } = this.props.navigation;
-    const { source } = this.props.route.params;
+    const { source, title, itemId } = this.props.route.params;
+    console.log(source);
     return(
       <View style={styles.container}>
         <Text style={styles.buttonText}>Item Name</Text>
@@ -188,7 +193,7 @@ export default class BreakAwayItemChangeOut extends React.Component {
 
         <TouchableOpacity
             title = 'Submit'
-            onPress={this.handlesubmit}
+            onPress={()=>this.handlesubmit(itemId)}
             style = {styles.item}>
             <Text
               style = {styles.buttonText}>Submit</Text>

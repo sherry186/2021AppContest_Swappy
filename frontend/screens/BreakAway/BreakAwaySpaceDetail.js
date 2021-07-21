@@ -12,6 +12,8 @@ import { View,
 
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 
+import * as SQLite from 'expo-sqlite'
+const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
 
 import BreakAwayItems from '../../Data/BreakAwayItems';
 import CircularProgress from 'react-native-circular-progress-indicator';
@@ -23,17 +25,54 @@ export default class BreakAwaySpaceDetail extends React.Component {
   
   constructor(props) {
     super(props);
-    this.state = { hesitate: [], fullData: []};
+    this.state = { 
+      hesitate: [], 
+      fullData: [],
+      hesitateItems: [],
+      storyItems: []
+    };
   }
+
+  getHesitateItemsBySpace = (spaceName) => {
+    database.transaction(tx => {
+        tx.executeSql('SELECT * FROM MyHesitatingItems WHERE spaceName = ?', 
+        [spaceName],
+        (txObj, resultSet) => {
+            //console.log('Success', resultSet);
+            let item = resultSet.rows._array;
+            this.setState({
+              hesitateItems: item,
+            });
+            //console.log(this.state.hesitateItems);
+    },
+        (txObj, error) => console.log('Error', error))
+    })
+  };
+
+  getStoryItemsBySpace = (spaceName) => {
+    database.transaction(tx => {
+        tx.executeSql('SELECT * FROM MyStoryItems WHERE spaceName = ?', 
+        [spaceName],
+        (txObj, resultSet) => {
+            //console.log('Success', resultSet);
+            let item = resultSet.rows._array;
+            this.setState({
+              storyItems: item,
+            });
+            console.log('storyitems',item);
+    },
+        (txObj, error) => console.log('Error', error))
+    })
+};
 
   renderHesitate = ({ item }) => ( 
     <TouchableOpacity
         style ={{flexDirection: 'row', width:70, height: 80, margin:10, alignItems: 'center', justifyContent: 'center'}}
-        onPress = {() => this.props.navigation.navigate("BreakAwayItemDetail", {source: item.source, spaceId: item.spaceId, story: item.story, uploadDate: item.uploadDate})}
+        onPress = {() => this.props.navigation.navigate("BreakAwayItemDetail", {itemId: item.id, title: item.title, source: JSON.parse(item.image), spaceId: item.spaceName, story: item.story, uploadDate: item.reminderDate})}
         >
         <Image 
           style={{width: 60, height: 60,  }}
-          source={item.source}/>
+          source={JSON.parse(item.image)}/>
     </TouchableOpacity>
     
   )
@@ -41,13 +80,15 @@ export default class BreakAwaySpaceDetail extends React.Component {
   renderStory = ({ item }) => ( 
     <TouchableOpacity
       style ={{flexDirection: 'row', width:70, height: 80, margin:10, alignItems: 'center', justifyContent: 'center'}}
-      onPress = {() => this.props.navigation.navigate("BreakAwayItemStory", {title: item.title, story: item.story, image: item.source})}
+      onPress = {() => this.props.navigation.navigate("BreakAwayItemStory", {title: item.title, story: item.story, image: JSON.parse(item.image)})}
       >
         <Image 
           style={{flexDirection: 'row', width: 60, height: 60,  }}
-          source={item.source}/>
+          source={JSON.parse(item.image)}/>
     </TouchableOpacity>
   )
+
+
 
   componentDidMount() {
     const datafilter1 = _.filter(BreakAwayItems, item => {
@@ -66,6 +107,9 @@ export default class BreakAwaySpaceDetail extends React.Component {
   
   render(){  
     const { spaceId, complete } = this.props.route.params;
+    this.getHesitateItemsBySpace(spaceId);
+    this.getStoryItemsBySpace(spaceId);
+    console.log(spaceId, complete);
     return (
       <ScrollView style={{ flex: 1}}>
         <View style = {{flex:1, alignContent: 'center', alignItems: 'center', alignSelf:'center'}}>
@@ -81,7 +125,7 @@ export default class BreakAwaySpaceDetail extends React.Component {
         <View>
           <FlatList
                 style = {{flex: 1}}
-                data={this.state.hesitate}
+                data={this.state.hesitateItems}
                 renderItem={this.renderHesitate}
                 horizontal = {true}
                 keyExtractor={item => item.id}
@@ -91,7 +135,7 @@ export default class BreakAwaySpaceDetail extends React.Component {
         <Text>故事集</Text>
         <FlatList
               style = {{flex: 1}}
-              data={this.state.fullData}
+              data={this.state.storyItems}
               renderItem={this.renderStory}
               horizontal = {true}
               keyExtractor={item => item.id}

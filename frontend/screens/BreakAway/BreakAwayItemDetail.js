@@ -11,40 +11,87 @@ import { View,
        StyleSheet } from "react-native";
 import BreakAwaySpace from '../../Data/BreakAwaySpace';
 
+import * as SQLite from 'expo-sqlite'
+const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
+
+import { deleteHesitateItem, createMyStoriesTable, createStoryItem } from '../../localStorageApi/api';
+
+
 /* 2. Get the param */
 export default class BreakAwayItemDetail extends React.Component {
   
   constructor(props) {
     super(props);
+
+    this.state = {
+      spaceName: '',
+    }
   }
 
-  handleChangeOut = (source) =>{
-    this.props.navigation.navigate("BreakAwayItemChangeOut", {source: source})
+  renderImage = ({ item }) => (
+    <Image 
+      style={{ width: 100, height: 100  }}
+      source={item}/>
+  );
+
+  handleChangeOut = (itemId, title, source, story, spaceId) =>{
+    const JSONimage = JSON.stringify(source);
+    createStoryItem(title, story, JSONimage, spaceId);
+    this.props.navigation.navigate("BreakAwayItemChangeOut", {id: itemId, title: title, source: source})
   }
 
-  handleKeep = () =>{
+  handleKeep = (itemId, title, source, story, spaceId) =>{
+    const JSONimage = JSON.stringify(source);
+    createStoryItem(title, story, JSONimage, spaceId);
+    deleteHesitateItem(itemId);
     this.props.navigation.goBack()
   }
+
+
+  getSpaceName = (spaceId) => {
+    database.transaction(tx => {
+        tx.executeSql('SELECT spaceName FROM MySpaces WHERE id = ? LIMIT 1', 
+        [spaceId],
+        (txObj, resultSet) => {
+            //console.log('Success', resultSet);
+            let spaceName = resultSet.rows._array[0].spaceName;
+            //console.log(spaceName);
+            this.setState({
+              spaceName,
+            });
+    },
+        (txObj, error) => console.log('Error', error))
+    })
+};
+
+componentDidMount() {
+  createMyStoriesTable();
+}
   
   render(){  
-    const { source, spaceId, story, uploadDate} = this.props.route.params;
+    const { itemId, title, source, spaceId, story, uploadDate} = this.props.route.params;
+    this.getSpaceName(spaceId);
+    //console.log('source', source);
     return (
       <ScrollView style={{ flex: 1}}>
-        <Image 
-            style={{ width: 100, height: 100  }}
-            source={source}/>
-        <Text>Space: {BreakAwaySpace[spaceId].title}</Text>
+        <FlatList
+              style = {{margin: 20}}
+              data={source}
+              renderItem={this.renderImage}
+              horizontal = {true}
+          />
+        <Text>Space: {this.state.spaceName}</Text>
         <Text>Story: {story}</Text>
        
         <View style= {{flexDirection: 'row'}}>
             <TouchableOpacity
-                  onPress={()=>this.handleChangeOut(source)}
+                  onPress={()=>this.handleChangeOut(itemId, title, source, story, spaceId)}
                   title = '換出'
                   style = {styles.item}>
                   <Text style = {styles.buttonText}>換出</Text> 
             </TouchableOpacity>
             <TouchableOpacity
-                  onPress={()=>this.handleKeep()}
+                  onPress={()=>this.handleKeep(itemId, title, source, story, spaceId)}
                   title = '留下'
                   style = {styles.item}>
                   <Text style = {styles.buttonText}>留下</Text> 
