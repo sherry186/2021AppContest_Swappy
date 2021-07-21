@@ -67,7 +67,20 @@ function Root() {
         <RootStack.Screen 
           name="GeneralAdd" 
           component={General_ADD}
-          options={{headerShown: false}}
+          options={{
+            title: '',
+            cardStyle: {backgroundColor: colors.mono_40},
+            headerStyle: {
+                backgroundColor: "transparent",
+                elevation: 0,
+                shadowOpacity: 0, 
+            },
+            headerTintColor: colors.warning_80,
+            headerTitleStyle: {
+              backgroundColor:'transparent',
+              fontWeight: 'bold',
+            }, 
+          }}
          />
 
         <RootStack.Screen 
