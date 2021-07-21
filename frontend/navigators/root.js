@@ -26,6 +26,7 @@ import BreakAwayItemStory from '../screens/BreakAway/BreakAwayItemStory';
 import Notification_successDetail from '../screens/Notification/Notification_successDetail';
 import Notification_failDetail from '../screens/Notification/Notification_failDetail';
 import Notification_waitingDetail from '../screens/Notification/Notification_waitingDetail';
+import Notification_invitationDetail from '../screens/Notification/Notification_invitationDetail';
 //import { Text } from 'react-native';
 
 
@@ -229,6 +230,24 @@ function Root() {
         <RootStack.Screen 
           name="NotificationFailDetail" 
           component={Notification_failDetail}
+          options={{
+            title: '',
+            cardStyle: {backgroundColor: colors.mono_40},
+            headerStyle: {
+                backgroundColor: "transparent",
+                elevation: 0,
+                shadowOpacity: 0, 
+            },
+            headerTintColor: colors.warning_80,
+            headerTitleStyle: {
+              backgroundColor:'transparent',
+              fontWeight: 'bold',
+            }, 
+          }}/>
+
+        <RootStack.Screen 
+          name="NotificationInvatationDetail" 
+          component={Notification_invitationDetail}
           options={{
             title: '',
             cardStyle: {backgroundColor: colors.mono_40},

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { SearchBar } from 'react-native-elements';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
-
+import { useNavigation } from '@react-navigation/core';
 import InvitationData from '../../Data/InvitationData';
 import GroupItems from '../../Data/GroupItems';
 import colors from '../../config/colors';
@@ -14,6 +14,7 @@ const Notification_invitation = () => {
   const[data, setData] = useState([]);
   const[groupItems, setGroupItems] = useState([]);
 
+  const navigation = useNavigation();
 
   const renderItem = ({ item }) => (
       //console.log(this.props.navigation);
@@ -23,9 +24,15 @@ const Notification_invitation = () => {
 
             <View style = { styles.item }>
               <TouchableOpacity 
+                  onPress = {()=>navigation.navigate("NotificationInvatationDetail",{ 
+                    id: item.id,
+                    mything_title: item.mything.title, 
+                    mything_source: item.mything.source, 
+                    requestFor_title:item.requestFor.title, 
+                    requestFor_source: item.requestFor.source})}
                   style = {{ backgroundColor: 'transparent'}}>
                   <Text style={styles.title}>{item.requester} </Text>
-                  <Text style={styles.title}>{item.itis}</Text>
+                  <Text style={styles.title}>{item.requestFor.title}</Text>
                   <Text style={styles.title}>{item.general? 'general' : 'group'}</Text>
               </TouchableOpacity>
             </View>
