@@ -3,13 +3,15 @@ import {Platform, KeyboardAvoidingView, useWindowDimensions, ScrollView, TextInp
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 import BreakAwaySpace from '../../Data/BreakAwaySpace';
 import { Picker } from '@react-native-picker/picker';
-import { createMyHesitatingItemsTable, createHesitateItem } from '../../localStorageApi/api';
+import { createMyHesitatingItemsTable, createHesitateItem, updateProgress } from '../../localStorageApi/api';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/core';
 import { Dimensions } from 'react-native';
 import colors from '../../config/colors';
 import * as SQLite from 'expo-sqlite'
 const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
+
+
 
 import { format } from 'fecha';
 
@@ -56,11 +58,13 @@ export default function BreakAwayHesitate () {
   }
 
   const handlesubmit = () =>{
-    createMyHesitatingItemsTable();
     const JSONimage = JSON.stringify(image);
     //console.log(JSONimage);
     const reminderDate = getDate();
     createHesitateItem(title, story, JSONimage, reminderDate, space);
+
+    const addToHesitatePoints = 2.0
+    updateProgress(space, addToHesitatePoints);
     navigation.goBack();
   }
 
@@ -102,7 +106,11 @@ export default function BreakAwayHesitate () {
       alert("最多只能5張照片喔qq")
     }
     
-  };  
+  }; 
+  
+  useEffect(()=> {
+    createMyHesitatingItemsTable();
+  }, [])
 
   useEffect(() => {
     // this.setState({

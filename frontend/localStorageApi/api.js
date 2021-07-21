@@ -56,30 +56,18 @@ export const deleteSpace = (id) => {
     })
 };
 
-export const updateProgress = (SpaceName, points) => {
-
-    //const currentpoints;
-    //get current progress for space
+export const updateProgress = (spaceName, points) => {
     database.transaction(tx => {
-        tx.executeSql('SELECT progrss FROM mySpaces', 
-        null,
-        (txObj, resultSet) => {
-            console.log('Success', resultSet);
-            resultSet
-        },
+        tx.executeSql(`UPDATE MySpaces SET progress = progress + ? WHERE id = ?`, 
+        [points, spaceName],
+        (txObj, resultSet) => console.log('Success', resultSet),
         (txObj, error) => console.log('Error', error))
-    });
-
-    // database.transaction(tx => {
-    //     tx.executeSql(`UPDATE MySpaces SET progress = ? WHERE spaceName = ?`, 
-    //     [spaceName],
-    //     (txObj, resultSet) => console.log('Success', resultSet),
-    //     (txObj, error) => console.log('Error', error))
-    // })
+    })
 }
 
 
 export const createHesitateItem = (title, story, image, reminderDate, space) => {
+    console.log('creating item');
     database.transaction(tx => { 
         tx.executeSql(
           `INSERT INTO MyHesitatingItems (title, story, image, reminderDate, spaceName) VALUES (?, ?, ?, ?, ?)`, 

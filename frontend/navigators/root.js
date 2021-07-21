@@ -27,6 +27,7 @@ import Notification_successDetail from '../screens/Notification/Notification_suc
 import Notification_failDetail from '../screens/Notification/Notification_failDetail';
 import Notification_waitingDetail from '../screens/Notification/Notification_waitingDetail';
 import Notification_invitationDetail from '../screens/Notification/Notification_invitationDetail';
+import Message_home from '../screens/Message/Message_home';
 //import { Text } from 'react-native';
 
 
@@ -172,7 +173,7 @@ function Root() {
             }, 
           }}/>
 
-        {/*notification & message*/}
+        {/*notification */}
         <RootStack.Screen 
           name="Notification" 
           component={Notification}
@@ -262,6 +263,27 @@ function Root() {
               fontWeight: 'bold',
             }, 
           }}/>
+
+        {/* message */}
+        <RootStack.Screen 
+          name="MessageHome" 
+          component={Message_home}
+          options={{
+            //headerShown: true,
+            title: '',
+            cardStyle: {backgroundColor: colors.mono_40},
+            headerStyle: {
+                backgroundColor: "transparent",
+                elevation: 0,
+                shadowOpacity: 0, 
+            },
+            headerTintColor: colors.warning_80,
+            headerTitleStyle: {
+              backgroundColor:'transparent',
+              fontWeight: 'bold',
+            }, 
+          }}/>
+
       </RootStack.Navigator>
     );
   }
