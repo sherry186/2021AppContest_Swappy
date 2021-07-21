@@ -12,29 +12,27 @@ import colors from '../../config/colors';
 
 
 
-function Message_home () {
+export default function Message_home () {
 
   const[data, setData] = useState([]);
-  const navigation = useNavigation();
+  //const navigation = useNavigation();
 
   const renderItem = ({ item }) => (
       //console.log(this.props.navigation);
-      <View style = {{flexDirection: 'row', height: 60, justifyContent: 'center', alignItems: 'center'}}>
+      <SafeAreaView style = {{flexDirection: 'row', height: 100, justifyContent: 'center', alignItems: 'center'}}>
             <Image
                 style = {{flex: 1, height: "100%"}}
                 source = {item.profile}/>
 
             <View style = { styles.item }>
-              
               <TouchableOpacity 
-                  style = {{ backgroundColor: 'transparent'}}>
+                  style = {styles.item }>
                   <Text style={styles.title}>{item.nameShow}</Text>
                   <Text style={styles.title}>{item.message[item.message.length - 1].content} </Text>
                   
               </TouchableOpacity>
             </View>
-
-      </View>
+      </SafeAreaView>
       
 
   );
@@ -65,8 +63,7 @@ function Message_home () {
 
     setData(arr);
     
-  });
- 
+  },[]);
 
   return(
     <ScrollView style = {{ height: "100%", width: "100%", backgroundColor: colors.mono_40 }}>
@@ -80,11 +77,8 @@ function Message_home () {
     </ScrollView>
     
   )
-
-
 }
 
-export default Message_home;
 
 const styles = StyleSheet.create({
     margin: {
@@ -95,9 +89,6 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: "transparent",
       width: "100%",
-    },
-    margin: {
-
     },
     complete:{ 
       flexDirection: 'row',
