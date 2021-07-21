@@ -23,6 +23,9 @@ import signup from '../screens/Login/signup';
 import LoginSignupNav from './loginSignupNav';
 import colors from '../config/colors';
 import BreakAwayItemStory from '../screens/BreakAway/BreakAwayItemStory';
+import Notification_successDetail from '../screens/Notification/Notification_successDetail';
+import Notification_failDetail from '../screens/Notification/Notification_failDetail';
+import Notification_waitingDetail from '../screens/Notification/Notification_waitingDetail';
 //import { Text } from 'react-native';
 
 
@@ -140,6 +143,7 @@ function Root() {
             },
             headerTintColor: colors.warning_80,
             headerTitleStyle: {
+              backgroundColor:'transparent',
               fontWeight: 'bold',
             }, 
           }}/>
@@ -162,6 +166,7 @@ function Root() {
             },
             headerTintColor: colors.warning_80,
             headerTitleStyle: {
+              backgroundColor:'transparent',
               fontWeight: 'bold',
             }, 
           }}/>
@@ -180,10 +185,64 @@ function Root() {
             },
             headerTintColor: colors.warning_80,
             headerTitleStyle: {
+              backgroundColor:'transparent',
+              fontWeight: 'bold',
+            }, 
+          }}/>
+        
+        <RootStack.Screen 
+          name="NotificationSuccessDetail" 
+          component={Notification_successDetail}
+          options={{
+            title: '',
+            cardStyle: {backgroundColor: colors.mono_40},
+            headerStyle: {
+                backgroundColor: "transparent",
+                elevation: 0,
+                shadowOpacity: 0, 
+            },
+            headerTintColor: colors.warning_80,
+            headerTitleStyle: {
+              backgroundColor:'transparent',
+              fontWeight: 'bold',
+            }, 
+          }}/>
+        
+        <RootStack.Screen 
+          name="NotificationWaitingDetail" 
+          component={Notification_waitingDetail}
+          options={{
+            title: '',
+            cardStyle: {backgroundColor: colors.mono_40},
+            headerStyle: {
+                backgroundColor: "transparent",
+                elevation: 0,
+                shadowOpacity: 0, 
+            },
+            headerTintColor: colors.warning_80,
+            headerTitleStyle: {
+              backgroundColor:'transparent',
               fontWeight: 'bold',
             }, 
           }}/>
 
+        <RootStack.Screen 
+          name="NotificationFailDetail" 
+          component={Notification_failDetail}
+          options={{
+            title: '',
+            cardStyle: {backgroundColor: colors.mono_40},
+            headerStyle: {
+                backgroundColor: "transparent",
+                elevation: 0,
+                shadowOpacity: 0, 
+            },
+            headerTintColor: colors.warning_80,
+            headerTitleStyle: {
+              backgroundColor:'transparent',
+              fontWeight: 'bold',
+            }, 
+          }}/>
       </RootStack.Navigator>
     );
   }

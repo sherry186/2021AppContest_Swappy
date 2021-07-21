@@ -14,7 +14,7 @@ function Notification() {
         
     return(  
         <Tab.Navigator
-            initialRouteName="invitation"
+            initialRouteName="requesting"
             
             tabBarOptions={{
                 showLabel: false,
@@ -30,16 +30,7 @@ function Notification() {
                 }
              }}
         >   
-            <Tab.Screen 
-                name = "invitation"
-                component = {Notification_invitation}
-                options={{ 
-                    tabBarIcon:({focused})=>(
-                        <View style =  {{ right: 30, width:120}}>
-                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20 }}>Invitation</Text>
-                        </View>
-                    )}}
-            />
+            
             <Tab.Screen 
                 name = "requesting"
                 component = {Notification_requesting}
@@ -50,6 +41,16 @@ function Notification() {
                         </View>
                       )}}
             
+            />
+            <Tab.Screen 
+                name = "invitation"
+                component = {Notification_invitation}
+                options={{ 
+                    tabBarIcon:({focused})=>(
+                        <View style =  {{ right: 30, width:120}}>
+                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20 }}>Invitation</Text>
+                        </View>
+                    )}}
             />
         </Tab.Navigator>
         

@@ -57,10 +57,10 @@ export default function BreakAwayHesitate () {
 
   const handlesubmit = () =>{
     createMyHesitatingItemsTable();
-    const image = 'temp image';
-
+    const JSONimage = JSON.stringify(image);
+    //console.log(JSONimage);
     const reminderDate = getDate();
-    createHesitateItem(title, story, image, reminderDate, space);
+    createHesitateItem(title, story, JSONimage, reminderDate, space);
     navigation.goBack();
   }
 
@@ -74,11 +74,11 @@ export default function BreakAwayHesitate () {
   );
 
   
-  const onValueChange = (flag,value) => {
-    console.log(value);
-    //setSpace(value);
-    //console.log(space);
-  };
+  // const onValueChange = (flag,value) => {
+  //   console.log(value);
+  //   //setSpace(value);
+  //   //console.log(space);
+  // };
 
   const pickImage = async () => {
     if(image.length < 5)

@@ -91,7 +91,7 @@ export const createHesitateItem = (title, story, image, reminderDate, space) => 
 
 export const deleteHesitateItem = (id) => {
     database.transaction(tx => {
-        tx.executeSql('DELETE FROM MySpaces WHERE id = ?', 
+        tx.executeSql('DELETE FROM MyHesitatingItems WHERE id = ?', 
         [id],
         (txObj, resultSet) => console.log('Success', resultSet),
         (txObj, error) => console.log('Error', error))
@@ -130,21 +130,6 @@ export const getHesitateItemByID = (id) => {
     })
 };
 
-export const getHesitateItemsBySpace = (spaceName) => {
-    database.transaction(tx => {
-        tx.executeSql('SELECT * FROM MyHesitatingItems WHERE spaceName = ?', 
-        [spaceName],
-        (txObj, resultSet) => {
-            //console.log('Success', resultSet);
-            let item = resultSet.rows._array;
-            // this.setState({
-            //   spaceData: spacesData,
-            // });
-            console.log(item);
-    },
-        (txObj, error) => console.log('Error', error))
-    })
-};
 
 
 export const createMyStoriesTable = () => {
@@ -173,21 +158,7 @@ export const createStoryItem = (title, story, image, spaceName) => {
 }
 
 
-export const getStoryItemsBySpace = (spaceName) => {
-    database.transaction(tx => {
-        tx.executeSql('SELECT * FROM MyStoryItems WHERE spaceName = ?', 
-        [spaceName],
-        (txObj, resultSet) => {
-            //console.log('Success', resultSet);
-            let item = resultSet.rows._array;
-            // this.setState({
-            //   spaceData: spacesData,
-            // });
-            console.log(item);
-    },
-        (txObj, error) => console.log('Error', error))
-    })
-};
+
 
 
 

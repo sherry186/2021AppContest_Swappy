@@ -20,12 +20,14 @@ import * as SQLite from 'expo-sqlite'
 const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
 import { deleteHesitateItem } from '../../localStorageApi/api';
 
-
+import { Dimensions } from 'react-native';
+let ScreenWidth = Dimensions.get("window").width;
 export default class BreakAway extends React.Component {
 
 
     state = {
       spaceData: [],
+      hesitateData: [],
       itemData: [],
       shouldShow: false,
     }
@@ -43,7 +45,7 @@ export default class BreakAway extends React.Component {
         onLongPress = {() => this.handleDelete(item)}
         onPress =  {() => this.props.navigation.navigate("BreakAwaySpaceDetail", {spaceId: item.id, complete: item.progress})}
         style={styles.button}
-        >
+      >
       <Text>{item.spaceName}</Text>
       <Text></Text>
       <ProgressBar
@@ -77,18 +79,21 @@ export default class BreakAway extends React.Component {
 
   renderImage = ({ item }) => (
     <TouchableOpacity
-      
-      onPress = {() => this.props.navigation.navigate("BreakAwayItemDetail", {source: item.source, spaceId: item.spaceId, story: item.story, uploadDate: item.uploadDate})} 
-      style={{flexDirection: 'row', width:70, height: 80, margin:10}}
-      
+      onPress = {() => this.props.navigation.navigate("BreakAwayItemDetail", {itemId: item.id, title: item.title, source: JSON.parse(item.image), spaceId: item.spaceName, story: item.story, uploadDate: item.uploadDate})} 
+      style={{flexDirection: 'row', width:70, height: 80, margin:10, backgroundColor:'red'}}
       >
       <Image 
-        style={{ width: 60, height: 60  }}
-        source={item.source}/>
+        style={{ width: 70, height: 80  }}
+        source={{uri: JSON.parse(item.image)[0].uri}}/>
     </TouchableOpacity>
   );
 
   getSpaces = () => {
+      // database.transaction(tx => {
+      //   tx.executeSql(
+      //     "DROP TABLE MyHesitatingItems"
+      //   );}
+      // );
     database.transaction(tx => {
         tx.executeSql('SELECT * FROM MySpaces', 
         null,
@@ -104,7 +109,27 @@ export default class BreakAway extends React.Component {
     });
 }
 
+getHesitateItems = () => {
+  database.transaction(tx => {
+      tx.executeSql('SELECT * FROM MyHesitatingItems', 
+      null,
+      (txObj, resultSet) => {
+          //console.log('Success', resultSet);
+          let hesitateData = resultSet.rows._array;
+          this.setState({
+            hesitateData: hesitateData,
+          });
+          console.log(hesitateData);
+          
+  },
+      (txObj, error) => console.log('Error', error))
+  });
+}
+
+
+
   componentDidMount() {
+    //this.getSpaces();
     this.setState({
       //spaceData: BreakAwaySpace,
       itemData: BreakAwayItems,
@@ -114,7 +139,7 @@ export default class BreakAway extends React.Component {
 
   render() {
     this.getSpaces();
-
+    this.getHesitateItems();
     // const[grvalue, grsetValue] = useState('');
     const{ navigate } = this.props.navigation;
     //console.log(this.props.navigation);
@@ -125,7 +150,7 @@ export default class BreakAway extends React.Component {
         
           <FlatList
               style = {{margin: 20}}
-              data={this.state.itemData}
+              data={this.state.hesitateData}
               renderItem={this.renderImage}
               horizontal = {true}
               keyExtractor={item => item.id}
@@ -214,6 +239,18 @@ const styles = StyleSheet.create({
     },
     title: {
       fontSize: 32,
+    },
+    image:{
+      width: ScreenWidth*0.2, 
+      height: ScreenWidth*0.2,  
+    },
+    imageContainer:{
+      flex:1, 
+      left: 10, 
+      margin : 10, 
+      justifyContent:'center', 
+      alignItems:'center', 
+      flexDirection: 'row'
     },
     button: {
       //flex:1,
