@@ -46,7 +46,7 @@ export default class BreakAway extends React.Component {
     //console.log(this.props.navigation);
     <TouchableOpacity
         onLongPress = {() => this.handleDelete(item)}
-        onPress =  {() => this.props.navigation.navigate("BreakAwaySpaceDetail", {spaceId: item.id, complete: item.progress})}
+        onPress =  {() => this.props.navigation.navigate("BreakAwaySpaceDetail", {spaceId: item.id, complete: item.progress, spaceName: item.spaceName})}
         style={styles.button}
       >
       <Text>{item.spaceName}</Text>

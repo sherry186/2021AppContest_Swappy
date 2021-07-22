@@ -18,7 +18,7 @@ const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database o
 import BreakAwayItems from '../../Data/BreakAwayItems';
 import CircularProgress from 'react-native-circular-progress-indicator';
 /* 2. Get the param */
-
+import colors from '../../config/colors';
 const LEVELPOINTS = 20;
 
 
@@ -91,58 +91,85 @@ export default class BreakAwaySpaceDetail extends React.Component {
 
 
 
-  componentDidMount() {
-    const datafilter1 = _.filter(BreakAwayItems, item => {
-        return item.spaceId == this.props.route.params.spaceId && item.state == "hesitate"
-    })
-    const datafilter2 = _.filter(BreakAwayItems, item => {
-      return item.spaceId == this.props.route.params.spaceId
-  })
+  // // componentDidMount() {
+  //   const datafilter1 = _.filter(BreakAwayItems, item => {
+  //       return item.spaceId == this.props.route.params.spaceId && item.state == "hesitate"
+  //   })
+  //   const datafilter2 = _.filter(BreakAwayItems, item => {
+  //     return item.spaceId == this.props.route.params.spaceId
+  // })
 
-    this.setState({
-      hesitate: datafilter1,
-      fullData: datafilter2,
-    });
-  }
+  //   this.setState({
+  //     hesitate: datafilter1,
+  //     fullData: datafilter2,
+  //   });
+  // }
 
   
   render(){  
-    const { spaceId, complete } = this.props.route.params;
+    const { spaceId, complete, spaceName } = this.props.route.params;
     this.getHesitateItemsBySpace(spaceId);
     this.getStoryItemsBySpace(spaceId);
     console.log(spaceId, complete);
     return (
-      <ScrollView style={{ flex: 1}}>
-        <View style = {{flex:1, alignContent: 'center', alignItems: 'center', alignSelf:'center'}}>
-            <CircularProgress
-              value={complete / LEVELPOINTS }
-              radius={150}
-              duration={2000}
-              textStyle={{ fontWeight: '100', color: 'red' }}
-              maxValue={LEVELPOINTS}
-            />
-        </View>
-        <Text>猶豫區</Text>
-        <View>
-          <FlatList
-                style = {{flex: 1}}
-                data={this.state.hesitateItems}
-                renderItem={this.renderHesitate}
-                horizontal = {true}
-                keyExtractor={item => item.id}
-            />
-        </View>
-        
-        <Text>故事集</Text>
-        <FlatList
-              style = {{flex: 1}}
-              data={this.state.storyItems}
-              renderItem={this.renderStory}
-              horizontal = {true}
-              keyExtractor={item => item.id}
-          />
-        
-      </ScrollView>
+      <View style={{ flex: 1, alignItems: 'center'}}>
+
+          <View style = {{flexDirection: 'row', height: 30, width: '100%',justifyContent:'center', alignItems:'center', backgroundColor: colors.mono_30}}>       
+                <Text style = {{ fontSize: 20, fontWeight:'bold', color: colors.function_100}}>{spaceName}</Text>
+          </View>
+
+          <ScrollView style = {{flex: 9, height: "90%",alignContent:'center', width: "100%"}}>
+            <View style = {{
+                flex:4, 
+                alignContent: 'center', 
+                alignItems: 'center', 
+                alignSelf:'center', 
+                width: "100%",
+                justifyContent: 'center',  
+                backgroundColor: colors.mono_80}}>
+                <CircularProgress
+                  value={(complete % LEVELPOINTS)}
+                  radius={140}
+                  duration={2000}
+                  textStyle={{ color: 'transparent' }}
+                  maxValue={20}
+                >
+                </CircularProgress>
+                <View style = {{position: 'absolute', alignItems: 'center', justifyContent:'center', backgroundColor: 'transparent'}}>
+                  <Text style= {{ fontSize: 60, fontWeight: 'bold', color: colors.function_100 }}>{Math.floor(complete/LEVELPOINTS)}</Text>
+                  <Text style= {{ fontSize: 30, color: colors.function_100, }}>level</Text>
+                </View>
+            </View>
+            
+            <View style = {{flex: 5, backgroundColor: 'green', width: "100%"}}>            
+                <Text>猶豫區</Text>
+                <View >
+                  <FlatList
+                        style = {{flex: 1}}
+                        data={this.state.hesitateItems}
+                        renderItem={this.renderHesitate}
+                        horizontal = {true}
+                        keyExtractor={item => item.id}
+                    />
+                </View>
+
+                <View style = {{flex: 1}}>
+                  <Text>故事集</Text>
+                  <View>
+                      <FlatList
+                            style = {{flex: 1}}
+                            data={this.state.storyItems}
+                            renderItem={this.renderStory}
+                            numColumns={3}
+                            horizontal = {false}
+                            columnWrapperStyle={{}}
+                            keyExtractor={item => item.id}
+                        />
+                  </View>
+                </View>
+            </View>
+          </ScrollView>
+      </View>
     );
   }
 
