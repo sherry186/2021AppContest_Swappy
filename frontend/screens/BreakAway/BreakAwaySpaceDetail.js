@@ -10,6 +10,7 @@ import { View,
        TouchableOpacity,
        StyleSheet } from "react-native";
 
+import { Dimensions } from 'react-native';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 
 import * as SQLite from 'expo-sqlite'
@@ -20,6 +21,7 @@ import CircularProgress from 'react-native-circular-progress-indicator';
 /* 2. Get the param */
 import colors from '../../config/colors';
 const LEVELPOINTS = 20;
+let ScreenWidth = Dimensions.get("window").width;
 
 
 export default class BreakAwaySpaceDetail extends React.Component {
@@ -68,11 +70,11 @@ export default class BreakAwaySpaceDetail extends React.Component {
 
   renderHesitate = ({ item }) => ( 
     <TouchableOpacity
-        style ={{flexDirection: 'row', width:70, height: 80, margin:10, alignItems: 'center', justifyContent: 'center'}}
+        style ={styles.imageC}
         onPress = {() => this.props.navigation.navigate("BreakAwayItemDetail", {itemId: item.id, title: item.title, source: JSON.parse(item.image), spaceId: item.spaceName, story: item.story, uploadDate: item.reminderDate})}
         >
         <Image 
-          style={{width: 60, height: 60,  }}
+          style={styles.image}
           source={JSON.parse(item.image)}/>
     </TouchableOpacity>
     
@@ -80,30 +82,17 @@ export default class BreakAwaySpaceDetail extends React.Component {
 
   renderStory = ({ item }) => ( 
     <TouchableOpacity
-      style ={{flexDirection: 'row', width:70, height: 80, margin:10, alignItems: 'center', justifyContent: 'center'}}
+      style ={styles.imageC}
       onPress = {() => this.props.navigation.navigate("BreakAwayItemStory", {title: item.title, story: item.story, image: JSON.parse(item.image)})}
       >
         <Image 
-          style={{flexDirection: 'row', width: 60, height: 60,  }}
+          style={styles.image}
           source={JSON.parse(item.image)}/>
     </TouchableOpacity>
   )
 
 
 
-  // // componentDidMount() {
-  //   const datafilter1 = _.filter(BreakAwayItems, item => {
-  //       return item.spaceId == this.props.route.params.spaceId && item.state == "hesitate"
-  //   })
-  //   const datafilter2 = _.filter(BreakAwayItems, item => {
-  //     return item.spaceId == this.props.route.params.spaceId
-  // })
-
-  //   this.setState({
-  //     hesitate: datafilter1,
-  //     fullData: datafilter2,
-  //   });
-  // }
 
   
   render(){  
@@ -114,11 +103,13 @@ export default class BreakAwaySpaceDetail extends React.Component {
     return (
       <View style={{ flex: 1, alignItems: 'center'}}>
 
-          <View style = {{flexDirection: 'row', height: 30, width: '100%',justifyContent:'center', alignItems:'center', backgroundColor: colors.mono_30}}>       
-                <Text style = {{ fontSize: 20, fontWeight:'bold', color: colors.function_100}}>{spaceName}</Text>
+          <View style = {{flexDirection: 'row', height: 30, width: '100%',justifyContent:'center', alignItems:'center', backgroundColor: "transparent"}}>       
+                <Text style = {{ fontSize: 30, fontWeight:'bold', color: colors.function_100}}>{spaceName}</Text>
           </View>
 
-          <ScrollView style = {{flex: 9, height: "90%",alignContent:'center', width: "100%"}}>
+          <ScrollView style = {{flex: 9, height: "90%",alignContent:'center', width: "100%", }}>
+            <View style = {styles.marginRow}></View>
+
             <View style = {{
                 flex:4, 
                 alignContent: 'center', 
@@ -126,10 +117,14 @@ export default class BreakAwaySpaceDetail extends React.Component {
                 alignSelf:'center', 
                 width: "100%",
                 justifyContent: 'center',  
-                backgroundColor: colors.mono_80}}>
+                backgroundColor: 'transparent'}}>
                 <CircularProgress
                   value={(complete % LEVELPOINTS)}
-                  radius={140}
+                  radius={120}
+                  activeStrokeColor={colors.warning_100}
+                  inActiveStrokeColor={colors.mono_60}
+                  inActiveStrokeWidth={20}
+                  activeStrokeWidth={20}
                   duration={2000}
                   textStyle={{ color: 'transparent' }}
                   maxValue={20}
@@ -141,31 +136,52 @@ export default class BreakAwaySpaceDetail extends React.Component {
                 </View>
             </View>
             
-            <View style = {{flex: 5, backgroundColor: 'green', width: "100%"}}>            
-                <Text>猶豫區</Text>
-                <View >
-                  <FlatList
-                        style = {{flex: 1}}
-                        data={this.state.hesitateItems}
-                        renderItem={this.renderHesitate}
-                        horizontal = {true}
-                        keyExtractor={item => item.id}
-                    />
-                </View>
+            <View style = {styles.marginRow}></View>
+            
+            <View style = {styles.textC, {alignItems:'center'}}>
+                <Text style = {styles.text, {color: colors.mono_80}}>還差{LEVELPOINTS-(complete % LEVELPOINTS)}點經驗值升級</Text>
+            </View>
 
-                <View style = {{flex: 1}}>
-                  <Text>故事集</Text>
-                  <View>
+
+            <View style = {{flex: 5, backgroundColor: 'transparent', width: "100%"}}>
+                <View style = {styles.marginRow}></View>
+                <View style = {{flex: 1}}>    
+                    <View style = {styles.textC}>
+                      <View style = {styles.margin}></View>
+                      <Text style = {styles.text}>猶豫區</Text>
+                    </View>          
+
+                    <View  style = {styles.flatC}>
+                      
                       <FlatList
                             style = {{flex: 1}}
-                            data={this.state.storyItems}
-                            renderItem={this.renderStory}
-                            numColumns={3}
-                            horizontal = {false}
-                            columnWrapperStyle={{}}
+                            data={this.state.hesitateItems}
+                            renderItem={this.renderHesitate}
+                            //numColumns={3}
+                            horizontal = {true}
                             keyExtractor={item => item.id}
                         />
-                  </View>
+                    </View>
+                </View>
+                
+                <View style = {styles.line}></View>
+                <View style = {styles.marginRow}></View>
+                <View style = {{flex: 1}}>
+                    <View style = {styles.textC}>
+                        <View style = {styles.margin}></View>
+                        <Text style = {styles.text}>故事集</Text>
+                    </View>  
+                    <View style = {styles.flatC2}>
+                        <FlatList
+                              style = {{flex: 1}}
+                              data={this.state.storyItems}
+                              renderItem={this.renderStory}
+                              numColumns={3}
+                              horizontal = {false}
+                              columnWrapperStyle={{}}
+                              keyExtractor={item => item.id}
+                          />
+                    </View>
                 </View>
             </View>
           </ScrollView>
@@ -176,37 +192,55 @@ export default class BreakAwaySpaceDetail extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  input: {
-    margin: 15,
-    height: 40,
-    borderColor: '#7a42f4',
-    borderWidth: 1
+  line: {
+    height: 1,
+    backgroundColor: colors.function_100,
+    width: "90%",
+    alignSelf:"center",
   },
-  container: {
-    // flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center'
-    paddingTop: 23
+  marginRow:{
+    height: 20,
+    width: "100%",
+    backgroundColor: 'transparent',
   },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+  margin:{
+    height: "100%",
+    width: "5%",
+    backgroundColor: 'transparent',
   },
-  itemS: {
-    backgroundColor: '#7a42f4',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+  textC:{
+      backgroundColor: 'transparent',
+      flex: 1,
+      alignItems: 'center',
+      flexDirection:'row',
   },
-  title: {
-    fontSize: 32,
+  text:{
+      color: colors.function_100,
+      fontWeight:'bold',
+      fontSize: 15,
   },
-  buttonText: {
-    //color: '#fff',
-    fontSize: 15,
-    left: 5,
-    fontWeight: 'bold',
+  flatC:{
+      flex:4,
+      backgroundColor: 'transparent',
+      alignItems: 'center',
+      justifyContent:'center',
+  },
+  flatC2:{
+    flex:4,
+    backgroundColor: 'transparent',
+    //alignItems: 'center',
+    justifyContent:'center',
+  },
+  image:{
+    width: "100%", 
+    height: "100%"  
+  },
+  imageC:{
+    flexDirection: 'row', 
+    width: ScreenWidth/3 -ScreenWidth*0.06, 
+    height: ScreenWidth/3-ScreenWidth*0.06, 
+    margin: ScreenWidth*0.03, 
+    alignItems: 'center', 
+    justifyContent: 'center'
   },
 });
