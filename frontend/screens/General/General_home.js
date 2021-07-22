@@ -76,12 +76,6 @@ const General_HOME = () => {
   const windowHeight = useWindowDimensions().height;
 
 
-  // useEffect(() => {
-  //   if (error) {
-  //     Alert.alert('Error fetching general items', error.message);
-  //     console.log(error);
-  //   }
-  // }, [error]);
 
   useEffect(() => {
       if (data) {
@@ -92,15 +86,6 @@ const General_HOME = () => {
       } 
   }, [data]);
 
-  // const forceUpdate = () => {
-  //   console.log(data);
-  //   if (data) {
-  //           //console.log(data);
-  //           setItems(data.generalItemsList);
-  //           setAllItems(data.generalItemsList);
-  //           //console.log(items);
-  //         } 
-  // }
 
   const navigation = useNavigation();
 

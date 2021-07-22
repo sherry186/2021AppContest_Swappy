@@ -1,9 +1,18 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { View, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { 
+  View, 
+  Text, 
+  SafeAreaView,  
+  FlatList, 
+  StyleSheet, 
+  TouchableOpacity,
+
+ } from "react-native";
 import { SearchBar } from 'react-native-elements';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 
+import  { useNavigation } from '@react-navigation/core';
 import SocialItems from '../../Data/SocialItems';
 import SocialCollection from '../../Data/SocialCollection';
 
@@ -36,93 +45,104 @@ const inMyList = (data, collection) => {
 
 
 
-export default class Main_HOME extends React.Component {
+const Main_HOME = () => {
 
-  state = {
-    search: '',
-    data: [],
-    fullData: [],
-  };
+  const [search, setSearch] = useState('');
+  const [data, setData] = useState([]);
+  const [fullData, setFullData] = useState([]);
 
-  static navigationOptions = {
-    title: 'Main_HOME',
-  }
+  const navigation = useNavigation();
 
-  handleSearch = (search) => {
+
+
+  const handleSearch = (se) => {
     console.log("search", search)
-    const data = _.filter(this.state.fullData, post => {
+    const searchedItems = _.filter(fullData, post => {
       return contains(post.person, post.post, post.title, search)
     })
-    this.setState({ data,  search});
+    setSearch(se);
+    setData(searchedItems);
+    
   };
 
-  handleCollected = (id) =>{
-    const {data} = this.state;
+  const handleCollected = (id) =>{
+    //const {data} = this.state;
     let arr = data.map((item, index)=>{
       if(id == index){
         item.collected = !item.collected;
       }
       return {...item}
     })
-    console.log("selection handler1 ==>", arr)
-    this.setState({data: arr})
+    console.log("selection handler1 ==>", arr);
+    setData(arr);
+    //this.setState({data: arr})
   };
 
-  renderChat = ({ item }) => (
+  const renderChat = ({ item }) => (
     //console.log(this.props.navigation);
     <View style={styles.ChatC}>
-        <TouchableOpacity style = {styles.Chat} onPress={() => this.props.navigation.navigate('MainDetail', {title: item.title, person: item.person, post: item.post, comment: item.comment, hideName: item.hideName})}>
+        <TouchableOpacity 
+            style = {styles.Chat} 
+            onPress={() => navigation.navigate('MainDetail', {title: item.title, person: item.person, post: item.post, comment: item.comment, hideName: item.hideName})}>
           <Text style={styles.post}>{item.title}</Text>
           <Text style={styles.person}>{item.hideName? "匿名" : item.person}</Text>
           <Text style={styles.person}>{item.post}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={item.collected?{width: 70, height: 30, position:'absolute', right: 20, top: 20, backgroundColor: '#ee6e73'} : {width: 70, height: 30, position:'absolute', right: 20, top: 20}}
-                          onPress={()=>this.handleCollected(item.id)}>
+        <TouchableOpacity 
+            style={item.collected?{width: 70, height: 30, position:'absolute', right: 20, top: 20, backgroundColor: '#ee6e73'} : {width: 70, height: 30, position:'absolute', right: 20, top: 20}}
+            onPress={()=>handleCollected(item.id)}>
           <Text>{item.collected? "uncollect": "collect"}</Text>
         </TouchableOpacity>
     </View>
   );
 
-  componentDidMount() {
-    const datafilter = _.filter(SocialItems, post => {
-        return inMyList(post.id, SocialCollection)
-    })
-    let arr = datafilter.map((item, index)=>{
-      item.collected = true
-      return {...item}
-    })
+    useEffect(() => {
+      const datafilter = _.filter(SocialItems, post => {
+          return inMyList(post.id, SocialCollection)
+      })
+      let arr = datafilter.map((item, index)=>{
+        item.collected = true
+        return {...item}
+      })
 
-    this.setState({
-      data: arr,
-      fullData: datafilter,
-    });
-  }
+      setData(arr);
+      setFullData(datafilter);
+      // this.setState({
+      //   data: arr,
+      //   fullData: datafilter,
+      // });
+    }, []);
   
 
-  render() {
-    const { search } = this.state;
-    // const[grvalue, grsetValue] = useState('');
-    const{ navigate } = this.props.navigation;
-    //console.log(this.props.navigation);
+  // render() {
+  //   const { search } = this.state;
+  //   // const[grvalue, grsetValue] = useState('');
+  //   const{ navigate } = this.props.navigation;
+  //   //console.log(this.props.navigation);
 
     return(
       <SafeAreaView style={styles.container}>
+
         <SearchBar
           placeholder="Type Here..."
-          onChangeText={this.handleSearch}
+          onChangeText={handleSearch}
           value={search}
           lightTheme
         />
-      <FlatList
-        data={this.state.data}
-        renderItem={this.renderChat}
-        keyExtractor={item => item.id}
-      />
+
+        <FlatList
+          data={data}
+          renderItem={renderChat}
+          keyExtractor={item => item.id}
+        />
+
       </SafeAreaView>
     )
-  }
+  
 
 }
+
+export default Main_HOME;
 
 const styles = StyleSheet.create({
   container: {
