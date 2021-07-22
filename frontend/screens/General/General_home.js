@@ -50,24 +50,38 @@ const contains = (data, query) => {
 }
 
 
+//create your forceUpdate hook
+function useForceUpdate(){
+  const [value, setValue] = useState(0); // integer state
+
+  // setItems(data.generalItemsList);
+  // setAllItems(data.generalItemsList);
+  return () => setValue(value + 1); // update the state to force render
+}
 
 const General_HOME = () => {
+  // call your hook here
+  const forceUpdate = useForceUpdate();
+
+  // const [, updateState] = React.useState();
+  // const forceUpdate = React.useCallback(() => updateState({}), []);
+  console.log("render");
 
   const [search, setSearch] = useState('');
   const [items, setItems] = useState([]);
   const [allItems, setAllItems] = useState([]);
 
-  const { data, error, loading } = useQuery(GENERAL_ITEMS);
+  const { data, error, loading } = useQuery(GENERAL_ITEMS, {pollInterval: 500});
 
   const windowHeight = useWindowDimensions().height;
 
 
-  useEffect(() => {
-    if (error) {
-      Alert.alert('Error fetching general items', error.message);
-      console.log(error);
-    }
-  }, [error]);
+  // useEffect(() => {
+  //   if (error) {
+  //     Alert.alert('Error fetching general items', error.message);
+  //     console.log(error);
+  //   }
+  // }, [error]);
 
   useEffect(() => {
       if (data) {
@@ -77,6 +91,16 @@ const General_HOME = () => {
         console.log(items);
       } 
   }, [data]);
+
+  // const forceUpdate = () => {
+  //   console.log(data);
+  //   if (data) {
+  //           //console.log(data);
+  //           setItems(data.generalItemsList);
+  //           setAllItems(data.generalItemsList);
+  //           //console.log(items);
+  //         } 
+  // }
 
   const navigation = useNavigation();
 
@@ -96,7 +120,7 @@ const General_HOME = () => {
 
   const handleSearch = (se) => {
     console.log("search", search)
-    const searchedItems = _.filter(allItems, general => {
+    const searchedItems = _.filter(data.generalItemsList, general => {
       return contains(general.title, se)
     })
     setSearch(se);
@@ -132,7 +156,9 @@ const General_HOME = () => {
         backgroundColor: colors.mono_40,
         bottom: 68,
         }}>
+      
       <View style = {styles.margin}></View>
+    
       <View style = {{top: "15%", height: "10%", width: "90%", flexDirection:'row'}}>
           <View style = {{flex : 5, alignItems: 'center', justifyContent: 'center'}}>
               <SearchBar
@@ -162,13 +188,12 @@ const General_HOME = () => {
               source = {require("../../assets/general&group/notification.png")}/>
           </TouchableOpacity>   
       </View>
-      
       <ScrollView style = {{top: "5%", alignContent: 'center'}}>
         <View>
-          <FlatList
-              data={search == ''? allItems: items}
+          {data ? ( <FlatList
+              data={search == ''? data.generalItemsList: items}
               renderItem={renderItem}
-            />
+            /> ) : <Text>Loading</Text>}
         </View>
         
         

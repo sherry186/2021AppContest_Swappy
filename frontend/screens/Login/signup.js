@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useMutation, gql } from '@apollo/client';
 
+import { auth } from '../../firebase'
+
 const SIGN_UP_MUTATION = gql`
 mutation signUp($email: String!, $password: String!, $phone: String!, $username: String!) {
   signUp(input: { 
@@ -46,13 +48,11 @@ const signup = () => {
 
   if (data) {
     // save token
-    
     AsyncStorage
       .setItem('token', data.signUp.token)
       .then(() => {
         // redirect home
-        Alert.alert('signed up successfully!');
-        navigation.navigate("login");
+        //Alert.alert('signed up successfully!');
       })
   }
 
@@ -60,7 +60,31 @@ const signup = () => {
 
 
   const handlesubmit = () => {
-    signUp({variables: { email, password, phone, username}})
+    signUp({variables: { email, password, phone, username}});
+
+    //create firebase account
+    auth.createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // Signed in 
+        var user = userCredential.user;
+        user.updateProfile({
+          displayName: username,
+          photoURL: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper.png"
+        }).then(() => {
+          // Update successful
+          // ...
+        }).catch((error) => {
+          // An error occurred
+          // ...
+        });  
+        
+      })
+      .catch((error) => {
+        var errorMessage = error.message;
+        alert(errorMessage);
+      });
+      Alert.alert('signed up successfully!');
+      navigation.navigate("login");
   }
   
   return (

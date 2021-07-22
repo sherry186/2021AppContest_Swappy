@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {View,ScrollView, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { SearchBar } from 'react-native-elements';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
-
+import  { useNavigation } from '@react-navigation/core';
 import SocialItems from '../../Data/SocialItems';
 import { TextInput } from 'react-native';
 
@@ -38,14 +38,16 @@ const Main_HOME = () => {
 
   const handleSearch = (se) => {
     console.log("search", search)
-    const data = _.filter(fullData, post => {
+    const searchedItems = _.filter(fullData, post => {
       return contains(post.person, post.title, post.post, se)
     })
-    this.setState({ data,  se});
+    setSearch(se);
+    setData(searchedItems);
+    //this.setState({data,  se});
   };
 
-  handleCollected = (id) =>{
-    const {data} = this.state;
+  const handleCollected = (id) =>{
+    //const {data} = this.state;
     let arr = data.map((item, index)=>{
       if(id == index){
         item.collected = !item.collected;
@@ -53,10 +55,10 @@ const Main_HOME = () => {
       return {...item}
     })
     console.log("selection handler1 ==>", arr)
-    this.setState({data: arr})
+    setData(arr)
   };
 
-  renderChat = ({ item }) => (
+  const renderChat = ({ item }) => (
     //console.log(this.props.navigation);
     <View style={styles.ChatC}>
         <TouchableOpacity style = {styles.Chat} onPress={() => this.props.navigation.navigate('MainDetail', {title: item.title, person: item.person, post: item.post, comment: item.comment, hideName: item.hideName})}>
@@ -73,56 +75,60 @@ const Main_HOME = () => {
           
   );
 
-  componentDidMount() {
+  useEffect(() => {
     const posts = SocialItems
     let arr = posts.map((item, index)=>{
       item.collected = false
       return {...item}
     })
 
-    this.setState({
-      data: arr,
-      fullData: SocialItems,
-    });
-  }
+    setData(arr);
+    setFullData(SocialItems);
+    // this.setState({
+    //   data: arr,
+    //   fullData: SocialItems,
+    // });
+  }, []);
   
 
-  render() {
-    const { search } = this.state;
-    // const[grvalue, grsetValue] = useState('');
-    const{ navigate } = this.props.navigation;
+  
+    // const { search } = this.state;
+    // // const[grvalue, grsetValue] = useState('');
+    // const{ navigate } = this.props.navigation;
     //console.log(this.props.navigation);
+  const navigation = useNavigation();
 
-    return(
-      <View style={styles.container}>
-        <SearchBar
-          placeholder="Type Here..."
-          onChangeText={this.handleSearch}
-          value={search}
-          lightTheme
-        />
-        <FlatList
-          data={this.state.data}
-          renderItem={this.renderChat}
-          keyExtractor={item => item.id}
-        />
-        
-        <TouchableOpacity 
-          style={styles.button}
-          onPress={() => navigate('MainAdd')}>
-          <Text style={styles.buttonText}>ADD</Text>
-        </TouchableOpacity>
-        
+  return(
+    <View style={styles.container}>
+      <SearchBar
+        placeholder="Type Here..."
+        onChangeText={handleSearch}
+        value={search}
+        lightTheme
+      />
+      <FlatList
+        data={data}
+        renderItem={renderChat}
+        keyExtractor={item => item.id}
+      />
       
-      </View>
-
+      <TouchableOpacity 
+        style={styles.button}
+        onPress={() => navigate('MainAdd')}>
+        <Text style={styles.buttonText}>ADD</Text>
+      </TouchableOpacity>
+      
+    
+    </View>
         
 
       
     )
-  }
+  
 
 }
+
+export default Main_HOME;
 
 const styles = StyleSheet.create({
     container: {

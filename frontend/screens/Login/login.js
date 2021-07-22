@@ -68,14 +68,25 @@ const login = () =>  {
       .then(() => {
         // redirect home
         Alert.alert('signed in successfully!');
-        navigation.navigate("BottomTab")
+        
       })
   }
 
 
   const handlesubmit = () => {
+    useEffect(() => {
+      const unsubscribe = auth.onAuthStateChanged(function (user) {
+      if (user) {
+        console.log('signed in!');
+      } else {
+      // No user is signed in.
+      }
+      });
+      return unsubscribe;
+      }, [])
     signIn({ variables: { email: account, password }})
     //navigation.navigate("BottomTab")
+    navigation.navigate("BottomTab")
   }
 
   const handlesetSecure = (now) =>{
