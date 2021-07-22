@@ -109,7 +109,7 @@ const General_HOME = () => {
   }
 
   const toMessage = () => {
-    navigation.navigate("MessageHome")
+    navigation.navigate("Chat")
   }
 
   
@@ -193,7 +193,7 @@ const General_HOME = () => {
           {data ? ( <FlatList
               data={search == ''? data.generalItemsList: items}
               renderItem={renderItem}
-            /> ) : <Text>Loading</Text>}
+            /> ) : <Text>loading...</Text>}
         </View>
         
         

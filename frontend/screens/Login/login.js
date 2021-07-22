@@ -15,6 +15,8 @@ import { useNavigation } from '@react-navigation/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useMutation,  gql } from '@apollo/client';
 
+import { auth } from '../../firebase'
+
 const SIGN_IN_MUTATION = gql`
   mutation signin($email: String!, $password: String!) {
     signIn(input: { email: $email, password: $password}) {
@@ -72,18 +74,25 @@ const login = () =>  {
       })
   }
 
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(function (user) {
+    if (user) {
+      console.log('signed in!');
+    } else {
+    // No user is signed in.
+    }
+    });
+    return unsubscribe;
+    }, [])
+
 
   const handlesubmit = () => {
-    // useEffect(() => {
-    //   const unsubscribe = auth.onAuthStateChanged(function (user) {
-    //   if (user) {
-    //     console.log('signed in!');
-    //   } else {
-    //   // No user is signed in.
-    //   }
-    //   });
-    //   return unsubscribe;
-    //   }, [])
+      auth.signInWithEmailAndPassword(account, password)
+      .catch((error) => {
+        var errorMessage = error.message;
+        alert(errorMessage)
+      });
+    
     signIn({ variables: { email: account, password }})
     //navigation.navigate("BottomTab")
     navigation.navigate("BottomTab")

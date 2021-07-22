@@ -2,7 +2,7 @@ import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-  const URI = 'http://cd59b6fb1c13.ngrok.io';
+  const URI = 'http://0de49758bc31.ngrok.io';
 
 
   const httpLink = createHttpLink({
