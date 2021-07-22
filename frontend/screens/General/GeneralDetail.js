@@ -15,11 +15,36 @@ import { View,
 import { useNavigation } from '@react-navigation/core';
 import colors from '../../config/colors';
 
+import { useMutation,  gql } from '@apollo/client';
+
+
+const CREATE_REQUEST = gql`
+  mutation createRequestItem($requestedItemId: ID!){
+    createRequestItem(requestedItemId: $requestedItemId) {
+      id
+      guyWhoseItemIsRequested{
+        id
+        username
+      },
+      requestedItem{
+        id
+        title
+      }
+      requester {
+        id
+        username
+      }
+      status
+    }
+  }`;
+
+  
 
 /* 2. Get the param */
 function GeneralDetailsScreen ({ route, navigation }) {
+  const [createRequest, { data, error, loading }] = useMutation(CREATE_REQUEST);
 
-    
+  const { itemID, title, sort, des, method, image } = route.params;  
   const renderImage = ({ item }) => (
     <SafeAreaView style = {{flex:1, flexDirection: 'row'}}>
       <Image 
@@ -28,16 +53,19 @@ function GeneralDetailsScreen ({ route, navigation }) {
     </SafeAreaView> 
   );
 
-  const handleRequest = ({item}) =>(
-    <SafeAreaView style = {{flex:1, flexDirection: 'row'}}>
-      <Image 
-      style={{flexDirection: 'row', width: 60, height: 60,  }}
-      source={item.source}/>
-    </SafeAreaView> 
-  );// 理論上應該是一個Navigation，還要再改
+  const handleRequest = () => {
+    console.log('request pressed');
+    createRequest({ variables: { requestedItemId: itemID } });
+    console.log(error);
+    console.log(data);
+    // <SafeAreaView style = {{flex:1, flexDirection: 'row'}}>
+    //   <Image 
+    //   style={{flexDirection: 'row', width: 60, height: 60,  }}
+    //   source={item.source}/>
+    // </SafeAreaView> 
+};// 理論上應該是一個Navigation，還要再改
   
-  // render(){  
-    const { itemID, title, sort, des, method, image } = route.params;
+  // render(){ 
     
     return (
       <View style={{ flex: 1, top: "5%", bottom:"20%", alignItems: 'center'}}>
@@ -114,6 +142,7 @@ function GeneralDetailsScreen ({ route, navigation }) {
               <View style = {styles.buttonsC}>
                   <TouchableOpacity 
                       style={styles.buttons}
+                      onPress={handleRequest}
                       >
                       <Image
                         source = {require('../../assets/general/request.png')}/>

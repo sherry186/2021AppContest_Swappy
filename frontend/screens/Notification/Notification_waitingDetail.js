@@ -18,25 +18,36 @@ import { useNavigation } from '@react-navigation/core';
 import colors from '../../config/colors';
 import Notification_requesting from './Notification_requesting';
 
+import { useQuery, useMutation,  gql } from '@apollo/client';
 
-/* 2. Get the param */
-function Notification_waitingDetail ({ route, navigation }) {
+const REMOVE_REQUEST = gql`
+  mutation removeRequest($id: ID!) {
+    removeRequest(id: $id)
+  }
+`;
 
-    
- 
 
-  
+function Notification_waitingDetail ({ route }) {
+
+  const [removeRequest, { data, error, loading}] = useMutation(REMOVE_REQUEST);
   
   // render(){  
     const [image, setImage] = useState(null);
     const [title, setTitle] = useState('');
     const { id, mything_title, mything_source, requestFor_title, requestFor_source } = route.params;
     
-    const navigation1 = useNavigation();
+    const navigation = useNavigation();
 
-    const handleDelete = () =>(
-        <View></View>
-    );
+    const handleDelete = () =>{
+      removeRequest({variables: {id: id}});
+      console.log(id);
+      console.log(error);
+      console.log(data);
+      console.log(loading);
+
+      navigation.navigate("Notification");
+
+    };
 
     const pickImage = async () => {
 

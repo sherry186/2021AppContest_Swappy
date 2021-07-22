@@ -42,6 +42,7 @@ const typeDefs = gql`
         getInvitedRequests: [Request]! 
         getRequestingRequests: [Request]!
         getRequest(id: ID!):  Request!
+        getRequestsByStatus(status: Status!): [Request]!
     }
 
     type Mutation {
@@ -103,7 +104,7 @@ const typeDefs = gql`
     }
 
     type Request {
-        id: ID!
+        id: ID
         guyWhoseItemIsRequested: User!
         requestedItem: GeneralItem!
         requester: User!
@@ -149,7 +150,7 @@ const resolvers = {
             if(!user) {
                 throw new Error('AUthentication Error. Please sign in');
             }
-            const myInvitedRequests = await db.collection('Requests').find({ "guyWhoseItemIsRequested._id" : user._id }).toArray();
+            const myInvitedRequests = await db.collection('Requests').find({ "guyWhoseItemIsRequested._id" : user._id }, {status: "WAITING"}).toArray();
             console.log(myInvitedRequests);
             return myInvitedRequests;
         }, 
@@ -168,6 +169,13 @@ const resolvers = {
             const item =  await db.collection('Requests').findOne({_id: ObjectId(id)});
             //console.log(item);
             return item;
+        },
+        getRequestsByStatus: async (_, { status }, {db, user}) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+            const requests= await db.collection('Requests').find({status: status}).toArray();
+            return requests;
         }
 
     },
@@ -315,6 +323,9 @@ const resolvers = {
         id: ({ _id, id }) => _id || id,
     },
     GeneralItem: {
+        id: ({ _id, id }) => _id || id,
+    },
+    Request: {
         id: ({ _id, id }) => _id || id,
     },
   };

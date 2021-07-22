@@ -37,7 +37,7 @@ function Notification() {
                 options={{ 
                     tabBarIcon:({focused})=>(
                         <View style =  {{right: 40,  width: 120,}}>
-                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20 }}>Requesting</Text>
+                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20 }}>Requests</Text>
                         </View>
                       )}}
             
@@ -48,7 +48,7 @@ function Notification() {
                 options={{ 
                     tabBarIcon:({focused})=>(
                         <View style =  {{ right: 30, width:120}}>
-                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20 }}>Invitation</Text>
+                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20 }}>Invitations</Text>
                         </View>
                     )}}
             />
