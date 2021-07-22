@@ -13,6 +13,7 @@ const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database o
 
 
 
+
 import { format } from 'fecha';
 
 let ScreenWidth = Dimensions.get("window").width;

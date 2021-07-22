@@ -50,29 +50,29 @@ const Notification_invitation = () => {
   const navigation = useNavigation();
 
   const[invitationData, setInvitationData] = useState([]);
-  const { data, error, loading } = useQuery(RENDER_INVITATIONS);
+  const { data, error, loading } = useQuery(RENDER_INVITATIONS, {pollInterval: 500});
   const [updateStatus, _] = useMutation(UPDATE_STATUS);
 
   console.log('inviation page');
   // console.log(loading, data, error);
-  useEffect(()=> {
-    console.log(data);
-    if(data){
-      setInvitationData(data.getInvitedRequests);
-      console.log(invitationData);
-    }
-    if(loading) {
-      console.log('loading...')
-    }
-  },[])
+  // useEffect(()=> {
+  //   console.log(data);
+  //   if(data){
+  //     setInvitationData(data.getInvitedRequests);
+  //     console.log(invitationData);
+  //   }
+  //   if(loading) {
+  //     console.log('loading...')
+  //   }
+  // },[])
 
-  useEffect(() => {
-    if (data) {
-      console.log(data);
-      setInvitationData(data.getInvitedRequests);
-      console.log(invitationData);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     console.log(data);
+  //     setInvitationData(data.getInvitedRequests);
+  //     console.log(invitationData);
+  //   }
+  // }, [data]);
 
   const handleYes = (requestId) => {
     updateStatus({variables: {id: requestId,status: "SUCCESS"}});
@@ -138,11 +138,12 @@ const Notification_invitation = () => {
   return(
     <View style = {{ height: "100%", width: "100%", backgroundColor: colors.mono_40 }}>
       <View style={styles.container}>
-        <FlatList
-          data={invitationData}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-        /> 
+        { data ? ( <FlatList
+            data={data.getInvitedRequests}
+            renderItem={renderItem}
+            keyExtractor={item => item.id}
+          /> ) : <Text>loading ...</Text>
+        }
       </View>
     </View>
     

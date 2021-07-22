@@ -42,15 +42,6 @@ query getRequestingRequests{
 
 
 const Notification_requesting = () => {
-
-  // constructor(props){
-  //   super(props);
-  //   this.state ={
-  //     fail: [],
-  //     success: [],
-  //     waiting:[],
-  //   };
-  // }
   
   const[fail, setFail] = useState([]);
   const[success, setSuccess] = useState([]);
@@ -62,55 +53,59 @@ const Notification_requesting = () => {
   const[failData, setFailData] = useState([]);
   const[successData, setSuccesData] = useState([]);
   const[waitingData, setWaitingData] = useState([]);
-  const { data, error, loading } = useQuery(RENDER_REQUESTS);
+ 
+  const { data, error, loading } = useQuery(RENDER_REQUESTS, {pollInterval: 500});
 
   console.log('requesintgn page');
   // console.log(loading, data, error);
-  useEffect(()=> {
-    console.log(data);
-    if(data){
-      setRequestData(data.getRequestingRequests);
-      console.log(requestData);
+  
 
-      //filter request data to waiting, success and fail
-      const _waiting = requestData.filter(request => request.status == "WAITING");
-      const _success = requestData.filter(request => request.status == "SUCCESS");
-      const _fail = requestData.filter(request => request.status == "FAIL");
+  // useEffect(()=> {
+  //   console.log(data);
+  //   if(data){
+  //     setRequestData(data.getRequestingRequests);
+  //     console.log(requestData);
 
-      console.log(_waiting, _success, _fail);
+  //     //filter request data to waiting, success and fail
+  //     const _waiting = requestData.filter(request => request.status == "WAITING");
+  //     const _success = requestData.filter(request => request.status == "SUCCESS");
+  //     const _fail = requestData.filter(request => request.status == "FAIL");
 
-      setWaitingData(_waiting);
-      setSuccesData(_success);
-      setFailData(_fail);
-    }
-    if(loading) {
-      console.log('loading...')
-    }
-  },[])
+  //     console.log(_waiting, _success, _fail);
 
-  useEffect(() => {
-    if (data) {
-      console.log(data);
-      setRequestData(data.getRequestingRequests);
-      console.log(requestData);
+  //     setWaitingData(_waiting);
+  //     setSuccesData(_success);
+  //     setFailData(_fail);
+  //   }
+  //   if(loading) {
+  //     console.log('loading...')
+  //   }
+  // },[data])
 
-      //filter request data to waiting, success and fail
-      const _waiting = requestData.filter(request => request.status == "WAITING");
-      const _success = requestData.filter(request => request.status == "SUCCESS");
-      const _fail = requestData.filter(request => request.status == "FAIL");
+  // useEffect(() => {
+  //   if (data) {
+  //     console.log(data);
+  //     setRequestData(data.getRequestingRequests);
+  //     console.log(requestData);
 
-      console.log(_waiting, _success, _fail);
-      setWaitingData(_waiting);
-      setSuccesData(_success);
-      setFailData(_fail);
+  //     //filter request data to waiting, success and fail
+  //     const _waiting = requestData.filter(request => request.status == "WAITING");
+  //     const _success = requestData.filter(request => request.status == "SUCCESS");
+  //     const _fail = requestData.filter(request => request.status == "FAIL");
 
-    }
-  }, [data]);
+  //     console.log(_waiting, _success, _fail);
+  //     setWaitingData(_waiting);
+  //     setSuccesData(_success);
+  //     setFailData(_fail);
+
+  //   }
+  // }, [data]);
 
 
   
 
-  const renderFail = ({ item }) => (
+  const renderFail = ({ item }) => {
+    return (
     //console.log(this.props.navigation);
     <TouchableOpacity 
       // onPress = {()=>navigation.navigate("NotificationFailDetail",{ 
@@ -122,7 +117,7 @@ const Notification_requesting = () => {
       style={styles.success}>
       <Text style={styles.title}>{item.requestedItem.title}</Text>
     </TouchableOpacity>
-  );
+  )};
 
   const renderSuccess = ({ item }) => {
     console.log(item);
@@ -177,25 +172,26 @@ const Notification_requesting = () => {
 
   return(
     <ScrollView style={styles.container}>
+      {data? (<>
+            <FlatList
+              data={data.getRequestingRequests.filter(request => request.status == "SUCCESS")}
+              renderItem={renderSuccess}
+              keyExtractor={item => item.id}
+            />
 
-      <FlatList
-        data={successData}
-        renderItem={renderSuccess}
-        keyExtractor={item => item.id}
-      />
+            <FlatList
+              data={data.getRequestingRequests.filter(request => request.status == "WAITING")}
+              renderItem={renderWaiting}
+              keyExtractor={item => item.id}
+            />
 
-      <FlatList
-        data={waitingData}
-        renderItem={renderWaiting}
-        keyExtractor={item => item.id}
-      />
-
-      <FlatList
-        data={failData}
-        renderItem={renderFail}
-        keyExtractor={item => item.id}
-      />
-      
+            <FlatList
+              data={data.getRequestingRequests.filter(request => request.status == "FAIL")}
+              renderItem={renderFail}
+              keyExtractor={item => item.id}
+            />
+          </>) : <Text>loading...</Text>
+      }
       
     </ScrollView>
   )
