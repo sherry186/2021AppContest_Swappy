@@ -62,27 +62,27 @@ const signup = () => {
   const handlesubmit = () => {
     signUp({variables: { email, password, phone, username}});
 
-    //create firebase account
-    auth.createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        // Signed in 
-        var user = userCredential.user;
-        user.updateProfile({
-          displayName: username,
-          photoURL: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper.png"
-        }).then(() => {
-          // Update successful
-          // ...
-        }).catch((error) => {
-          // An error occurred
-          // ...
-        });  
+    // //create firebase account
+    // auth.createUserWithEmailAndPassword(email, password)
+    //   .then((userCredential) => {
+    //     // Signed in 
+    //     var user = userCredential.user;
+    //     user.updateProfile({
+    //       displayName: username,
+    //       photoURL: "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper.png"
+    //     }).then(() => {
+    //       // Update successful
+    //       // ...
+    //     }).catch((error) => {
+    //       // An error occurred
+    //       // ...
+    //     });  
         
-      })
-      .catch((error) => {
-        var errorMessage = error.message;
-        alert(errorMessage);
-      });
+    //   })
+    //   .catch((error) => {
+    //     var errorMessage = error.message;
+    //     alert(errorMessage);
+    //   });
       Alert.alert('signed up successfully!');
       navigation.navigate("login");
   }
