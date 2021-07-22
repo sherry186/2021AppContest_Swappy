@@ -74,16 +74,16 @@ const login = () =>  {
 
 
   const handlesubmit = () => {
-    useEffect(() => {
-      const unsubscribe = auth.onAuthStateChanged(function (user) {
-      if (user) {
-        console.log('signed in!');
-      } else {
-      // No user is signed in.
-      }
-      });
-      return unsubscribe;
-      }, [])
+    // useEffect(() => {
+    //   const unsubscribe = auth.onAuthStateChanged(function (user) {
+    //   if (user) {
+    //     console.log('signed in!');
+    //   } else {
+    //   // No user is signed in.
+    //   }
+    //   });
+    //   return unsubscribe;
+    //   }, [])
     signIn({ variables: { email: account, password }})
     //navigation.navigate("BottomTab")
     navigation.navigate("BottomTab")
