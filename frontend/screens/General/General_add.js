@@ -11,6 +11,7 @@ import {
     Platform,
     useWindowDimensions,
     FlatList,
+    SafeAreaView,
     Image,
     ScrollView, 
     KeyboardAvoidingView,
