@@ -78,7 +78,8 @@ componentDidMount() {
     this.getSpaceName(spaceId);
     //console.log('source', source);
     return (
-      <ScrollView style={{ flex: 1}}>
+      <View style={{ flex: 1, top: "5%", bottom:"20%", alignItems: 'center'}}>
+        
         <FlatList
               style = {{margin: 20}}
               data={source}
@@ -103,7 +104,7 @@ componentDidMount() {
             </TouchableOpacity>
         </View>
         
-      </ScrollView>
+      </View>
     );
   }
 

@@ -7,8 +7,10 @@ import { ScrollView,
          FlatList, 
          StyleSheet, 
          TouchableOpacity, 
+         KeyboardAvoidingView,
          Image,
-         Alert } from "react-native";
+         Alert,
+         TextInput } from "react-native";
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 import { ProgressBar } from "react-native-paper";
 import BreakAwaySpace from '../../Data/BreakAwaySpace';
@@ -25,6 +27,7 @@ let ScreenWidth = Dimensions.get("window").width;
 
 const LEVELPOINTS = 20
 
+
 export default class BreakAway extends React.Component {
 
 
@@ -33,6 +36,7 @@ export default class BreakAway extends React.Component {
       hesitateData: [],
       itemData: [],
       shouldShow: false,
+      newSpaceName:'',
     }
   
 
@@ -49,13 +53,19 @@ export default class BreakAway extends React.Component {
         onPress =  {() => this.props.navigation.navigate("BreakAwaySpaceDetail", {spaceId: item.id, complete: item.progress, spaceName: item.spaceName})}
         style={styles.button}
       >
-      <Text>{item.spaceName}</Text>
-      <Text></Text>
-      <ProgressBar
-        progress = {((item.progress) % LEVELPOINTS) / LEVELPOINTS} 
-        style={styles.probarStyle} 
-        color = {'#FEBC5F'}/> 
-    </TouchableOpacity>   
+      <View style = {styles.buttonTitleC}>
+        <Text style = {styles.buttonTitle}>{item.spaceName}</Text>
+      </View>
+      
+      <View style = {styles.probarC}>
+          <ProgressBar
+            progress = {((item.progress) % LEVELPOINTS) / LEVELPOINTS} 
+            style={styles.probarStyle} 
+            color = {colors.function_100}/> 
+      </View>
+      
+    </TouchableOpacity> 
+      
   );
 
   handleDelete = (item) => {
@@ -78,16 +88,20 @@ export default class BreakAway extends React.Component {
   }
 
   // deleteSpaceAlert = () => 
-    
+  
+  handleAddSpace = () =>{
+
+  }
   
 
   renderImage = ({ item }) => (
+    
     <TouchableOpacity
       onPress = {() => this.props.navigation.navigate("BreakAwayItemDetail", {itemId: item.id, title: item.title, source: JSON.parse(item.image), spaceId: item.spaceName, story: item.story, uploadDate: item.uploadDate})} 
-      style={{flexDirection: 'row', width:70, height: 80, margin:10, backgroundColor:'red'}}
+      style={{width:ScreenWidth* 0.3, height: ScreenWidth* 0.3, margin:ScreenWidth* 0.03, backgroundColor:'red'}}
       >
       <Image 
-        style={{ width: 70, height: 80  }}
+        style={{ width: "100%", height: "100%"  }}
         source={{uri: JSON.parse(item.image)[0].uri}}/>
     </TouchableOpacity>
   );
@@ -130,6 +144,7 @@ getHesitateItems = () => {
   });
 }
 
+  
 
 
   componentDidMount() {
@@ -152,65 +167,120 @@ getHesitateItems = () => {
 
     return(
       <View style={{flex:1, flexDirection: 'column'}}> 
-        
-          <FlatList
-              style = {{margin: 20}}
-              data={this.state.hesitateData}
-              renderItem={this.renderImage}
-              horizontal = {true}
-              keyExtractor={item => item.id}
-          />
-          <View style = {{flex:3}}>
+          <View style = {{height:30, backgroundColor: 'transparent'}}></View>
+          <View style = {{flex:1.2, alignItems: 'center', justifyContent:'center', backgroundColor: 'transparent'}}>
               <FlatList
-                  style = {{bottom: 150}}
-                  data={this.state.spaceData}
-                  renderItem={this.renderSpace}
+                  data={this.state.hesitateData}
+                  renderItem={this.renderImage}
+                  horizontal = {true}
                   keyExtractor={item => item.id}
-              /> 
-              <TouchableOpacity 
-                style={styles.button2}
-                onPress={() => navigate("BreakAwayADD")}>
-                <Text>ADD</Text>
-               </TouchableOpacity>
+              />
+          </View>
+          <View style = {styles.line}></View>
+
+          <View style = {{flex: 3,justifyContent:'center', alignItems:'center', backgroundColor: 'transparent'}}>
+              <View style = {{flex:3, width:"100%",}}>
+                <View style = {{flex: 3,  justifyContent:'center', backgroundColor:'transparent' }}>
+                    <FlatList
+                          data={this.state.spaceData}
+                          renderItem={this.renderSpace}
+                          keyExtractor={item => item.id}
+                      /> 
+                </View>
+                <View style = {{flex: 0.7, alignItems:'center', backgroundColor: 'transparent'}}>
+                  
+                  <View style = {styles.inputContainer}>
+                       <TextInput
+                         style={styles.input}
+                         placeholderTextColor = {colors.function_100}
+                         onChangeText={(text) => this.setState({newSpaceName: text})}
+                         value={this.state.newSpaceName} />   
+                       <TouchableOpacity
+                         onPress = {() => this.setState({newSpaceName: ""})}
+                         style ={{
+                           right: "1%",
+                           width: "7%", 
+                           height: "100%",
+                           justifyContent: 'center',
+                           alignItems:'center'}}
+                       >
+                         <Image
+                           style ={{
+                             width: 15, 
+                             height: 15,
+                             }} 
+                           source = {require('../../assets/breakAway/delete.png')}/>
+                       </TouchableOpacity>
+
+                       <TouchableOpacity
+                         onPress = {()=>this.handleAddSpace()}
+                         style ={{
+                           right: 0,  
+                           width: "7%", 
+                           height: "100%",
+                           justifyContent:'center',
+                           alignItems:'center'}}
+                       >
+                         <Image
+                           style ={{
+                             width: 15, 
+                             height: 15,
+                             }} 
+                           source = {require('../../assets/breakAway/ok.png')}/>
+                       </TouchableOpacity>
+                   </View>                
+
+                </View>
+              </View>
+              <View style = {{flex:0.4, backgroundColor: 'green', }}></View>
+
           </View>
           
 
           
+        <View style = {{flex:1.5, justifyContent:'center', alignItems:'center', backgroundColor:'transparent'}}>
+            {
+              this.state.shouldShow ? (
+              <View style={{flexDirection: 'row', height: 20,alignItems:'center'}}>
+                <View style={{flex:1, alignItems:'center',left: ScreenWidth*0.11, backgroundColor:'transparent'}}>
+                  <TouchableOpacity 
+                    style={styles.buttonRoundhech}
+                    onPress={() => navigate("BreakAwayHesitate")}
+                    >
+                    <Image
+                      style = {styles.buttonRoundhech}
+                      source = {require('../../assets/breakAway/猶豫.png')}/>
+                    <Text style = {styles.hech}>猶豫</Text>
+                  </TouchableOpacity>
+                </View>
+              
+                <View style={{flex:1, alignItems:'center', right: ScreenWidth*0.11, backgroundColor:'transparent'}}>
+                  <TouchableOpacity 
+                    style={styles.buttonRoundhech}
+                    onPress={() => navigate("BreakAwayChangeOut")}
+                    >
+                    <Image
+                      style = {styles.buttonRoundhech}
+                      source = {require('../../assets/breakAway/換出.png')}/>
+                    <Text style = {styles.hech}>換出</Text>
+                  </TouchableOpacity>
+                </View>                
+              </View>
+              ) : null
+            }
 
-        {
-          this.state.shouldShow ? (
-          <View style={{flexDirection: 'row', height: 20}}>
-            <View style={styles.center, {flex:1}}>
-              <TouchableOpacity 
-                style={styles.buttonRound}
-                onPress={() => navigate("BreakAwayHesitate")}
-                >
-                <Text>Hesitate</Text>
-              </TouchableOpacity>
+          
+            <View style={{margin: 20, flexDirection:'column'}}>
+                <TouchableOpacity 
+                  style={styles.buttonRound}
+                  onPress={() => this.setState({shouldShow: !shouldShow})}
+                  >
+                  <Image
+                      style = {styles.buttonRound}
+                      source = {require('../../assets/breakAway/camera.png')}/>
+                </TouchableOpacity>
             </View>
-
-            <View style={styles.center, {flex:1}}>
-              <TouchableOpacity 
-                style={styles.buttonRound}
-                onPress={() => navigate("BreakAwayChangeOut")}
-                >
-                <Text>ChangeOut</Text>
-              </TouchableOpacity>
-            </View>                
-          </View>
-          ) : null
-        }
-        
-
-        <View style={{margin: 20, flexDirection:'column'}}>
-            <TouchableOpacity 
-              style={styles.buttonRound}
-              onPress={() => this.setState({shouldShow: !shouldShow})}
-              >
-              <Text>Camera</Text>
-            </TouchableOpacity>
         </View>
-
        
       </View>
         
@@ -221,77 +291,100 @@ getHesitateItems = () => {
 }
 
 const styles = StyleSheet.create({
+  line: {
+    height: 1,
+    backgroundColor: colors.function_100,
+    width: "90%",
+    alignSelf:"center",
+  },
   center: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
    },
-    container: {
-      flex: 1,
-      // alignItems: 'center',
-      // justifyContent: 'center'
-    },
-    probarStyle: {
-      width: 300,
-      height: 10,
-      backgroundColor: "#E0E0E0"
-    },
-    item: {
-      backgroundColor: colors.function_100,
-      padding: 20,
-      marginVertical: 8,
-      marginHorizontal: 16,
-    },
-    title: {
-      fontSize: 32,
-    },
-    image:{
-      width: ScreenWidth*0.2, 
-      height: ScreenWidth*0.2,  
-    },
-    imageContainer:{
-      flex:1, 
-      left: 10, 
-      margin : 10, 
-      justifyContent:'center', 
-      alignItems:'center', 
-      flexDirection: 'row'
-    },
-    button: {
-      //flex:1,
-      margin: 4,
-      width: 350,
-      height: 60,
-      
-      backgroundColor: "#E0E0E0",
-      alignItems: 'center',
-      alignSelf: 'center',
-      //justifyContent: 'center',
-    },
-    button2: {
-      margin: 4,
-      width: 350,
-      height: 60,
-      bottom: 200,
-      backgroundColor: "#E0E0E0",
-      alignItems: 'center',
-      alignSelf: 'center',
-      justifyContent: 'center',
-    },
-    buttonRound: {
-      position: 'absolute',
-      width: 60,
-      height: 60,
-      borderRadius: 30,
-      bottom: 50,
-      backgroundColor: "#E0E0E0",
-      alignItems: 'center',
-      alignSelf: 'center',
-      justifyContent: 'center',
-    },
-    buttonText: {
-      color: colors.mono_40,
-      fontSize: 10,
-      fontWeight: 'bold',
-    },
-  });
+  probarStyle: {
+    width: "100%",
+    borderRadius: 5,
+    height: 10,
+    backgroundColor: colors.mono_60
+  },  
+  probarC:{
+    flex: 7,
+    height:'100%', 
+    justifyContent:'center', 
+    backgroundColor: 'transparent'
+  },
+  title: {
+    fontSize: 32,
+  },
+  image:{
+    width: ScreenWidth*0.2, 
+    height: ScreenWidth*0.2,  
+  },  
+  button: {
+    //flex:1,
+    margin: 4,
+    width: "90%",
+    height: 45,
+    flexDirection:'row',
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+    alignSelf: 'center',
+    //justifyContent: 'center',
+  },
+  buttonTitle:{
+    fontSize:15,
+    fontWeight:'bold',
+    color: colors.function_100,
+  },
+  buttonTitleC:{
+    flex: 2, 
+    height: '100%', 
+    alignItems: 'center', 
+    justifyContent:'center', 
+    backgroundColor: 'transparent'
+  },
+  button2: {
+    margin: 4,
+    width: 350,
+    height: 60,
+    backgroundColor: "#E0E0E0",
+    alignItems: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
+  },
+  buttonRoundhech: {
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonRound: {
+    width: 65,
+    height: 65,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  input: {
+    //top: 14,
+    color: colors.mono_80,
+    left: 10,
+    height: "90%",
+    width: "85%",
+    borderWidth: 0,
+  },
+  inputContainer:{
+    flexDirection: 'row',
+    margin:10,
+    height: "50%",
+    width: "90%",
+    borderWidth: 1,
+    //borderRadius:6,
+    borderColor: colors.mono_80,
+    backgroundColor: 'transparent',
+  },
+  hech:{
+    fontSize:10,
+    color: colors.mono_100,
+  }
+});
