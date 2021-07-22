@@ -100,12 +100,12 @@ function Notification_invitationDetail ({ route, navigation }) {
               
             </View>
 
-            <View style = {{flex: 1, alignItems:'center', justifyContent: 'center'}}>
+            {/* <View style = {{flex: 1, alignItems:'center', justifyContent: 'center'}}>
                 <TouchableOpacity
                     onPress = {handleDelete}>
                     <Text style = {{color : colors.warning_100}}>撤回</Text>
                 </TouchableOpacity>
-            </View>
+            </View> */}
             
               
          </View>

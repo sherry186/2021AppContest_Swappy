@@ -8,13 +8,79 @@ import InvitationData from '../../Data/InvitationData';
 import GroupItems from '../../Data/GroupItems';
 import colors from '../../config/colors';
 
+import { useQuery, useMutation,  gql } from '@apollo/client';
+
+const RENDER_INVITATIONS = gql`
+  query getInvitedRequests{
+    getInvitedRequests {
+      id
+      requestedItem {
+        title
+        image
+        id
+      }
+      guyWhoseItemIsRequested {
+        username
+        id
+      }
+      requester {
+        username
+        id
+      }
+      requestersItem {
+        title
+        image
+        id
+      }
+      status
+    }
+  }`;
+
+const UPDATE_STATUS = gql`
+  mutation updateStatus($id: ID!, $status: Status!){
+    updateStatus(id: $id, status: $status)
+  }`;
+
 
 const Notification_invitation = () => {
 
-  const[data, setData] = useState([]);
+  //const[data, setData] = useState([]);
   const[groupItems, setGroupItems] = useState([]);
 
   const navigation = useNavigation();
+
+  const[invitationData, setInvitationData] = useState([]);
+  const { data, error, loading } = useQuery(RENDER_INVITATIONS);
+  const [updateStatus, _] = useMutation(UPDATE_STATUS);
+
+  console.log('inviation page');
+  // console.log(loading, data, error);
+  useEffect(()=> {
+    console.log(data);
+    if(data){
+      setInvitationData(data.getInvitedRequests);
+      console.log(invitationData);
+    }
+    if(loading) {
+      console.log('loading...')
+    }
+  },[])
+
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+      setInvitationData(data.getInvitedRequests);
+      console.log(invitationData);
+    }
+  }, [data]);
+
+  const handleYes = (requestId) => {
+    updateStatus({variables: {id: requestId,status: "SUCCESS"}});
+  }
+
+  const handleNo = (requestId) => {
+    updateStatus({variables: {id: requestId,status: "FAIL"}});
+  }
 
   const renderItem = ({ item }) => (
       //console.log(this.props.navigation);
@@ -26,24 +92,26 @@ const Notification_invitation = () => {
               <TouchableOpacity 
                   onPress = {()=>navigation.navigate("NotificationInvatationDetail",{ 
                     id: item.id,
-                    mything_title: item.mything.title, 
-                    mything_source: item.mything.source, 
-                    requestFor_title:item.requestFor.title, 
-                    requestFor_source: item.requestFor.source})}
+                    mything_title: item.requestersItem == null ? null : item.requestersItem.title, 
+                    mything_source: item.requestersItem == null ? null : item.requestersItem.image, 
+                    requestFor_title:item.requestedItem.title, 
+                    requestFor_source: item.requestedItem.image})}
                   style = {{ backgroundColor: 'transparent'}}>
-                  <Text style={styles.title}>{item.requester} </Text>
-                  <Text style={styles.title}>{item.requestFor.title}</Text>
-                  <Text style={styles.title}>{item.general? 'general' : 'group'}</Text>
+                  <Text style={styles.title}>{item.requester.username} </Text>
+                  <Text style={styles.title}>{item.requestedItem.title}</Text>
+                  <Text style={styles.title}>{'general'}</Text>
               </TouchableOpacity>
             </View>
             <View style = {styles.yn}>
               <TouchableOpacity
+                  onPress = {()=>handleYes(item.id)}
                   style={styles.ynButton}>
                   <Text>Y</Text>
               </TouchableOpacity>
             </View>
             <View style = {styles.yn}>
               <TouchableOpacity
+                  onPress = {()=>handleNo(item.id)}
                   style={styles.ynButton}>
                   <Text>N</Text>
               </TouchableOpacity>
@@ -55,7 +123,7 @@ const Notification_invitation = () => {
   );
 
   useEffect(() => {
-    setData(InvitationData);
+    //setData(InvitationData);
     setGroupItems(GroupItems);
     // this.setState({
     //   data: InvitationData,
@@ -71,10 +139,10 @@ const Notification_invitation = () => {
     <View style = {{ height: "100%", width: "100%", backgroundColor: colors.mono_40 }}>
       <View style={styles.container}>
         <FlatList
-          data={data}
+          data={invitationData}
           renderItem={renderItem}
           keyExtractor={item => item.id}
-        />
+        /> 
       </View>
     </View>
     
