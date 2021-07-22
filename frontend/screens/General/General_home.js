@@ -179,7 +179,7 @@ const General_HOME = () => {
           style={styles.button}
           onPress={toAdd}>
           <Image
-            // style = {{width: 65, height: 65 }}
+            style = {styles.button}
             source = {require("../../assets/general/add.png")}/>
       </TouchableOpacity>
       
@@ -226,14 +226,14 @@ const styles = StyleSheet.create({
       flexDirection: 'row'
     },
     button: {
-      // width: 65,
-      // height: 65,
+      width: 65,
+      height: 65,
       position: 'absolute',
       borderRadius: 31.5,
       backgroundColor: 'transparent',
       bottom: "10%",
-      right: 169,
-      alignItems: 'center',
+      //right: 169,
+      alignSelf: 'center',
       justifyContent: 'center',
     },
     buttonText: {
