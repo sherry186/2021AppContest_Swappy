@@ -192,7 +192,11 @@ export default function BreakAwayHesitate () {
                 <TextInput
                     style={styles.input2}
                     //placeholder='100'
-                    onChangeText={setLimit}
+                    keyboardType = 'numeric'
+                    onChangeText={ (text)=> {
+                      const newText = text.replace(/[^d]+/, '');
+                      setLimit(text)
+                    }}
                     value = {Limit}/>
                 
               </View>
@@ -235,6 +239,7 @@ export default function BreakAwayHesitate () {
             <TextInput
                 style={styles.inputStory}
                 //placeholder='100'
+                //onScroll = {true}
                 multiline = {true}
                 onChangeText={setStory}
                 value = {story}/>
@@ -344,21 +349,24 @@ const styles = StyleSheet.create({
       marginHorizontal:"5%",
       height: 40,
       borderColor: colors.mono_80,
-      borderWidth: 1
+      borderWidth: 1,
+      color: colors.mono_80
     },
     input2: {
       flex: 1,
       width: ScreenWidth*0.3,
       height: 40,
       borderColor: colors.mono_80,
-      borderWidth: 1
+      borderWidth: 1,
+      color: colors.function_100
     },
     input3: {
       flex: 1,
       width: ScreenWidth*0.5,
       height: 40,
       borderColor: colors.mono_80,
-      borderWidth: 1
+      borderWidth: 1,
+      color: colors.mono_80
     },
     inputStory:{
       margin: "5%",

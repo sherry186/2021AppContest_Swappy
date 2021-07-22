@@ -119,7 +119,7 @@ export default class BreakAwaySpaceDetail extends React.Component {
               radius={150}
               duration={2000}
               textStyle={{ fontWeight: '100', color: 'red' }}
-              maxValue={100}
+              maxValue={LEVELPOINTS}
             />
         </View>
         <Text>猶豫區</Text>
