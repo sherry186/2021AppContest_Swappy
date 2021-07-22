@@ -104,7 +104,7 @@ export default class BreakAwaySpaceDetail extends React.Component {
       <View style={{ flex: 1, alignItems: 'center'}}>
 
           <View style = {{flexDirection: 'row', height: 30, width: '100%',justifyContent:'center', alignItems:'center', backgroundColor: "transparent"}}>       
-                <Text style = {{ fontSize: 30, fontWeight:'bold', color: colors.function_100}}>{spaceName}</Text>
+                <Text style = {{ fontSize: 30, fontWeight:'bold', color: colors.function_100}}>{spaceName.toUpperCase()}</Text>
           </View>
 
           <ScrollView style = {{flex: 9, height: "90%",alignContent:'center', width: "100%", }}>
