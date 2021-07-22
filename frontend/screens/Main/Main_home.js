@@ -1,5 +1,4 @@
-import * as React from 'react';
-
+import React, { useState, useEffect } from 'react';
 import {View,ScrollView, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { SearchBar } from 'react-native-elements';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
@@ -24,24 +23,25 @@ const contains = (data1, data2, data3, query) => {
 
 
 
-export default class Main_HOME extends React.Component {
+const Main_HOME = () => {
 
-  state = {
-    search: '',
-    data: [],
-    fullData: [],
-  };
+  // state = {
+  //   search: '',
+  //   data: [],
+  //   fullData: [],
+  // };
+  const [search, setSearch] = useState('');
+  const [data, setData] = useState([]);
+  const [fullData, setFullData] = useState([]);
 
-  static navigationOptions = {
-    title: 'Main_HOME',
-  }
+ 
 
-  handleSearch = (search) => {
+  const handleSearch = (se) => {
     console.log("search", search)
-    const data = _.filter(this.state.fullData, post => {
-      return contains(post.person, post.title, post.post, search)
+    const data = _.filter(fullData, post => {
+      return contains(post.person, post.title, post.post, se)
     })
-    this.setState({ data,  search});
+    this.setState({ data,  se});
   };
 
   handleCollected = (id) =>{

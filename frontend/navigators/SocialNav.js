@@ -6,7 +6,7 @@ import Main from './MainNav';
 import MyCollection from './MyCollectionNav';
 
 const SocialTab = createMaterialTopTabNavigator();
-
+import colors from "../config/colors";
 function SocialTabs(){
         const insets = useSafeAreaInsets();
     return(  
@@ -14,20 +14,40 @@ function SocialTabs(){
         <SocialTab.Navigator
             initialRouteName="Main"
             tabBarOptions={{
-                activeTintColor: "#e91e63",
-                labelStyle: { fontSize: 12 },
-                style: { backgroundColor: 'white', marginTop: insets.top}
+                showLabel: false,
+                showIcon: true,
+                indicatorStyle:{color: colors.function_100},
+                
+                style: { 
+                    marginTop:12,
+                    elevation: 0,
+                    top: 63,
+                    left: 79,
+                    width: 252,
+                    height: 40,
+                    backgroundColor: 'transparent',
+                }
              }}
         >   
             <SocialTab.Screen 
                 name = "Main"
                 component = {Main}
-                options={{ tarBarLabel: 'MainNav'}}
+                options={{ 
+                    tabBarIcon:({focused})=>(
+                        <View style =  {{display: 'flex', right: 10, width: 100,}}>
+                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20,}}>全部</Text>
+                        </View>
+                      )}}
             />
             <SocialTab.Screen 
                 name = "My Collection"
                 component = {MyCollection}
-                options={{ tarBarLabel: 'MyCollection'}}
+                options={{ 
+                    tabBarIcon:({focused})=>(
+                        <View style =  {{display: 'flex', right: 10, width: 100,}}>
+                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20,}}>收藏</Text>
+                        </View>
+                      )}}
             />
         </SocialTab.Navigator>
     )
