@@ -88,7 +88,7 @@ function GeneralDetailsScreen ({ route, navigation }) {
         <View style = {{flex: 10, backgroundColor: colors.mono_40, width: "100%", alignItems: 'center' }}>
             <Image
               style = {{flex: 5, height: "50%", width: "80%"}}
-              source = {require('../../assets/general/商品呈現.png')}
+              source = {image? {uri: image} : require('../../assets/general/商品呈現.png')}
             />
             <View style = {{flex: 0.6, backgroundColor: colors.mono_40, width:"100%", flexDirection: 'row'}}>
               <View style = {styles.margin}></View>

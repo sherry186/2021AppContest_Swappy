@@ -28,14 +28,18 @@ import { useMutation,  gql } from '@apollo/client';
 
 let ScreenWidth = Dimensions.get("window").width;
 
-const CREATE_GENERALITEM = gql`
-  mutation createGeneralItem ($title: String!, $description: String!, $category: String!, $exchangeMethod: String!) {
+
+
+  const CREATE_GENERALITEM = gql`
+  mutation createGeneralItem ($title: String!, $description: String!, $category: String!, $exchangeMethod: String!, $image: String) {
     createGeneralItem(input: {
       title: $title
       description: $description
       category: $category
       exchangeMethod: $exchangeMethod
+      image: $image
     }) {
+      id
       owner {
         username
         id
@@ -176,7 +180,16 @@ const General_ADD = () => {
     //     (txObj, error) => console.log('Error', error))
     // })
     //Navigate back to home page
-    createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod}});
+    
+    if(image.length == 0) {
+      createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod}});
+    } else {
+      for (let i = 0; i < image.length; i++) {
+        console.log(typeof(image[i].uri));
+        createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod, image: image[i].uri}});
+      }
+    }
+    
     navigation.navigate('General');
   } 
 

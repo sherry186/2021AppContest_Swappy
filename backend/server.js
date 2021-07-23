@@ -364,6 +364,7 @@ const resolvers = {
                 description: input.description, 
                 category: input.category, 
                 exchangeMethod: input.exchangeMethod, 
+                image: input.image,
                 owner: user,
             }
 
