@@ -49,7 +49,9 @@ export default class BreakAway extends React.Component {
   }
 
 
-  renderSpace = ({ item }) => (
+  renderSpace = ({ item }) => {
+    //console.log('space',item);
+    return (
     //console.log(this.props.navigation);
     <TouchableOpacity
         onLongPress = {() => this.handleDelete(item)}
@@ -69,7 +71,7 @@ export default class BreakAway extends React.Component {
       
     </TouchableOpacity> 
       
-  );
+  )};
 
   getSpaceName = (spaceId) => {
     if(spaceId == 0) {
@@ -81,9 +83,9 @@ export default class BreakAway extends React.Component {
         tx.executeSql('SELECT spaceName FROM MySpaces WHERE id = ? LIMIT 1', 
         [spaceId],
         (txObj, resultSet) => {
-            //console.log('Success', resultSet);
-            let spaceName = resultSet.rows._array[0].spaceName;
-            //console.log(spaceName);
+            console.log('Success', resultSet);
+            let spaceName = resultSet.rows._array[0]?.spaceName;
+            console.log('spaceName',spaceName);
             this.setState({
               spaceName,
             });
@@ -122,13 +124,13 @@ export default class BreakAway extends React.Component {
   
 
   renderImage = ({ item }) => {
-    console.log(item);
+    //console.log('image', item);
     this.getSpaceName(item.id);
 
     return (
     
     <TouchableOpacity
-      onPress = {() => this.props.navigation.navigate("BreakAwayItemDetail", {itemId: item.id, title: item.title, source: item.image, spaceId: item.spaceName, spaceName: this.state.spaceName, story: item.story, uploadDate: item.uploadDate})} 
+      onPress = {() => this.props.navigation.navigate("BreakAwayItemDetail", {itemId: item.id, title: item.title, source: item.image, spaceId: item.spaceName, spaceName: item.spaceName, story: item.story, uploadDate: item.uploadDate})} 
       style={{width:ScreenWidth* 0.3, height: ScreenWidth* 0.3, margin:ScreenWidth* 0.03, backgroundColor:'red'}}
       >
       <Image 
@@ -152,7 +154,7 @@ export default class BreakAway extends React.Component {
             this.setState({
               spaceData: spacesData,
             });
-            console.log(this.state.spaceData);
+            //console.log(this.state.spaceData);
     },
         (txObj, error) => console.log('Error', error))
     });
