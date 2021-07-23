@@ -6,6 +6,7 @@ import {
     TextInput,
     TouchableOpacity,
     Dimensions,
+    Image,
     Switch} from 'react-native';
 import { useState, useEffect } from 'react';
 import  { useNavigation } from '@react-navigation/core';
@@ -100,13 +101,16 @@ const Main_ADD = () => {
       </View>
          
 
-      <TouchableOpacity
-          title = 'Submit'
-          onPress={handlesubmit}
-          style = {styles.item}>
-          <Text
-            style = {styles.buttonText}>Submit</Text>
-      </TouchableOpacity>
+      <View style = {styles.uploadContainer}>
+              <TouchableOpacity
+                  title = 'Submit'
+                  onPress={handlesubmit}
+                  style = {styles.item}>
+                  <Image
+                    style = {{height: 70, width:70,}} 
+                    source = {require('../../assets/breakAway/upload.png')}/>
+              </TouchableOpacity>
+          </View>
     </View>
   )
 }
@@ -115,6 +119,14 @@ export default Main_ADD;
 
 
 const styles = StyleSheet.create({
+  uploadContainer:{
+    flex:1,
+    justifyContent:'center',
+    height:"100%",
+    backgroundColor:"transparent",  
+    alignItems:'center',
+    justifyContent:'center',    
+  },
   title: {
     margin:15,
     height: 60,
@@ -145,12 +157,12 @@ const styles = StyleSheet.create({
     // justifyContent: 'center'
     paddingTop: 23
   },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
+  // item: {
+  //   backgroundColor: '#f9c2ff',
+  //   padding: 20,
+  //   marginVertical: 8,
+  //   marginHorizontal: 16,
+  // },
   buttonText: {
     //color: '#fff',
     fontSize: 15,
@@ -163,5 +175,14 @@ const styles = StyleSheet.create({
     marginRight: ScreenWidth*0.05,
     textAlign: 'right',
     fontWeight: 'bold',
+  },
+  item: {
+    position:'absolute',
+    top: ScreenWidth*0.4,
+    height:70,
+    width:70,
+    alignItems: 'center',
+    justifyContent: 'center',
+    
   },
 });
