@@ -119,22 +119,7 @@ const Main_HOME = () => {
       
           
   )};
-
-  // useEffect(() => {
-  //   const posts = SocialItems
-  //   let arr = posts.map((item, index)=>{
-  //     item.collected = false
-  //     return {...item}
-  //   })
-
-  //   setData(arr);
-  //   setFullData(SocialItems);
-  //   // this.setState({
-  //   //   data: arr,
-  //   //   fullData: SocialItems,
-  //   // });
-  // }, []);
-  
+ 
   
 
   return(
