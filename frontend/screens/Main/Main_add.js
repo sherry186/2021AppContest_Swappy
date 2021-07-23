@@ -6,106 +6,106 @@ import {
     TextInput,
     TouchableOpacity,
     Switch} from 'react-native';
+import { useState, useEffect } from 'react';
+import  { useNavigation } from '@react-navigation/core';
 
 import SocialItems from '../../Data/SocialItems';
 import Social from '../../navigators/SocialNav';
+import { offsetLimitPagination } from '@apollo/client/utilities';
 
-export default class Main_ADD extends React.Component {
+import { useQuery, useMutation,  gql } from '@apollo/client';
 
-  static navigationOptions = {
-    title: 'Main_ADD',
+const CREATE_POST = gql`
+mutation createPost ($title: String!, $description: String!, $hideUser: Boolean!) {
+  createPost(title: $title, description:$description, hideUser: $hideUser) {
+    id
+    title
+    description
+    author {
+      username
+      id
+    }
   }
-  constructor(props) {
-    super(props);
-    this.label = {false: 'off', true: 'on'};
-    this.state = { 
-      title: "",
-      article: "",
-      hide: false, 
-       };
-  }
+}`;
 
-  handlesubmit =() =>{
+const Main_ADD = () => {
+  const [title, setTitle] = useState('');
+  const [article, setArticle] = useState('');
+  const [hide, setHide] = useState(false);
+
+  const navigation = useNavigation();
+
+  const [createPost, { data, error, loading }] = useMutation(CREATE_POST);
+
+  const handlesubmit =() =>{
     
-    nextId = SocialItems.length.toString
-    if(this.state.hide == false)
-    {
-        item = {id: nextId, 
-          person: 'Sylvia', 
-          title: this.state.title,
-          post: this.state.article }
+    createPost({variables: {title: title, description: article, hideUser: hide}});
+    // nextId = SocialItems.length.toString;
+    // if(hide == false)
+    // {
+    //     item = {id: nextId, 
+    //       person: 'Sylvia', 
+    //       title: title,
+    //       post: article }
         
-        SocialItems.push(item)
-    }
-    else
-    {
-        item = {id: nextId, 
-          person: 'SomeBody', 
-          title: this.state.title,
-          post: this.state.article }
+    //     SocialItems.push(item)
+    // }
+    // else
+    // {
+    //     item = {id: nextId, 
+    //       person: 'SomeBody', 
+    //       title: title,
+    //       post: article }
       
-        SocialItems.push(item)
-    }
-    
-    this.props.navigation.goBack()
+    //     SocialItems.push(item)
+    // }
+
+    navigation.goBack()
   } 
-  
-  handleupload = () =>{
+
+  const handleupload = () =>{
 
   }
 
+  return(
+    <View style={styles.container}>
+      <TextInput
+          style={styles.title}
+          placeholder="Title"
+          onChangeText={(text) => setTitle(text)}
+          value = {title}/>
 
-  render() {
-    const{ navigate } = this.props.navigation;
+      <TextInput
+          style={styles.post}
+          placeholder="What's on your mind?"
+          multiline = {true}
+          onChangeText={(text) => setArticle(text)}
+          value = {article}/>
+      <Text></Text>
+      <Text></Text>
 
-    
+      <Switch
+          style = {styles.switch}
+          onValueChange = {(value)=>{setHide(value)}}
+          value = {hide}
+          />
+        <Text 
+          style = {styles.Text}>
+            hide name {hide? 'on':'off'}</Text> 
 
-    return(
-      <View style={styles.container}>
-        <TextInput
-            style={styles.title}
-            placeholder="Title"
-            onChangeText={(text) => this.setState({title: text})}
-            value = {this.state.title}/>
-
-        <TextInput
-            style={styles.post}
-            placeholder="What's on your mind?"
-            multiline = {true}
-            onChangeText={(text) => this.setState({article: text})}
-            value = {this.state.article}/>
-        <Text></Text>
-        <Text></Text>
-
-        <Switch
-            style = {styles.switch}
-            onValueChange = {(value)=>{this.setState({hide : value})}}
-            value = {this.state.hide}
-            />
-          <Text 
-            style = {styles.Text}>
-              hide name {this.label[this.state.hide]}</Text> 
-
-        <TouchableOpacity
-            title = 'upload'
-            onPress={this.handleupload}
-            style = {styles.item}>
-            <Text
-              style = {styles.buttonText}>Upload</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-            title = 'Submit'
-            onPress={this.handlesubmit}
-            style = {styles.item}>
-            <Text
-              style = {styles.buttonText}>Submit</Text>
-        </TouchableOpacity>
-      </View>
-    )
-  }
-
+      <TouchableOpacity
+          title = 'Submit'
+          onPress={handlesubmit}
+          style = {styles.item}>
+          <Text
+            style = {styles.buttonText}>Submit</Text>
+      </TouchableOpacity>
+    </View>
+  )
 }
+
+export default Main_ADD;
+
 
 const styles = StyleSheet.create({
   title: {

@@ -14,6 +14,8 @@ import colors from '../../config/colors';
 
 import { useQuery, useMutation,  gql } from '@apollo/client';
 
+
+
 const RENDER_REQUESTS = gql`
 query getRequestingRequests{
   getRequestingRequests {
@@ -56,7 +58,6 @@ const Notification_requesting = () => {
  
   const { data, error, loading } = useQuery(RENDER_REQUESTS, {pollInterval: 500});
 
-  console.log('requesintgn page');
   // console.log(loading, data, error);
   
 

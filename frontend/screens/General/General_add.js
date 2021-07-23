@@ -176,10 +176,7 @@ const General_ADD = () => {
     //     (txObj, error) => console.log('Error', error))
     // })
     //Navigate back to home page
-    createItem({
-      variables: { 
-        title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod
-        }});
+    createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod}});
     navigation.navigate('General');
   } 
 

@@ -38,7 +38,7 @@ export default class TopBarNavigator extends React.Component{
                     options={{ 
                         tabBarIcon:({focused})=>(
                             <View style =  {{display: 'flex', right: 25, width: 100,}}>
-                                <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20,}}>General</Text>
+                                <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20,}}>一般換物</Text>
                             </View>
                           )}}
                 />
@@ -48,7 +48,7 @@ export default class TopBarNavigator extends React.Component{
                     options={{ 
                         tabBarIcon:({focused})=>(
                             <View style =  {{display: 'flex', right: 25, width: 100,}}>
-                                <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20,}}>Group</Text>
+                                <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20,}}>群組換物</Text>
                             </View>
                           )}}
                 />

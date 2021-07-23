@@ -43,6 +43,8 @@ const typeDefs = gql`
         getRequestingRequests: [Request]!
         getRequest(id: ID!):  Request!
         getRequestsByStatus(status: Status!): [Request]!
+        getPosts: [Post]!
+        getMyCollections: [Post]!
     }
 
     type Mutation {
@@ -56,6 +58,12 @@ const typeDefs = gql`
         updateStatus(id: ID!, status: Status!): Boolean!
         removeRequest(id: ID!): Boolean!
         updateRequestersItem(itemId: ID!, requestId: ID!): Boolean!
+
+        createPost(title: String!, description: String!, hideUser: Boolean!): Post!
+        postComment(postId: ID!, comment: String!): Boolean!
+
+        addToCollection(postId: ID!): Boolean!
+        removeFromCollection(postId: ID!): Boolean!
     }
 
     input SignUpInput {
@@ -91,6 +99,7 @@ const typeDefs = gql`
         phone: String!
         password: String!
         avatar: String
+        postsCollection: [Post]
     }
 
     type GeneralItem {
@@ -112,6 +121,19 @@ const typeDefs = gql`
         status: Status!
     }
 
+    type Post {
+        id: ID!
+        title: String!
+        description: String!
+        author: User
+        comments: [Comment]!
+    }
+
+    type Comment {
+        user: User!
+        comment: String!
+    }
+
     enum Status {
         WAITING
         FAIL
@@ -125,6 +147,12 @@ const typeDefs = gql`
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
     Query: {
+        getMyCollections: async (_, __, { user }) => {
+            return user.postsCollection ? user.postsCollection : null;
+        },
+        getPosts: async (_, __, {db}) => {
+            return await db.collection('Posts').find().toArray();
+        },
         generalItemsList: async (_, __, {db}) => {
             return await db.collection('GeneralItems').find().toArray();
         },
@@ -180,6 +208,51 @@ const resolvers = {
 
     },
     Mutation: {
+        removeFromCollection: async (_, { postId }, { db, user }) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+            const post = await db.collection('Posts').findOne({_id: ObjectId(postId)});
+            await db.collection('Users').updateOne({ _id : ObjectId(user._id) },{ $pull: { postsCollection: post }});
+            return true;
+        },
+        addToCollection: async (_, { postId }, { db, user }) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+            const post = await db.collection('Posts').findOne({_id: ObjectId(postId)});
+            await db.collection('Users').updateOne({ _id : ObjectId(user._id) },{ $push: { postsCollection: post }});
+            return true;
+        },
+        postComment:　async (_, { postId, comment }, { db, user }) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+            const _comment = {
+                user: user,
+                comment: comment
+            }
+            await db.collection('Posts').updateOne({ _id : ObjectId(postId) },{ $push: { comments: _comment }});
+            return true;
+        },
+        createPost: async (_, { title, description, hideUser }, { db, user }) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+            const newPost = {
+                title: title,
+                description: description,
+                author: hideUser? null : user,
+                comments: [], 
+            }
+
+            const result = await db.collection('Posts').insertOne(newPost);
+            
+            return  {
+                ...newPost,
+                id: result.insertedId
+            }
+        },
         updateRequestersItem: async (_, { itemId, requestId }, { db, user }) => {
             if(!user) {
                 throw new Error('AUthentication Error. Please sign in');
@@ -326,6 +399,9 @@ const resolvers = {
         id: ({ _id, id }) => _id || id,
     },
     Request: {
+        id: ({ _id, id }) => _id || id,
+    },
+    Post: {
         id: ({ _id, id }) => _id || id,
     },
   };

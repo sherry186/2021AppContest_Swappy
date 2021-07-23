@@ -50,21 +50,11 @@ const contains = (data, query) => {
 }
 
 
-//create your forceUpdate hook
-function useForceUpdate(){
-  const [value, setValue] = useState(0); // integer state
 
-  // setItems(data.generalItemsList);
-  // setAllItems(data.generalItemsList);
-  return () => setValue(value + 1); // update the state to force render
-}
+
 
 const General_HOME = () => {
-  // call your hook here
-  const forceUpdate = useForceUpdate();
 
-  // const [, updateState] = React.useState();
-  // const forceUpdate = React.useCallback(() => updateState({}), []);
   console.log("render");
 
   const [search, setSearch] = useState('');
@@ -74,7 +64,6 @@ const General_HOME = () => {
   const { data, error, loading } = useQuery(GENERAL_ITEMS, {pollInterval: 500});
 
   const windowHeight = useWindowDimensions().height;
-
 
 
   useEffect(() => {
