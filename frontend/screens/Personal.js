@@ -65,7 +65,7 @@ export default class Personal extends React.Component {
           >
             <Image 
                 style={styles.image}
-                source={require('../assets/personal/持有物品清單.jpg')}/>
+                source={require('../assets/personal/持有物品清單.png')}/>
             <Text style={styles.buttonText}>持有物品清單</Text>
           </TouchableOpacity>
           <TouchableOpacity

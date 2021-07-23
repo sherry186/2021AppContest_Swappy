@@ -1,74 +1,104 @@
 import { styleSheets } from 'min-document';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Text,
     StyleSheet,
     View,
     TouchableOpacity, 
     TextInput,
-    ScrollView} from 'react-native';
+    ScrollView,
+    useWindowDimensions,
+    SafeAreaView,
+    FlatList,
+    Image,
+    Dimensions,
+    KeyboardAvoidingView,
+    } from 'react-native';
 
+import * as ImagePicker from 'expo-image-picker';
+import colors from '../../config/colors';
 
+let ScreenWidth = Dimensions.get("window").width;
 
+function GroupAddItem ({route, navigation}) {
 
-export default class GroupAddItem extends React.Component {
+  const [Gname, setGname] = useState('');
+  const [Discription, setDiscription] = useState('');
+  const [Ihave, setIhave] = useState([]);
+  const [dummyData, setDummyData] = useState([{way: 'faceToFace'},
+                                               {way: 'byPost'}]);
+  const [image, setImage] = useState([]);
 
-  static navigationOptions = {
-    title: 'GroupAddItem',
-  }
+  const windowHeight = useWindowDimensions().height;
 
+  useEffect(()=>{
+     let arr = dummyData.map((item, index)=>{
+       item.isSelected = false
+       return {...item};
+     })
+     const {tags} = route.params;
+     let arr2 = tags.map((item, index)=>{
+       item.isSelected = false
+       return {...item};
+     })
+     const tags2 = tags
+     let arr3 = tags2.map((item, index)=>{
+       item.isSelected = false
+       return {...item}
+     })
+
+    setDummyData(arr);
+    setIhave(arr2);
+
+    // this.setState({dummyData: arr, Ihave: arr2, Iwant: arr3});
+     console.log('arr data ==>', arr)
+  }, []);
+
+  const pickImage = async () => {
+    if(image.length < 5)
+    {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [3, 3],
+        quality: 1,
+      });
   
-
-  constructor(props) {
-    super(props);
-    this.state = { 
-      Gname: '', 
-      Discription: '', 
-      Ihave: [],
-      Iwant: [],
-      dummyData: [
-        {way: 'faceToFace'},
-        {way: 'byPost'},
-      ]};
-  }
-
-  componentDidMount(){
-    let arr = this.state.dummyData.map((item, index)=>{
-      item.isSelected = false
-      return {...item};
-    })
-    const {tags} = this.props.route.params
-    let arr2 = tags.map((item, index)=>{
-      item.isSelected = false
-      return {...item};
-    })
-
-    const tags2 = tags
-    let arr3 = tags2.map((item, index)=>{
-      item.isSelected = false
-      return {...item}
-    })
-    
-    this.setState({dummyData: arr, Ihave: arr2, Iwant: arr3});
-    console.log('arr data ==>', arr)
-  }
-
-  selectionHandlerSort2 = (ind) => {
-    //alert("jie")
-    const {Gname, Discription, Ihave, Iwant, dummyData} = this.state;
-    let arr3 = Iwant.map((item, index)=>{
-      if(ind == index){
-        item.isSelected = !item.isSelected;
+      if (!result.cancelled) {
+        
+        setImage([...image, {id: image.length, uri: result.uri}]);
       }
-      return {...item}
-    })
-    console.log("selection handler ==>", arr3)
-    this.setState({Iwant: arr3})
-  }
+    }
+    else
+    {
+      alert("最多只能5張照片喔qq")
+    }
+    
+  };
 
-  selectionHandlerSort = (ind) => {
-    //alert("jie")
-    const {Gname, Discription, Ihave, Iwant, dummyData} = this.state;
+  const renderImage = ({ item }) => (
+    <SafeAreaView style = {styles.imageContainer}>
+      <Image 
+        style={styles.image}
+        source={{uri: item.uri}}/>
+    </SafeAreaView> 
+  );
+
+  useEffect(() => {
+    //setData(BreakAwaySpace);
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
+    
+  },[]);
+
+  const selectionHandlerSort = (ind) => {
+    
     let arr2 = Ihave.map((item, index)=>{
       if(ind == index){
         item.isSelected = !item.isSelected;
@@ -76,150 +106,154 @@ export default class GroupAddItem extends React.Component {
       return {...item}
     })
     console.log("selection handler ==>", arr2)
-    this.setState({Ihave: arr2})
+    setIhave(arr2)
   }
 
-  selectionHandler = (ind) => {
+  const selectionHandler = (ind) => {
     //alert("jie")
-    const {Gname, Discription, Ihave, Iwant, dummyData} = this.state;
+    //const {Gname, Discription, Ihave, Iwant, dummyData} = this.state;
     let arr1 = dummyData.map((item, index)=>{
       if(ind == index){
         item.isSelected = !item.isSelected;
       }
       return {...item}
     })
-    console.log("selection handler1 ==>", arr1)
-    this.setState({dummyData: arr1})
+    //console.log("selection handler1 ==>", arr1)
+    setDummyData(arr1)
   }
 
-  handlesubmit =() =>{
-    
-    this.props.navigation.goBack()
+  const handlesubmit =() =>{
+    navigation.goBack()
   } 
 
-  handleupload = () =>{
+  const handleupload = () =>{
 
   }
 
-  render() {
-    const{ navigate } = this.props.navigation;
-    //const{ tags } = this.props.route.params;
+  
     return(
-      <View style={styles.container}>
-        <Text style={styles.buttonText}>Item Name</Text>
-        <TextInput
-            style={styles.input}
-            placeholder='ItemName'
-            onChangeText={(text) => this.setState({Gname: text})}
-            value = {this.state.Gname}/>
+      <View style={{flex:1, flexDirection: 'column',  }}>
+        <KeyboardAvoidingView style={{height: windowHeight *0.15 ,flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+          <View style = {styles.flatListContainer}>
+              <FlatList
+                data={image}
+                renderItem={renderImage}
+                horizontal = {true}
+              />
+          </View> 
 
-        <Text style={styles.buttonText}>Discription</Text>
-        <TextInput
-            style={styles.input}
-            placeholder='second hand, not brandnew'
-            onChangeText={(text) => this.setState({Discription: text})}
-            value = {this.state.Discription}/>
+          <View style = {styles.buttonAdd}>
+          <TouchableOpacity 
+              style={styles.buttonAddContainer}
+              onPress={pickImage}
+              >
+              <Image
+                style = {{height:ScreenWidth*0.05, width: ScreenWidth*0.05}}
+                source={require("../../assets/breakAway/add.png")}/>
+          </TouchableOpacity>
+          </View>
+           
+      </KeyboardAvoidingView>
+       {/* duplicate from breakAwayHesitate */} 
 
-        <Text style={styles.buttonText}>I have</Text>
-        <ScrollView horizontal={true} style={{flexDirection: 'row'}}>
-          {
-            this.state.Ihave.map((item, index)=>{
-              return(
-                <TouchableOpacity
-                  onPress={()=>this.selectionHandlerSort(index)}
-                  title = 'sort'
-                  //onPress={this.handleupload}
-                  style = {item.isSelected ? styles.item : styles.itemS}>
-                  <Text style = {styles.buttonText}>{item.name}</Text> 
-                </TouchableOpacity>
-              );
-            })
-          }
-        </ScrollView>
-
-        <Text style={styles.buttonText}>I want</Text>
-        <ScrollView horizontal={true} style={{flexDirection: 'row'}}>
-          {
-            this.state.Iwant.map((item, index)=>{
-              return(
-                <TouchableOpacity
-                  onPress={()=>this.selectionHandlerSort2(index)}
-                  title = 'sort2'
-                  //onPress={this.handleupload}
-                  style = {item.isSelected ? styles.item : styles.itemS}>
-                  <Text style = {styles.buttonText}>{item.name}</Text> 
-                </TouchableOpacity>
-              );
-            })
-          }
-        </ScrollView>
-
-
-        <Text style={styles.buttonText}>method: </Text>
-        <View style={{flexDirection: 'row'}}>
-          {
-            this.state.dummyData.map((item, index)=>{
-              return(
-                <TouchableOpacity
-                  onPress={()=>this.selectionHandler(index)}
-                  title = 'method'
-                  //onPress={this.handleupload}
-                  style = {item.isSelected ? styles.item : styles.itemS}>
-                  <Text style = {styles.buttonText}>{item.way}</Text> 
-                </TouchableOpacity>
-              );
-            })
-          }
-        </View>
-
-        
+      <KeyboardAvoidingView style = {styles.line}></KeyboardAvoidingView>
 
 
 
-        <TouchableOpacity
-            title = 'upload'
-            onPress={this.handleupload}
-            style = {styles.item}>
-            <Text
-              style = {styles.buttonText}>Upload</Text>
-        </TouchableOpacity>
+      <ScrollView >
+          <View style ={styles.textContainer}>
+              <Text style={styles.text}>交付方式 </Text>
+          </View>
 
-        <TouchableOpacity
-            title = 'Submit'
-            onPress={this.handlesubmit}
-            style = {styles.item}>
-            <Text
-              style = {styles.buttonText}>Submit</Text>
-        </TouchableOpacity>
+          <View style={{flexDirection: 'row'}}>
+            {
+              dummyData.map((item, index)=>{
+                return(
+                  <TouchableOpacity
+                    onPress={()=>selectionHandler(index)}
+                    title = 'method'
+                    //onPress={this.handleupload}
+                    style = {{flexDirection:'row',
+                    marginHorizontal: ScreenWidth*0.05,
+                    marginVertical:ScreenWidth*0.03,
+                    backgroundColor: item.isSelected? colors.function_100: colors.mono_60,
+                    width: ScreenWidth*0.3,
+                    height: ScreenWidth*0.1,
+                    alignItems:'center',
+                    justifyContent: 'center',
+                    borderRadius: ScreenWidth*0.02,}}>
+                    <Text style = {styles.buttonText}>{item.way}</Text> 
+                  </TouchableOpacity>
+                );
+              })
+            }
+          </View>
+          <View style ={styles.textContainer}>
+            <Text style={styles.text}>物品說明</Text>
+          </View>
 
-        {/* <Button
-            title = 'Go to home screen'
-            onPress={() => navigate('Home')}/> */}
-      </View>
-    )
-  }
+          <View style = {styles.textInputContainer}>
+            <TextInput
+                style={styles.input}
+                multiline ={true}
+                onChangeText={(text) => setDiscription(text)}
+                value = {Discription}/>
+          </View>
+
+          <View style ={styles.textContainer}>
+            <Text style={styles.text}>物品種類</Text>
+          </View>
+
+
+            <ScrollView horizontal={true} style={{flexDirection: 'row'}}>
+              {
+                Ihave.map((item, index)=>{
+                  return(
+                    <TouchableOpacity
+                      onPress={()=>selectionHandlerSort(index)}
+                      title = 'sort'
+                      //onPress={this.handleupload}
+                      style = {{
+                        flexDirection:'row',
+                        marginHorizontal: ScreenWidth*0.05,
+                        marginVertical:ScreenWidth*0.03,
+                        backgroundColor: item.isSelected? colors.function_100: colors.mono_60,
+                        width: ScreenWidth*0.3,
+                        height: ScreenWidth*0.1,
+                        alignItems:'center',
+                        justifyContent: 'center',
+                        borderRadius: ScreenWidth*0.02,
+                        }}>
+                      <Text style = {styles.buttonText}>{item.name}</Text> 
+                    </TouchableOpacity>
+                  );
+                })
+              }
+            </ScrollView>
+
+
+                
+            <View style = {styles.uploadContainer}>
+              <TouchableOpacity
+                  title = 'Submit'
+                  onPress={handlesubmit}
+                  style = {styles.item}>
+                  <Image
+                    style = {{height: 70, width:70,}} 
+                    source = {require('../../assets/breakAway/upload.png')}/>
+              </TouchableOpacity>
+          </View>
+
+      </ScrollView>
+    </View>
+  )
+  // }
 
 }
 
+export default GroupAddItem;
+
 const styles = StyleSheet.create({
-  input: {
-    margin: 15,
-    height: 40,
-    borderColor: '#7a42f4',
-    borderWidth: 1
-  },
-  container: {
-    // flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center'
-    paddingTop: 23
-  },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
   itemS: {
     backgroundColor: '#7a42f4',
     padding: 20,
@@ -229,10 +263,108 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
   },
+  wayS: {
+    backgroundColor: colors.mono_60,
+    width: "20%",
+    height: 25,
+    margin: 5,
+    borderRadius:2,
+    justifyContent:'center',
+    alignItems:'center', 
+  },
+  waySd: {
+    backgroundColor: colors.function_100,
+    width: "20%",
+    height: 25,
+    margin: 5,
+    borderRadius:2,
+    justifyContent:'center',
+    alignItems:'center',
+  },
   buttonText: {
-    //color: '#fff',
-    fontSize: 15,
-    left: 5,
-    fontWeight: 'bold',
+    fontSize: ScreenWidth*0.03,
+    color:colors.mono_40,
+    fontWeight: '900',
+  },
+  item: {
+    height:70,
+    width:70,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image:{
+    width: ScreenWidth*0.2, 
+    height: ScreenWidth*0.2,  
+  },
+  imageContainer:{
+    flex:1, 
+    left: 10, 
+    margin : 10, 
+    justifyContent:'center', 
+    alignItems:'center', 
+    flexDirection: 'row',
+  },
+  flatListContainer:{
+    flex:4, 
+    backgroundColor: "transparent",
+    justifyContent: 'center',
+    alignItems:'center',      
+  },
+  buttonAdd: {
+    flex: 1.2,
+    height: "100%",
+    backgroundColor: "transparent",
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonAddContainer: {
+    borderColor: colors.mono_80,
+    borderWidth: 1,
+    width: ScreenWidth*0.2,
+    height: ScreenWidth*0.2,
+    backgroundColor: "transparent",
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  line: {
+    height: 1,
+    backgroundColor: colors.function_100,
+    width: "90%",
+    alignSelf:"center",
+  },
+  textContainer:{
+    flex:1,
+    justifyContent:'center',
+    backgroundColor:'transparent',      
+  },
+  textInputContainer:{
+    flex:1,
+    alignItems:'center',
+    //justifyContent:'center',
+    flexDirection:'row',
+    height:"100%",
+    width: "100%",
+    backgroundColor: "transparent",      
+  },
+  uploadContainer:{
+    flex:1,
+    justifyContent:'center',
+    height:"100%",
+    backgroundColor:"transparent",  
+    alignItems:'center',
+    justifyContent:'center',    
+  },
+  text:{
+    margin: "5%",
+    color: colors.mono_80,
+    fontWeight: "bold",
+  },
+  input:{
+    margin: "5%",
+    height: 150,
+    borderColor: colors.mono_80,
+    borderWidth: 1,
+    textAlignVertical: 'top',
+    width: "90%"
   },
 });
