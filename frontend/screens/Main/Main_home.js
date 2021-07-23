@@ -196,25 +196,30 @@ const Main_HOME = () => {
 
 export default Main_HOME;
 
-class FlatListComponent extends React.Component {
-  state = {
-    collected: false,
+function FlatListComponent(props)  {
+  // state = {
+  //   collected: false,
     
-  }
+  // }
+  const [collected, setCollected] = useState(null)
   
 
-  render() {
+  useEffect(() => {
+    setCollected(false);
+  }, []);
+
+  // render() {
     //const {navigation} = this.props
     //const navigation = useNavigation();
     return (
       <View style={styles.ChatC}>
            <TouchableOpacity
              style={styles.Chat}
-             onPress={() => this.props.navigation.navigate('MainDetail', {title: this.props.title, person: this.props.person, post: this.props.description, comment: this.props.comment, hideName: this.props.hideName})}
+             onPress={() => props.navigation.navigate('MainDetail', {title: props.title, person: props.person, post: props.description, comment: props.comment, hideName: props.hideName})}
             >
-                  <Text style={styles.post}>{this.props.title}</Text>
-                  <Text style={styles.person}>{this.props.hideName? "匿名" : this.props.person}</Text>
-                  <Text style={styles.person}>{this.props.description}</Text>
+                  <Text style={styles.post}>{props.title}</Text>
+                  <Text style={styles.person}>{props.hideName? "匿名" : props.person}</Text>
+                  <Text style={styles.person}>{props.description}</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={{width: 10,
@@ -224,23 +229,21 @@ class FlatListComponent extends React.Component {
                    top: 0, 
                    backgroundColor: 'transparent'} }
                 onPress={() => {
-                      const newCollected = !this.state.collected;
-                      this.setState({
-                          collected: newCollected,
-                    });
-                    console.log('status: ', this.state.st);
+                      const newCollected = !collected;
+                      setCollected(newCollected);
+                    //console.log('status: ', this.state.st);
                 
               }}
             >
                 <Image
                     style ={{width:10, 
                       height: 20, 
-                      tintColor: this.state.collected? colors.warning_80: colors.brown_40}}
+                      tintColor: collected? colors.warning_80: colors.brown_60}}
                     source={require('../../assets/Social/collect.png')}/>     
             </TouchableOpacity>
      </View>
     )
-  }
+  
 }
 
 

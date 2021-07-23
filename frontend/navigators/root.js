@@ -7,7 +7,7 @@ import GroupDetailsScreen from '../screens/Group/GroupDetail';
 import Group_ADD from '../screens/Group/Group_add';
 import Main_ADD from '../screens/Main/Main_add';
 import Tabs from './Bottom_tab';
-import BreakAwayADD from '../screens/BreakAway/BreakAwayADD';
+//import BreakAwayADD from '../screens/BreakAway/BreakAwayADD';
 import MainDetail from '../screens/Main/Main_detail';
 import BreakAwayHesitate from '../screens/BreakAway/BreakAwayHesitate';
 import GroupAddItem from '../screens/Group/GroupAddItem';
@@ -123,7 +123,20 @@ function Root() {
         <RootStack.Screen 
           name="MainAdd" 
           component={Main_ADD}
-          options={{headerShown: false}}
+          options={{
+            title: '',
+            cardStyle: {backgroundColor: colors.mono_40},
+            headerStyle: {
+                backgroundColor: "transparent",
+                elevation: 0,
+                shadowOpacity: 0, 
+            },
+            headerTintColor: colors.warning_80,
+            headerTitleStyle: {
+              backgroundColor:'transparent',
+              fontWeight: 'bold',
+            }, 
+          }}
          />
 
         <RootStack.Screen 
@@ -134,10 +147,10 @@ function Root() {
 
         
         {/*break away */}
-        <RootStack.Screen 
+        {/* <RootStack.Screen 
           name="BreakAwayADD" 
           component={BreakAwayADD}
-          options={{headerShown: false }}/>
+          options={{headerShown: false }}/> */}
         
         <RootStack.Screen 
           name="BreakAwayItemDetail" 

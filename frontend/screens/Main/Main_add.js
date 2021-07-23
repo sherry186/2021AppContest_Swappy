@@ -5,6 +5,7 @@ import {
     View, 
     TextInput,
     TouchableOpacity,
+    Dimensions,
     Switch} from 'react-native';
 import { useState, useEffect } from 'react';
 import  { useNavigation } from '@react-navigation/core';
@@ -12,8 +13,11 @@ import  { useNavigation } from '@react-navigation/core';
 import SocialItems from '../../Data/SocialItems';
 import Social from '../../navigators/SocialNav';
 import { offsetLimitPagination } from '@apollo/client/utilities';
-
+import colors from '../../config/colors';
 import { useQuery, useMutation,  gql } from '@apollo/client';
+import { color } from 'jimp';
+
+let ScreenWidth = Dimensions.get("window").width;
 
 const CREATE_POST = gql`
 mutation createPost ($title: String!, $description: String!, $hideUser: Boolean!) {
@@ -71,27 +75,30 @@ const Main_ADD = () => {
     <View style={styles.container}>
       <TextInput
           style={styles.title}
-          placeholder="Title"
+          placeholderTextColor ={colors.mono_80}
+          
+          placeholder="標題"
           onChangeText={(text) => setTitle(text)}
           value = {title}/>
 
       <TextInput
           style={styles.post}
-          placeholder="What's on your mind?"
+          placeholder="在想什麼嗎?"
           multiline = {true}
           onChangeText={(text) => setArticle(text)}
           value = {article}/>
       <Text></Text>
       <Text></Text>
-
+      <View style = {{flexDirection:'row', alignItems:'center'}}>
+      
       <Switch
           style = {styles.switch}
           onValueChange = {(value)=>{setHide(value)}}
           value = {hide}
           />
-        <Text 
-          style = {styles.Text}>
-            hide name {hide? 'on':'off'}</Text> 
+      <Text style = {styles.Text}>{hide? '匿名':'顯示名稱'}</Text>
+      </View>
+         
 
       <TouchableOpacity
           title = 'Submit'
@@ -111,19 +118,20 @@ const styles = StyleSheet.create({
   title: {
     margin:15,
     height: 60,
-    borderColor: '#7a42f4',
+    
+    borderColor: colors.mono_80,
     borderWidth: 1,
-    fontSize:40,
+    fontSize:20,
     paddingLeft: 10,
   },
   switch:{
-    marginRight: 350,
+    //marginRight: 350,
     marginVertical: 8,
   },
   post: {
     margin: 15,
     height: 200,
-    borderColor: '#7a42f4',
+    borderColor: colors.mono_80,
     borderWidth: 1,
     paddingLeft: 10,
     paddingTop: 10,
@@ -152,7 +160,7 @@ const styles = StyleSheet.create({
   Text: {
     //color: '#fff',
     fontSize: 15,
-    marginRight: 290,
+    marginRight: ScreenWidth*0.05,
     textAlign: 'right',
     fontWeight: 'bold',
   },
