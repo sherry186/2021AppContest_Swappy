@@ -16,10 +16,7 @@ function MyCollection() {
         component={MyCollection_HOME}
         options={{
           title:"",
-          headerStyle:{
-            backgroundColor: 'transparent',
-            height: 0
-          }
+          headerShown: false,
         }} />
       
       

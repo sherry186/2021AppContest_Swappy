@@ -145,7 +145,7 @@ const Main_HOME = () => {
 
       <TouchableOpacity 
         style={styles.button}
-        onPress={() => navigate('MainAdd')}>
+        onPress={() => navigation.navigate('MainAdd')}>
         <Image
             style = {styles.button}
             source = {require("../../assets/Social/add.png")}/>

@@ -31,8 +31,10 @@ function SocialTabs(){
         >   
             <SocialTab.Screen 
                 name = "Main"
+                
                 component = {Main}
                 options={{ 
+                    headerShown: false,
                     tabBarIcon:({focused})=>(
                         <View style =  {{display: 'flex', right: 10, width: 100,}}>
                             <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20,}}>全部</Text>
@@ -43,6 +45,7 @@ function SocialTabs(){
                 name = "My Collection"
                 component = {MyCollection}
                 options={{ 
+                    headerShown: false,
                     tabBarIcon:({focused})=>(
                         <View style =  {{display: 'flex', right: 10, width: 100,}}>
                             <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20,}}>收藏</Text>

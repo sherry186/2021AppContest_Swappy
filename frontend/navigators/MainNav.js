@@ -17,10 +17,8 @@ function Main() {
         component={Main_HOME}
         options={{
           title:"",
-          headerStyle:{
-            backgroundColor: 'transparent',
-            height: 0
-          }
+          headerShown: false,
+          
         }} />
     </MStack.Navigator>
   );
