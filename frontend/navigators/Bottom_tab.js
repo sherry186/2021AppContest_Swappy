@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 //import TopBarNavigator from './ggtab';  //dot dot slash is going up a path
 import Social from './SocialNav';
-import Personal from '../screens/Personal/Personal';
+import Personal from '../screens/Personal';
 import BreakAway from '../screens/BreakAway/BreakAway';
 import Home from "./Home_Nav";
 import colors from "../config/colors";

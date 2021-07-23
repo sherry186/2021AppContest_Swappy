@@ -21,7 +21,6 @@ function GroupDetailsScreen ({route, navigation}) {
   const { title, items, post, discription } = route.params;
 
   const handleback =() =>{
-        
     navigation.goBack()
   } 
 

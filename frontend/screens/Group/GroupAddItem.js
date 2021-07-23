@@ -1,74 +1,57 @@
 import { styleSheets } from 'min-document';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Text,
     StyleSheet,
     View,
     TouchableOpacity, 
     TextInput,
-    ScrollView} from 'react-native';
+    ScrollView,
+    Dimensions,
+    } from 'react-native';
 
 
+let ScreenWidth = Dimensions.get("window").width;
 
-
-export default class GroupAddItem extends React.Component {
-
-  static navigationOptions = {
-    title: 'GroupAddItem',
-  }
+function GroupAddItem ({route, navigation}) {
 
   
 
-  constructor(props) {
-    super(props);
-    this.state = { 
-      Gname: '', 
-      Discription: '', 
-      Ihave: [],
-      Iwant: [],
-      dummyData: [
-        {way: 'faceToFace'},
-        {way: 'byPost'},
-      ]};
-  }
+  const [Gname, setGname] = useState('');
+  const [Discription, setDiscription] = useState('');
+  const [Ihave, setIhave] = useState([]);
+  const [dummyData, setDummyData] = useState([{way: 'faceToFace'},
+                                               {way: 'byPost'}]);
 
-  componentDidMount(){
-    let arr = this.state.dummyData.map((item, index)=>{
-      item.isSelected = false
-      return {...item};
-    })
-    const {tags} = this.props.route.params
-    let arr2 = tags.map((item, index)=>{
-      item.isSelected = false
-      return {...item};
-    })
+  const [image, setImage] = useState([]);
+  
 
-    const tags2 = tags
-    let arr3 = tags2.map((item, index)=>{
-      item.isSelected = false
-      return {...item}
-    })
+  useEffect(()=>{
+     let arr = dummyData.map((item, index)=>{
+       item.isSelected = false
+       return {...item};
+     })
+     const {tags} = route.params;
+     let arr2 = tags.map((item, index)=>{
+       item.isSelected = false
+       return {...item};
+     })
+     const tags2 = tags
+     let arr3 = tags2.map((item, index)=>{
+       item.isSelected = false
+       return {...item}
+     })
+
+    setDummyData(arr);
+    setIhave(arr2);
+
+    // this.setState({dummyData: arr, Ihave: arr2, Iwant: arr3});
+     console.log('arr data ==>', arr)
+  }, []);
+
+
+  const selectionHandlerSort = (ind) => {
     
-    this.setState({dummyData: arr, Ihave: arr2, Iwant: arr3});
-    console.log('arr data ==>', arr)
-  }
-
-  selectionHandlerSort2 = (ind) => {
-    //alert("jie")
-    const {Gname, Discription, Ihave, Iwant, dummyData} = this.state;
-    let arr3 = Iwant.map((item, index)=>{
-      if(ind == index){
-        item.isSelected = !item.isSelected;
-      }
-      return {...item}
-    })
-    console.log("selection handler ==>", arr3)
-    this.setState({Iwant: arr3})
-  }
-
-  selectionHandlerSort = (ind) => {
-    //alert("jie")
-    const {Gname, Discription, Ihave, Iwant, dummyData} = this.state;
     let arr2 = Ihave.map((item, index)=>{
       if(ind == index){
         item.isSelected = !item.isSelected;
@@ -76,75 +59,55 @@ export default class GroupAddItem extends React.Component {
       return {...item}
     })
     console.log("selection handler ==>", arr2)
-    this.setState({Ihave: arr2})
+    setIhave(arr2)
   }
 
-  selectionHandler = (ind) => {
+  const selectionHandler = (ind) => {
     //alert("jie")
-    const {Gname, Discription, Ihave, Iwant, dummyData} = this.state;
+    //const {Gname, Discription, Ihave, Iwant, dummyData} = this.state;
     let arr1 = dummyData.map((item, index)=>{
       if(ind == index){
         item.isSelected = !item.isSelected;
       }
       return {...item}
     })
-    console.log("selection handler1 ==>", arr1)
-    this.setState({dummyData: arr1})
+    //console.log("selection handler1 ==>", arr1)
+    setDummyData(arr1)
   }
 
-  handlesubmit =() =>{
-    
-    this.props.navigation.goBack()
+  const handlesubmit =() =>{
+    navigation.goBack()
   } 
 
-  handleupload = () =>{
+  const handleupload = () =>{
 
   }
 
-  render() {
-    const{ navigate } = this.props.navigation;
-    //const{ tags } = this.props.route.params;
+  
     return(
       <View style={styles.container}>
         <Text style={styles.buttonText}>Item Name</Text>
         <TextInput
             style={styles.input}
             placeholder='ItemName'
-            onChangeText={(text) => this.setState({Gname: text})}
-            value = {this.state.Gname}/>
+            onChangeText={(text) => setGname(text)}
+            value = {Gname}/>
 
         <Text style={styles.buttonText}>Discription</Text>
         <TextInput
             style={styles.input}
             placeholder='second hand, not brandnew'
-            onChangeText={(text) => this.setState({Discription: text})}
-            value = {this.state.Discription}/>
+            onChangeText={(text) => setDiscription(text)}
+            value = {Discription}/>
 
         <Text style={styles.buttonText}>I have</Text>
         <ScrollView horizontal={true} style={{flexDirection: 'row'}}>
           {
-            this.state.Ihave.map((item, index)=>{
+            Ihave.map((item, index)=>{
               return(
                 <TouchableOpacity
-                  onPress={()=>this.selectionHandlerSort(index)}
+                  onPress={()=>selectionHandlerSort(index)}
                   title = 'sort'
-                  //onPress={this.handleupload}
-                  style = {item.isSelected ? styles.item : styles.itemS}>
-                  <Text style = {styles.buttonText}>{item.name}</Text> 
-                </TouchableOpacity>
-              );
-            })
-          }
-        </ScrollView>
-
-        <Text style={styles.buttonText}>I want</Text>
-        <ScrollView horizontal={true} style={{flexDirection: 'row'}}>
-          {
-            this.state.Iwant.map((item, index)=>{
-              return(
-                <TouchableOpacity
-                  onPress={()=>this.selectionHandlerSort2(index)}
-                  title = 'sort2'
                   //onPress={this.handleupload}
                   style = {item.isSelected ? styles.item : styles.itemS}>
                   <Text style = {styles.buttonText}>{item.name}</Text> 
@@ -158,10 +121,10 @@ export default class GroupAddItem extends React.Component {
         <Text style={styles.buttonText}>method: </Text>
         <View style={{flexDirection: 'row'}}>
           {
-            this.state.dummyData.map((item, index)=>{
+            dummyData.map((item, index)=>{
               return(
                 <TouchableOpacity
-                  onPress={()=>this.selectionHandler(index)}
+                  onPress={()=>selectionHandler(index)}
                   title = 'method'
                   //onPress={this.handleupload}
                   style = {item.isSelected ? styles.item : styles.itemS}>
@@ -174,32 +137,21 @@ export default class GroupAddItem extends React.Component {
 
         
 
-
-
-        <TouchableOpacity
-            title = 'upload'
-            onPress={this.handleupload}
-            style = {styles.item}>
-            <Text
-              style = {styles.buttonText}>Upload</Text>
-        </TouchableOpacity>
-
         <TouchableOpacity
             title = 'Submit'
-            onPress={this.handlesubmit}
+            onPress={handlesubmit}
             style = {styles.item}>
             <Text
               style = {styles.buttonText}>Submit</Text>
         </TouchableOpacity>
 
-        {/* <Button
-            title = 'Go to home screen'
-            onPress={() => navigate('Home')}/> */}
       </View>
     )
-  }
+  // }
 
 }
+
+export default GroupAddItem;
 
 const styles = StyleSheet.create({
   input: {
