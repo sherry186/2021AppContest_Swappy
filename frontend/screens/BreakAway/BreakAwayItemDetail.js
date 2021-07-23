@@ -28,23 +28,24 @@ export default class BreakAwayItemDetail extends React.Component {
     }
   }
 
-  renderImage = ({ item }) => (
-    <Image 
-      style={{ width: 100, height: 100  }}
-      source={item}/>
-  );
+  renderImage = ({ item }) => {
+    //console.log(item);
+    return (
+      <Image 
+        style={{ width: 100, height: 100  }}
+        source={item}/>
+    );
+  } 
 
   handleChangeOut = (itemId, title, source, story, spaceId) =>{
-    const JSONimage = JSON.stringify(source);
-    createStoryItem(title, story, JSONimage, spaceId);
+    createStoryItem(title, story, source, spaceId);
     const changeOutPoints = 2.0;
     updateProgress(spaceId, changeOutPoints);
     this.props.navigation.navigate("BreakAwayItemChangeOut", {id: itemId, title: title, source: source})
   }
 
   handleKeep = (itemId, title, source, story, spaceId) =>{
-    const JSONimage = JSON.stringify(source);
-    createStoryItem(title, story, JSONimage, spaceId);
+    createStoryItem(title, story, source, spaceId);
     deleteHesitateItem(itemId);
 
     const keepPoints = 2.0
@@ -54,7 +55,12 @@ export default class BreakAwayItemDetail extends React.Component {
 
 
   getSpaceName = (spaceId) => {
-    database.transaction(tx => {
+    if(spaceId == 0) {
+      this.setState({
+        spaceName:'尚未選擇空間！',
+      });
+    } else {
+      database.transaction(tx => {
         tx.executeSql('SELECT spaceName FROM MySpaces WHERE id = ? LIMIT 1', 
         [spaceId],
         (txObj, resultSet) => {
@@ -67,26 +73,32 @@ export default class BreakAwayItemDetail extends React.Component {
     },
         (txObj, error) => console.log('Error', error))
     })
+    }
 };
 
 componentDidMount() {
   createMyStoriesTable();
+  this.getSpaceName(this.props.route.params.spaceId);
 }
   
   render(){  
-    const { itemId, title, source, spaceId, story, uploadDate} = this.props.route.params;
-    this.getSpaceName(spaceId);
-    //console.log('source', source);
+    const { itemId, title, source, spaceId, story, uploadDate, spaceName} = this.props.route.params;
+    console.log(spaceName);
+    console.log('source', source);
     return (
       <View style={{ flex: 1, top: "5%", bottom:"20%", alignItems: 'center'}}>
         
-        <FlatList
+        {/* <FlatList
               style = {{margin: 20}}
               data={source}
               renderItem={this.renderImage}
               horizontal = {true}
-          />
-        <Text>Space: {this.state.spaceName}</Text>
+          /> */}
+        <Image 
+          style={{ margin: 20, width: 200, height: 200  }}
+          source={{uri:source}}/>
+        <Text>Title: {title}</Text>
+        <Text>Space: {spaceName}</Text>
         <Text>Story: {story}</Text>
        
         <View style= {{flexDirection: 'row'}}>

@@ -24,7 +24,7 @@ function BreakAwayItemStory ({ route, navigation }) {
     <SafeAreaView style = {{flex:1, flexDirection: 'row'}}>
       <Image 
       style={{flexDirection: 'row', width: 60, height: 60,  }}
-      source={item.source}/>
+      source={{uri:item.source}}/>
     </SafeAreaView> 
   );
 
@@ -37,7 +37,7 @@ function BreakAwayItemStory ({ route, navigation }) {
   );// 理論上應該是一個Navigation，還要再改
   
   // render(){  
-    const { title, story, image } = route.params;
+    const { title, story, image, spaceName } = route.params;
     
     return (
       <View style={{ flex: 1, top: "5%", bottom:"20%", alignItems: 'center'}}>
@@ -60,7 +60,7 @@ function BreakAwayItemStory ({ route, navigation }) {
         <View style = {{flex: 10, backgroundColor: colors.mono_40, width: "100%", alignItems: 'center' }}>
             <Image
               style = {{flex: 5, height: "50%", width: "80%"}}
-              source = {image}
+              source = {{uri:image}}
             />
             <View style = {styles.line}></View>
             
@@ -69,8 +69,8 @@ function BreakAwayItemStory ({ route, navigation }) {
               
               <View style = {{flex: 1, flexDirection: 'row'}}>
                 <View style = {styles.margin}></View>
-                <Text style = {styles.textT}>物品名稱 </Text>
-                <Text>{title}</Text>
+                <Text style = {styles.textT}>物品空間 </Text>
+                <Text>{spaceName}</Text>
               </View>
               <View style = {{flex:1, flexDirection: 'row'}}>
                 <View style = {styles.margin}></View>

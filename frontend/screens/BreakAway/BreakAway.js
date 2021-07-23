@@ -39,6 +39,7 @@ export default class BreakAway extends React.Component {
       itemData: [],
       shouldShow: false,
       newSpaceName:'',
+      spaceName:''
     }
   
 
@@ -70,6 +71,28 @@ export default class BreakAway extends React.Component {
       
   );
 
+  getSpaceName = (spaceId) => {
+    if(spaceId == 0) {
+      this.setState({
+        spaceName:'尚未選擇空間！',
+      });
+    } else {
+      database.transaction(tx => {
+        tx.executeSql('SELECT spaceName FROM MySpaces WHERE id = ? LIMIT 1', 
+        [spaceId],
+        (txObj, resultSet) => {
+            //console.log('Success', resultSet);
+            let spaceName = resultSet.rows._array[0].spaceName;
+            //console.log(spaceName);
+            this.setState({
+              spaceName,
+            });
+    },
+        (txObj, error) => console.log('Error', error))
+    })
+    }
+  };  
+
   handleDelete = (item) => {
 
     console.log(item);
@@ -98,17 +121,21 @@ export default class BreakAway extends React.Component {
   }
   
 
-  renderImage = ({ item }) => (
+  renderImage = ({ item }) => {
+    console.log(item);
+    this.getSpaceName(item.id);
+
+    return (
     
     <TouchableOpacity
-      onPress = {() => this.props.navigation.navigate("BreakAwayItemDetail", {itemId: item.id, title: item.title, source: JSON.parse(item.image), spaceId: item.spaceName, story: item.story, uploadDate: item.uploadDate})} 
+      onPress = {() => this.props.navigation.navigate("BreakAwayItemDetail", {itemId: item.id, title: item.title, source: item.image, spaceId: item.spaceName, spaceName: this.state.spaceName, story: item.story, uploadDate: item.uploadDate})} 
       style={{width:ScreenWidth* 0.3, height: ScreenWidth* 0.3, margin:ScreenWidth* 0.03, backgroundColor:'red'}}
       >
       <Image 
         style={{ width: "100%", height: "100%"  }}
-        source={{uri: JSON.parse(item.image)[0].uri}}/>
+        source={{uri: item.image}}/>
     </TouchableOpacity>
-  );
+  )};
 
   getSpaces = () => {
       // database.transaction(tx => {
@@ -148,7 +175,7 @@ getHesitateItems = () => {
   });
 }
 
-  
+
 
 
   componentDidMount() {

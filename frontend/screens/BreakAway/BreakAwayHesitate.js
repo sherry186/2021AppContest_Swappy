@@ -12,7 +12,7 @@ import * as SQLite from 'expo-sqlite'
 const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
 
 
-
+const DUMMY_IMAGE = 'https://iwfstaff.com.au/wp-content/uploads/2017/12/placeholder-image.png';
 
 import { format } from 'fecha';
 
@@ -59,10 +59,21 @@ export default function BreakAwayHesitate () {
   }
 
   const handlesubmit = () =>{
-    const JSONimage = JSON.stringify(image);
-    //console.log(JSONimage);
+    console.log(image);
     const reminderDate = getDate();
-    createHesitateItem(title, story, JSONimage, reminderDate, space);
+    if(image.length == 0) {
+      createHesitateItem(title, story, DUMMY_IMAGE, reminderDate, space);
+    } else {
+      for (let i = 0; i < image.length; i++) {
+        console.log(typeof(image[i].uri));
+        createHesitateItem(title, story, image[i].uri, reminderDate, space);
+      }
+    }
+
+    // const JSONimage = JSON.stringify(image);
+    // //console.log(JSONimage);
+    // const reminderDate = getDate();
+    // createHesitateItem(title, story, JSONimage, reminderDate, space);
 
     const addToHesitatePoints = 2.0
     updateProgress(space, addToHesitatePoints);
@@ -206,17 +217,17 @@ export default function BreakAwayHesitate () {
               </View>
               
           </View>
-
-          <View style ={styles.textContainer}>
+{/* 
+          <View style ={styles.textContainer}> */}
             <Text style={styles.text}>物品位置</Text> 
-          </View>
+          {/* </View> */}
            
           <View style ={styles.textInputContainer}>
           <View style = {{flex: 0.5}}></View>
             <View style = {{flex: 3.5, justifyContent: 'center'}}>
                 <Picker
                   mode={'dropdown'}
-                  style={styles.input3}
+                  //style={styles.input3}
                   selectedValue={space}
                   // onValueChange={(value)=>onValueChange(2 ,value)}
                     onValueChange= {(itemValue, itemIndex) => setSpace(itemValue)}>

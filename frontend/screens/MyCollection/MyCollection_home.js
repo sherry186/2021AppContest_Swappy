@@ -26,7 +26,6 @@ query getMyCollections{
     id
     title
     description
-    
   }
 }`;
 

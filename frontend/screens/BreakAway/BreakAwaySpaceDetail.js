@@ -46,7 +46,7 @@ export default class BreakAwaySpaceDetail extends React.Component {
             this.setState({
               hesitateItems: item,
             });
-            //console.log(this.state.hesitateItems);
+            console.log(this.state.hesitateItems);
     },
         (txObj, error) => console.log('Error', error))
     })
@@ -68,26 +68,28 @@ export default class BreakAwaySpaceDetail extends React.Component {
     })
 };
 
-  renderHesitate = ({ item }) => ( 
+  renderHesitate = ({ item }) => {
+    console.log(item);
+    return ( 
     <TouchableOpacity
         style ={styles.imageC}
-        onPress = {() => this.props.navigation.navigate("BreakAwayItemDetail", {itemId: item.id, title: item.title, source: JSON.parse(item.image), spaceId: item.spaceName, story: item.story, uploadDate: item.reminderDate})}
+        onPress = {() => this.props.navigation.navigate("BreakAwayItemDetail", {itemId: item.id, title: item.title, source: item.image, spaceId: item.spaceName, spaceName: this.props.route.params.spaceName, story: item.story, uploadDate: item.reminderDate})}
         >
         <Image 
           style={styles.image}
-          source={JSON.parse(item.image)}/>
+          source={{url:item.image}}/>
     </TouchableOpacity>
     
-  )
+  )}
 
   renderStory = ({ item }) => ( 
     <TouchableOpacity
       style ={styles.imageC}
-      onPress = {() => this.props.navigation.navigate("BreakAwayItemStory", {title: item.title, story: item.story, image: JSON.parse(item.image)})}
+      onPress = {() => this.props.navigation.navigate("BreakAwayItemStory", {title: item.title, story: item.story, spaceName: this.props.route.params.spaceName, image: item.image, space: item.space})}
       >
         <Image 
           style={styles.image}
-          source={JSON.parse(item.image)}/>
+          source={{uri:item.image}}/>
     </TouchableOpacity>
   )
 
@@ -99,7 +101,7 @@ export default class BreakAwaySpaceDetail extends React.Component {
     const { spaceId, complete, spaceName } = this.props.route.params;
     this.getHesitateItemsBySpace(spaceId);
     this.getStoryItemsBySpace(spaceId);
-    console.log(spaceId, complete);
+    //console.log(spaceName);
     return (
       <View style={{ flex: 1, alignItems: 'center'}}>
 
@@ -132,7 +134,7 @@ export default class BreakAwaySpaceDetail extends React.Component {
                 </CircularProgress>
                 <View style = {{position: 'absolute', alignItems: 'center', justifyContent:'center', backgroundColor: 'transparent'}}>
                   <Text style= {{ fontSize: 60, fontWeight: 'bold', color: colors.function_100 }}>{Math.floor(complete/LEVELPOINTS)}</Text>
-                  <Text style= {{ fontSize: 30, color: colors.function_100, }}>level</Text>
+                  <Text style= {{ fontSize: 30, color: colors.function_100, }}>等級</Text>
                 </View>
             </View>
             

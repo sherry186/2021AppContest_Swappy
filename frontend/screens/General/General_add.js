@@ -171,15 +171,6 @@ const General_ADD = () => {
   }
 
   const handlesubmit =() =>{
-    // //add item to DataBase
-    // dataBase.transaction(tx => { 
-    //   tx.executeSql(
-    //     `INSERT INTO GeneralItems (title, category, description, method, image) VALUES (?, ?, ?, ?, ?)`, 
-    //     [itemName, dropdown, description, deliveryMethodHandler,  itemName + ' image'],
-    //     (txObj, resultSet) => console.log('Success', resultSet),
-    //     (txObj, error) => console.log('Error', error))
-    // })
-    //Navigate back to home page
     
     if(image.length == 0) {
       createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod}});
