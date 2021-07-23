@@ -148,6 +148,7 @@ const typeDefs = gql`
 const resolvers = {
     Query: {
         getMyCollections: async (_, __, { user }) => {
+            console.log(user.postsCollection);
             return user.postsCollection ? user.postsCollection : null;
         },
         getPosts: async (_, __, {db}) => {
@@ -213,15 +214,18 @@ const resolvers = {
                 throw new Error('AUthentication Error. Please sign in');
             }
             const post = await db.collection('Posts').findOne({_id: ObjectId(postId)});
-            await db.collection('Users').updateOne({ _id : ObjectId(user._id) },{ $pull: { postsCollection: post }});
+            const result = await db.collection('Users').updateOne({ _id : ObjectId(user._id) },{ $pull: { postsCollection: post }});
+            console.log(result);
             return true;
         },
         addToCollection: async (_, { postId }, { db, user }) => {
             if(!user) {
                 throw new Error('AUthentication Error. Please sign in');
             }
+            console.log(user._id);
             const post = await db.collection('Posts').findOne({_id: ObjectId(postId)});
-            await db.collection('Users').updateOne({ _id : ObjectId(user._id) },{ $push: { postsCollection: post }});
+            const result = await db.collection('Users').updateOne({ _id : ObjectId(user._id) },{ $push: { postsCollection: post }});
+            console.log(result);
             return true;
         },
         postComment:　async (_, { postId, comment }, { db, user }) => {
@@ -419,7 +423,7 @@ const start = async () => {
         resolvers, 
         context: async ({req}) => {
             const user = await getUserFromToken(req.headers.authorization, db);
-            //console.log(getToken("60f2cf2385c21cc1cabc9546"));
+            console.log(getToken("60f96890d500fa3e0481725c"));
             return {
                 db,
                 user,

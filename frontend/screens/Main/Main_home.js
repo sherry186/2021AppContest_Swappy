@@ -76,8 +76,6 @@ const Main_HOME = () => {
   const windowHeight = useWindowDimensions().height;
 
   const { data, error, loading } = useQuery(RENDER_POST, {pollInterval: 500});
-  const [addToCollection] = useMutation(ADD_TO_COLLECTION);
-  const [removeFromCollection] = useMutation(REMOVE_FROM_COLLECTION);
 
 
   const handleSearch = (se) => {
@@ -91,14 +89,7 @@ const Main_HOME = () => {
     //this.setState({data,  se});
   };
 
-  // const handleCollected = (collected, id) =>{
-  //   if(collected) {
-  //     addToCollection(id);
-  //   } else {
-  //     removeFromCollection(id);
-  //   }
-    
-  // };
+
 
   // const renderChat = ({ item }) => {
   //   let collected = false;
@@ -201,12 +192,25 @@ function FlatListComponent(props)  {
   //   collected: false,
     
   // }
-  const [collected, setCollected] = useState(null)
-  
+  const [collected, setCollected] = useState(false)
+  const [addToCollection] = useMutation(ADD_TO_COLLECTION);
+  const [removeFromCollection] = useMutation(REMOVE_FROM_COLLECTION);
+
 
   useEffect(() => {
     setCollected(false);
   }, []);
+
+  const handleCollected = (collected, id) =>{
+    console.log(collected);
+    console.log(id);
+    if(collected) {
+      addToCollection({ variables: { postId: id } });
+    } else {
+      removeFromCollection({ variables: { postId: id } });
+    }
+    
+  };
 
   // render() {
     //const {navigation} = this.props
@@ -231,8 +235,8 @@ function FlatListComponent(props)  {
                 onPress={() => {
                       const newCollected = !collected;
                       setCollected(newCollected);
+                      handleCollected(newCollected, props.id);
                     //console.log('status: ', this.state.st);
-                
               }}
             >
                 <Image

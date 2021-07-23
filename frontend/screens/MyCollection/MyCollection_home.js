@@ -18,16 +18,34 @@ import  { useNavigation } from '@react-navigation/core';
 import SocialItems from '../../Data/SocialItems';
 import SocialCollection from '../../Data/SocialCollection';
 
+import { useQuery, useMutation,  gql } from '@apollo/client';
+
+const RENDER_MYCOLLECTION = gql`
+query getMyCollections{
+  getMyCollections{
+    id
+    title
+    description
+    
+  }
+}`;
 
 const contains = (data1, data2, data3, query) => {
-  let formatData1 = data1.toLowerCase();
+  let formatData1 = data1? data1.toLowerCase(): null;
   let formatData2 = data2.toLowerCase();
   let formatData3 = data3.toLowerCase();
 
   let formatQuery = query.toLowerCase();
 
-  if (formatData1.includes(formatQuery) || formatData2.includes(formatQuery) || formatData3.includes(formatQuery)) {
-    return true;
+  if(formatData1) {
+    if (formatData1.includes(formatQuery) || formatData2.includes(formatQuery) || formatData3.includes(formatQuery)) {
+      return true;
+    }
+  }
+  else{
+    if (formatData2.includes(formatQuery) || formatData3.includes(formatQuery)) {
+      return true;
+    }
   }
   return false;
 }
@@ -50,33 +68,36 @@ const inMyList = (data, collection) => {
 const MyCollection_HOME = () => {
 
   const [search, setSearch] = useState('');
-  const [data, setData] = useState([]);
+  const [data1, setData1] = useState([]);
   const [fullData, setFullData] = useState([]);
 
+  const { data, error, loading } = useQuery(RENDER_MYCOLLECTION, {pollInterval: 500});
+
+  console.log(error);
   const navigation = useNavigation();
 
   const windowHeight = useWindowDimensions().height;
 
   const handleSearch = (se) => {
     console.log("search", search)
-    const searchedItems = _.filter(fullData, post => {
-      return contains(post.person, post.post, post.title, search)
+    const searchedItems = _.filter(data.getMyCollections, post => {
+      return contains(post.author?.username, post.title, post.description, search)
     })
     setSearch(se);
-    setData(searchedItems);
+    setData1(searchedItems);
     
   };
 
   const handleCollected = (id) =>{
     //const {data} = this.state;
-    let arr = data.map((item, index)=>{
+    let arr = data1.map((item, index)=>{
       if(id == index){
         item.collected = !item.collected;
       }
       return {...item}
     })
     console.log("selection handler1 ==>", arr);
-    setData(arr);
+    setData1(arr);
     //this.setState({data: arr})
   };
 
@@ -85,16 +106,18 @@ const MyCollection_HOME = () => {
     <View style={styles.ChatC}>
         <TouchableOpacity 
             style = {styles.Chat} 
-            onPress={() => navigation.navigate('MainDetail', {title: item.title, person: item.person, post: item.post, comment: item.comment, hideName: item.hideName})}>
+            onPress={() => navigation.navigate('MainDetail', {title: item.title, person: item.author, post: item.description, comment: null, hideName: null})}>
           <Text style={styles.post}>{item.title}</Text>
-          <Text style={styles.person}>{item.hideName? "匿名" : item.person}</Text>
-          <Text style={styles.person}>{item.post}</Text>
+          <Text style={styles.person}>{item.author == null? "匿名" : item.author.username}</Text>
+          <Text style={styles.person}>{item.description}</Text>
         </TouchableOpacity>
         <TouchableOpacity 
             style={{width: 10, height: 20, position:'absolute', right: 20, top: 0, backgroundColor: 'transparent'} }
-            onPress={()=>handleCollected(item.id)}>
+            //onPress={()=>handleCollected(item.id)}
+            >
           <Image
-            style ={{width:10, height: 20, tintColor: item.collected? colors.warning_80: colors.brown_40}}
+            //style ={{width:10, height: 20, tintColor: item.collected? colors.warning_80: colors.brown_40}}
+            style ={{width:10, height: 20, tintColor: colors.warning_80}}
             source={require('../../assets/Social/collect.png')}/>
         </TouchableOpacity>
     </View>
@@ -109,7 +132,7 @@ const MyCollection_HOME = () => {
         return {...item}
       })
 
-      setData(arr);
+      setData1(arr);
       setFullData(datafilter);
       // this.setState({
       //   data: arr,
@@ -160,12 +183,12 @@ const MyCollection_HOME = () => {
       <ScrollView style = {{top: "5%", alignContent: 'center'}}>
         <View>
           {data ? (<FlatList
-            data={data}
+            data={search == ''? data.getMyCollections: data1}
             renderItem={renderChat}
             keyExtractor={item => item.id}
           />
 
-          ) : <Text>Loading</Text>
+          ) : <Text>loading...</Text>
 
           }
         </View>

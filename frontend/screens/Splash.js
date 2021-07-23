@@ -8,11 +8,11 @@ const SplashScreen = () => {
 
   useEffect(() => {
     const checkUser = async () => {
-      if (await isAuthenticated()) {
-        navigation.navigate('BottomTab');
-      } else {
+      // if (await isAuthenticated()) {
+      //   navigation.navigate('BottomTab');
+      // } else {
         navigation.navigate('loginSignup');
-      }
+      // }
     }
 
     checkUser();
