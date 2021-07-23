@@ -65,7 +65,7 @@ export default class Personal extends React.Component {
           >
             <Image 
                 style={styles.image}
-                source={require('../assets/personal/持有物品清單.jpg')}/>
+                source={require('../../assets/personal/持有物品清單.png')}/>
             <Text style={styles.buttonText}>持有物品清單</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -73,7 +73,7 @@ export default class Personal extends React.Component {
           >
             <Image 
                 style={styles.image}
-                source={require('../assets/personal/發文紀錄.png')}/>
+                source={require('../../assets/personal/發文紀錄.png')}/>
             <Text style={styles.buttonText}>發文紀錄</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -81,7 +81,7 @@ export default class Personal extends React.Component {
           >
             <Image 
                 style={styles.image}
-                source={require('../assets/personal/交換紀錄.png')}/>
+                source={require('../../assets/personal/交換紀錄.png')}/>
             <Text style={styles.buttonText}>交換紀錄</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -89,7 +89,7 @@ export default class Personal extends React.Component {
           >
             <Image 
                 style={styles.image}
-                source={require('../assets/personal/願望清單.png')}/>
+                source={require('../../assets/personal/願望清單.png')}/>
             <Text style={styles.buttonText}>願望清單設定</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -97,7 +97,7 @@ export default class Personal extends React.Component {
           >
             <Image 
                 style={styles.image}
-                source={require('../assets/personal/個人資料設定.png')}/>
+                source={require('../../assets/personal/個人資料設定.png')}/>
             <Text style={styles.buttonText}>個人資料設定</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -105,7 +105,7 @@ export default class Personal extends React.Component {
           >
             <Image 
                 style={styles.image}
-                source={require('../assets/personal/關於swappy.png')}/>
+                source={require('../../assets/personal/關於swappy.png')}/>
             <Text style={styles.buttonText}>關於swappy</Text>
           </TouchableOpacity>
         </View>
