@@ -72,7 +72,7 @@ const Group_HOME = () => {
       <View style={styles.buttons}>
           <TouchableOpacity 
             style={styles.item}
-            onPress={() => navigation.navigate('GroupDetail', {title: item.title, items: item.items, post: item.post})}>
+            onPress={() => navigation.navigate('GroupDetail', {title: item.title, discription: item.discription, items: item.items, post: item.post})}>
             <Text>{item.title}</Text>
           </TouchableOpacity>
       </View>
@@ -144,7 +144,7 @@ const Group_HOME = () => {
           style={styles.button}
           onPress={() => navigation.navigate('GroupAdd')}>
          <Image
-            // style = {{width: 65, height: 65 }}
+            style = {{width: 65, height: 65 }}
             source = {require("../../assets/general/add.png")}/>
       </TouchableOpacity>
     </SafeAreaView>

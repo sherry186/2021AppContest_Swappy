@@ -1,141 +1,236 @@
 import { styleSheets } from 'min-document';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Text,
     StyleSheet,
     View, 
+    Image,
     TextInput,
     TouchableOpacity,
     FlatList,
-    ScrollView} from 'react-native';
+    ScrollView,
+    Dimensions} from 'react-native';
+import colors from '../../config/colors';
 //import GroupItems from '../../Data/GroupItems';
 
+let ScreenWidth = Dimensions.get("window").width;
 
-export default class GroupDetailsScreen extends React.Component {
 
-  
+function GroupDetailsScreen ({route, navigation}) {
 
-  handleback =() =>{
+  const { title, items, post, discription } = route.params;
+
+  const handleback =() =>{
         
-    this.props.navigation.goBack()
+    navigation.goBack()
   } 
 
-  renderItem = ({ item }) => (
+  const renderItem = ({ item }) => (
     //console.log(this.props.navigation);
     <TouchableOpacity 
       style={styles.tag}>
       <View>
-        <Text style={{
-            fontSize:10,
-            flexDirection:  'row' ,
-            justifyContent: 'space-between'}}>
-              {item.name}</Text>
+        <Text style={styles.buttonText}>{item.name}</Text>
         </View>    
       
     </TouchableOpacity>
   );
   
 
-  renderPost = ({ item }) => (
+  const renderPost = ({ item }) => (
     <TouchableOpacity 
       style={styles.item} 
-      onPress={() => {this.props.navigation.navigate('Group_itemDetail',{dis: item.dis, method: item.method, tagname: this.props.route.params.items[item.tagid].name, image: item.image})}}>    
-      <Text style={styles.title}>{item.dis}</Text>
+      onPress={() => {navigation.navigate('Group_itemDetail',{dis: item.dis, method: item.method, tagname: items[item.tagid].name, image: item.image})}}>    
+      <Text style={styles.title, {color: colors.mono_40}}>{item.dis}</Text>
+     
       <TouchableOpacity>
-        <Text style={styles.title}>{this.props.route.params.items[item.tagid].name}</Text>
+        <Text style={styles.tagT, {color: colors.mono_60}}>#{items[item.tagid].name}</Text>
       </TouchableOpacity>
     </TouchableOpacity>
   );
 
-  render() {
-    const{ navigate } = this.props.navigation;
-    const { title, items, post } = this.props.route.params
+  const renderPostN = ({ item }) => (
+    <TouchableOpacity 
+      style={styles.itemN} 
+      onPress={() => {navigation.navigate('Group_itemDetail',{dis: item.dis, method: item.method, tagname: items[item.tagid].name, image: item.image})}}>    
+      <Text style={styles.title, {color: colors.mono_80}}>{item.dis}</Text>
+      
+      <TouchableOpacity>
+        <Text style={styles.tagT, {color: colors.function_100}}>#{items[item.tagid].name}</Text>
+      </TouchableOpacity>
+    </TouchableOpacity>
+  );
+
+  
+    // const{ navigate } = this.props.navigation;
+    // const { title, items, post, discription } = this.props.route.params
 
     return(
-      <ScrollView style={styles.container}>
-          <Text>{title}</Text>
-          
-          <View style= {{flexDirection: 'row'}}>
-           <FlatList
-              data={items}
-              //style={{flexDirection: 'row'}}
-              horizontal={ true }
-              renderItem={this.renderItem}
-              keyExtractor={item => item.ID}
-            />
-          </View>
-
-          <View style= {{flex:1, flexDirection: 'row'}}>
-           <FlatList
-              data={post}
-              renderItem={this.renderPost}
-              keyExtractor={item => item.ID}
-            />
-          </View>
-          
+      <View style={{ flex: 1, top: "5%", bottom:"20%", alignItems: 'center'}}>
+          <View style = {{flex: 1, flexDirection: 'row', height: "7%", backgroundColor: colors.mono_40}}>
           <TouchableOpacity
-            title = 'add'
-            onPress={() => {this.props.navigation.navigate('GroupAddItem',{tags: items})}}
-            style = {{
-                width: 60, 
-                height: 60, 
-                borderRadius: 30,
-                backgroundColor: '#f9c2ff',
-                marginVertical: 16,
-                marginHorizontal: 170,
-                alignContent: 'center',}}>
-            <Text
-              style = {{fontSize: 20, marginHorizontal: 10, marginVertical: 15}}>add</Text>
+            style = {{flex:2, width: "20%", backgroundColor: colors.mono_40, alignItems: 'center', justifyContent:'center'}}
+            onPress = {()=>navigation.goBack()}
+            >
+            <Image 
+              style = {{height: "25%", width: "25%"}}
+              source = {require('../../assets/manyneed/xmark.png')}/>
           </TouchableOpacity>
 
+          <View
+            style ={{flex: 8, justifyContent: 'center', alignItems: 'center'}}>
+              <Text style = {{ fontSize: 25, color: colors.function_100}}>{title}</Text>
+          </View>
+
           <TouchableOpacity
-            title = 'back'
-            onPress={this.handleback}
-            style = {styles.item}>
-            <Text
-              style = {styles.buttonText}>back</Text>
-            </TouchableOpacity>
-      </ScrollView>
-    )
-  }
+            style = {{flex:2, width: "20%", backgroundColor: colors.mono_40, alignItems: 'center', justifyContent:'center'}}
+            onPress = {()=>navigation.navigate('GroupWishingPool', {items: items})}
+            >
+            <Image 
+              style = {{height: "25%", width: "25%"}}
+              source = {require('../../assets/manyneed/heart.png')}/>
+          </TouchableOpacity>
+
+        </View>
+
+          <View style = {{flex:1.4, alignItems: 'center'}}>
+              <ScrollView contentContainerStyle = {{ width: "90%", backgroundColor: colors.mono_40, alignItems:'center'}}>
+                    <Text style = {{color: colors.mono_80}}>{discription}</Text>
+              </ScrollView>
+          </View>
+
+          <View style = {{flex: 0.1}}></View>
+
+          <View style = {{flex: 8}}>
+            <View>
+            <View style = {{height: ScreenWidth*0.06, flexDirection:'row', backgroundColor: colors.mono_40, alignItems:'center'}}>
+                <View style = {{width: "5%"}}></View>
+                <ScrollView style = {{width: '95%', backgroundColor: 'transparent'}}>
+                  <FlatList
+                    data={items}
+                    contentContainerStyle={{backgroundColor: 'transparent', alignItems:'center', justifyContent: 'center'}}
+                    horizontal={ true }
+                    renderItem={renderItem}
+                    keyExtractor={item => item.ID}
+                  />
+                </ScrollView>
+                
+            </View>
+              <View style = {styles.line}></View>
+            </View>
+            
+
+            <ScrollView contentContainerStyle = {{backgroundColor: 'transparent', alignItems:'center', justifyContent:'center'}}>
+             <FlatList
+                data={post}
+                renderItem={renderPost}
+                keyExtractor={item => item.ID}
+              />
+
+              <FlatList
+                data={post}
+                renderItem={renderPostN}
+                keyExtractor={item => item.ID}
+              />
+              <View style = {{height: 78,backgroundColor: colors.mono_40,}}></View>
+            </ScrollView>
+            
+
+         </View>
+
+         <TouchableOpacity
+              title = 'add'
+              onPress={() => {navigation.navigate('GroupAddItem',{tags: items})}}
+              style={styles.button}>
+              <Image
+                style = {styles.button}
+                source = {require("../../assets/general/add.png")}/>
+          </TouchableOpacity>
+      </View>
+    ) 
 
 }
 
+export default GroupDetailsScreen;
+
 const styles = StyleSheet.create({
-  input: {
-    margin: 15,
-    height: 40,
-    borderColor: '#7a42f4',
-    borderWidth: 1
+  line: {
+    marginTop: 5,
+    height: 1,
+    backgroundColor: colors.function_100,
+    width: "90%",
+    alignSelf:"center",
   },
+  
   container: {
-    // flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center'
-    paddingTop: 23
+    flex:1
   },
   tag:{
     //flex:1,
     flexDirection:'row',
-    margin:5,
-    backgroundColor: '#f9c2ff',
-    width: 40,
-    height: 20,
+    marginRight: ScreenWidth*0.05,
+    backgroundColor: colors.function_100,
+    width: ScreenWidth*0.18,
+    height: ScreenWidth*0.06,
+    alignItems:'center',
+    justifyContent: 'center',
+    borderRadius: ScreenWidth*0.015,
   },
   item: {
-    backgroundColor: '#f9c2ff',
+    
+    backgroundColor: colors.function_100,
+    height: ScreenWidth*0.2,
+    width: ScreenWidth*0.9,
+    padding: 20,
+    justifyContent:'flex-start',
+    marginVertical: 8,
+    marginHorizontal: 16,
+
+    shadowColor: colors.mono_100,
+    shadowOffset: { width: 10, height: 10 },
+    shadowOpacity: 0.5,
+    shadowRadius: 0,
+    elevation: 3,
+  },
+  itemN: {
+    backgroundColor: colors.mono_40,
+    height: ScreenWidth*0.2,
+    width: ScreenWidth*0.9,
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
+
+    shadowColor: colors.mono_100,
+    shadowOffset: { width: 10, height: 10 },
+    shadowOpacity: 0.5,
+    shadowRadius: 0,
+    elevation: 3,
+  },
+  button: {
+    width: 65,
+    height: 65,
+    position: 'absolute',
+    borderRadius: 31.5,
+    backgroundColor: 'transparent',
+    bottom: "10%",
+    //right: 169,
+    alignSelf: 'center',
+    justifyContent: 'center',
   },
   title: {
-    fontSize: 7,
+    fontSize: 20,
+    top:10,
+    fontWeight:'bold',
+    
+  },
+  tagT: {
+    fontSize: 15,
+    fontWeight: '300',
   },
   buttonText: {
-    //color: '#fff',
-    fontSize: 20,
-    left: 10,
-    fontWeight: 'bold',
+    fontSize: ScreenWidth*0.03,
+    color:colors.mono_40,
+    fontWeight: '900',
   },
 
 });
