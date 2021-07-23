@@ -22,6 +22,8 @@ import * as SQLite from 'expo-sqlite'
 const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
 import { deleteHesitateItem, deleteSpace } from '../../localStorageApi/api';
 
+import { createMySpacesTable, createSpace } from '../../localStorageApi/api'
+
 import { Dimensions } from 'react-native';
 let ScreenWidth = Dimensions.get("window").width;
 
@@ -90,7 +92,9 @@ export default class BreakAway extends React.Component {
   // deleteSpaceAlert = () => 
   
   handleAddSpace = () =>{
-
+    createMySpacesTable();
+    createSpace(this.state.newSpaceName);
+    this.setState({newSpaceName: ""})
   }
   
 

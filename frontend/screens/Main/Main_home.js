@@ -91,34 +91,35 @@ const Main_HOME = () => {
     //this.setState({data,  se});
   };
 
-  const handleCollected = (collected, id) =>{
-    if(collected) {
-      addToCollection(id);
-    } else {
-      removeFromCollection(id);
-    }
+  // const handleCollected = (collected, id) =>{
+  //   if(collected) {
+  //     addToCollection(id);
+  //   } else {
+  //     removeFromCollection(id);
+  //   }
     
-  };
+  // };
 
-  const renderChat = ({ item }) => {
-    let collected = false;
-    return (
-    <View style={styles.ChatC}>
-        <TouchableOpacity style = {styles.Chat} onPress={() => navigation.navigate('MainDetail', {title: item.title, person: item.author, post: item.description, comment: item.comments, hideName: item.hideUser})}>
-          <Text style={styles.post}>{item.title}</Text>
-          <Text style={styles.person}>{item.author == null? "匿名" : item.author.username}</Text>
-          <Text style={styles.person}>{item.description}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={{width: 10, height: 20, position: 'absolute', top: 0, right: 20, backgroundColor: 'transparent'} }
-                          onPress={()=>{collected = !collected; handleCollected(collected, item.id)}}>
-          <Image
-            style ={{width:10, height: 20, tintColor: collected? colors.warning_80: colors.brown_40}}
-            source={require('../../assets/Social/collect.png')}/>
-        </TouchableOpacity>
-    </View>
+  // const renderChat = ({ item }) => {
+  //   let collected = false;
+  //   return (
+  //   <View style={styles.ChatC}>
+  //       <TouchableOpacity style = {styles.Chat} onPress={() => navigation.navigate('MainDetail', {title: item.title, person: item.author, post: item.description, comment: item.comments, hideName: item.hideUser})}>
+  //         <Text style={styles.post}>{item.title}</Text>
+  //         <Text style={styles.person}>{item.author == null? "匿名" : item.author.username}</Text>
+  //         <Text style={styles.person}>{item.description}</Text>
+  //       </TouchableOpacity>
+  //       <TouchableOpacity 
+  //           style={{width: 10, height: 20, position: 'absolute', top: 0, right: 20, backgroundColor: 'transparent'} }
+  //           onPress={()=>{collected = !collected; handleCollected(collected, item.id)}}>
+  //         <Image
+  //           style ={{width:10, height: 20, tintColor: collected? colors.warning_80: colors.brown_40}}
+  //           source={require('../../assets/Social/collect.png')}/>
+  //       </TouchableOpacity>
+  //   </View>
       
           
-  )};
+  // )};
  
   
 
@@ -151,9 +152,19 @@ const Main_HOME = () => {
 
       <ScrollView style = {{top: "5%", alignContent: 'center'}}>
         <View>
-          {data ? (<FlatList
+          {data ? (
+          <FlatList
             data={search == ''? data.getPosts: data1}
-            renderItem={renderChat}
+            renderItem={({item}) => { 
+              return <FlatListComponent 
+                id={item.id}
+                person = {item.person}
+                title = {item.title}
+                description = {item.description}
+                hideName = {item.hideName}
+                comment = {item.comment}
+                navigation = {navigation} />}}
+            //renderItem={renderChat}
             keyExtractor={item => item.id}
           />
 
@@ -184,6 +195,59 @@ const Main_HOME = () => {
 }
 
 export default Main_HOME;
+
+class FlatListComponent extends React.Component {
+  state = {
+    collected: false,
+    
+  }
+  
+
+  render() {
+    //const {navigation} = this.props
+    //const navigation = useNavigation();
+    return (
+      <View style={styles.ChatC}>
+           <TouchableOpacity
+             style={styles.Chat}
+             onPress={() => this.props.navigation.navigate('MainDetail', {title: this.props.title, person: this.props.person, post: this.props.description, comment: this.props.comment, hideName: this.props.hideName})}
+            >
+                  <Text style={styles.post}>{this.props.title}</Text>
+                  <Text style={styles.person}>{this.props.hideName? "匿名" : this.props.person}</Text>
+                  <Text style={styles.person}>{this.props.description}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={{width: 10,
+                   height: 20, 
+                   position:'absolute', 
+                   right: 20, 
+                   top: 0, 
+                   backgroundColor: 'transparent'} }
+                onPress={() => {
+                      const newCollected = !this.state.collected;
+                      this.setState({
+                          collected: newCollected,
+                    });
+                    console.log('status: ', this.state.st);
+                
+              }}
+            >
+                <Image
+                    style ={{width:10, 
+                      height: 20, 
+                      tintColor: this.state.collected? colors.warning_80: colors.brown_40}}
+                    source={require('../../assets/Social/collect.png')}/>     
+            </TouchableOpacity>
+     </View>
+    )
+  }
+}
+
+
+
+
+
+
 
 const styles = StyleSheet.create({
     margin: {
