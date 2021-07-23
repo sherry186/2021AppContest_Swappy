@@ -28,7 +28,7 @@ import Notification_failDetail from '../screens/Notification/Notification_failDe
 import Notification_waitingDetail from '../screens/Notification/Notification_waitingDetail';
 import Notification_invitationDetail from '../screens/Notification/Notification_invitationDetail';
 import Message_home from '../screens/Message/Message_home';
-import ChatScreen from '../screens/chat';
+import GroupWishingPoolScreen from '../screens/Group/Group_wishingPool';
 //import { Text } from 'react-native';
 
 
@@ -38,6 +38,13 @@ function Root() {
     return (
       
       <RootStack.Navigator>
+        <RootStack.Screen 
+          name="Splash"
+          component={SplashScreen}
+          options={{
+            headerShown: false
+          }}
+        />
         {/*login*/}
         <RootStack.Screen 
           name="loginSignup" 
@@ -92,7 +99,15 @@ function Root() {
         <RootStack.Screen 
           name="GroupDetail" 
           component={GroupDetailsScreen}
-          options={{headerShown: true }}/>
+          options={{
+            headerShown: false,
+          }}/>
+        <RootStack.Screen 
+          name="GroupWishingPool" 
+          component={GroupWishingPoolScreen}
+          options={{
+            headerShown: false,
+          }}/>
 
         <RootStack.Screen 
           name="GroupAddItem" 
@@ -290,11 +305,6 @@ function Root() {
               fontWeight: 'bold',
             }, 
           }}/>
-
-        <RootStack.Screen 
-          name="Chat"
-          component={ChatScreen}
-        />
 
       </RootStack.Navigator>
     );
