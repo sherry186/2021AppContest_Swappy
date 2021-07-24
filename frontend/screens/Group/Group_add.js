@@ -1,100 +1,244 @@
 import { styleSheets } from 'min-document';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Text,
     StyleSheet,
     View, 
     TextInput,
+    FlatList,
+    ScrollView,
+    Image,
+    Dimensions,
     TouchableOpacity} from 'react-native';
-    import * as SQLite from "expo-sqlite";
+import * as SQLite from "expo-sqlite";
+import { useNavigation } from '@react-navigation/core';
+import colors from '../../config/colors';
 
-export default class Group_ADD extends React.Component {
+let ScreenWidth = Dimensions.get("window").width;
 
-  static navigationOptions = {
-    title: 'Group_ADD',
-  }
-  constructor(props) {
-    super(props);
-    this.state = { Gname: '', Tags: '', };
-  }
+function Group_ADD () {
 
-  handlesubmit =() =>{
-        
-    this.props.navigation.navigate('Home')
+
+  const [Gname, setGname] = useState("");
+  const [tag, setTag] = useState("");
+  const [des, setDes] = useState("");
+  const [tagList, setTagList] = useState([]);
+  
+  const navigation = useNavigation();
+
+
+  const handlesubmit =() =>{
+    navigation.navigate('Home')
   } 
-  handleupload = () =>{
 
+  const handleAddTag = () =>{
+      const newTag = tag;
+      setTagList([...tagList, {name: newTag}]);
+      setTag('');
   }
 
+  const handleDelete = (item) =>{
+    let array = tagList;
+    const index = array.indexOf(item);
+    
+    if (index > -1) {
+      array.splice(index, 1);
+    }
+    setTagList([...array]);
+  }
 
-  render() {
-    const{ navigate } = this.props.navigation;
-    return(
-      <View style={styles.container}>
-        <Text style={styles.buttonText}>Group Name</Text>
-        <TextInput
-            style={styles.input}
-            placeholder="Change group"
-            onChangeText={(text) => this.setState({Gname: text})}
-            value = {this.state.Gname}/>
-        <Text style={styles.buttonText}>Tags</Text>
-        <TextInput
-            style={styles.input}
-            placeholder="item1, item2, item3"
-            onChangeText={(text) => this.setState({Tags: text})}
-            value = {this.state.Tags}/>
-        
-        <TouchableOpacity
-            title = 'upload'
-            onPress={this.handleupload}
-            style = {styles.item}>
-            <Text
-              style = {styles.buttonText}>Upload</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity
-            title = 'Submit'
-            onPress={this.handlesubmit}
-            style = {styles.item}>
-            <Text
-              style = {styles.buttonText}>Submit</Text>
-        </TouchableOpacity>
+  
 
-        {/* <Button
-            title = 'Go to home screen'
-            onPress={() => navigate('Home')}/> */}
+  
+    //const{ navigate } = this.props.navigation; 
+  return(
+    <View style={{flex:1, flexDirection: 'column'}}>
+      <ScrollView>
+      <View style ={styles.textContainer}>
+          <Text style={styles.text}>群組名稱</Text>
       </View>
-    )
-  }
+      <View style ={styles.textInputContainer}>
+        <TextInput
+            style={styles.input}
+            onChangeText={(text) => setGname(text)}
+            value = {Gname}/>
+      </View>
+      <View style ={styles.textContainer}>
+        <Text style={styles.text}>說明</Text>
+      </View>
+
+      <View style ={styles.textInputContainer2}>
+      <TextInput
+          style={styles.input}
+          multiline = {true}
+          onChangeText={(text) => setDes(text)}
+          value = {des}/>
+      </View>
+
+      <View style ={styles.textContainer}>
+        <Text style={styles.text}>物品品項(按勾新增物品)</Text>
+      </View>
+
+      <View style = {styles.inputContainer}>
+           <TextInput
+             style={styles.input2}
+             placeholderTextColor = {colors.function_100}
+             onChangeText={(text) => setTag(text)}
+             value={tag} />   
+           <TouchableOpacity
+             onPress = {()=>handleAddTag()}
+             style ={{ 
+               width: "7%", 
+               height: "100%",
+               justifyContent:'center',
+               alignItems:'center'}}
+           >
+             <Image
+               style ={{
+                 width: 15, 
+                 height: 15,
+                 }} 
+               source = {require('../../assets/breakAway/ok.png')}/>
+           </TouchableOpacity>
+       </View>  
+
+       
+       <ScrollView 
+          horizontal={true} 
+          style={{flexDirection: 'row', marginTop: ScreenWidth*0.05}}
+          >
+          {
+            
+            tagList.map((item, index)=>{
+              return(
+                <View 
+                  style = {{
+                    flexDirection:'row',
+                    marginHorizontal: ScreenWidth*0.05,
+                    marginVertical:ScreenWidth*0.03,
+                    backgroundColor: colors.function_100,
+                    width: ScreenWidth*0.3,
+                    height: ScreenWidth*0.1,
+                    alignItems:'center',
+                    justifyContent: 'center',
+                    borderRadius: ScreenWidth*0.02,
+                     }}>
+                  <Text style = {{flex:5, color: colors.mono_40, fontWeight: '900', marginLeft: "5%"}}>{item.name}</Text>
+                  <TouchableOpacity
+                    onPress={()=>handleDelete(item)}
+                    style = {{flex:1}}
+                    title = 'upload'>
+                    <Image
+                      style = {{height: ScreenWidth*0.02, width: ScreenWidth*0.02}} 
+                      source ={require('../../assets/group/delete.png')}/>
+                  </TouchableOpacity>
+                </View>
+              );
+            })
+          }
+       </ScrollView>  
+       
+      
+      </ScrollView>
+      
+      <View style = {styles.uploadContainer}>
+          <TouchableOpacity
+              title = 'Submit'
+              onPress={handlesubmit}
+              style = {styles.item}>
+              <Image
+                style = {{height: 70, width:70,}} 
+                source = {require('../../assets/breakAway/upload.png')}/>
+          </TouchableOpacity>
+      </View>
+      {/* <Button
+          title = 'Go to home screen'
+          onPress={() => navigate('Home')}/> */}
+    </View>
+  )
+
 
 }
 
+export default Group_ADD;
+
 const styles = StyleSheet.create({
   input: {
-    margin: 15,
-    height: 40,
-    borderColor: '#7a42f4',
-    borderWidth: 1
+    flex: 1,
+    marginHorizontal:"5%",
+    height: "100%",
+    color: colors.mono_80,
+    borderColor: colors.mono_80,
+    borderWidth: 1,
+    textAlignVertical:'top',
   },
-  container: {
-    // flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center'
-    paddingTop: 23
-  },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  title: {
-    fontSize: 32,
-  },
-  buttonText: {
-    //color: '#fff',
-    fontSize: 15,
+  input2: {
+    //top: 14,
+    color: colors.mono_80,
     left: 10,
-    fontWeight: 'bold',
+    height: "100%",
+    width: "90%",
+    borderWidth: 0,
   },
+  uploadContainer:{
+    flex:1,
+    justifyContent:'center',
+    height:"100%",
+    backgroundColor:"transparent",  
+    alignItems:'center',
+    justifyContent:'center',    
+  },
+  
+  item: {
+    position: 'absolute',
+    bottom: 60,
+    height:70,
+    width:70,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    marginLeft: "5%",
+    fontWeight: 'bold',
+    color: colors.mono_80,
+  },
+  inputContainer:{
+    flex:1.3,
+    marginLeft:"5%",
+    flexDirection: 'row',
+    //margin:10,
+    height: "100%",
+    width: "90%",
+    borderWidth: 1,
+    //borderRadius:6,
+    borderColor: colors.mono_80,
+    backgroundColor: 'transparent',
+  },
+  textContainer:{
+    flex:1,
+    marginVertical: 10,
+    justifyContent:'center',
+    //alignItems:'center',
+    backgroundColor:'transparent',      
+  },
+  textInputContainer:{
+    flex:1.3,
+    alignItems:'center',
+    //justifyContent:'center',
+    flexDirection:'row',
+    height:"100%",
+    width: "100%",
+    backgroundColor: "transparent",      
+  },
+  textInputContainer2:{
+    flex:2,
+    alignItems:'center',
+    
+    //justifyContent:'center',
+    flexDirection:'row',
+    height: ScreenWidth*0.5,
+    width: "100%",
+    backgroundColor: "transparent",      
+  },
+
 });
