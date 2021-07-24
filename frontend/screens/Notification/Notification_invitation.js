@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { View, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { View, Dimensions, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { SearchBar } from 'react-native-elements';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 import { useNavigation } from '@react-navigation/core';
@@ -10,6 +10,7 @@ import colors from '../../config/colors';
 
 import { useQuery, useMutation,  gql } from '@apollo/client';
 
+let ScreenWidth = Dimensions.get("window").width;
 const RENDER_INVITATIONS = gql`
   query getInvitedRequests{
     getInvitedRequests {
@@ -96,7 +97,7 @@ const Notification_invitation = () => {
                     mything_source: item.requestersItem == null ? null : item.requestersItem.image, 
                     requestFor_title:item.requestedItem.title, 
                     requestFor_source: item.requestedItem.image})}
-                  style = {{ backgroundColor: 'transparent'}}>
+                  style = {{ backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center', borderRadius: ScreenWidth*0.2}}>
                   <Text style={styles.title}>{item.requester.username} </Text>
                   <Text style={styles.title}>{item.requestedItem.title}</Text>
                   <Text style={styles.title}>{'general'}</Text>
@@ -106,20 +107,19 @@ const Notification_invitation = () => {
               <TouchableOpacity
                   onPress = {()=>handleYes(item.id)}
                   style={styles.ynButton}>
-                  <Text>Y</Text>
+                  <Text style ={{fontWeight: '900', fontSize: 20, color : colors.main_80}}>Y</Text>
               </TouchableOpacity>
             </View>
             <View style = {styles.yn}>
               <TouchableOpacity
                   onPress = {()=>handleNo(item.id)}
                   style={styles.ynButton}>
-                  <Text>N</Text>
+                  <Text style ={{fontWeight: '900', fontSize: 20, color : colors.warning_100}}>N</Text>
               </TouchableOpacity>
             </View>
         </View>
       </View>
       
-
   );
 
   useEffect(() => {
@@ -164,19 +164,20 @@ const styles = StyleSheet.create({
       backgroundColor: "transparent",
       width: "100%",
     },
-    margin: {
-
-    },
     complete:{ 
       flexDirection: 'row',
-      marginTop: 20,
+      marginTop: 10,
       height: 90, 
       width:"90%",
       backgroundColor: 'transparent',
       justifyContent:'center',
+
+      
     },
     item: {
       flex: 6,
+      justifyContent: 'center',
+      borderRadius: ScreenWidth*0.01,
       backgroundColor: colors.mono_60,
       padding: 20,
       marginVertical: 8,
@@ -198,8 +199,9 @@ const styles = StyleSheet.create({
       justifyContent:'center'
     },
     title: {
+      justifyContent:'center',
       fontSize: 12,
+      color: colors.mono_100,
+      fontWeight: 'bold',
     },
-    
-   
-  });
+ });
