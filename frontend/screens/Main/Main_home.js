@@ -245,7 +245,7 @@ function FlatListComponent(props)  {
                 <Image
                     style ={{width:10, 
                       height: 20, 
-                      tintColor: collected? colors.warning_80: colors.brown_60}}
+                      tintColor: collected? colors.function_100: colors.mono_80}}
                     source={require('../../assets/Social/collect.png')}/>     
             </TouchableOpacity>
      </View>

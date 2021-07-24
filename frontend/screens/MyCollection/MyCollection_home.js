@@ -116,7 +116,7 @@ const MyCollection_HOME = () => {
             >
           <Image
             //style ={{width:10, height: 20, tintColor: item.collected? colors.warning_80: colors.brown_40}}
-            style ={{width:10, height: 20, tintColor: colors.warning_80}}
+            style ={{width:10, height: 20, tintColor: colors.function_100}}
             source={require('../../assets/Social/collect.png')}/>
         </TouchableOpacity>
     </View>
