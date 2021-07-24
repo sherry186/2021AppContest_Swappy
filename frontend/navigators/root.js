@@ -24,7 +24,7 @@ import LoginSignupNav from './loginSignupNav';
 import colors from '../config/colors';
 import BreakAwayItemStory from '../screens/BreakAway/BreakAwayItemStory';
 import Notification_successDetail from '../screens/Notification/Notification_successDetail';
-import Notification_failDetail from '../screens/Notification/Notification_failDetail';
+//import Notification_failDetail from '../screens/Notification/Notification_failDetail';
 import Notification_waitingDetail from '../screens/Notification/Notification_waitingDetail';
 import Notification_invitationDetail from '../screens/Notification/Notification_invitationDetail';
 import Message_home from '../screens/Message/Message_home';
@@ -300,7 +300,7 @@ function Root() {
             }, 
           }}/>
 
-        <RootStack.Screen 
+        {/* <RootStack.Screen 
           name="NotificationFailDetail" 
           component={Notification_failDetail}
           options={{
@@ -316,7 +316,7 @@ function Root() {
               backgroundColor:'transparent',
               fontWeight: 'bold',
             }, 
-          }}/>
+          }}/> */}
 
         <RootStack.Screen 
           name="NotificationInvatationDetail" 

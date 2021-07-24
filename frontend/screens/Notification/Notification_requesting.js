@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
-import { View, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { 
+   View,
+   Text, 
+   SafeAreaView,  
+   FlatList, 
+   StyleSheet, 
+   TouchableOpacity, 
+   ScrollView,
+   Dimensions } from "react-native";
+
 import { SearchBar } from 'react-native-elements';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 import  { useNavigation } from '@react-navigation/core';
@@ -14,6 +23,7 @@ import colors from '../../config/colors';
 
 import { useQuery, useMutation,  gql } from '@apollo/client';
 
+let ScreenWidth = Dimensions.get("window").width;
 
 
 const RENDER_REQUESTS = gql`
@@ -107,16 +117,9 @@ const Notification_requesting = () => {
 
   const renderFail = ({ item }) => {
     return (
-    //console.log(this.props.navigation);
     <TouchableOpacity 
-      // onPress = {()=>navigation.navigate("NotificationFailDetail",{ 
-      //   id: item.id,
-      //   mything_title: item.requestersItem == null ? null : item.requestersItem.title, 
-      //   mything_source: item.requestersItem == null ? null : item.requestersItem.image, 
-      //   requestFor_title: item.requestedItem.title, 
-      //   requestFor_source: item.requestedItem.image})} 
-      style={styles.success}>
-      <Text style={styles.title}>{item.requestedItem.title}</Text>
+      style={styles.fail}>
+      <Text style={styles.title, {color: colors.warning_100}}>{item.requestedItem.title}</Text>
     </TouchableOpacity>
   )};
 
@@ -131,8 +134,8 @@ const Notification_requesting = () => {
         mything_source: item.requestersItem == null ? null : item.requestersItem.image, 
         requestFor_title: item.requestedItem.title, 
         requestFor_source: item.requestedItem.image})} 
-      style={styles.fail}>
-      <Text style={styles.title}>{item.requestedItem.title}</Text>
+      style={styles.success}>
+      <Text style={styles.title, {color: colors.mono_40}}>{item.requestedItem.title}</Text>
     </TouchableOpacity>
   )};
 
@@ -148,7 +151,7 @@ const Notification_requesting = () => {
         requestFor_title: item.requestedItem.title, 
         requestFor_source: item.requestedItem.image})} 
       style={styles.waiting}>
-      <Text style={styles.title}>{item.requestedItem.title}</Text>
+      <Text style={styles.title, {color: colors.mono_80}}>{item.requestedItem.title}</Text>
     </TouchableOpacity>
   )};
 
@@ -172,29 +175,31 @@ const Notification_requesting = () => {
     //console.log(this.props.navigation);
 
   return(
-    <ScrollView style={styles.container}>
-      {data? (<>
-            <FlatList
-              data={data.getRequestingRequests.filter(request => request.status == "SUCCESS")}
-              renderItem={renderSuccess}
-              keyExtractor={item => item.id}
-            />
+    // <View style = {{alignItems: 'center'}}>
+        <ScrollView style={styles.container}>
+          {data? (<>
+                <FlatList
+                  data={data.getRequestingRequests.filter(request => request.status == "SUCCESS")}
+                  renderItem={renderSuccess}
+                  keyExtractor={item => item.id}
+                />
 
-            <FlatList
-              data={data.getRequestingRequests.filter(request => request.status == "WAITING")}
-              renderItem={renderWaiting}
-              keyExtractor={item => item.id}
-            />
+                <FlatList
+                  data={data.getRequestingRequests.filter(request => request.status == "WAITING")}
+                    renderItem={renderWaiting}
+                  keyExtractor={item => item.id}
+                />
 
-            <FlatList
-              data={data.getRequestingRequests.filter(request => request.status == "FAIL")}
-              renderItem={renderFail}
-              keyExtractor={item => item.id}
-            />
-          </>) : <Text>loading...</Text>
-      }
-      
-    </ScrollView>
+                <FlatList
+                  data={data.getRequestingRequests.filter(request => request.status == "FAIL")}
+                  renderItem={renderFail}
+                  keyExtractor={item => item.id}
+                />
+              </>) : <Text>loading...</Text>
+          }
+
+        </ScrollView>
+    // </View>
   )
   
 
@@ -205,29 +210,45 @@ export default Notification_requesting;
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      // alignItems: 'center',
-      // justifyContent: 'center'
+      backgroundColor: colors.mono_40,
     },
     success: {
-      backgroundColor: colors.function_100,
+      backgroundColor: colors.main_80,
+      width: ScreenWidth*0.9,
       padding: 20,
+      alignItems: 'center',
       marginVertical: 8,
-      marginHorizontal: 16,
+      marginHorizontal: "5%",
+      borderRadius: ScreenWidth*0.01,
     },
     fail: {
-      backgroundColor: colors.warning_60,
+      backgroundColor: colors.mono_40,
+      width: ScreenWidth*0.9,
+      borderWidth: 1,
       padding: 20,
+      alignItems: 'center',
       marginVertical: 8,
-      marginHorizontal: 16,
+      borderColor: colors.warning_100,
+      borderStyle: 'dashed',
+      borderRadius: 1,
+      marginHorizontal: "5%",
     },
     waiting: {
-      backgroundColor: colors.mono_60,
+      backgroundColor: colors.mono_40,
+      borderRadius: 1,
+      width: ScreenWidth*0.9,
       padding: 20,
+      borderWidth:1,
+      borderColor: colors.mono_80,
+      borderStyle: 'dashed',
+      alignItems: 'center',
       marginVertical: 8,
-      marginHorizontal: 16,
+      marginHorizontal: "5%",
     },
     title: {
-      fontSize: 32,
+      fontSize: 22,
+      fontWeight: '900',
+      //color: colors.mono_40,
     },
     button: {
       width: 60,

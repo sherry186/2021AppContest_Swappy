@@ -6,6 +6,7 @@
     function_100: '#629D89',
     function_80: '#629D89',
     function_60: '#D2EFE5',
+    main_80:'#84C6B0',
     warning_100: '#EC9292',
     warning_80: '#FFB0AE',
     warning_60: '#FADAD9',
