@@ -18,41 +18,59 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import colors from '../../config/colors';
 
+import { useMutation,  gql } from '@apollo/client';
+
+const ADD_GROUP_ITEM = gql`
+  mutation createGroupItem($groupId:ID!, $tag: String, $description: String!, $exchangeMethod: ExchangeMethod!, $image: String){
+    createGroupItem(groupId:$groupId, input: {
+      tag: $tag
+      description: $description
+      exchangeMethod: $exchangeMethod
+      image: $image
+    })
+  }`;
+
 let ScreenWidth = Dimensions.get("window").width;
 
 function GroupAddItem ({route, navigation}) {
 
   const [Gname, setGname] = useState('');
   const [Discription, setDiscription] = useState('');
-  const [Ihave, setIhave] = useState([]);
+  //const [Ihave, setIhave] = useState([]);
+  const [tag, setTag] = useState('');
   const [dummyData, setDummyData] = useState([{way: 'faceToFace'},
                                                {way: 'byPost'}]);
+  const [exchangeMethod, setExchangeMethod] = useState('NOTSELECTED')
   const [image, setImage] = useState([]);
+
+  const [createGroupItem, { data, error, loading }] = useMutation(ADD_GROUP_ITEM);
 
   const windowHeight = useWindowDimensions().height;
 
-  useEffect(()=>{
-     let arr = dummyData.map((item, index)=>{
-       item.isSelected = false
-       return {...item};
-     })
-     const {tags} = route.params;
-     let arr2 = tags.map((item, index)=>{
-       item.isSelected = false
-       return {...item};
-     })
-     const tags2 = tags
-     let arr3 = tags2.map((item, index)=>{
-       item.isSelected = false
-       return {...item}
-     })
+  const {tags, id} = route.params;
 
-    setDummyData(arr);
-    setIhave(arr2);
+  // useEffect(()=>{
+  //    let arr = dummyData.map((item, index)=>{
+  //      item.isSelected = false
+  //      return {...item};
+  //    })
+  //    const {tags} = route.params;
+  //    let arr2 = tags.map((item, index)=>{
+  //      item.isSelected = false
+  //      return {...item};
+  //    })
+  //    const tags2 = tags
+  //    let arr3 = tags2.map((item, index)=>{
+  //      item.isSelected = false
+  //      return {...item}
+  //    })
 
-    // this.setState({dummyData: arr, Ihave: arr2, Iwant: arr3});
-     console.log('arr data ==>', arr)
-  }, []);
+  //   setDummyData(arr);
+  //   setIhave(arr2);
+
+  //   // this.setState({dummyData: arr, Ihave: arr2, Iwant: arr3});
+  //    console.log('arr data ==>', arr)
+  // }, []);
 
   const pickImage = async () => {
     if(image.length < 5)
@@ -99,14 +117,15 @@ function GroupAddItem ({route, navigation}) {
 
   const selectionHandlerSort = (ind) => {
     
-    let arr2 = Ihave.map((item, index)=>{
-      if(ind == index){
-        item.isSelected = !item.isSelected;
-      }
-      return {...item}
-    })
-    console.log("selection handler ==>", arr2)
-    setIhave(arr2)
+    // let arr2 = Ihave.map((item, index)=>{
+    //   if(ind == index){
+    //     item.isSelected = !item.isSelected;
+    //   }
+    //   return {...item}
+    // })
+    // console.log("selection handler ==>", arr2)
+    setTag(tags[ind]);
+    console.log(tag);
   }
 
   const selectionHandler = (ind) => {
@@ -120,9 +139,30 @@ function GroupAddItem ({route, navigation}) {
     })
     //console.log("selection handler1 ==>", arr1)
     setDummyData(arr1)
+
+    if(dummyData[0].isSelected == true && dummyData[1].isSelected == true) {
+      setExchangeMethod("BOTH");
+    } else if (dummyData[0].isSelected == true && dummyData[1].isSelected == false) {
+      setExchangeMethod("FACETOFACE");
+    } else if (dummyData[0].isSelected == false && dummyData[1].isSelected == true) {
+      setExchangeMethod("BYPOST");
+    } else {
+      setExchangeMethod("NOTSELECTED");
+    }
+    //console.log(exchangeMethod);
   }
 
   const handlesubmit =() =>{
+    console.log(id, typeof(tag), typeof(Discription), typeof(exchangeMethod));
+    if(image.length == 0) {
+      createGroupItem({ variables: { groupId: id, tag: tag, description: Discription, exchangeMethod: exchangeMethod}});
+    } else {
+      for (let i = 0; i < image.length; i++) {
+        console.log(typeof(image[i].uri));
+        createGroupItem({ variables: { groupId: id, tag: tag, description: Discription, exchangeMethod: exchangeMethod, image: image[i].uri}});
+      }
+    }
+
     navigation.goBack()
   } 
 
@@ -207,7 +247,7 @@ function GroupAddItem ({route, navigation}) {
 
             <ScrollView horizontal={true} style={{flexDirection: 'row'}}>
               {
-                Ihave.map((item, index)=>{
+                tags.map((item, index)=>{
                   return(
                     <TouchableOpacity
                       onPress={()=>selectionHandlerSort(index)}
@@ -224,7 +264,7 @@ function GroupAddItem ({route, navigation}) {
                         justifyContent: 'center',
                         borderRadius: ScreenWidth*0.02,
                         }}>
-                      <Text style = {styles.buttonText}>{item.name}</Text> 
+                      <Text style = {styles.buttonText}>{item}</Text> 
                     </TouchableOpacity>
                   );
                 })

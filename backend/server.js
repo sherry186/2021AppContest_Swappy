@@ -186,6 +186,7 @@ const typeDefs = gql`
         FACETOFACE
         BYPOST
         BOTH
+        NOTSELECTED
     }
 `;
 
