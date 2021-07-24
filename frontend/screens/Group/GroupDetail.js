@@ -15,47 +15,63 @@ import colors from '../../config/colors';
 
 let ScreenWidth = Dimensions.get("window").width;
 
+import { useQuery,  gql } from '@apollo/client';
+
+const RENDER_GROUP_DETAIL = gql`
+  query getGroup($id: ID!) {
+    getGroup(id: $id) {
+      groupItems{
+        description
+        tag
+        exchangeMethod
+        image
+      }
+    }
+  }`;
+
 
 function GroupDetailsScreen ({route, navigation}) {
 
-  const { title, items, post, discription } = route.params;
+  const { title, items, post, discription, tags, id } = route.params;
+  console.log(id);
 
+  const { data, error, loading } = useQuery(RENDER_GROUP_DETAIL, {variables: { id: id }, pollInterval: 500});
   const handleback =() =>{
     navigation.goBack()
   } 
-
+  console.log(data);
   const renderItem = ({ item }) => (
     //console.log(this.props.navigation);
     <TouchableOpacity 
       style={styles.tag}>
       <View>
-        <Text style={styles.buttonText}>{item.name}</Text>
+        <Text style={styles.buttonText}>{item}</Text>
         </View>    
       
     </TouchableOpacity>
   );
   
 
+  const renderPostN = ({ item }) => (
+    <TouchableOpacity 
+      style={styles.itemN} 
+      onPress={() => {navigation.navigate('Group_itemDetail',{dis: item.description, method: item.exchangeMethod, tagname: item.tag, image: item.image})}}>    
+      <Text style={styles.title, {color: colors.mono_80}}>{item.description}</Text>
+     
+      <TouchableOpacity>
+        <Text style={styles.tagT, {color: colors.mono_100}}>#{item.tag}</Text>
+      </TouchableOpacity>
+    </TouchableOpacity>
+  );
+
   const renderPost = ({ item }) => (
     <TouchableOpacity 
       style={styles.item} 
       onPress={() => {navigation.navigate('Group_itemDetail',{dis: item.dis, method: item.method, tagname: items[item.tagid].name, image: item.image})}}>    
       <Text style={styles.title, {color: colors.mono_40}}>{item.dis}</Text>
-     
-      <TouchableOpacity>
-        <Text style={styles.tagT, {color: colors.mono_60}}>#{items[item.tagid].name}</Text>
-      </TouchableOpacity>
-    </TouchableOpacity>
-  );
-
-  const renderPostN = ({ item }) => (
-    <TouchableOpacity 
-      style={styles.itemN} 
-      onPress={() => {navigation.navigate('Group_itemDetail',{dis: item.dis, method: item.method, tagname: items[item.tagid].name, image: item.image})}}>    
-      <Text style={styles.title, {color: colors.mono_80}}>{item.dis}</Text>
       
       <TouchableOpacity>
-        <Text style={styles.tagT, {color: colors.function_100}}>#{items[item.tagid].name}</Text>
+        <Text style={styles.tagT, {color: colors.function_60}}>#{items[item.tagid].name}</Text>
       </TouchableOpacity>
     </TouchableOpacity>
   );
@@ -83,7 +99,7 @@ function GroupDetailsScreen ({route, navigation}) {
 
           <TouchableOpacity
             style = {{flex:2, width: "20%", backgroundColor: colors.mono_40, alignItems: 'center', justifyContent:'center'}}
-            onPress = {()=>navigation.navigate('GroupWishingPool', {items: items})}
+            onPress = {()=>navigation.navigate('GroupWishingPool', {id: id, items: tags})}
             >
             <Image 
               style = {{height: "25%", width: "25%"}}
@@ -106,7 +122,7 @@ function GroupDetailsScreen ({route, navigation}) {
                 <View style = {{width: "5%"}}></View>
                 <ScrollView style = {{width: '95%', backgroundColor: 'transparent'}}>
                   <FlatList
-                    data={items}
+                    data={tags}
                     contentContainerStyle={{backgroundColor: 'transparent', alignItems:'center', justifyContent: 'center'}}
                     horizontal={ true }
                     renderItem={renderItem}
@@ -120,17 +136,17 @@ function GroupDetailsScreen ({route, navigation}) {
             
 
             <ScrollView contentContainerStyle = {{backgroundColor: 'transparent', alignItems:'center', justifyContent:'center'}}>
-             <FlatList
+
+              <FlatList
                 data={post}
                 renderItem={renderPost}
                 keyExtractor={item => item.ID}
               />
-
-              <FlatList
-                data={post}
+              {data? (<FlatList
+                data={data.getGroup.groupItems}
                 renderItem={renderPostN}
-                keyExtractor={item => item.ID}
-              />
+                //keyExtractor={item => item.id}
+              />) : <Text>loading ...</Text>}
               <View style = {{height: 78,backgroundColor: colors.mono_40,}}></View>
             </ScrollView>
             
@@ -139,7 +155,7 @@ function GroupDetailsScreen ({route, navigation}) {
 
          <TouchableOpacity
               title = 'add'
-              onPress={() => {navigation.navigate('GroupAddItem',{tags: items})}}
+              onPress={() => {navigation.navigate('GroupAddItem',{tags: tags, id: id})}}
               style={styles.button}>
               <Image
                 style = {styles.button}

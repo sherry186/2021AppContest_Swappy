@@ -14,6 +14,7 @@ import { SearchBar } from 'react-native-elements';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 import colors from '../../config/colors';
 import GroupItems from '../../Data/GroupItems';
+import { useQuery,  gql } from '@apollo/client';
 
 
 
@@ -27,21 +28,22 @@ const contains = (data, query) => {
   return false;
 }
 
-
+const RENDER_GROUP = gql`
+  query getGroups {
+    getGroups {
+      id
+      title
+      description
+      tags
+    }
+  }`;
 
 const Group_HOME = () => {
 
-  // constructor(props){
-  //   super(props);
-  //   this.state = {
-  //     search: '',
-  //     data: [],
-  //     fullData: [],
-  //   };
-  // }
+  const { data, error, loading } = useQuery(RENDER_GROUP, {pollInterval: 500});
   
   const [search, setSearch] = useState('');
-  const [data, setData] = useState([]);
+  const [data1, setData1] = useState([]);
   const [fullData, setFullData] = useState([]);
   const navigation = useNavigation();
  
@@ -57,11 +59,11 @@ const Group_HOME = () => {
 
   const handleSearch = (search) => {
     console.log("search", search)
-    const data1 = _.filter(fullData, group => {
+    const data1 = _.filter(data.getGroups, group => {
       return contains(group.title, search)
     })
     setSearch(search);
-    setData(data1);
+    setData1(data1);
     //this.setState({ data,  search});
   };
 
@@ -72,7 +74,7 @@ const Group_HOME = () => {
       <View style={styles.buttons}>
           <TouchableOpacity 
             style={styles.item}
-            onPress={() => navigation.navigate('GroupDetail', {title: item.title, discription: item.discription, items: item.items, post: item.post})}>
+            onPress={() => navigation.navigate('GroupDetail', {title: item.title, discription: item.description, tags: item.tags, items: item.items, post: item.post, id: item.id})}>
             <Text>{item.title}</Text>
           </TouchableOpacity>
       </View>
@@ -130,11 +132,13 @@ const Group_HOME = () => {
       
       <ScrollView style = {{top: "5%", alignContent: 'center'}}>
         <View>
-            <FlatList
-              data={search == ''? fullData : data}
+          { data ? 
+            (<FlatList
+              data={search == ''? data.getGroups : data1}
               renderItem={renderItem}
               keyExtractor={item => item.id}
-            />
+            />) : <Text>loading ...</Text>
+          }
         </View>
         
         <View style = {{height: 78,backgroundColor: colors.mono_40,}}></View>

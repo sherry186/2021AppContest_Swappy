@@ -14,10 +14,23 @@ import * as SQLite from "expo-sqlite";
 import { useNavigation } from '@react-navigation/core';
 import colors from '../../config/colors';
 
+import { useMutation,  gql } from '@apollo/client';
+
 let ScreenWidth = Dimensions.get("window").width;
+
+const ADD_GROUP = gql`
+  mutation addGroup($title: String!, $description: String!, $tags: [String]!){
+    addGroup(title: $title, description: $description, tags: $tags) {
+      id
+      title
+      description
+      tags
+    }
+  }`;
 
 function Group_ADD () {
 
+  const [addGroup, { data, error, loading }] = useMutation(ADD_GROUP);
 
   const [Gname, setGname] = useState("");
   const [tag, setTag] = useState("");
@@ -28,12 +41,15 @@ function Group_ADD () {
 
 
   const handlesubmit =() =>{
+    console.log(tagList);
+    addGroup({variables: {title: Gname, description: des, tags: tagList}})
     navigation.navigate('Home')
   } 
 
   const handleAddTag = () =>{
       const newTag = tag;
-      setTagList([...tagList, {name: newTag}]);
+      setTagList([...tagList, newTag]);
+      //setTagList([...tagList, {name: newTag}]);
       setTag('');
   }
 
@@ -123,7 +139,7 @@ function Group_ADD () {
                     justifyContent: 'center',
                     borderRadius: ScreenWidth*0.02,
                      }}>
-                  <Text style = {{flex:5, color: colors.mono_40, fontWeight: '900', marginLeft: "5%"}}>{item.name}</Text>
+                  <Text style = {{flex:5, color: colors.mono_40, fontWeight: '900', marginLeft: "5%"}}>{item}</Text>
                   <TouchableOpacity
                     onPress={()=>handleDelete(item)}
                     style = {{flex:1}}

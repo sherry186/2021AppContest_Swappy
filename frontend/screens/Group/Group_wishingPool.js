@@ -11,34 +11,53 @@ import {
     ScrollView,
     Dimensions} from 'react-native';
 import colors from '../../config/colors';
-//import GroupItems from '../../Data/GroupItems';
+import { useMutation,  gql } from '@apollo/client';
 
 let ScreenWidth = Dimensions.get("window").width;
+
+const ADD_WISH_LIST = gql`
+  mutation addWishList ($groupId: ID!, $tags: [String]!) {
+  addWishList(groupId: $groupId, tags: $tags)
+}`;
 
 
 function GroupWishingPoolScreen ({route, navigation}) {
 
-    const { items, } = route.params;
+    const { id, items } = route.params;
 
     const [itemState, setItemState] = useState([]);
 
-    const handleback =() =>{
 
+    const [addWishList, { data, error, loading }] = useMutation(ADD_WISH_LIST);
+
+    const handleback =() =>{
+      let selectedTags = [];
+      itemState.forEach(item => {
+        if(item.isSelected) {
+          selectedTags.push(item.name)
+        }
+      });
+      console.log(selectedTags);
+      addWishList({ variables:{groupId: id, tags: selectedTags}})
+      console.log(data, error, loading);
       navigation.goBack()
     } 
-
     const handleSelect = (ind)=>{
         let arr1 = itemState.map((item, index)=>{
             if( ind == index){
-              item.isSelected = !itemState.isSelected;
+              item.isSelected = !itemState[ind].isSelected;
             }
             return {...item}
           })
-        console.log("selection handler1 ==>", arr1)
+       
         setItemState(arr1)
+        console.log(arr1);
+
+
     }
 
-    const renderItem = ({ item }) => (
+    const renderItem = ({ item }) => {
+      return (
       //console.log(this.props.navigation);
       <TouchableOpacity
         onPress = {() =>handleSelect(item.ind)}
@@ -59,17 +78,21 @@ function GroupWishingPoolScreen ({route, navigation}) {
           </View>    
 
       </TouchableOpacity>
-    );
+    )};
 
     useEffect(()=>{
-        let arr = items.map((item, index)=>{
-            item.isSelected = false
-            item.ind = index
-            return {...item};
+        let arr = [];
+        arr = items.map((item, index)=>{
+            var obj = {}
+            obj.isSelected = false;
+            obj.ind = index;
+            obj.name = item;
+            return {...obj};
         })
         
         setItemState(arr);
 
+        
     },[])
   
 
@@ -78,7 +101,7 @@ function GroupWishingPoolScreen ({route, navigation}) {
         <View style = {{flex: 1, flexDirection: 'row', height: "7%", backgroundColor: colors.mono_40}}>
           <TouchableOpacity
             style = {{flex:2, width: "20%", backgroundColor: colors.mono_40, alignItems: 'center', justifyContent:'center'}}
-            onPress = {()=>navigation.goBack()}
+            onPress = {handleback}
             >
             <Image 
               style = {{height: "25%", width: "25%"}}
