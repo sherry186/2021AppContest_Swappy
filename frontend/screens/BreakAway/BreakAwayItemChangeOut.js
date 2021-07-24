@@ -7,11 +7,14 @@ import {
     TouchableOpacity, 
     TextInput,
     Image,
+    ScrollView,
+    KeyboardAvoidingView,
+    Dimensions,
     } from 'react-native';
 
 import { Picker } from '@react-native-picker/picker';
 import colors from '../../config/colors';
-
+let ScreenWidth = Dimensions.get("window").width;
 
 import * as SQLite from 'expo-sqlite'
 const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
@@ -135,72 +138,115 @@ export default class BreakAwayItemChangeOut extends React.Component {
     const { source, title, itemId } = this.props.route.params;
     console.log(source);
     return(
-      <View style={styles.container}>
-        <Text style={styles.buttonText}>Item Name</Text>
-        <TextInput
-            style={styles.input}
-            placeholder='ItemName'
-            onChangeText={(text) => this.setState({ItemName: text})}
-            value = {this.state.ItemName}/>
-
-        <Text style={styles.buttonText}>Description</Text>
-        <TextInput
-            style={styles.input}
-            placeholder='second hand, not brandnew'
-            onChangeText={(text) => {this.setState({Description: text}); console.log(this.state.Description)}}
-            value = {this.state.Description}/>
-
-        <Text style={styles.buttonText}>item sort</Text>
-        <Picker
-            mode={'dropdown'}
-            style={{height: 25,width:200}}
-            selectedValue={this.state.dropdown}
-            onValueChange={(value)=>this.onValueChange(2,value)}>
-            <Picker.Item label="書籍" value="key0" />
-            <Picker.Item label="衣服與配件" value="key1" />
-            <Picker.Item label="玩具" value="key2" />
-            <Picker.Item label="特色周邊品" value="key3" />
-            <Picker.Item label="小型生活器具" value="key4" />
-            <Picker.Item label="家電用品" value="key5" />
-            <Picker.Item label="其他" value="key6" />
-          </Picker>
-
-        <View style={{flexDirection: 'row'}}>
-          {
-            this.state.dummyData.map((item, index)=>{
-              return(
-                <TouchableOpacity
-                  onPress={()=>this.selectionHandler(index)}
-                  title = 'upload'
-                  //onPress={this.handleupload}
-                  style = {item.isSelected ? styles.item : styles.itemS}>
-                  <Text style = {styles.buttonText}>{item.way}</Text> 
-                </TouchableOpacity>
-              );
-            })
-          }
-        </View>
+      <View style={{ flex: 1, alignItems: 'center', backgroundColor: 'transparent'}}>
+        <KeyboardAvoidingView style = {{height: "50%", width: "100%", alignItems: 'center'}}>
+            <Image 
+                style = {{flex: 5, height: "50%", width: "80%"}}
+                source={{uri: source}}/>
+        </KeyboardAvoidingView>
+        <ScrollView style = {{width: "100%", backgroundColor: 'transparent'}}>
+            <View style ={styles.textContainer}>
+              <Text style = {styles.text}>物品標題</Text>
+            </View>
         
-        <Image 
-            style={{ width: 100, height: 100  }}
-            source={source}/>
+            <View style ={styles.textInputContainer}>
+              <TextInput
+                  style={styles.input}
+                  //placeholder='ItemName'
+                  onChangeText={(text) => this.setState({ItemName: text})}
+                  value = {this.state.ItemName}/>
+            </View>
+            <View style ={styles.textContainer}>
+              <Text style={styles.text}>物品種類</Text> 
+            </View>
+            
+            <View style ={styles.textInputContainer}>
+              <View style = {{flex: 0.5}}></View>
+              <View style = {{flex: 3.5, justifyContent: 'center'}}>
+                    <Picker
+                        mode={'dropdown'}
+                        style={{height: 25,width:200}}
+                        selectedValue={this.state.dropdown}
+                        onValueChange={(value)=>this.onValueChange(2,value)}>
+                        <Picker.Item label="書籍" value="key0" />
+                        <Picker.Item label="衣服與配件" value="key1" />
+                        <Picker.Item label="玩具" value="key2" />
+                        <Picker.Item label="特色周邊品" value="key3" />
+                        <Picker.Item label="小型生活器具" value="key4" />
+                        <Picker.Item label="家電用品" value="key5" />
+                        <Picker.Item label="其他" value="key6" />
+                      </Picker>
+              </View>
+              <View style = {{flex: 6}}></View>
+            </View>
 
-        {/* <TouchableOpacity
-            title = 'upload'
-            onPress={this.handleupload}
-            style = {styles.item}>
-            <Text
-              style = {styles.buttonText}>Upload</Text>
-        </TouchableOpacity> */}
+        
 
-        <TouchableOpacity
-            title = 'Submit'
-            onPress={()=>this.handlesubmit(itemId)}
-            style = {styles.item}>
-            <Text
-              style = {styles.buttonText}>Submit</Text>
-        </TouchableOpacity>
+        
 
+          <View style={styles.textInputContainer}>
+            <View style = {{flex: 0.5}}></View>
+            <View style = {{flex: 9.5, flexDirection: 'row'}}>
+            {
+              this.state.dummyData.map((item, index)=>{
+                return(
+                  <TouchableOpacity
+                    onPress={()=>this.selectionHandler(index)}
+                    title = 'upload'
+                    //onPress={this.handleupload}
+                    style = {item.isSelected ? styles.item : styles.itemS}>
+                    <Text style = {styles.buttonText}>{item.way}</Text> 
+                  </TouchableOpacity>
+                );
+              })
+            }
+            </View>
+          </View>
+
+          <View style ={styles.textContainer}>
+              <Text style={styles.text}>物品說明</Text>
+          </View>
+        
+          <View style = {{flex:3}}>
+              <TextInput
+                  style={styles.input}
+                  placeholder='second hand, not brandnew'
+                  onChangeText={(text) => {this.setState({Description: text}); console.log(this.state.Description)}}
+                  value = {this.state.Description}/>
+          </View>
+
+        
+        
+
+
+          {/* <TouchableOpacity
+              title = 'upload'
+              onPress={this.handleupload}
+              style = {styles.item}>
+              <Text
+                style = {styles.buttonText}>Upload</Text>
+          </TouchableOpacity> */}
+          
+        
+          {/* <TouchableOpacity
+              title = 'Submit'
+              onPress={()=>this.handlesubmit(itemId)}
+              style = {styles.item}>
+              <Text
+                style = {styles.buttonText}>Submit</Text>
+          </TouchableOpacity> */}
+  
+          <View style = {styles.uploadContainer}>
+                <TouchableOpacity
+                    title = 'Submit'
+                    onPress={()=>this.handlesubmit(itemId)}
+                    style = {styles.item}>
+                    <Image
+                      style = {{height: 70, width:70,}} 
+                      source = {require('../../assets/breakAway/upload.png')}/>
+                </TouchableOpacity>
+          </View>
+        </ScrollView>
         {/* <Button
             title = 'Go to home screen'
             onPress={() => navigate('Home')}/> */}
@@ -211,42 +257,137 @@ export default class BreakAwayItemChangeOut extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  picker: {
-    width: 100,
-    height: 10,
-  },
+ 
   input: {
-    margin: 15,
+    flex: 1,
+    marginHorizontal:"5%",
     height: 40,
-    borderColor: '#7a42f4',
+    borderColor: colors.mono_80,
     borderWidth: 1
   },
-  container: {
-    // flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center'
-    paddingTop: 23
-  },
-  item: {
+  wayS: {
     backgroundColor: colors.mono_60,
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+    width: "20%",
+    height: 25,
+    margin: 5,
+    borderRadius:2,
+    justifyContent:'center',
+    alignItems:'center', 
   },
-  itemS: {
+  waySd: {
     backgroundColor: colors.function_100,
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  title: {
-    fontSize: 32,
+    width: "20%",
+    height: 25,
+    margin: 5,
+    borderRadius:2,
+    justifyContent:'center',
+    alignItems:'center',
   },
   buttonText: {
-    //color: '#fff',
+    color: colors.mono_40,
     fontSize: 15,
-    left: 3,
-
     fontWeight: 'bold',
+  },
+  item: {
+    height:70,
+    width:70,
+    alignItems: 'center',
+    justifyContent: 'center',
+    
+  },
+  image:{
+    width: ScreenWidth*0.2, 
+    height: ScreenWidth*0.2,  
+  },
+  imageContainer:{
+    flex:1, 
+    left: 10, 
+    margin : 10, 
+    justifyContent:'center', 
+    alignItems:'center', 
+    flexDirection: 'row'
+  },
+  flatListContainer:{
+    flex:4, 
+    backgroundColor: "transparent",
+    justifyContent: 'center',
+    alignItems:'center',      
+  },
+  buttonAdd: {
+    flex: 1.2,
+    height: "100%",
+    backgroundColor: "transparent",
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonAddContainer: {
+    borderColor: colors.mono_80,
+    borderWidth: 1,
+    width: ScreenWidth*0.2,
+    height: ScreenWidth*0.2,
+    backgroundColor: "transparent",
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  line: {
+    height: 1,
+    backgroundColor: colors.function_100,
+    width: "90%",
+    alignSelf:"center",
+  },
+  textContainer:{
+    flex:1,
+    justifyContent:'center',
+    backgroundColor:'transparent',      
+  },
+  textInputContainer:{
+    flex:1,
+    alignItems:'center',
+    //justifyContent:'center',
+    flexDirection:'row',
+    height:"100%",
+    width: "100%",
+    backgroundColor: "transparent",      
+  },
+  uploadContainer:{
+    flex:1,
+    justifyContent:'center',
+    height:"100%",
+    backgroundColor:"transparent",  
+    alignItems:'center',
+    justifyContent:'center',    
+  },
+  text:{
+    margin: "5%",
+    color: colors.mono_80,
+    fontWeight: "bold",
+  },
+  input: {
+    flex: 1,
+    marginHorizontal:"5%",
+    height: 40,
+    borderColor: colors.mono_80,
+    borderWidth: 1
+  },
+  input2: {
+    flex: 1,
+    width: ScreenWidth*0.3,
+    height: 40,
+    borderColor: colors.mono_80,
+    borderWidth: 1
+  },
+  input3: {
+    flex: 1,
+    width: ScreenWidth*0.5,
+    height: 40,
+    borderColor: colors.mono_80,
+    borderWidth: 1
+  },
+  inputStory:{
+    margin: "5%",
+    height: 150,
+    borderColor: colors.mono_80,
+    borderWidth: 1,
+    textAlignVertical: 'top',
   },
 });
