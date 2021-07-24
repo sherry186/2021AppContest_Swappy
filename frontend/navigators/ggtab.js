@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { View, Text } from "react-native";
+import { View, Text, Dimensions } from "react-native";
 import General from './GeneralNav';
 import Group from './GroupNav';
 import colors from "../config/colors";
+
+let ScreenWidth = Dimensions.get("window").width;
 
 
 
@@ -22,11 +24,13 @@ export default class TopBarNavigator extends React.Component{
                     indicatorStyle:{color: colors.function_100},
                     
                     style: { 
-                        marginTop:12,
-                        elevation: 0,
+                        alignSelf:'center',
+                        //marginleft: ScreenWidth*0.25,
+                        //marginTop:12,
+                        //elevation: 0,
                         top: 63,
-                        left: 79,
-                        width: 252,
+                        //left: ScreenWidth*0.2,
+                        width: ScreenWidth * 0.6,
                         height: 40,
                         backgroundColor: 'transparent',
                     }
@@ -37,8 +41,8 @@ export default class TopBarNavigator extends React.Component{
                     component = {General}
                     options={{ 
                         tabBarIcon:({focused})=>(
-                            <View style =  {{display: 'flex', right: 25, width: 100,}}>
-                                <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20,}}>一般換物</Text>
+                            <View style =  {{flex: 1, alignItems: 'center', alignSelf: 'center', width: ScreenWidth*0.3, }}>
+                                <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20}}>一般換物</Text>
                             </View>
                           )}}
                 />
@@ -47,8 +51,8 @@ export default class TopBarNavigator extends React.Component{
                     component = {Group}
                     options={{ 
                         tabBarIcon:({focused})=>(
-                            <View style =  {{display: 'flex', right: 25, width: 100,}}>
-                                <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20,}}>群組換物</Text>
+                            <View style =  {{ flex: 1, alignItems: 'center', alignSelf: 'center', width: ScreenWidth*0.3,}}>
+                                <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20}}>群組換物</Text>
                             </View>
                           )}}
                 />
