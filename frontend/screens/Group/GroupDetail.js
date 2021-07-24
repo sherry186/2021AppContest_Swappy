@@ -18,16 +18,20 @@ let ScreenWidth = Dimensions.get("window").width;
 import { useQuery,  gql } from '@apollo/client';
 
 const RENDER_GROUP_DETAIL = gql`
-  query getGroup($id: ID!) {
-    getGroup(id: $id) {
-      groupItems{
-        description
-        tag
-        exchangeMethod
-        image
-      }
-    }
-  }`;
+query filterMatchingGroupItems($id: ID!) {
+  filterMatchingGroupItems(id: $id) 
+}`;
+  // query getGroup($id: ID!) {
+  //   getGroup(id: $id) {
+  //     groupItems{
+  //       description
+  //       tag
+  //       exchangeMethod
+  //       image
+  //     }
+  //   }
+
+ 
 
 
 function GroupDetailsScreen ({route, navigation}) {
@@ -40,6 +44,8 @@ function GroupDetailsScreen ({route, navigation}) {
     navigation.goBack()
   } 
   console.log(data);
+  console.log(error);
+  console.log(loading);
   const renderItem = ({ item }) => (
     //console.log(this.props.navigation);
     <TouchableOpacity 
@@ -67,11 +73,11 @@ function GroupDetailsScreen ({route, navigation}) {
   const renderPost = ({ item }) => (
     <TouchableOpacity 
       style={styles.item} 
-      onPress={() => {navigation.navigate('Group_itemDetail',{dis: item.dis, method: item.method, tagname: items[item.tagid].name, image: item.image})}}>    
-      <Text style={styles.title, {color: colors.mono_40}}>{item.dis}</Text>
+      onPress={() => {navigation.navigate('Group_itemDetail',{dis: item.description, method: item.exchangeMethod, tagname: item.tag, image: item.image})}}>    
+      <Text style={styles.title, {color: colors.mono_40}}>{item.description}</Text>
       
       <TouchableOpacity>
-        <Text style={styles.tagT, {color: colors.function_60}}>#{items[item.tagid].name}</Text>
+        <Text style={styles.tagT, {color: colors.function_60}}>#{item.tag}</Text>
       </TouchableOpacity>
     </TouchableOpacity>
   );
@@ -137,16 +143,17 @@ function GroupDetailsScreen ({route, navigation}) {
 
             <ScrollView contentContainerStyle = {{backgroundColor: 'transparent', alignItems:'center', justifyContent:'center'}}>
 
+              {data? (<>
               <FlatList
-                data={post}
+                data={data.filterMatchingGroupItems.matchedItems}
                 renderItem={renderPost}
                 keyExtractor={item => item.ID}
               />
-              {data? (<FlatList
-                data={data.getGroup.groupItems}
+              <FlatList
+                data={data.filterMatchingGroupItems.unmatchedItems}
                 renderItem={renderPostN}
                 //keyExtractor={item => item.id}
-              />) : <Text>loading ...</Text>}
+              /></>) : <Text>loading ...</Text>}
               <View style = {{height: 78,backgroundColor: colors.mono_40,}}></View>
             </ScrollView>
             

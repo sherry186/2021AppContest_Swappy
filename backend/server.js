@@ -206,10 +206,10 @@ const resolvers = {
         filterMatchingGroupItems: async (_, { id }, {db,user}) => {
             var group = await db.collection('Groups').findOne({_id: ObjectId(id)});
             var groupItems = group.groupItems;
-            console.log(group);
+            //console.log(group);
             //如果使用者沒有新增wishTags或haveTags (無法配對)
-            if(group.wishList[user._id].wishTags == undefined || group.wishList[user._id].haveTags == undefined) {
-                console.log(group.wishList[user._id]);
+            if(group.wishList[user._id] == undefined || group.wishList[user._id].wishTags == undefined || group.wishList[user._id].haveTags == undefined) {
+                //console.log(group.wishList[user._id]);
                 return {
                     matchedItems: [],
                     unmatchedItems: groupItems
@@ -252,7 +252,7 @@ const resolvers = {
             return await db.collection('Groups').find().toArray();
         },
         getMyCollections: async (_, __, { user }) => {
-            console.log(user.postsCollection);
+            //console.log(user.postsCollection);
             return user.postsCollection ? user.postsCollection : null;
         },
         getPosts: async (_, __, {db}) => {
@@ -265,9 +265,9 @@ const resolvers = {
             if(!user) {
                 throw new Error('AUthentication Error. Please sign in');
             }
-            console.log(user._id);
+            //console.log(user._id);
             const myCollection = await db.collection('GeneralItems').find({ "owner._id" : user._id }).toArray();
-            console.log(myCollection);
+            //console.log(myCollection);
             return myCollection;
         },
         getGeneralItem: async (_, { id }, {db, user}) => {
