@@ -223,7 +223,10 @@ function FlatListComponent(props)  {
             >
                   <Text style={styles.post}>{props.title}</Text>
                   <Text style={styles.person}>{props.hideName? "匿名" : props.person}</Text>
-                  <Text style={styles.person}>{props.description}</Text>
+                  <Text 
+                    style={styles.person}
+                    ellipsizeMode={'tail'} 
+                    numberOfLines={2}>{props.description}</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={{width: 10,
