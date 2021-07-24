@@ -24,7 +24,14 @@ export default class MainDetail extends React.Component {
 
   constructor(props){
     super(props);
-    this.state = {comment: ""}
+    this.state = {
+      comment: "", 
+      comments:[
+        {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree"},
+        {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree"},
+        {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree"},
+        {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree"},
+        {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree"}, ]}
   }
 
   componentDidMount() {
@@ -33,21 +40,41 @@ export default class MainDetail extends React.Component {
 
   renderComment = ({ item }) => (
     //console.log(this.props.navigation);
-    <Text>{item.person} {item.content}</Text>
+    <View style = {{
+      width:"90%", 
+      borderColor: colors.mono_60,
+      borderWidth:1,
+      backgroundColor: colors.mono_40, 
+      alignSelf:'center', 
+      marginVertical: ScreenWidth*0.02, 
+      height: ScreenWidth*0.3, 
+      borderRadius: ScreenWidth*0.02,
+      }}>
+      <View style = {{flexDirection:'row', margin: ScreenWidth*0.02, alignItems:'center'}}>
+        <Image
+          style = {{height: ScreenWidth*0.05, width: ScreenWidth*0.05}}
+          source = {require('../../assets/Social/profileDefault.png')}
+          />
+        <Text style = {{left: ScreenWidth*0.01, color: colors.mono_100}}>{item.name}</Text>
+      </View>
+        <Text style = {{left: ScreenWidth*0.01, color: colors.mono_100}}> {item.content}</Text>
+    </View>
+    
   );
 
   render(){  
     const { title, profile, person, post, comment, hideName } = this.props.route.params;
     return (
       <View style={{ flex: 1, top: "5%", bottom:"20%", alignItems: 'center'}}>
-         <View style = {{flex: 1, flexDirection: 'row', height: "7%", backgroundColor: colors.mono_40}}>
+         <View style = {{flexDirection: 'row', height: "7%", width:"100%", backgroundColor: colors.mono_40}}>
           <TouchableOpacity
             style = {{flex:2, width: "20%", backgroundColor: colors.mono_40, alignItems: 'center', justifyContent:'center'}}
             onPress = {()=>this.props.navigation.goBack()}
             >
             <Image 
               style = {{height: "25%", width: "25%"}}
-              source = {require('../../assets/manyneed/xmark.png')}/>
+              source = {profile? {uri:profile} : require('../../assets/manyneed/xmark.png')}/> 
+              {/*sholud be hideName? but for there are no profile photo*/}
           </TouchableOpacity>
 
           <View
@@ -56,31 +83,92 @@ export default class MainDetail extends React.Component {
           </View>
         </View>
         
-        <View style= {{flex: 10, backgroundColor: colors.mono_40, width: "100%"}}>
-          <View style = {{flex: 1, marginLeft: ScreenWidth*0.05}}>
+        <ScrollView style= {{flex: 10, backgroundColor: colors.mono_40, width: "100%"}}>
+          <View style = {{flex: 1, marginLeft: ScreenWidth*0.05, marginRight: ScreenWidth*0.05}}>
             <View style ={{flexDirection: 'row'}}>
               <Image
                 style = {{height: ScreenWidth*0.05, width: ScreenWidth*0.05}}
                 source = {require('../../assets/Social/profileDefault.png')}/>
               <Text style = {{left: ScreenWidth*0.01,}}>{hideName? person : "匿名"}</Text>
             </View>
-              <Text>{post}</Text>
-
+            <ScrollView style = {{marginTop:ScreenWidth*0.05, backgroundColor:'transparent'}}>
+              <Text style = {{color: colors.mono_100}}>{post}</Text>
+            </ScrollView>
+            
           </View>
 
-          <View style = {{flex:1}}>
-            
+          
+
+          <View style = {{flex:1, backgroundColor: colors.mono_40, bottom: 60, marginTop: ScreenWidth*0.02}}>
+            <View style = {styles.line}></View>
             <FlatList 
-              data={comment}
+              data={this.state.comments}
               renderItem={this.renderComment}
               keyExtractor={item => item.id}/>
-            <TextInput
-                style={styles.title}
-                placeholder="comment"
-                onChangeText={(text) => this.setState({comment: text})}
-                value = {this.state.comment}/>
+
+            
           </View>
-        </View>
+          
+          
+        </ScrollView>
+        <View style = {styles.commentC}>
+                <View style = {styles.comment}>
+                    <TextInput
+                        placeholder="comment"
+                        style = {{flex:8}}
+                        onChangeText={(text) => this.setState({comment: text})}
+                        value = {this.state.comment}/>
+                    <TouchableOpacity
+                       //onPress = {()=>this.handleAddComment()}
+                       style ={{ 
+                         flex:1,
+                         width: "7%", 
+                         height: "100%",
+                         justifyContent:'center',
+                         alignItems:'center'}}
+                     >
+                       <Image
+                         style ={{
+                           width: 15, 
+                           height: 15,
+                           }} 
+                         source = {require('../../assets/breakAway/ok.png')}/>
+                     </TouchableOpacity>
+                </View> 
+                <TouchableOpacity
+                       //onPress = {()=>handleHeart()}
+                       style ={{ 
+                         flex:1,
+                         width: "7%", 
+                         height: "100%",
+                         //backgroundColor:'red',
+                         justifyContent:'center',
+                         alignItems:'center'}}
+                     >
+                       <Image
+                         style ={{
+                          width: ScreenWidth*0.06, 
+                          height: ScreenWidth*0.06,
+                           }} 
+                         source = {require('../../assets/Social/heart.png')}/>
+                     </TouchableOpacity>
+                <TouchableOpacity
+                  //onPress = {()=>handleCollect()}
+                  style ={{ 
+                    flex:1,
+                    width: "7%", 
+                    height: "100%",
+                    justifyContent:'center',
+                    alignItems:'center'}}
+                >
+                  <Image
+                    style ={{
+                      width: ScreenWidth*0.06, 
+                      height: ScreenWidth*0.06,
+                      }} 
+                    source = {require('../../assets/Social/收藏.png')}/>
+                </TouchableOpacity>
+            </View>    
       </View>
     );
   }
@@ -88,6 +176,12 @@ export default class MainDetail extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  line: {
+    height: 1,
+    backgroundColor: colors.mono_60,
+    width: "90%",
+    alignSelf:"center",
+  },
   input: {
     margin: 15,
     height: 40,
@@ -100,20 +194,28 @@ const styles = StyleSheet.create({
     // justifyContent: 'center'
     paddingTop: 23
   },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+  comment: {
+    flexDirection:'row',
+    flex:8,
+    //backgroundColor:colors.mono_80,
+    borderRadius:ScreenWidth*0.02,
+    height:ScreenWidth*0.1,
+    width:"70%",
+    borderWidth:1,
+    borderColor: colors.function_100,
+    marginLeft:"5%",
+    //position:'absolute',
+    bottom: 0,
   },
-  itemS: {
-    backgroundColor: '#7a42f4',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  title: {
-    fontSize: 32,
+  commentC: {
+    flexDirection:'row',
+    //flex:1,
+    backgroundColor:colors.mono_40,
+    height:"7%",
+    width:"100%",
+    alignItems:'center',
+    position:'absolute',
+    bottom: 40,
   },
   buttonText: {
     //color: '#fff',
