@@ -230,7 +230,7 @@ export default function BreakAwayHesitate () {
                   //style={styles.input3}
                   selectedValue={space}
                   // onValueChange={(value)=>onValueChange(2 ,value)}
-                    onValueChange= {(itemValue, itemIndex) => setSpace(itemValue)}>
+                  onValueChange= {(itemValue, itemIndex) => setSpace(itemValue)}>
                   {
                     data.map((item, index)=>{
                       return(

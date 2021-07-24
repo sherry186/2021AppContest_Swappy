@@ -12,8 +12,12 @@ import { View,
        ScrollView, 
        TouchableOpacity,
        StyleSheet, 
+       Dimensions,
        TextInput } from "react-native";
 
+import colors from '../../config/colors';
+
+let ScreenWidth = Dimensions.get("window").width;
 
 /* 2. Get the param */
 export default class MainDetail extends React.Component {
@@ -33,24 +37,51 @@ export default class MainDetail extends React.Component {
   );
 
   render(){  
-    const { title, person, post, comment, hideName } = this.props.route.params;
+    const { title, profile, person, post, comment, hideName } = this.props.route.params;
     return (
-      <ScrollView style={{ flex: 1}}>
-        <Text></Text>
-        <Text></Text>
-        <Text>{title}</Text>
-        <Text>{hideName? person : "匿名"}</Text>
-        <Text>{post}</Text>
-        <FlatList 
-          data={comment}
-          renderItem={this.renderComment}
-          keyExtractor={item => item.id}/>
-        <TextInput
-            style={styles.title}
-            placeholder="comment"
-            onChangeText={(text) => this.setState({comment: text})}
-            value = {this.state.comment}/>
-      </ScrollView>
+      <View style={{ flex: 1, top: "5%", bottom:"20%", alignItems: 'center'}}>
+         <View style = {{flex: 1, flexDirection: 'row', height: "7%", backgroundColor: colors.mono_40}}>
+          <TouchableOpacity
+            style = {{flex:2, width: "20%", backgroundColor: colors.mono_40, alignItems: 'center', justifyContent:'center'}}
+            onPress = {()=>this.props.navigation.goBack()}
+            >
+            <Image 
+              style = {{height: "25%", width: "25%"}}
+              source = {require('../../assets/manyneed/xmark.png')}/>
+          </TouchableOpacity>
+
+          <View
+            style ={{flex: 8, justifyContent: 'center', alignItems: 'center'}}>
+              <Text style = {{right: "15%", fontSize: 20, fontWeight: 'bold', color: colors.mono_100}}>{title}</Text>
+          </View>
+        </View>
+        
+        <View style= {{flex: 10, backgroundColor: colors.mono_40, width: "100%"}}>
+          <View style = {{flex: 1, marginLeft: ScreenWidth*0.05}}>
+            <View style ={{flexDirection: 'row'}}>
+              <Image
+                style = {{height: ScreenWidth*0.05, width: ScreenWidth*0.05}}
+                source = {require('../../assets/Social/profileDefault.png')}/>
+              <Text style = {{left: ScreenWidth*0.01,}}>{hideName? person : "匿名"}</Text>
+            </View>
+              <Text>{post}</Text>
+
+          </View>
+
+          <View style = {{flex:1}}>
+            
+            <FlatList 
+              data={comment}
+              renderItem={this.renderComment}
+              keyExtractor={item => item.id}/>
+            <TextInput
+                style={styles.title}
+                placeholder="comment"
+                onChangeText={(text) => this.setState({comment: text})}
+                value = {this.state.comment}/>
+          </View>
+        </View>
+      </View>
     );
   }
 

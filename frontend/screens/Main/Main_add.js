@@ -101,16 +101,16 @@ const Main_ADD = () => {
       </View>
          
 
-      <View style = {styles.uploadContainer}>
-              <TouchableOpacity
-                  title = 'Submit'
-                  onPress={handlesubmit}
-                  style = {styles.item}>
-                  <Image
-                    style = {{height: 70, width:70,}} 
-                    source = {require('../../assets/breakAway/upload.png')}/>
-              </TouchableOpacity>
-          </View>
+      
+      <TouchableOpacity
+          title = 'Submit'
+          onPress={handlesubmit}
+          style = {styles.item}>
+          <Image
+            style = {{height: 70, width:70,}} 
+            source = {require('../../assets/breakAway/upload.png')}/>
+      </TouchableOpacity>
+     
     </View>
   )
 }
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     flex:1,
     justifyContent:'center',
     height:"100%",
-    backgroundColor:"transparent",  
+    backgroundColor:"red",  
     alignItems:'center',
     justifyContent:'center',    
   },
@@ -178,7 +178,8 @@ const styles = StyleSheet.create({
   },
   item: {
     position:'absolute',
-    top: ScreenWidth*0.4,
+    bottom: 0,
+    alignSelf:'center',
     height:70,
     width:70,
     alignItems: 'center',
