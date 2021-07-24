@@ -11,7 +11,9 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "graphql": "^15.5.1",
+    "graphql-type-json": "^0.3.2",
     "jsonwebtoken": "^8.5.1",
+    "lodash.partition": "^4.6.0",
     "mongodb": "^4.0.0",
     "mongoose": "^5.13.2",
     "nodemon": "^2.0.12"

@@ -68,7 +68,6 @@ export default class BreakAway extends React.Component {
             style={styles.probarStyle} 
             color = {colors.function_100}/> 
       </View>
-      
     </TouchableOpacity> 
       
   )};

@@ -6,6 +6,8 @@ const { ApolloServerPluginLandingPageGraphQLPlayground } = require('apollo-serve
 require('dotenv').config();
 //const mongoose = require('mongoose');
 const { MongoClient, ObjectId } = require('mongodb');
+const { GraphQLJSON, GraphQLJSONObject } = require('graphql-type-json');
+var partition = require('lodash.partition');
 
 // Password handler
 const bcrypt = require("bcrypt");
@@ -35,6 +37,8 @@ const getUserFromToken = async (token, db) => {
 }
 
 const typeDefs = gql`
+    scalar JSON
+    scalar JSONObject
     type Query {
         generalItemsList: [GeneralItem]!
         myGeneralItems: [GeneralItem]!
@@ -45,6 +49,9 @@ const typeDefs = gql`
         getRequestsByStatus(status: Status!): [Request]!
         getPosts: [Post]!
         getMyCollections: [Post]!
+        getGroups: [Group]!
+        getGroup(id: ID!): Group!
+        filterMatchingGroupItems(id: ID!): JSONObject!
     }
 
     type Mutation {
@@ -64,6 +71,17 @@ const typeDefs = gql`
 
         addToCollection(postId: ID!): Boolean!
         removeFromCollection(postId: ID!): Boolean!
+
+        addGroup(title: String!, description: String! tags: [String]!): Group!
+        createGroupItem(groupId: ID!, input: GroupItemInput):Boolean!
+        addWishList(groupId:ID!, tags: [String]!): Boolean!
+    }
+
+    input GroupItemInput {
+        tag: String, 
+        description: String!, 
+        exchangeMethod: ExchangeMethod!, 
+        image: String
     }
 
     input SignUpInput {
@@ -112,6 +130,30 @@ const typeDefs = gql`
         image: String
     }
 
+    type Group {
+        id: ID!
+        title: String!
+        description: String!
+        tags: [String]!
+        groupItems: [GroupItem]!
+        wishList: JSONObject! 
+    }
+
+    type GroupItem {
+        description: String!
+        exchangeMethod: ExchangeMethod!
+        tag: String
+        image: String
+        owner: User!
+    }
+
+    type wishListItem {
+        id: ID!
+        user: User!
+        wantTags: [String]!
+        haveTags: [String]!
+    }
+
     type Request {
         id: ID
         guyWhoseItemIsRequested: User!
@@ -139,7 +181,20 @@ const typeDefs = gql`
         FAIL
         SUCCESS
     }
+
+    enum ExchangeMethod{
+        FACETOFACE
+        BYPOST
+        BOTH
+    }
 `;
+
+function intersect(a, b) { // a b are arrays
+    objA = {};
+    a.forEach(function(v) { objA[v] = true; });
+    c = b.filter(function(v) { return objA[v]; });
+    return c
+}
 
 
 
@@ -147,6 +202,54 @@ const typeDefs = gql`
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
     Query: {
+        filterMatchingGroupItems: async (_, { id }, {db,user}) => {
+            var group = await db.collection('Groups').findOne({_id: ObjectId(id)});
+            var groupItems = group.groupItems;
+            console.log(group);
+            //如果使用者沒有新增wishTags或haveTags (無法配對)
+            if(group.wishList[user._id].wishTags == undefined || group.wishList[user._id].haveTags == undefined) {
+                console.log(group.wishList[user._id]);
+                return {
+                    matchedItems: [],
+                    unmatchedItems: groupItems
+                }
+            } else {
+                const isWhatTheUserWants = (item) => {
+                    return group.wishList[user._id].wishTags[item.tag];
+                };
+                const canOfferWhatTheOwnerWants = (item) => {
+                    if(group.wishList[item.owner._id].wishTags == undefined) {
+                        return false;
+                    } else {
+                        for (const tag in group.wishList[item.owner._id].wishTags) {
+                            if(group.wishList[user._id].haveTags[tag]) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                };
+
+                partitionedGroupItems = partition(groupItems, function(item) {
+                    if(item.owner == undefined || item.owner._id == user._id) {
+                        return false
+                    } else {
+                        return isWhatTheUserWants(item) && canOfferWhatTheOwnerWants(item);
+                    }
+                })
+
+                return {
+                    matchedItems: partitionedGroupItems[0],
+                    unmatchedItems: partitionedGroupItems[1]
+                }
+            }
+        },
+        getGroup: async (_, { id }, {db}) => {
+            return await db.collection('Groups').findOne({_id: ObjectId(id)});
+        },
+        getGroups: async (_, __, {db}) => {
+            return await db.collection('Groups').find().toArray();
+        },
         getMyCollections: async (_, __, { user }) => {
             console.log(user.postsCollection);
             return user.postsCollection ? user.postsCollection : null;
@@ -172,7 +275,7 @@ const resolvers = {
             }
    
             const item =  await db.collection('GeneralItems').findOne({_id: ObjectId(id)});
-            console.log(getToken(item.owner._id));
+            //console.log(getToken(item.owner._id));
             return item;
         }, 
         getInvitedRequests: async (_, __, {db, user}) => {
@@ -355,6 +458,75 @@ const resolvers = {
                 token: getToken(user._id)
             }
         },
+        addGroup: async (_, { title, description, tags }, { db, user }) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+            const newGroup = {
+                title: title,
+                description: description,
+                tags: tags,
+                groupItems: [],
+                wishList: {}
+            }
+
+            const result = await db.collection('Groups').insertOne(newGroup);
+            return {
+                ...newGroup,
+                id: result.insertedId
+            }
+        },
+        addWishList: async (_, { groupId, tags }, { db, user }) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+            const group = await db.collection('Groups').findOne({_id: ObjectId(groupId)});
+            //console.log(group);
+            let tagsObject = {};
+            tags.forEach(function(v) { tagsObject[v] = true; });
+            if(group.wishList[user._id] == undefined || group.wishList[user._id] == null) {
+                group.wishList[user._id] = {};
+            } 
+            group.wishList[user._id].wishTags = tagsObject;
+            console.log(group.wishList);
+            const result = await db.collection('Groups').updateOne({ _id : ObjectId(groupId) },{ $set: { wishList: group.wishList }});
+            return true;
+        },
+        createGroupItem: async (_, { groupId, input }, { db, user }) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+            const group = await db.collection('Groups').findOne({_id: ObjectId(groupId)});
+            //console.log(group);
+            console.log(group.wishList[user._id]);
+
+            if(group.wishList[user._id] == undefined || group.wishList[user._id] == null) {
+                let tagsObject = {};
+                tagsObject[input.tag] = true;
+                group.wishList[user._id] = {};
+                group.wishList[user._id].haveTags = tagsObject;
+            } else if (group.wishList[user._id].haveTags == undefined || group.wishList[user._id].haveTags == null) {
+                let tagsObject = {};
+                tagsObject[input.tag] = true;
+                group.wishList[user._id].haveTags = tagsObject;
+            } else {
+                let tagsObject = group.wishList[user._id].haveTags;
+                tagsObject[input.tag] = true;
+                group.wishList[user._id].haveTags = tagsObject;
+            }
+
+            await db.collection('Groups').updateOne({_id: ObjectId(groupId)}, { $set: { wishList: group.wishList }});
+
+            const newGroupItem = {
+                description: input.description,
+                tag: input.tag,
+                exchangeMethod: input.exchangeMethod,
+                image: input.image,
+                owner: user
+            }
+            await db.collection('Groups').updateOne({ _id : ObjectId(groupId) },{ $push: { groupItems: newGroupItem }});
+            return true;
+        },
         createGeneralItem: async (_, { input }, { db, user }) => {
             if(!user) {
                 throw new Error('AUthentication Error. Please sign in');
@@ -409,6 +581,11 @@ const resolvers = {
     Post: {
         id: ({ _id, id }) => _id || id,
     },
+    Group: {
+        id: ({ _id, id }) => _id || id,
+    },
+    JSON: GraphQLJSON,
+    JSONObject: GraphQLJSONObject,
   };
 
 
@@ -424,7 +601,7 @@ const start = async () => {
         resolvers, 
         context: async ({req}) => {
             const user = await getUserFromToken(req.headers.authorization, db);
-            console.log(getToken("60f96890d500fa3e0481725c"));
+            //console.log(getToken("60f96890d500fa3e0481725c"));
             return {
                 db,
                 user,
@@ -443,7 +620,7 @@ const start = async () => {
     });
 }
 
-console.log(getToken('60f55abf6cb420ec4427fe72'));
+console.log(getToken('60fa373b1194a5dc307aae23'));
 
 start();
 
