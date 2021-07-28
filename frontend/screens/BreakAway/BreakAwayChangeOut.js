@@ -1,6 +1,5 @@
 import { styleSheets } from 'min-document';
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Text,
     StyleSheet,
@@ -24,12 +23,14 @@ import { Picker } from '@react-native-picker/picker';
 // import * as SQLite from "expo-sqlite";
 import colors from '../../config/colors';
 import * as SQLite from 'expo-sqlite';
+
 import { useMutation,  gql } from '@apollo/client';
+import { createMyStoriesTable, createStoryItem, updateProgress } from '../../localStorageApi/api';
 
 let ScreenWidth = Dimensions.get("window").width;
 
-const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
 
+const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
 
   const CREATE_GENERALITEM = gql`
   mutation createGeneralItem ($title: String!, $description: String!, $category: String!, $exchangeMethod: String!, $image: String) {
@@ -55,6 +56,7 @@ const BreakAwayChangeOut = () => {
   const [dropdown, setDropdown] = useState('');
   const [deliveryMethod, setDeliveryMethod] = useState(0);
   const [dummyData, setdummyData] = useState([ {way: '面交'}, {way: '郵寄'}]);
+  const [data1, setData1] = useState([]);
 
   const [image, setImage] = useState([]);
 
@@ -79,6 +81,30 @@ const BreakAwayChangeOut = () => {
     setdummyData(arr);
     console.log(dummyData);
   }, []);
+
+  useEffect(() => {
+    createMyStoriesTable();
+    console.log();
+
+    database.transaction(tx => {
+      tx.executeSql('SELECT * FROM MySpaces', 
+      null,
+      (txObj, resultSet) => {
+          //console.log('Success', resultSet);
+          let spacesData = resultSet.rows._array;
+          setData1(spacesData);
+          //console.log(data);
+  },
+      (txObj, error) => console.log('Error', error))
+  });
+  }, []);
+
+  const addToStory = (title, source, story, spaceId) =>{
+    createStoryItem(title, story, source, spaceId);
+
+    const keepPoints = 2.0
+    updateProgress(spaceId, keepPoints);
+  }
 
   const renderImage = ({ item }) => (
     <SafeAreaView style = {styles.imageContainer}>
@@ -180,15 +206,18 @@ const BreakAwayChangeOut = () => {
   }
 
   const handlesubmit =() =>{
-    
+    const dummyImageURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAMFBMVEX09PTMzMzJycnPz8/d3d3V1dXi4uLo6Ojw8PDx8fH39/ft7e3Y2NjQ0NDp6enb29uHE20LAAACaklEQVR4nO3b6W6CQBhGYUTWD9T7v9uylLIN6jCk8Cbn+deEGo6DMOAYRQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIJyFiuzshLesStJAdVZdufEV38LFydkZm6w+IrBJrK86itkxgU1ifnaKmz363QvUvsbjmoNYdjuXPPMQz6R7lfLsGKeq3bd76LvfHwnFIXt0tOKYwjuF51kVtjMUbzqFVmR1/cpK30idwv7qH98yz0SVwvI+XP19JygqhY9xehMnXokihfl0/hZ77a5I4WM2zXz5DKJI4XwKvjHLNGeGRmE1L7w7N7fKeRLSKCy+KGwCnedZjcJofruXuo7SbpwdiRqFlk4D42y9rf0eyOtEjcL5BzFeb2rV5oRApNAmj6QcjyRs8g4sE0UKJ4nxemJq8yGeJ6oURpY/uic26frppy0uJvNEmcI2JM/yovlz8cxlGbhIFCrcsA6cX0/kC52Bt3hMlC90Bk5HUbzQPYL9KA6b6BXmk8/YZuCYqFdYj/f47wL/EtUKrR6/LXsfOCSKFbaBQ+KnwGa79sqpVWjp7x1Ec6B+DhQsHAK7xM+BeoVjYLPzr499eoXTwO+IFfoHihXuWbWgVVh792kV7lt3IlRoe0ZQqvCLax+FZ8c4UUghheebFu6jU1gk++gU7l3t3f2rRmGAyxcGr329cuEh60stunBh2Z3y6yxM/wX52S1u/bf3Ryzzdq9tuIDnYWv1q7NTNlhy0O8t/Nb6/SfLbnHoYbpjSep/sjLfOZ0ZXfTXJKPgH69deAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDyA0uAKIxQw0bjAAAAAElFTkSuQmCC'
     if(image.length == 0) {
       createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod}});
+      addToStory(itemName, dummyImageURI, story, space)
     } else {
       for (let i = 0; i < image.length; i++) {
         console.log(typeof(image[i].uri));
         createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod, image: image[i].uri}});
+        addToStory(itemName, image[i].uri, story, space)
       }
     }
+
     
     navigation.navigate('General');
   } 
@@ -307,7 +336,8 @@ const BreakAwayChangeOut = () => {
             <View style = {{flex: 3.5, justifyContent: 'center'}}>
                 <Picker
                   mode={'dropdown'}
-                  style={styles.input3}
+                  style={{height: 25,width:200}}
+                  //style={styles.input3}
                   selectedValue={space}
                   // onValueChange={(value)=>onValueChange(2 ,value)}
                   onValueChange= {(itemValue, itemIndex) => setSpace(itemValue)}>

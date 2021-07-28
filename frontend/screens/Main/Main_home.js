@@ -152,7 +152,7 @@ const Main_HOME = () => {
                 person = {item.person}
                 title = {item.title}
                 description = {item.description}
-                hideName = {item.hideName}
+                hideName = {item.hideUser}
                 comment = {item.comment}
                 navigation = {navigation} />}}
             //renderItem={renderChat}
@@ -219,7 +219,7 @@ function FlatListComponent(props)  {
       <View style={styles.ChatC}>
            <TouchableOpacity
              style={styles.Chat}
-             onPress={() => props.navigation.navigate('MainDetail', {title: props.title, person: props.person, post: props.description, comment: props.comment, hideName: props.hideName})}
+             onPress={() => props.navigation.navigate('MainDetail', {title: props.title, person: props.person, post: props.description, comment: props.comment, hideName: props.hideUser})}
             >
                   <Text style={styles.post}>{props.title}</Text>
                   <Text style={styles.person}>{props.hideName? "匿名" : props.person}</Text>

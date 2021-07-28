@@ -83,23 +83,33 @@ export default class MainDetail extends React.Component {
           </View>
         </View>
         
-        <ScrollView style= {{flex: 10, backgroundColor: colors.mono_40, width: "100%"}}>
-          <View style = {{flex: 1, marginLeft: ScreenWidth*0.05, marginRight: ScreenWidth*0.05}}>
-            <View style ={{flexDirection: 'row'}}>
+        <View style= {{flex: 1, backgroundColor: colors.mono_40, width: "100%"}}>
+          <ScrollView style = {{ flex: 1, marginLeft: ScreenWidth*0.05, marginRight: ScreenWidth*0.05, backgroundColor: 'green'}}>
+            <View style ={{ flexDirection: 'row'}}>
               <Image
                 style = {{height: ScreenWidth*0.05, width: ScreenWidth*0.05}}
                 source = {require('../../assets/Social/profileDefault.png')}/>
               <Text style = {{left: ScreenWidth*0.01,}}>{hideName? person : "匿名"}</Text>
             </View>
-            <ScrollView style = {{marginTop:ScreenWidth*0.05, backgroundColor:'transparent'}}>
-              <Text style = {{color: colors.mono_100}}>{post}</Text>
+
+            <ScrollView style= {{backgroundColor: 'red'}}>
+                <View style = {{  backgroundColor:'transparent',}}>
+                  <Text style = {{flex: 1, color: colors.mono_100}}>{post}</Text>
+                </View>
             </ScrollView>
             
-          </View>
+            
+          </ScrollView>
+
+          {/* <ScrollView style = {{flex: 1}}>
+              <View style = {{ backgroundColor:'transparent',}}>
+                <Text style = {{color: colors.mono_100}}>{post}</Text>
+              </View>
+          </ScrollView> */}
 
           
 
-          <View style = {{flex:1, backgroundColor: colors.mono_40, bottom: 60, marginTop: ScreenWidth*0.02}}>
+          <ScrollView style = {{flex: 1,  backgroundColor: colors.mono_40, bottom: 60, marginTop: ScreenWidth*0.02}}>
             <View style = {styles.line}></View>
             <FlatList 
               data={this.state.comments}
@@ -107,10 +117,10 @@ export default class MainDetail extends React.Component {
               keyExtractor={item => item.id}/>
 
             
-          </View>
+          </ScrollView>
           
           
-        </ScrollView>
+        </View>
         <View style = {styles.commentC}>
                 <View style = {styles.comment}>
                     <TextInput
