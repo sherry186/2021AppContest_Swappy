@@ -217,8 +217,7 @@ export default function BreakAwayHesitate () {
               </View>
               
           </View>
-{/* 
-          <View style ={styles.textContainer}> */}
+          {/* <View style ={styles.textContainer}> */}
             <Text style={styles.text}>物品位置</Text> 
           {/* </View> */}
            
