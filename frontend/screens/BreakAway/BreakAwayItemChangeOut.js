@@ -1,5 +1,5 @@
 import { styleSheets } from 'min-document';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Text,
     StyleSheet,
@@ -19,80 +19,62 @@ let ScreenWidth = Dimensions.get("window").width;
 import * as SQLite from 'expo-sqlite'
 const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
 
-
+import { useMutation,  gql } from '@apollo/client';
 import { deleteHesitateItem } from '../../localStorageApi/api';
+import { createMyStoriesTable, createStoryItem, updateProgress } from '../../localStorageApi/api';
 
 // const dummyData = [
 //   {way:'faceToFace'},
 //   {way:'byPost'}
 // ];
 
+const CREATE_GENERALITEM = gql`
+  mutation createGeneralItem ($title: String!, $description: String!, $category: String!, $exchangeMethod: String!, $image: String) {
+    createGeneralItem(input: {
+      title: $title
+      description: $description
+      category: $category
+      exchangeMethod: $exchangeMethod
+      image: $image
+    }) {
+      id
+      owner {
+        username
+        id
+      }
+      description
+    }
+  }`;
 
-export default class BreakAwayItemChangeOut extends React.Component {
+const BreakAwayItemChangeOut = ({ route, navigation }) => {
+  const [itemName, setItemName] = useState('');
+  const [description, setDescription] = useState('');
+  const [dropdown, setDropdown] = useState('');
+  const [deliveryMethod, setDeliveryMethod] = useState(0);
+  const [dummyData, setdummyData] = useState([ {way: '面交'}, {way: '郵寄'}]);
+  const [data1, setData1] = useState([]);
 
-  static navigationOptions = {
-    title: 'General_ADD',
-  }
-  constructor(props) {
-    super(props);
-    this.state = { 
-      ItemName: '', 
-      Description: '',
-      dropdown:' ',
-      deliveryMethod: 0, // 0: Not yet selected, 1: FacetoFace only, 2: byPost only, 3: FacetoFace AND byPost
-      dummyData: [ 
-        {way: 'faceToFace'},
-        {way: 'byPost'},
-      ] 
-  };
-    
-  
+  const [createItem, { data, error, loading }] = useMutation(CREATE_GENERALITEM);
 
-    database.transaction(tx => {
-      // tx.executeSql(
-      //   "DROP TABLE GeneralItems"
-      // );
-      tx.executeSql(
-        `CREATE TABLE IF NOT EXISTS GeneralItems (
-          id INTEGER PRIMARY KEY AUTOINCREMENT, 
-          title TEXT, 
-          category TEXT, 
-          description TEXT, 
-          method INT, 
-          image TEXT DEFAULT "No image")`
-      )
-    })
-  }
+  const { source, title, itemId, spaceId, story } = route.params;  
 
-  
-
-  componentDidMount(){
-    let arr = this.state.dummyData.map((item, index)=>{
+  useEffect(() => {
+    console.log(dummyData);
+    let arr = dummyData.map((item, index)=>{
       item.isSelected = false
       return {...item};
-    })
-    this.setState({dummyData: arr});
-    console.log('arr data ==>', arr)
-  }
+    });
+    setdummyData(arr);
+    //console.log(dummyData);
+  }, []);
 
-  selectionHandler = (ind) => {
-    //alert("jie")
-    const {ItemName, Description, dummyData} = this.state;
-    let arr = dummyData.map((item, index)=>{
-      if(ind == index){
-        item.isSelected = !item.isSelected;
-      }
-      return {...item}
-    })
-    console.log("selection handler ==>", arr)
-    this.setState({dummyData: arr})
-  }
+  useEffect(() => {
+    createMyStoriesTable();
+  }, [])
 
-  // summarizes the delivery method into 3 categories:
-  // 0: Not yet selected, 1: FacetoFace only, 2: byPost only, 3: FacetoFace AND byPost
-  deliveryMethodHandler = () => {
-    let facetoFace = this.state.dummyData[0].isSelected;
-    let byPost = this.state.dummyData[1].isSelected;
+  const deliveryMethodHandler = () => {
+    let facetoFace = dummyData[0].isSelected;
+    let byPost = dummyData[1].isSelected;
     if(facetoFace == true && byPost == true) {
       return 3;
     } 
@@ -105,156 +87,354 @@ export default class BreakAwayItemChangeOut extends React.Component {
     return 0;
   }
 
-  handlesubmit =(itemId) =>{
-    //add item to DataBase
-    database.transaction(tx => {
-      tx.executeSql(
-        `INSERT INTO GeneralItems (title, category, description, method, image) VALUES (?, ?, ?, ?, ?)`, 
-        [this.state.ItemName, this.state.dropdown, this.state.Description, this.deliveryMethodHandler(),  this.state.ItemName + ' image'],
-        (txObj, resultSet) => console.log('Success', resultSet),
-        (txObj, error) => console.log('Error', error))
-    })
+  const addToStory = (title, source, story, spaceId) =>{
+    createStoryItem(title, story, source, spaceId);
 
-    
+    const keepPoints = 2.0
+    updateProgress(spaceId, keepPoints);
+  }
+
+  const handlesubmit =(itemId) =>{
+    console.log(itemName, description, dropdown, deliveryMethod, source);
+    //add to general Items
+    createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod, image: source}});
+
+    //add to stroy collection
+    addToStory(title, source, story, spaceId);
     deleteHesitateItem(itemId);
     //Navigate back to home page
-    this.props.navigation.navigate('Home')
+    navigation.navigate('Home');
   } 
 
-  onValueChange = (flag,value) => {
-    if(flag ==1){
-    this.setState({selected:value});
-    }else{
-      this.setState({dropdown:value});
-    }
+  const onValueChange = (flag,value) => {
+    setDropdown(value);
   };  
 
-  handleupload = () =>{
-
-  }
-
-  render() {
-    const{ navigate } = this.props.navigation;
-    const { source, title, itemId } = this.props.route.params;
-    console.log(source);
-    return(
-      <View style={{ flex: 1, alignItems: 'center', backgroundColor: 'transparent'}}>
-        <KeyboardAvoidingView style = {{height: "50%", width: "100%", alignItems: 'center'}}>
-            <Image 
-                style = {{flex: 5, height: "50%", width: "80%"}}
-                source={{uri: source}}/>
-        </KeyboardAvoidingView>
-        <ScrollView style = {{width: "100%", backgroundColor: 'transparent'}}>
-            <View style ={styles.textContainer}>
-              <Text style = {styles.text}>物品標題</Text>
-            </View>
-        
-            <View style ={styles.textInputContainer}>
-              <TextInput
-                  style={styles.input}
-                  //placeholder='ItemName'
-                  onChangeText={(text) => this.setState({ItemName: text})}
-                  value = {this.state.ItemName}/>
-            </View>
-            <View style ={styles.textContainer}>
-              <Text style={styles.text}>物品種類</Text> 
-            </View>
-            
-            <View style ={styles.textInputContainer}>
-              <View style = {{flex: 0.5}}></View>
-              <View style = {{flex: 3.5, justifyContent: 'center'}}>
-                    <Picker
-                        mode={'dropdown'}
-                        style={{height: 25,width:200}}
-                        selectedValue={this.state.dropdown}
-                        onValueChange={(value)=>this.onValueChange(2,value)}>
-                        <Picker.Item label="書籍" value="key0" />
-                        <Picker.Item label="衣服與配件" value="key1" />
-                        <Picker.Item label="玩具" value="key2" />
-                        <Picker.Item label="特色周邊品" value="key3" />
-                        <Picker.Item label="小型生活器具" value="key4" />
-                        <Picker.Item label="家電用品" value="key5" />
-                        <Picker.Item label="其他" value="key6" />
-                      </Picker>
-              </View>
-              <View style = {{flex: 6}}></View>
-            </View>
-
-        
-
-        
-
-          <View style={styles.textInputContainer}>
-            <View style = {{flex: 0.5}}></View>
-            <View style = {{flex: 9.5, flexDirection: 'row'}}>
-            {
-              this.state.dummyData.map((item, index)=>{
-                return(
-                  <TouchableOpacity
-                    onPress={()=>this.selectionHandler(index)}
-                    title = 'upload'
-                    //onPress={this.handleupload}
-                    style = {item.isSelected ? styles.item : styles.itemS}>
-                    <Text style = {styles.buttonText}>{item.way}</Text> 
-                  </TouchableOpacity>
-                );
-              })
-            }
-            </View>
-          </View>
-
+  return(
+    <View style={{ flex: 1, alignItems: 'center', backgroundColor: 'transparent'}}>
+      <KeyboardAvoidingView style = {{height: "50%", width: "100%", alignItems: 'center'}}>
+          <Image 
+              style = {{flex: 5, height: "50%", width: "80%"}}
+              source={{uri: source}}/>
+      </KeyboardAvoidingView>
+      <ScrollView style = {{width: "100%", backgroundColor: 'transparent'}}>
           <View style ={styles.textContainer}>
-              <Text style={styles.text}>物品說明</Text>
+            <Text style = {styles.text}>物品標題</Text>
           </View>
-        
-          <View style = {{flex:3}}>
-              <TextInput
-                  style={styles.input}
-                  placeholder='second hand, not brandnew'
-                  onChangeText={(text) => {this.setState({Description: text}); console.log(this.state.Description)}}
-                  value = {this.state.Description}/>
+      
+          <View style ={styles.textInputContainer}>
+            <TextInput
+                style={styles.input}
+                //placeholder='ItemName'
+                onChangeText={(text) => setItemName(text)}
+                value = {itemName}/>
+          </View>
+          <View style ={styles.textContainer}>
+            <Text style={styles.text}>物品種類</Text> 
+          </View>
+          
+          <View style ={styles.textInputContainer}>
+            <View style = {{flex: 0.5}}></View>
+            <View style = {{flex: 3.5, justifyContent: 'center'}}>
+                  <Picker
+                      mode={'dropdown'}
+                      //style={{height: 25,width:200}}
+                      selectedValue={dropdown}
+                      onValueChange={(value)=>onValueChange(2,value)}>
+                      <Picker.Item label="書籍" value="key0" />
+                      <Picker.Item label="衣服與配件" value="key1" />
+                      <Picker.Item label="玩具" value="key2" />
+                      <Picker.Item label="特色周邊品" value="key3" />
+                      <Picker.Item label="小型生活器具" value="key4" />
+                      <Picker.Item label="家電用品" value="key5" />
+                      <Picker.Item label="其他" value="key6" />
+                    </Picker>
+            </View>
+            <View style = {{flex: 6}}></View>
           </View>
 
+      
+
+      
+
+        <View style={styles.textInputContainer}>
+          <View style = {{flex: 0.5}}></View>
+          <View style = {{flex: 9.5, flexDirection: 'row'}}>
+          {
+            dummyData.map((item, index)=>{
+              return(
+                <TouchableOpacity
+                  onPress={()=>selectionHandler(index)}
+                  title = 'upload'
+                  //onPress={this.handleupload}
+                  style = {item.isSelected ? styles.item : styles.itemS}>
+                  <Text style = {styles.buttonText}>{item.way}</Text> 
+                </TouchableOpacity>
+              );
+            })
+          }
+          </View>
+        </View>
+
+        <View style ={styles.textContainer}>
+            <Text style={styles.text}>物品說明</Text>
+        </View>
+      
+        <View style = {{flex:3}}>
+            <TextInput
+                style={styles.input}
+                placeholder='second hand, not brandnew'
+                onChangeText={(text) => {setDescription(text); console.log(description)}}
+                value = {description}/>
+        </View>
+
+        <View style = {styles.uploadContainer}>
+              <TouchableOpacity
+                  title = 'Submit'
+                  onPress={()=>handlesubmit(itemId)}
+                  style = {styles.item}>
+                  <Image
+                    style = {{height: 70, width:70,}} 
+                    source = {require('../../assets/breakAway/upload.png')}/>
+              </TouchableOpacity>
+        </View>
+      </ScrollView>
+      {/* <Button
+          title = 'Go to home screen'
+          onPress={() => navigate('Home')}/> */}
+    </View>
+  )
+}
+
+export default BreakAwayItemChangeOut;
+
+// export default class BreakAwayItemChangeOut extends React.Component {
+
+//   static navigationOptions = {
+//     title: 'General_ADD',
+//   }
+//   constructor(props) {
+//     super(props);
+//     this.state = { 
+//       ItemName: '', 
+//       Description: '',
+//       dropdown:' ',
+//       deliveryMethod: 0, // 0: Not yet selected, 1: FacetoFace only, 2: byPost only, 3: FacetoFace AND byPost
+//       dummyData: [ 
+//         {way: 'faceToFace'},
+//         {way: 'byPost'},
+//       ] 
+//   };
+    
+  
+
+//     database.transaction(tx => {
+//       // tx.executeSql(
+//       //   "DROP TABLE GeneralItems"
+//       // );
+//       tx.executeSql(
+//         `CREATE TABLE IF NOT EXISTS GeneralItems (
+//           id INTEGER PRIMARY KEY AUTOINCREMENT, 
+//           title TEXT, 
+//           category TEXT, 
+//           description TEXT, 
+//           method INT, 
+//           image TEXT DEFAULT "No image")`
+//       )
+//     })
+//   }
+
+  
+
+//   componentDidMount(){
+//     let arr = this.state.dummyData.map((item, index)=>{
+//       item.isSelected = false
+//       return {...item};
+//     })
+//     this.setState({dummyData: arr});
+//     console.log('arr data ==>', arr)
+//   }
+
+//   selectionHandler = (ind) => {
+//     //alert("jie")
+//     const {ItemName, Description, dummyData} = this.state;
+//     let arr = dummyData.map((item, index)=>{
+//       if(ind == index){
+//         item.isSelected = !item.isSelected;
+//       }
+//       return {...item}
+//     })
+//     console.log("selection handler ==>", arr)
+//     this.setState({dummyData: arr})
+//   }
+
+//   // summarizes the delivery method into 3 categories:
+//   // 0: Not yet selected, 1: FacetoFace only, 2: byPost only, 3: FacetoFace AND byPost
+//   deliveryMethodHandler = () => {
+//     let facetoFace = this.state.dummyData[0].isSelected;
+//     let byPost = this.state.dummyData[1].isSelected;
+//     if(facetoFace == true && byPost == true) {
+//       return 3;
+//     } 
+//     if(facetoFace == true) {
+//       return 2;
+//     }
+//     if(byPost == true) {
+//       return 1;
+//     }
+//     return 0;
+//   }
+
+//   handlesubmit =(itemId) =>{
+//     //add item to DataBase
+//     database.transaction(tx => {
+//       tx.executeSql(
+//         `INSERT INTO GeneralItems (title, category, description, method, image) VALUES (?, ?, ?, ?, ?)`, 
+//         [this.state.ItemName, this.state.dropdown, this.state.Description, this.deliveryMethodHandler(),  this.state.ItemName + ' image'],
+//         (txObj, resultSet) => console.log('Success', resultSet),
+//         (txObj, error) => console.log('Error', error))
+//     })
+
+    
+//     deleteHesitateItem(itemId);
+//     //Navigate back to home page
+//     this.props.navigation.navigate('Home')
+//   } 
+
+//   onValueChange = (flag,value) => {
+//     if(flag ==1){
+//     this.setState({selected:value});
+//     }else{
+//       this.setState({dropdown:value});
+//     }
+//   };  
+
+//   handleupload = () =>{
+
+//   }
+
+//   render() {
+//     const{ navigate } = this.props.navigation;
+//     const { source, title, itemId } = this.props.route.params;
+//     console.log(source);
+//     return(
+//       <View style={{ flex: 1, alignItems: 'center', backgroundColor: 'transparent'}}>
+//         <KeyboardAvoidingView style = {{height: "50%", width: "100%", alignItems: 'center'}}>
+//             <Image 
+//                 style = {{flex: 5, height: "50%", width: "80%"}}
+//                 source={{uri: source}}/>
+//         </KeyboardAvoidingView>
+//         <ScrollView style = {{width: "100%", backgroundColor: 'transparent'}}>
+//             <View style ={styles.textContainer}>
+//               <Text style = {styles.text}>物品標題</Text>
+//             </View>
+        
+//             <View style ={styles.textInputContainer}>
+//               <TextInput
+//                   style={styles.input}
+//                   //placeholder='ItemName'
+//                   onChangeText={(text) => this.setState({ItemName: text})}
+//                   value = {this.state.ItemName}/>
+//             </View>
+//             <View style ={styles.textContainer}>
+//               <Text style={styles.text}>物品種類</Text> 
+//             </View>
+            
+//             <View style ={styles.textInputContainer}>
+//               <View style = {{flex: 0.5}}></View>
+//               <View style = {{flex: 3.5, justifyContent: 'center'}}>
+//                     <Picker
+//                         mode={'dropdown'}
+//                         //style={{height: 25,width:200}}
+//                         selectedValue={this.state.dropdown}
+//                         onValueChange={(value)=>this.onValueChange(2,value)}>
+//                         <Picker.Item label="書籍" value="key0" />
+//                         <Picker.Item label="衣服與配件" value="key1" />
+//                         <Picker.Item label="玩具" value="key2" />
+//                         <Picker.Item label="特色周邊品" value="key3" />
+//                         <Picker.Item label="小型生活器具" value="key4" />
+//                         <Picker.Item label="家電用品" value="key5" />
+//                         <Picker.Item label="其他" value="key6" />
+//                       </Picker>
+//               </View>
+//               <View style = {{flex: 6}}></View>
+//             </View>
+
+        
+
+        
+
+//           <View style={styles.textInputContainer}>
+//             <View style = {{flex: 0.5}}></View>
+//             <View style = {{flex: 9.5, flexDirection: 'row'}}>
+//             {
+//               this.state.dummyData.map((item, index)=>{
+//                 return(
+//                   <TouchableOpacity
+//                     onPress={()=>this.selectionHandler(index)}
+//                     title = 'upload'
+//                     //onPress={this.handleupload}
+//                     style = {item.isSelected ? styles.item : styles.itemS}>
+//                     <Text style = {styles.buttonText}>{item.way}</Text> 
+//                   </TouchableOpacity>
+//                 );
+//               })
+//             }
+//             </View>
+//           </View>
+
+//           <View style ={styles.textContainer}>
+//               <Text style={styles.text}>物品說明</Text>
+//           </View>
+        
+//           <View style = {{flex:3}}>
+//               <TextInput
+//                   style={styles.input}
+//                   placeholder='second hand, not brandnew'
+//                   onChangeText={(text) => {this.setState({Description: text}); console.log(this.state.Description)}}
+//                   value = {this.state.Description}/>
+//           </View>
+
         
         
 
 
-          {/* <TouchableOpacity
-              title = 'upload'
-              onPress={this.handleupload}
-              style = {styles.item}>
-              <Text
-                style = {styles.buttonText}>Upload</Text>
-          </TouchableOpacity> */}
+//           {/* <TouchableOpacity
+//               title = 'upload'
+//               onPress={this.handleupload}
+//               style = {styles.item}>
+//               <Text
+//                 style = {styles.buttonText}>Upload</Text>
+//           </TouchableOpacity> */}
           
         
-          {/* <TouchableOpacity
-              title = 'Submit'
-              onPress={()=>this.handlesubmit(itemId)}
-              style = {styles.item}>
-              <Text
-                style = {styles.buttonText}>Submit</Text>
-          </TouchableOpacity> */}
+//           {/* <TouchableOpacity
+//               title = 'Submit'
+//               onPress={()=>this.handlesubmit(itemId)}
+//               style = {styles.item}>
+//               <Text
+//                 style = {styles.buttonText}>Submit</Text>
+//           </TouchableOpacity> */}
   
-          <View style = {styles.uploadContainer}>
-                <TouchableOpacity
-                    title = 'Submit'
-                    onPress={()=>this.handlesubmit(itemId)}
-                    style = {styles.item}>
-                    <Image
-                      style = {{height: 70, width:70,}} 
-                      source = {require('../../assets/breakAway/upload.png')}/>
-                </TouchableOpacity>
-          </View>
-        </ScrollView>
-        {/* <Button
-            title = 'Go to home screen'
-            onPress={() => navigate('Home')}/> */}
-      </View>
-    )
-  }
+//           <View style = {styles.uploadContainer}>
+//                 <TouchableOpacity
+//                     title = 'Submit'
+//                     onPress={()=>this.handlesubmit(itemId)}
+//                     style = {styles.item}>
+//                     <Image
+//                       style = {{height: 70, width:70,}} 
+//                       source = {require('../../assets/breakAway/upload.png')}/>
+//                 </TouchableOpacity>
+//           </View>
+//         </ScrollView>
+//         {/* <Button
+//             title = 'Go to home screen'
+//             onPress={() => navigate('Home')}/> */}
+//       </View>
+//     )
+//   }
 
-}
+// }
 
 const styles = StyleSheet.create({
  

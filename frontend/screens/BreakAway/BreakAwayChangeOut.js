@@ -329,7 +329,7 @@ const BreakAwayChangeOut = () => {
 
         <View style ={styles.textContainer}>
             <Text style={styles.text}>物品位置</Text> 
-           </View>
+        </View>
            
           <View style ={styles.textInputContainer}>
           <View style = {{flex: 0.5}}></View>

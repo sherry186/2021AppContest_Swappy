@@ -18,6 +18,7 @@ import { View,
 import colors from '../../config/colors';
 
 let ScreenWidth = Dimensions.get("window").width;
+let ScreenHeight = Dimensions.get("window").height;
 
 /* 2. Get the param */
 export default class MainDetail extends React.Component {
@@ -83,44 +84,40 @@ export default class MainDetail extends React.Component {
           </View>
         </View>
         
-        <View style= {{flex: 1, backgroundColor: colors.mono_40, width: "100%"}}>
-          <ScrollView style = {{ flex: 1, marginLeft: ScreenWidth*0.05, marginRight: ScreenWidth*0.05, backgroundColor: 'green'}}>
-            <View style ={{ flexDirection: 'row'}}>
-              <Image
-                style = {{height: ScreenWidth*0.05, width: ScreenWidth*0.05}}
-                source = {require('../../assets/Social/profileDefault.png')}/>
-              <Text style = {{left: ScreenWidth*0.01,}}>{hideName? person : "匿名"}</Text>
-            </View>
+        <ScrollView style= {{flex: 1, backgroundColor: colors.mono_40, width: "100%"}}>
+          
+            
 
-            <ScrollView style= {{backgroundColor: 'red'}}>
-                <View style = {{  backgroundColor:'transparent',}}>
+            <View 
+                style= {{backgroundColor: 'red', backgroundColor: colors.mono_40, marginBottom:20, alignItems:'center'}}
+                //contentContainerStyle = {{}}
+                >
+                <View style ={{ flexDirection: 'row', width:ScreenWidth*0.9}}>
+                  <Image
+                    style = {{height: ScreenWidth*0.05, width: ScreenWidth*0.05}}
+                    source = {require('../../assets/Social/profileDefault.png')}/>
+                  <Text style = {{left: ScreenWidth*0.01,}}>{hideName? person : "匿名"}</Text>
+                </View>
+                <View style = {{  backgroundColor:'transparent', width:ScreenWidth*0.9,}}>
                   <Text style = {{flex: 1, color: colors.mono_100}}>{post}</Text>
                 </View>
-            </ScrollView>
             
             
-          </ScrollView>
+            
+            </View>
 
-          {/* <ScrollView style = {{flex: 1}}>
-              <View style = {{ backgroundColor:'transparent',}}>
-                <Text style = {{color: colors.mono_100}}>{post}</Text>
-              </View>
-          </ScrollView> */}
-
-          
-
-          <ScrollView style = {{flex: 1,  backgroundColor: colors.mono_40, bottom: 60, marginTop: ScreenWidth*0.02}}>
+        
             <View style = {styles.line}></View>
             <FlatList 
+              style = {{}}
               data={this.state.comments}
               renderItem={this.renderComment}
               keyExtractor={item => item.id}/>
 
-            
-          </ScrollView>
+            <View style = {{height: ScreenHeight*0.13}}></View>
           
           
-        </View>
+        </ScrollView>
         <View style = {styles.commentC}>
                 <View style = {styles.comment}>
                     <TextInput
