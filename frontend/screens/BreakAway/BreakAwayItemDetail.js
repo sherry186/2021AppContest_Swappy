@@ -40,10 +40,10 @@ export default class BreakAwayItemDetail extends React.Component {
   } 
 
   handleChangeOut = (itemId, title, source, story, spaceId) =>{
-    createStoryItem(title, story, source, spaceId);
-    const changeOutPoints = 2.0;
-    updateProgress(spaceId, changeOutPoints);
-    this.props.navigation.navigate("BreakAwayItemChangeOut", {id: itemId, title: title, source: source})
+    // createStoryItem(title, story, source, spaceId);
+    // const changeOutPoints = 2.0;
+    // updateProgress(spaceId, changeOutPoints);
+    this.props.navigation.navigate("BreakAwayItemChangeOut", {itemId: itemId, title: title, source: source, spaceId: spaceId, story: story})
   }
 
   handleKeep = (itemId, title, source, story, spaceId) =>{
