@@ -24,12 +24,6 @@ export default function BreakAwayHesitate () {
   const [Limit, setLimit] = useState(0);
   const [image, setImage] = useState([]);
 
-  // const [image1, setImage1] = useState(null);
-  // const [image2, setImage2] = useState(null);
-  // const [image3, setImage3] = useState(null);
-  // const [image4, setImage4] = useState(null);
-  // const [image5, setImage5] = useState(null);
-
   const [story, setStory] = useState('');
   const [title, setTitle] = useState('');
   const [space, setSpace] = useState(0);
@@ -217,9 +211,10 @@ export default function BreakAwayHesitate () {
               </View>
               
           </View>
-          {/* <View style ={styles.textContainer}> */}
+
+          <View style ={styles.textContainer}>
             <Text style={styles.text}>物品位置</Text> 
-          {/* </View> */}
+           </View>
            
           <View style ={styles.textInputContainer}>
           <View style = {{flex: 0.5}}></View>

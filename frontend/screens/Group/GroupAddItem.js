@@ -17,7 +17,7 @@ import {
 
 import * as ImagePicker from 'expo-image-picker';
 import colors from '../../config/colors';
-
+import { Picker } from '@react-native-picker/picker';
 import { useMutation,  gql } from '@apollo/client';
 
 const ADD_GROUP_ITEM = gql`
@@ -128,6 +128,8 @@ function GroupAddItem ({route, navigation}) {
     console.log(tag);
   }
 
+
+
   const selectionHandler = (ind) => {
     //alert("jie")
     //const {Gname, Discription, Ihave, Iwant, dummyData} = this.state;
@@ -166,8 +168,10 @@ function GroupAddItem ({route, navigation}) {
     navigation.goBack()
   } 
 
-  const handleupload = () =>{
-
+  const onValueChange = (flag, value) =>{
+    //setTag(tags[value]);
+    setTag(value);
+    console.log(tag);
   }
 
   
@@ -245,7 +249,7 @@ function GroupAddItem ({route, navigation}) {
           </View>
 
 
-            <ScrollView horizontal={true} style={{flexDirection: 'row'}}>
+            {/* <ScrollView horizontal={true} style={{flexDirection: 'row'}}>
               {
                 tags.map((item, index)=>{
                   return(
@@ -269,7 +273,30 @@ function GroupAddItem ({route, navigation}) {
                   );
                 })
               }
-            </ScrollView>
+            </ScrollView> */}
+
+            <View style ={styles.textInputContainer}>
+              <View style = {{flex: 0.5}}></View>
+                <View style = {{flex: 3.5, justifyContent: 'center'}}>
+                    <Picker
+                      mode={'dropdown'}
+                      //style={styles.input3}
+                      style={{height: 25,width:200}}
+                      selectedValue={tag}
+                      // onValueChange={(value)=>onValueChange(2 ,value)}
+                      //onValueChange= {(itemValue, itemIndex) => setTag(tags[itemValue])}>
+                      onValueChange = {(value) => onValueChange(2, value)}>
+                      {
+                        tags.map((item, index)=>{
+                          return(
+                            <Picker.Item label= {item} value= {item} />
+                          );
+                        })
+                      }
+                    </Picker>
+                </View>
+                <View style = {{flex: 6}}></View>
+            </View>
 
 
                 
@@ -294,6 +321,14 @@ function GroupAddItem ({route, navigation}) {
 export default GroupAddItem;
 
 const styles = StyleSheet.create({
+  textInputContainer:{
+    flex:1,
+    justifyContent:'center',
+    flexDirection:'row',
+    height:"100%",
+    width: "100%",
+    backgroundColor:"transparent",      
+  },
   itemS: {
     backgroundColor: '#7a42f4',
     padding: 20,
