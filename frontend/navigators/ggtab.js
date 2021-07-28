@@ -25,11 +25,7 @@ export default class TopBarNavigator extends React.Component{
                     
                     style: { 
                         alignSelf:'center',
-                        //marginleft: ScreenWidth*0.25,
-                        //marginTop:12,
-                        //elevation: 0,
                         top: 63,
-                        //left: ScreenWidth*0.2,
                         width: ScreenWidth * 0.6,
                         height: 40,
                         backgroundColor: 'transparent',
