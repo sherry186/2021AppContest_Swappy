@@ -1,16 +1,18 @@
-import * as React from 'react';
-
+import React from 'react';
+import { useEffect, useState } from 'react';
 import {
   View,
   Image,
   Text,
   SafeAreaView,
   FlatList,
+  Platform,
   StyleSheet,
   TouchableOpacity,
   Dimensions
 } from "react-native";
 import colors from '../config/colors';
+import * as ImagePicker from 'expo-image-picker';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 //import { ScreenHeight } from 'react-native-elements/dist/helpers';
 // import { Icon, InlineIcon } from '@iconify/react';
@@ -20,51 +22,71 @@ let ScreenWidth = Dimensions.get("window").width;
 let ScreenHeight = Dimensions.get("window").height;
 
 
-export default class Personal extends React.Component {
+const Personal = () => {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: '',
-      stars: 0,
-      maxstars: [1, 2, 3, 4, 5],
-    };
 
-  }
+  const [username, setUsername] = useState('');
+  const [stars, setStars] = useState(0);
+  const [maxstars, setMaxstars] = useState([1, 2, 3, 4, 5]);
+  const [defaultImage, setDefaultImage] = useState(null);
+  const [source, setSource] = useState(null);
 
-  static navigationOptions = {
-    title: 'Personal',
-  }
-
-  componentDidMount() {
-    this.setState({
-      username: '@sylvey',
-      stars: 4.2,
-      source: require('../assets/profile.jpg'),
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [3, 3],
+      quality: 1,
     });
-  }
 
-  render() {
-    const { search } = this.state;
-    // const[grvalue, grsetValue] = useState('');
-    const { navigate } = this.props.navigation;
-    //console.log(this.props.navigation);
+    if (!result.cancelled) {
+      
+      setSource({uri: result.uri});
+    }
+  }; 
+
+  useEffect(()=>{
+    setUsername('@sylvey');
+    setStars(4.2);
+    setDefaultImage(require('../assets/personal/addProfile.png'));
+  })
+
+  useEffect(() => {
+    //setData(BreakAwaySpace);
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
+    
+  },[]);
+
+
 
 
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.container}>
-          <Image
-            style={{ top: ScreenHeight*0.05, left: ScreenWidth*0.1, width: ScreenWidth*0.3, height: ScreenWidth*0.3, borderRadius: ScreenWidth*0.15 }}
-            source={this.state.source} />
-          <Text style={{ top: ScreenHeight*0.07, left: ScreenWidth*0.1, fontSize: ScreenWidth*0.06, color:"#629D89", fontWeight: 'bold', }}>{this.state.username}</Text>
+          <TouchableOpacity 
+            style = {{top: ScreenHeight*0.05, left: ScreenWidth*0.1,}}
+            onPress = {pickImage}>
+            <Image
+              style={{ width: ScreenWidth*0.3, height: ScreenWidth*0.3, borderRadius: ScreenWidth*0.15 }}
+              source={source? source: defaultImage} />
+
+          </TouchableOpacity>
+          
+          <Text style={{ top: ScreenHeight*0.07, left: ScreenWidth*0.1, fontSize: ScreenWidth*0.06, color:"#629D89", fontWeight: 'bold', }}>{username}</Text>
           <View style = {{ top: ScreenHeight*0.075, left: ScreenWidth*0.1, flexDirection: 'row', alignItems: 'center'}}>
-            <Text style={{frontSize: ScreenWidth*0.04, color:"#629D89" }}>{this.state.stars} </Text>
+            <Text style={{frontSize: ScreenWidth*0.04, color:"#629D89" }}>{stars} </Text>
             {
-              this.state.maxstars.map((item, index)=>{
+              maxstars.map((item, index)=>{
                 return(
                   <Image 
-                    source = {Math.round(this.state.stars)>=item? require('../assets/personal/star_full.png') :  require('../assets/personal/star_empty.png')}
+                    source = {Math.round(stars)>=item? require('../assets/personal/star_full.png') :  require('../assets/personal/star_empty.png')}
                     style = {{height: ScreenWidth*0.04, width:ScreenWidth*0.04}}/>
 
                 );
@@ -101,9 +123,11 @@ export default class Personal extends React.Component {
 
       </SafeAreaView>
     )
-  }
+  
 
 }
+
+export default Personal;
 
 const styles = StyleSheet.create({
   container: {
