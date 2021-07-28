@@ -108,7 +108,10 @@ const MyCollection_HOME = () => {
             onPress={() => navigation.navigate('MainDetail', {title: item.title, person: item.author, post: item.description, comment: null, hideName: null})}>
           <Text style={styles.post}>{item.title}</Text>
           <Text style={styles.person}>{item.author == null? "匿名" : item.author.username}</Text>
-          <Text style={styles.person}>{item.description}</Text>
+          <Text 
+              style={styles.person} 
+              ellipsizeMode={'tail'} 
+              numberOfLines={2}>{item.description}</Text>
         </TouchableOpacity>
         <TouchableOpacity 
             style={{width: 10, height: 20, position:'absolute', right: 20, top: 0, backgroundColor: 'transparent'} }

@@ -7,12 +7,17 @@ import {
   SafeAreaView,
   FlatList,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  Dimensions
 } from "react-native";
-
+import colors from '../config/colors';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
+//import { ScreenHeight } from 'react-native-elements/dist/helpers';
 // import { Icon, InlineIcon } from '@iconify/react';
 // import collectionItem from '@iconify/icons-zmdi/collection-item';
+
+let ScreenWidth = Dimensions.get("window").width;
+let ScreenHeight = Dimensions.get("window").height;
 
 
 export default class Personal extends React.Component {
@@ -22,8 +27,9 @@ export default class Personal extends React.Component {
     this.state = {
       username: '',
       stars: 0,
-      maxstars: 5,
+      maxstars: [1, 2, 3, 4, 5],
     };
+
   }
 
   static navigationOptions = {
@@ -33,7 +39,7 @@ export default class Personal extends React.Component {
   componentDidMount() {
     this.setState({
       username: '@sylvey',
-      stars: 4,
+      stars: 4.2,
       source: require('../assets/profile.jpg'),
     });
   }
@@ -49,10 +55,24 @@ export default class Personal extends React.Component {
       <SafeAreaView style={styles.container}>
         <View style={styles.container}>
           <Image
-            style={{ top: 60, left: 40, width: 100, height: 100, borderRadius: 50 }}
+            style={{ top: ScreenHeight*0.05, left: ScreenWidth*0.1, width: ScreenWidth*0.3, height: ScreenWidth*0.3, borderRadius: ScreenWidth*0.15 }}
             source={this.state.source} />
-          <Text style={{ top: 70, left: 40, fontSize: 25, color:"#629D89", fontWeight: 'bold', }}>{this.state.username}</Text>
-          <Text style={{ top: 80, left: 40, frontSize: 20, color:"#629D89" }}>{this.state.stars}</Text>
+          <Text style={{ top: ScreenHeight*0.07, left: ScreenWidth*0.1, fontSize: ScreenWidth*0.06, color:"#629D89", fontWeight: 'bold', }}>{this.state.username}</Text>
+          <View style = {{ top: ScreenHeight*0.075, left: ScreenWidth*0.1, flexDirection: 'row', alignItems: 'center'}}>
+            <Text style={{frontSize: ScreenWidth*0.04, color:"#629D89" }}>{this.state.stars} </Text>
+            {
+              this.state.maxstars.map((item, index)=>{
+                return(
+                  <Image 
+                    source = {Math.round(this.state.stars)>=item? require('../assets/personal/star_full.png') :  require('../assets/personal/star_empty.png')}
+                    style = {{height: ScreenWidth*0.04, width:ScreenWidth*0.04}}/>
+
+                );
+              })
+
+            }
+          </View>
+          
           
         </View>
 
@@ -65,41 +85,10 @@ export default class Personal extends React.Component {
           >
             <Image 
                 style={styles.image}
-                source={require('../assets/personal/持有物品清單.png')}/>
-            <Text style={styles.buttonText}>持有物品清單</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.item}
-          >
-            <Image 
-                style={styles.image}
-                source={require('../assets/personal/發文紀錄.png')}/>
-            <Text style={styles.buttonText}>發文紀錄</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.item}
-          >
-            <Image 
-                style={styles.image}
-                source={require('../assets/personal/交換紀錄.png')}/>
-            <Text style={styles.buttonText}>交換紀錄</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.item}
-          >
-            <Image 
-                style={styles.image}
-                source={require('../assets/personal/願望清單.png')}/>
-            <Text style={styles.buttonText}>願望清單設定</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.item}
-          >
-            <Image 
-                style={styles.image}
                 source={require('../assets/personal/個人資料設定.png')}/>
             <Text style={styles.buttonText}>個人資料設定</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             style={styles.item}
           >
@@ -122,9 +111,9 @@ const styles = StyleSheet.create({
     flex: 1.4,
   },
   line:{
-    left: 30,
-    backgroundColor:'#D4D4D4',
-    width: 350,
+    left: ScreenWidth*0.1,
+    backgroundColor: colors.mono_60,
+    width: ScreenWidth*0.8,
     height: 1.5,
   },
   image: {
@@ -139,28 +128,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   item: {
-    left: 20,
+    left: ScreenWidth*0.1,
     flexDirection: 'row',
+
     //backgroundColor: '#fff',
-    padding: 20,
+    paddingVertical: 20,
     margin: 1,
-  },
-  title: {
-    fontSize: 32,
-  },
-  buttons: {
-    flexDirection: 'row'
-  },
-  button: {
-    width: 60,
-    height: 60,
-    position: 'absolute',
-    borderRadius: 30,
-    backgroundColor: '#ee6e73',
-    bottom: 150,
-    right: 175,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   buttonText: {
     marginHorizontal: 20,
