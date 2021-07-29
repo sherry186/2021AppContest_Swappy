@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   Dimensions
 } from "react-native";
-import colors from '../config/colors';
+import colors from '../../config/colors';
 import * as ImagePicker from 'expo-image-picker';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 //import { ScreenHeight } from 'react-native-elements/dist/helpers';
@@ -48,7 +48,7 @@ const Personal = () => {
   useEffect(()=>{
     setUsername('@sylvey');
     setStars(4.2);
-    setDefaultImage(require('../assets/personal/addProfile.png'));
+    setDefaultImage(require('../../assets/personal/addProfile.png'));
   })
 
   useEffect(() => {
@@ -86,7 +86,7 @@ const Personal = () => {
               maxstars.map((item, index)=>{
                 return(
                   <Image 
-                    source = {Math.round(stars)>=item? require('../assets/personal/star_full.png') :  require('../assets/personal/star_empty.png')}
+                    source = {Math.round(stars)>=item? require('../../assets/personal/star_full.png') :  require('../assets/personal/star_empty.png')}
                     style = {{height: ScreenWidth*0.04, width:ScreenWidth*0.04}}/>
 
                 );
@@ -107,7 +107,7 @@ const Personal = () => {
           >
             <Image 
                 style={styles.image}
-                source={require('../assets/personal/個人資料設定.png')}/>
+                source={require('../../assets/personal/個人資料設定.png')}/>
             <Text style={styles.buttonText}>個人資料設定</Text>
           </TouchableOpacity>
 
@@ -116,7 +116,7 @@ const Personal = () => {
           >
             <Image 
                 style={styles.image}
-                source={require('../assets/personal/關於swappy.png')}/>
+                source={require('../../assets/personal/關於swappy.png')}/>
             <Text style={styles.buttonText}>關於swappy</Text>
           </TouchableOpacity>
         </View>
