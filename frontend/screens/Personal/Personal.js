@@ -12,6 +12,7 @@ import {
   Dimensions
 } from "react-native";
 import colors from '../../config/colors';
+import { useNavigation } from '@react-navigation/core';
 import * as ImagePicker from 'expo-image-picker';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 //import { ScreenHeight } from 'react-native-elements/dist/helpers';
@@ -31,38 +32,41 @@ const Personal = () => {
   const [defaultImage, setDefaultImage] = useState(null);
   const [source, setSource] = useState(null);
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [3, 3],
-      quality: 1,
-    });
 
-    if (!result.cancelled) {
+  const navigation = useNavigation();
+
+  // const pickImage = async () => {
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //     allowsEditing: true,
+  //     aspect: [3, 3],
+  //     quality: 1,
+  //   });
+
+  //   if (!result.cancelled) {
       
-      setSource({uri: result.uri});
-    }
-  }; 
+  //     setSource({uri: result.uri});
+  //   }
+  // }; 
 
   useEffect(()=>{
     setUsername('@sylvey');
     setStars(4.2);
-    setDefaultImage(require('../../assets/personal/addProfile.png'));
+    setDefaultImage(require('../../assets/personal/DefaultProfile.png'));
   })
 
-  useEffect(() => {
-    //setData(BreakAwaySpace);
-    (async () => {
-      if (Platform.OS !== 'web') {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!');
-        }
-      }
-    })();
+  // useEffect(() => {
+  //   //setData(BreakAwaySpace);
+  //   (async () => {
+  //     if (Platform.OS !== 'web') {
+  //       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  //       if (status !== 'granted') {
+  //         alert('Sorry, we need camera roll permissions to make this work!');
+  //       }
+  //     }
+  //   })();
     
-  },[]);
+  // },[]);
 
 
 
@@ -71,8 +75,8 @@ const Personal = () => {
       <SafeAreaView style={styles.container}>
         <View style={styles.container}>
           <TouchableOpacity 
-            style = {{top: ScreenHeight*0.05, left: ScreenWidth*0.1,}}
-            onPress = {pickImage}>
+            style = {{top: ScreenHeight*0.05, left: ScreenWidth*0.1,}}>
+            {/* onPress = {pickImage}> */}
             <Image
               style={{ width: ScreenWidth*0.3, height: ScreenWidth*0.3, borderRadius: ScreenWidth*0.15 }}
               source={source? source: defaultImage} />
@@ -86,7 +90,7 @@ const Personal = () => {
               maxstars.map((item, index)=>{
                 return(
                   <Image 
-                    source = {Math.round(stars)>=item? require('../../assets/personal/star_full.png') :  require('../assets/personal/star_empty.png')}
+                    source = {Math.round(stars)>=item? require('../../assets/personal/star_full.png') :  require('../../assets/personal/star_empty.png')}
                     style = {{height: ScreenWidth*0.04, width:ScreenWidth*0.04}}/>
 
                 );
@@ -104,6 +108,7 @@ const Personal = () => {
           
           <TouchableOpacity
             style={styles.item}
+            onPress = {() => navigation.navigate("ResetUser")}
           >
             <Image 
                 style={styles.image}
