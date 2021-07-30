@@ -129,7 +129,7 @@ const ResetUser = () => {
               onPress={handlesubmit}
               style = {styles.submit}>
               <Text
-                style = {styles.buttonText}>註冊</Text>
+                style = {styles.buttonText}>重設</Text>
           </TouchableOpacity>
         </View>
     )
