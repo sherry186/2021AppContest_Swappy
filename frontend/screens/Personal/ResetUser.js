@@ -42,6 +42,10 @@ const ResetUser = () => {
     const [source, setSource] = useState(null);
     const navigation = useNavigation();
 
+    const handlesubmit = () => {
+        navigation.goBack();
+    }
+
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -120,6 +124,13 @@ const ResetUser = () => {
               onChangeText={setCheckPassword}
               value = {checkPassword}/>
 
+          <TouchableOpacity
+              title = 'Submit'
+              onPress={handlesubmit}
+              style = {styles.submit}>
+              <Text
+                style = {styles.buttonText}>註冊</Text>
+          </TouchableOpacity>
         </View>
     )
     
@@ -137,5 +148,21 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         justifyContent: 'center',
         borderWidth: 0
+    },
+    buttonText: {
+        color: colors.mono_40,
+        justifyContent: 'center',
+        fontSize: 15,
+        fontWeight: 'bold',
+      },
+    submit: {
+      borderRadius: 10,
+      display:'flex',
+      margin: 30,
+      backgroundColor: colors.function_100,
+      height: 40,
+      width: 80,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
 })
