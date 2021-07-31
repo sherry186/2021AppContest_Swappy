@@ -41,6 +41,11 @@ mutation postComment($id: ID!, $comment: String!) {
   postComment(postId: $id, comment: $comment)
 }`;
 
+const COLLECT_POST = gql`
+mutation addToCollection($id: ID!) {
+  addToCollection(postId: $id)
+}`;
+
 const MainDetail = ({ route, navigation }) =>{
   const [comment, setComment] = useState('');
   const [date, setDate] = useState("6/22/2021, 2:59:00 PM");
@@ -57,20 +62,21 @@ const MainDetail = ({ route, navigation }) =>{
   const { data, error, loading } = useQuery(QUERY_POST, {variables: {id:id}});
   const [addComment] = useMutation(ADD_COMMENT, 
     {
-      refetchQueries: [ {
+      refetchQueries: [ 
+      {
         query: QUERY_POST,
-        variables: {id:id}
-      }
-      ]
+        variables: { id : id }
+      }]
     });
-  //console.log(data);
+  const [addToCollection] = useMutation(COLLECT_POST);
+ 
 
   const handleAddComment = () => {
     addComment({ variables: {id: id, comment: comment}});
   }
 
   const handleCollect = () => {
-    ;
+    addToCollection({variables: {id: id}});
   }
 
   const renderComment = ({ item }) => (
@@ -209,162 +215,6 @@ const MainDetail = ({ route, navigation }) =>{
 }
 
 export default MainDetail;
-
-// /* 2. Get the param */
-// export default class MainDetail extends React.Component {
-
-//   constructor(props){
-//     super(props);
-//     this.state = {
-//       comment: "",
-//       date: "6/22/2021, 2:59:00 PM", 
-//       comments:[
-//         {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree", date: "6/22/2021, 2:59:00 PM"},
-//         {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree", date: "6/22/2021, 2:59:00 PM"},
-//         {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree", date: "6/22/2021, 2:59:00 PM"},
-//         {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree", date: "6/22/2021, 2:59:00 PM"},
-//         {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree", date: "6/22/2021, 2:59:00 PM"}, ]}
-//   }
-
-//   componentDidMount() {
-    
-//   }
-
-//   renderComment = ({ item }) => (
-//     //console.log(this.props.navigation);
-//     <View style = {{
-//       width:"90%", 
-//       borderColor: colors.mono_60,
-//       borderWidth:1,
-//       backgroundColor: colors.mono_40, 
-//       alignSelf:'center', 
-//       marginVertical: ScreenWidth*0.02, 
-//       height: ScreenWidth*0.3, 
-//       borderRadius: ScreenWidth*0.02,
-//       }}>
-//       <View style = {{flexDirection:'row', margin: ScreenWidth*0.02, alignItems:'center'}}>
-//         <Image
-//           style = {{height: ScreenWidth*0.06, width: ScreenWidth*0.06}}
-//           source = {require('../../assets/Social/profileDefault.png')}
-//           />
-//         <View style ={{left: ScreenWidth*0.01,}}>
-//           <Text style = {{fontSize:13, color: colors.mono_100}}>{item.name}</Text>
-//           <Text style = {{fontSize:8, color: colors.mono_80}}>{item.date}</Text>
-//         </View>
-        
-        
-//       </View>
-//         <Text style = {{left: ScreenWidth*0.01, color: colors.mono_100}}> {item.content}</Text>
-//     </View>
-    
-//   );
-
-//   render(){  
-//     const { title, profile, person, post, comment, hideName } = this.props.route.params;
-//     return (
-//       <View style={{ flex: 1, top: "5%", bottom:"20%", alignItems: 'center'}}>
-//          <View style = {{flexDirection: 'row', height: "7%", width:"100%", backgroundColor: colors.mono_40}}>
-//           <TouchableOpacity
-//             style = {{flex:2, width: "20%", backgroundColor: colors.mono_40, alignItems: 'center', justifyContent:'center'}}
-//             onPress = {()=>this.props.navigation.goBack()}
-//             >
-//             <Image 
-//               style = {{height: "25%", width: "25%"}}
-//               source = {profile? {uri:profile} : require('../../assets/manyneed/xmark.png')}/> 
-//               {/*sholud be hideName? but for there are no profile photo*/}
-//           </TouchableOpacity>
-
-//           <View
-//             style ={{flex: 8, justifyContent: 'center', alignItems: 'center'}}>
-//               <Text style = {{right: "15%", fontSize: 20, fontWeight: 'bold', color: colors.mono_100}}>{title}</Text>
-              
-//           </View>
-//         </View>
-        
-//         <ScrollView style= {{flex: 1, backgroundColor: colors.mono_40, width: "100%"}}>
-          
-            
-
-//             <View 
-//                 style= {{backgroundColor: 'red', backgroundColor: colors.mono_40, marginBottom:20, alignItems:'center'}}
-//                 //contentContainerStyle = {{}}
-//                 >
-//                 <View style ={{ flexDirection: 'row', width:ScreenWidth*0.9, alignItems:'center'}}>
-//                   <Image
-//                     style = {{height: ScreenWidth*0.09, width: ScreenWidth*0.09}}
-//                     source = {require('../../assets/Social/profileDefault.png')}/>
-//                   <View style = {{left: ScreenWidth*0.01,}}>
-//                     <Text style = {{fontSize:15, color: colors.mono_100}}>{hideName? "匿名" : person}</Text>
-//                     <Text style = {{fontSize:10, color: colors.mono_80}}>{this.state.date}</Text>
-//                   </View>
-                  
-//                 </View>
-//                 <View style = {{  backgroundColor:'transparent', width:ScreenWidth*0.9,}}>
-//                   <Text style = {{flex: 1, color: colors.mono_100}}>{post}</Text>
-//                 </View>
-            
-            
-            
-//             </View>
-
-        
-//             <View style = {styles.line}></View>
-//             <FlatList 
-              
-//               data={this.state.comments}
-//               renderItem={this.renderComment}
-//               keyExtractor={item => item.id}/>
-
-//             <View style = {{height: ScreenHeight*0.13}}></View>
-          
-          
-//         </ScrollView>
-//         <View style = {styles.commentC}>
-//                 <View style = {styles.comment}>
-//                     <TextInput
-//                         placeholder="comment"
-//                         style = {{flex:8}}
-//                         onChangeText={(text) => this.setState({comment: text})}
-//                         value = {this.state.comment}/>
-//                     <TouchableOpacity
-//                        //onPress = {()=>this.handleAddComment()}
-//                        style ={{ 
-//                          flex:1,
-//                          width: "7%", 
-//                          height: "100%",
-//                          justifyContent:'center',
-//                          alignItems:'center'}}
-//                      >
-//                        <Image
-//                          style ={{
-//                            width: 15, 
-//                            height: 15,
-//                            }} 
-//                          source = {require('../../assets/breakAway/ok.png')}/>
-//                      </TouchableOpacity>
-//                 </View> 
-                
-//                 <TouchableOpacity
-//                   //onPress = {()=>handleCollect()}
-//                   style ={{ 
-//                     flex:1,
-//                     width: "7%", 
-//                     height: "100%",
-//                     justifyContent:'center',
-//                     alignItems:'center'}}
-//                 >
-//                   <Image
-//                     style ={{
-//                       width: ScreenWidth*0.06, 
-//                       height: ScreenWidth*0.06,
-//                       }} 
-//                     source = {require('../../assets/Social/收藏.png')}/>
-//                 </TouchableOpacity>
-//             </View>    
-//       </View>
-//     );
-//   }
-// }
 
 const styles = StyleSheet.create({
   line: {
