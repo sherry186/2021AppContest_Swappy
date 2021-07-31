@@ -70,32 +70,31 @@ const login = () =>  {
       .then(() => {
         // redirect home
         Alert.alert('signed in successfully!');
-        
+        navigation.navigate("BottomTab")
       })
   }
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(function (user) {
-    if (user) {
-      console.log('signed in!');
-    } else {
-    // No user is signed in.
-    }
-    });
-    return unsubscribe;
-    }, [])
+  // useEffect(() => {
+  //   const unsubscribe = auth.onAuthStateChanged(function (user) {
+  //   if (user) {
+  //     console.log('signed in!');
+  //   } else {
+  //   // No user is signed in.
+  //   }
+  //   });
+  //   return unsubscribe;
+  //   }, [])
 
 
   const handlesubmit = () => {
-      auth.signInWithEmailAndPassword(account, password)
-      .catch((error) => {
-        var errorMessage = error.message;
-        alert(errorMessage)
-      });
+      // auth.signInWithEmailAndPassword(account, password)
+      // .catch((error) => {
+      //   var errorMessage = error.message;
+      //   alert(errorMessage)
+      // });
     
     signIn({ variables: { email: account, password }})
     //navigation.navigate("BottomTab")
-    navigation.navigate("BottomTab")
   }
 
   const handlesetSecure = (now) =>{
