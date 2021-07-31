@@ -105,9 +105,9 @@ const MyCollection_HOME = () => {
     <View style={styles.ChatC}>
         <TouchableOpacity 
             style = {styles.Chat} 
-            onPress={() => navigation.navigate('MainDetail', {title: item.title, person: item.author, post: item.description, comment: null, hideName: null})}>
+            onPress={() => navigation.navigate('MainDetail', {title: item.title, person: item.author?item.author.username : "匿名", post: item.description, comment: null, hideName: null})}>
           <Text style={styles.post}>{item.title}</Text>
-          <Text style={styles.person}>{item.author == null? "匿名" : item.author.username}</Text>
+          <Text style={styles.person}>{item.author?item.author.username : "匿名"}</Text>
           <Text 
               style={styles.person} 
               ellipsizeMode={'tail'} 
