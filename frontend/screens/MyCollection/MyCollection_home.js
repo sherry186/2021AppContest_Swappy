@@ -113,7 +113,7 @@ const MyCollection_HOME = () => {
               ellipsizeMode={'tail'} 
               numberOfLines={2}>{item.description}</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
+        {/* <TouchableOpacity 
             style={{width: 10, height: 20, position:'absolute', right: 20, top: 0, backgroundColor: 'transparent'} }
             //onPress={()=>handleCollected(item.id)}
             >
@@ -121,7 +121,7 @@ const MyCollection_HOME = () => {
             //style ={{width:10, height: 20, tintColor: item.collected? colors.warning_80: colors.brown_40}}
             style ={{width:10, height: 20, tintColor: colors.function_100}}
             source={require('../../assets/Social/collect.png')}/>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
     </View>
   );
 

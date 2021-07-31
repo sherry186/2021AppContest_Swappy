@@ -68,9 +68,7 @@ const Main_ADD = () => {
     navigation.goBack()
   } 
 
-  const handleupload = () =>{
 
-  }
 
   return(
     <View style={styles.container}>
@@ -94,7 +92,7 @@ const Main_ADD = () => {
       
       <Switch
           style = {styles.switch}
-          onValueChange = {(value)=>{setHide(value)}}
+          onValueChange = {()=>{setHide(previousState => !previousState)}}
           value = {hide}
           />
       <Text style = {styles.Text}>{hide? '匿名':'顯示名稱'}</Text>

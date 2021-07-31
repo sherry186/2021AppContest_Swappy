@@ -149,7 +149,7 @@ const Main_HOME = () => {
             renderItem={({item}) => { 
               return <FlatListComponent 
                 id={item.id}
-                person = {item.person}
+                person = {item.author?item.author.username : "匿名"}
                 title = {item.title}
                 description = {item.description}
                 hideName = {item.hideUser}
@@ -192,14 +192,14 @@ function FlatListComponent(props)  {
   //   collected: false,
     
   // }
-  const [collected, setCollected] = useState(false)
+  // const [collected, setCollected] = useState(false)
   const [addToCollection] = useMutation(ADD_TO_COLLECTION);
   const [removeFromCollection] = useMutation(REMOVE_FROM_COLLECTION);
 
 
-  useEffect(() => {
-    setCollected(false);
-  }, []);
+  // useEffect(() => {
+  //   setCollected(false);
+  // }, []);
 
   const handleCollected = (collected, id) =>{
     console.log(collected);
@@ -219,16 +219,16 @@ function FlatListComponent(props)  {
       <View style={styles.ChatC}>
            <TouchableOpacity
              style={styles.Chat}
-             onPress={() => props.navigation.navigate('MainDetail', {title: props.title, person: props.person, post: props.description, comment: props.comment, hideName: props.hideUser})}
+             onPress={() => props.navigation.navigate('MainDetail', {title: props.title, person: props.person, post: props.description, comment: props.comment, hideName: props.hideName})}
             >
                   <Text style={styles.post}>{props.title}</Text>
-                  <Text style={styles.person}>{props.hideName? "匿名" : props.person}</Text>
+                  <Text style={styles.person}>{props.person}</Text>
                   <Text 
                     style={styles.person}
                     ellipsizeMode={'tail'} 
                     numberOfLines={2}>{props.description}</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
                 style={{width: 10,
                    height: 20, 
                    position:'absolute', 
@@ -247,7 +247,7 @@ function FlatListComponent(props)  {
                       height: 20, 
                       tintColor: collected? colors.function_100: colors.mono_80}}
                     source={require('../../assets/Social/collect.png')}/>     
-            </TouchableOpacity>
+            </TouchableOpacity> */}
      </View>
     )
   

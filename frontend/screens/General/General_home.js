@@ -105,12 +105,18 @@ const General_HOME = () => {
   const renderItem = ({ item }) => (
     //console.log(this.props.navigation);
     <SafeAreaView style={styles.boxContainer}>
-      <Text style={styles.title}>{item.title}</Text>
       <View style={styles.buttons}>
         <TouchableOpacity 
           style={styles.item}
           onPress={() => navigation.navigate('GeneralDetail', {itemID: item.id, title: item.title, sort: item.category, des: item.description, method: item.exchangeMethod, image: item.image})}>
-            <Text>Item Detail</Text>
+            <Image
+              source = {require('../../assets/general/商品呈現.png')}
+              style ={{height: 99, width: 99}}/>
+            
+            <View style = {{marginLeft: 16}}>
+                <Text style={styles.title}>{item.title}</Text>
+                <Text style = {{marginTop: "5%", color: colors.function_100}}>#{item.category}</Text>
+            </View>   
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -162,6 +168,7 @@ const General_HOME = () => {
               source = {require("../../assets/general&group/notification.png")}/>
           </TouchableOpacity>   
       </View>
+      
       <ScrollView style = {{top: "5%", alignContent: 'center'}}>
         <View>
           {data ? ( <FlatList
@@ -202,7 +209,7 @@ const styles = StyleSheet.create({
       width: 352,
       backgroundColor: colors.mono_40,
       //left: 30,
-      alignItems: 'center',
+      //alignItems: 'center',
       justifyContent: 'center',
       bottom: 10,
       
@@ -213,16 +220,20 @@ const styles = StyleSheet.create({
       elevation: 3,
     },
     item: {
-      backgroundColor: '#E2E6EC',
-      padding: 20,
-      marginVertical: 8,
-      marginHorizontal: 16,
+      flexDirection:'row',
+      backgroundColor: 'transparent',
+      //padding: 20,
+      height: "100%",
+      //marginVertical: 8,
+      //marginHorizontal: 16,
     },
     title: {
-      fontSize: 32,
+      fontSize: 33,
     },
     buttons: {
-      flexDirection: 'row'
+      //flexDirection: 'row'
+      flex:1,
+      backgroundColor: 'transparent',
     },
     button: {
       width: 65,
