@@ -104,7 +104,7 @@ const General_ADD = () => {
         quality: 1,
       });
   
-      //console.log(result);
+      console.log(result.uri);
   
       if (!result.cancelled) {
         console.log(result);

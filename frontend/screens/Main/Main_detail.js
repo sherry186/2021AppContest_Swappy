@@ -104,7 +104,7 @@ export default class MainDetail extends React.Component {
                     style = {{height: ScreenWidth*0.09, width: ScreenWidth*0.09}}
                     source = {require('../../assets/Social/profileDefault.png')}/>
                   <View style = {{left: ScreenWidth*0.01,}}>
-                    <Text style = {{fontSize:15, color: colors.mono_100}}>{hideName? person : "匿名"}</Text>
+                    <Text style = {{fontSize:15, color: colors.mono_100}}>{hideName? "匿名" : person}</Text>
                     <Text style = {{fontSize:10, color: colors.mono_80}}>{this.state.date}</Text>
                   </View>
                   
