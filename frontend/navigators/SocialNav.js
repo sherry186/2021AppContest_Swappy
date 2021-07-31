@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Text, View } from "react-native";
+import { Text, View, Dimensions  } from "react-native";
 import Main from './MainNav';
 import MyCollection from './MyCollectionNav';
 
 const SocialTab = createMaterialTopTabNavigator();
+let ScreenWidth = Dimensions.get("window").width;
 import colors from "../config/colors";
 function SocialTabs(){
         const insets = useSafeAreaInsets();
@@ -19,11 +20,9 @@ function SocialTabs(){
                 indicatorStyle:{color: colors.function_100},
                 
                 style: { 
-                    marginTop:12,
-                    elevation: 0,
+                    alignSelf:'center',
                     top: 63,
-                    left: 79,
-                    width: 252,
+                    width: ScreenWidth * 0.6,
                     height: 40,
                     backgroundColor: 'transparent',
                 }
@@ -36,8 +35,8 @@ function SocialTabs(){
                 options={{ 
                     headerShown: false,
                     tabBarIcon:({focused})=>(
-                        <View style =  {{display: 'flex', right: 10, width: 100,}}>
-                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20,}}>全部</Text>
+                        <View style =  {{flex: 1, alignItems: 'center', alignSelf: 'center', width: ScreenWidth*0.3, }}>
+                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20}}>全部</Text>
                         </View>
                       )}}
             />
@@ -47,8 +46,8 @@ function SocialTabs(){
                 options={{ 
                     headerShown: false,
                     tabBarIcon:({focused})=>(
-                        <View style =  {{display: 'flex', right: 10, width: 100,}}>
-                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20,}}>收藏</Text>
+                        <View style =  {{ flex: 1, alignItems: 'center', alignSelf: 'center', width: ScreenWidth*0.3,}}>
+                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20}}>收藏</Text>
                         </View>
                       )}}
             />

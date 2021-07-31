@@ -18,6 +18,7 @@ import { View,
 import colors from '../../config/colors';
 
 let ScreenWidth = Dimensions.get("window").width;
+let ScreenHeight = Dimensions.get("window").height;
 
 /* 2. Get the param */
 export default class MainDetail extends React.Component {
@@ -25,13 +26,14 @@ export default class MainDetail extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      comment: "", 
+      comment: "",
+      date: "6/22/2021, 2:59:00 PM", 
       comments:[
-        {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree"},
-        {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree"},
-        {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree"},
-        {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree"},
-        {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree"}, ]}
+        {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree", date: "6/22/2021, 2:59:00 PM"},
+        {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree", date: "6/22/2021, 2:59:00 PM"},
+        {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree", date: "6/22/2021, 2:59:00 PM"},
+        {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree", date: "6/22/2021, 2:59:00 PM"},
+        {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree", date: "6/22/2021, 2:59:00 PM"}, ]}
   }
 
   componentDidMount() {
@@ -52,10 +54,15 @@ export default class MainDetail extends React.Component {
       }}>
       <View style = {{flexDirection:'row', margin: ScreenWidth*0.02, alignItems:'center'}}>
         <Image
-          style = {{height: ScreenWidth*0.05, width: ScreenWidth*0.05}}
+          style = {{height: ScreenWidth*0.06, width: ScreenWidth*0.06}}
           source = {require('../../assets/Social/profileDefault.png')}
           />
-        <Text style = {{left: ScreenWidth*0.01, color: colors.mono_100}}>{item.name}</Text>
+        <View style ={{left: ScreenWidth*0.01,}}>
+          <Text style = {{fontSize:13, color: colors.mono_100}}>{item.name}</Text>
+          <Text style = {{fontSize:8, color: colors.mono_80}}>{item.date}</Text>
+        </View>
+        
+        
       </View>
         <Text style = {{left: ScreenWidth*0.01, color: colors.mono_100}}> {item.content}</Text>
     </View>
@@ -80,34 +87,45 @@ export default class MainDetail extends React.Component {
           <View
             style ={{flex: 8, justifyContent: 'center', alignItems: 'center'}}>
               <Text style = {{right: "15%", fontSize: 20, fontWeight: 'bold', color: colors.mono_100}}>{title}</Text>
+              
           </View>
         </View>
         
-        <ScrollView style= {{flex: 10, backgroundColor: colors.mono_40, width: "100%"}}>
-          <View style = {{flex: 1, marginLeft: ScreenWidth*0.05, marginRight: ScreenWidth*0.05}}>
-            <View style ={{flexDirection: 'row'}}>
-              <Image
-                style = {{height: ScreenWidth*0.05, width: ScreenWidth*0.05}}
-                source = {require('../../assets/Social/profileDefault.png')}/>
-              <Text style = {{left: ScreenWidth*0.01,}}>{hideName? person : "匿名"}</Text>
-            </View>
-            <ScrollView style = {{marginTop:ScreenWidth*0.05, backgroundColor:'transparent'}}>
-              <Text style = {{color: colors.mono_100}}>{post}</Text>
-            </ScrollView>
-            
-          </View>
-
+        <ScrollView style= {{flex: 1, backgroundColor: colors.mono_40, width: "100%"}}>
           
+            
 
-          <View style = {{flex:1, backgroundColor: colors.mono_40, bottom: 60, marginTop: ScreenWidth*0.02}}>
+            <View 
+                style= {{backgroundColor: 'red', backgroundColor: colors.mono_40, marginBottom:20, alignItems:'center'}}
+                //contentContainerStyle = {{}}
+                >
+                <View style ={{ flexDirection: 'row', width:ScreenWidth*0.9, alignItems:'center'}}>
+                  <Image
+                    style = {{height: ScreenWidth*0.09, width: ScreenWidth*0.09}}
+                    source = {require('../../assets/Social/profileDefault.png')}/>
+                  <View style = {{left: ScreenWidth*0.01,}}>
+                    <Text style = {{fontSize:15, color: colors.mono_100}}>{hideName? person : "匿名"}</Text>
+                    <Text style = {{fontSize:10, color: colors.mono_80}}>{this.state.date}</Text>
+                  </View>
+                  
+                </View>
+                <View style = {{  backgroundColor:'transparent', width:ScreenWidth*0.9,}}>
+                  <Text style = {{flex: 1, color: colors.mono_100}}>{post}</Text>
+                </View>
+            
+            
+            
+            </View>
+
+        
             <View style = {styles.line}></View>
             <FlatList 
+              
               data={this.state.comments}
               renderItem={this.renderComment}
               keyExtractor={item => item.id}/>
 
-            
-          </View>
+            <View style = {{height: ScreenHeight*0.13}}></View>
           
           
         </ScrollView>
@@ -135,23 +153,7 @@ export default class MainDetail extends React.Component {
                          source = {require('../../assets/breakAway/ok.png')}/>
                      </TouchableOpacity>
                 </View> 
-                <TouchableOpacity
-                       //onPress = {()=>handleHeart()}
-                       style ={{ 
-                         flex:1,
-                         width: "7%", 
-                         height: "100%",
-                         //backgroundColor:'red',
-                         justifyContent:'center',
-                         alignItems:'center'}}
-                     >
-                       <Image
-                         style ={{
-                          width: ScreenWidth*0.06, 
-                          height: ScreenWidth*0.06,
-                           }} 
-                         source = {require('../../assets/Social/heart.png')}/>
-                     </TouchableOpacity>
+                
                 <TouchableOpacity
                   //onPress = {()=>handleCollect()}
                   style ={{ 

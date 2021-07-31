@@ -312,7 +312,7 @@ const BreakAwayChangeOut = () => {
             <View style = {{flex: 3.5, justifyContent: 'center'}}>
                 <Picker
                     mode={'dropdown'}
-                    //style={{height: 25,width:200}}
+                    style={{height: 25,width:200}}
                     selectedValue={dropdown}
                     onValueChange={(value)=>onValueChange(2,value)}>
                     <Picker.Item label="書籍" value="key0" />
@@ -336,6 +336,7 @@ const BreakAwayChangeOut = () => {
             <View style = {{flex: 3.5, justifyContent: 'center'}}>
                 <Picker
                   mode={'dropdown'}
+                  style={{height: 25,width:200}}
                   //style={styles.input3}
                   selectedValue={space}
                   // onValueChange={(value)=>onValueChange(2 ,value)}

@@ -46,6 +46,7 @@ function GroupDetailsScreen ({route, navigation}) {
   console.log(data);
   console.log(error);
   console.log(loading);
+
   const renderItem = ({ item }) => (
     //console.log(this.props.navigation);
     <TouchableOpacity 
@@ -192,7 +193,8 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     marginRight: ScreenWidth*0.05,
     backgroundColor: colors.function_100,
-    width: ScreenWidth*0.18,
+    //width: ScreenWidth*0.18,
+    paddingHorizontal: ScreenWidth*0.05,
     height: ScreenWidth*0.06,
     alignItems:'center',
     justifyContent: 'center',
