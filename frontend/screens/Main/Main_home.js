@@ -77,7 +77,7 @@ const Main_HOME = () => {
 
   const { data, error, loading } = useQuery(RENDER_POST, {pollInterval: 500});
 
-
+  console.log(data);
   const handleSearch = (se) => {
     console.log("search", search)
     const searchedItems = _.filter(data.getPosts, post => {
@@ -153,7 +153,7 @@ const Main_HOME = () => {
                 title = {item.title}
                 description = {item.description}
                 hideName = {item.hideUser}
-                comment = {item.comment}
+                comments = {item.comments}
                 navigation = {navigation} />}}
             //renderItem={renderChat}
             keyExtractor={item => item.id}
@@ -219,7 +219,7 @@ function FlatListComponent(props)  {
       <View style={styles.ChatC}>
            <TouchableOpacity
              style={styles.Chat}
-             onPress={() => props.navigation.navigate('MainDetail', {title: props.title, person: props.person, post: props.description, comment: props.comment, hideName: props.hideName})}
+             onPress={() => props.navigation.navigate('MainDetail', {id: props.id, title: props.title, person: props.person, post: props.description, description: props.description, hideName: props.hideName})}
             >
                   <Text style={styles.post}>{props.title}</Text>
                   <Text style={styles.person}>{props.person}</Text>

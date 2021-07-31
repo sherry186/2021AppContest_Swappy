@@ -80,7 +80,9 @@ function Notification_waitingDetail ({ route }) {
                   <Text>對方的物品</Text>
                   <Image
                     style={{ width: 200, height: 200 }}
-                    source = {requestFor_source}/>
+                    //source = {requestFor_source}
+                    source = {requestFor_source? {url: `http://swappy.ngrok.io/images/${requestFor_source}`} : require('../../assets/general/商品呈現.png')}
+                    />
                   <Text>{requestFor_title}</Text>
                 </View>
 

@@ -148,7 +148,7 @@ const Notification_requesting = () => {
         id: item.id,
         mything_title: item.requestersItem == null ? null : item.requestersItem.title, 
         mything_source: item.requestersItem == null ? null : item.requestersItem.image, 
-        requestFor_title: item.requestedItem.title, 
+        requestFor_title: item.requestedItem.title ? item.requestedItem.title : null , 
         requestFor_source: item.requestedItem.image})} 
       style={styles.waiting}>
       <Text style={styles.title, {color: colors.mono_80}}>{item.requestedItem.title}</Text>

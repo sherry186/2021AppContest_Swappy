@@ -54,7 +54,7 @@ const Notification_invitation = () => {
   const { data, error, loading } = useQuery(RENDER_INVITATIONS, {pollInterval: 500});
   const [updateStatus, _] = useMutation(UPDATE_STATUS);
 
-  console.log('inviation page');
+  console.log(data);
   // console.log(loading, data, error);
   // useEffect(()=> {
   //   console.log(data);
@@ -92,11 +92,11 @@ const Notification_invitation = () => {
             <View style = { styles.item }>
               <TouchableOpacity 
                   onPress = {()=>navigation.navigate("NotificationInvatationDetail",{ 
-                    id: item.id,
-                    mything_title: item.requestersItem == null ? null : item.requestersItem.title, 
-                    mything_source: item.requestersItem == null ? null : item.requestersItem.image, 
-                    requestFor_title:item.requestedItem.title, 
-                    requestFor_source: item.requestedItem.image})}
+                    id: item.id,  
+                    requestFor_title: item.requestersItem == null ? null : item.requestersItem.title, 
+                    requestFor_source: item.requestersItem == null ? null : item.requestersItem.image, 
+                    mything_title: item.requestedItem.title ? item.requestedItem.title : null, 
+                    mything_source: item.requestedItem.image ? item.requestedItem.image : null})}
                   style = {{ backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center', borderRadius: ScreenWidth*0.2}}>
                   <Text style={styles.title}>{item.requester.username} </Text>
                   <Text style={styles.title}>{item.requestedItem.title}</Text>

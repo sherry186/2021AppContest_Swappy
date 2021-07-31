@@ -56,6 +56,7 @@ const typeDefs = gql`
         getRequest(id: ID!):  Request!
         getRequestsByStatus(status: Status!): [Request]!
         getPosts: [Post]!
+        getPost(id: ID!): Post!
         getMyCollections: [Post]!
         getGroups: [Group]!
         getGroup(id: ID!): Group!
@@ -204,12 +205,7 @@ const typeDefs = gql`
     }
 `;
 
-function intersect(a, b) { // a b are arrays
-    objA = {};
-    a.forEach(function(v) { objA[v] = true; });
-    c = b.filter(function(v) { return objA[v]; });
-    return c
-}
+
 
 
 
@@ -268,6 +264,9 @@ const resolvers = {
         getMyCollections: async (_, __, { user }) => {
             //console.log(user.postsCollection);
             return user.postsCollection ? user.postsCollection : null;
+        },
+        getPost: async (_, { id }, {db}) => {
+            return await db.collection('Posts').findOne({_id: ObjectId(id)});
         },
         getPosts: async (_, __, {db}) => {
             return await db.collection('Posts').find().toArray();
@@ -663,7 +662,7 @@ const start = async () => {
     console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
 }
 
-//console.log(getToken('60fa373b1194a5dc307aae23'));
+console.log(getToken('60fa373b1194a5dc307aae23'));
 
 start();
 

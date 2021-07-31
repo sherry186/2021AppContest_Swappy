@@ -32,6 +32,7 @@ function Notification_invitationDetail ({ route, navigation }) {
     const [title, setTitle] = useState('');
     const { id, mything_title, mything_source, requestFor_title, requestFor_source } = route.params;
     
+    console.log(mything_title);
     const navigation1 = useNavigation();
 
     const handleDelete = () =>(
@@ -83,7 +84,7 @@ function Notification_invitationDetail ({ route, navigation }) {
                         <View>
                         <Image
                             style={{ width: 200, height: 200 }}
-                            source = {requestFor_source}/>
+                            source = {{url: `http://swappy.ngrok.io/images/${requestFor_source}`}}/>
                             <Text>{requestFor_title}</Text>
                         </View>
                     )
@@ -94,7 +95,7 @@ function Notification_invitationDetail ({ route, navigation }) {
                   <Text>你的物品</Text>
                   <Image
                     style={{ width: 200, height: 200 }}
-                    source = {mything_source}/>
+                    source = {mything_source? {url: `http://swappy.ngrok.io/images/${mything_source}`} : require('../../assets/general/商品呈現.png')}/>
                   <Text>{mything_title}</Text>
                 </View>
               
