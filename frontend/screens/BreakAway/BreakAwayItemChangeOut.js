@@ -72,6 +72,12 @@ const BreakAwayItemChangeOut = ({ route, navigation }) => {
     createMyStoriesTable();
   }, [])
 
+  useEffect(()=> {
+    const _deliveryMethod = deliveryMethodHandler()
+    setDeliveryMethod(_deliveryMethod);
+    console.log(deliveryMethod);
+  }, [dummyData])
+
   const deliveryMethodHandler = () => {
     let facetoFace = dummyData[0].isSelected;
     let byPost = dummyData[1].isSelected;
@@ -86,6 +92,18 @@ const BreakAwayItemChangeOut = ({ route, navigation }) => {
     }
     return 0;
   }
+
+  const selectionHandler = (ind) => {
+    console.log(dummyData);
+    let arr = dummyData.map((item, index)=>{
+      if(ind == index){
+        item.isSelected = !item.isSelected;
+      }
+      return {...item}
+    });
+    //console.log("selection handler ==>", arr);
+    setdummyData(arr);
+  };
 
   const addToStory = (title, source, story, spaceId) =>{
     createStoryItem(title, story, source, spaceId);
@@ -154,7 +172,28 @@ const BreakAwayItemChangeOut = ({ route, navigation }) => {
           </View>
 
       
+          <View style ={styles.textContainer}>
+            <Text style={styles.text}>交付方式</Text> 
+        </View>
 
+        
+          <View style={styles.textInputContainer}>
+            <View style = {{flex: 0.5}}></View>
+            <View style = {{flex: 9.5, flexDirection: 'row'}}>
+            {
+              dummyData.map((item, index)=>{
+                return(
+                  <TouchableOpacity
+                    onPress={()=>selectionHandler(index)}
+                    title = 'upload'
+                    style = {item.isSelected ? styles.wayS : styles.waySd}>
+                    <Text style = {styles.buttonText}>{item.way}</Text> 
+                  </TouchableOpacity>
+                );
+              })
+            }
+            </View>
+          </View>
       
 
         <View style={styles.textInputContainer}>
