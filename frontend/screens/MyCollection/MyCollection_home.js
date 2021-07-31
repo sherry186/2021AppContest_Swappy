@@ -26,6 +26,9 @@ query getMyCollections{
     id
     title
     description
+    author{
+      username
+    }
   }
 }`;
 
@@ -105,7 +108,9 @@ const MyCollection_HOME = () => {
     <View style={styles.ChatC}>
         <TouchableOpacity 
             style = {styles.Chat} 
-            onPress={() => navigation.navigate('MainDetail', {title: item.title, person: item.author?item.author.username : "匿名", post: item.description, comment: null, hideName: null})}>
+            onPress={()=>navigation.navigate('MainDetail', {id: item.id, title: item.title, person: item.author?item.author.username : "匿名", post: item.description, description: item.description, hideName: item.author? null : "匿名"})}
+            //onPress={() => navigation.navigate('MainDetail', {title: item.title, person: item.author?item.author.username : "匿名", post: item.description, comment: null, hideName: null})}
+            >
           <Text style={styles.post}>{item.title}</Text>
           <Text style={styles.person}>{item.author?item.author.username : "匿名"}</Text>
           <Text 
