@@ -23,6 +23,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
 // import * as SQLite from "expo-sqlite";
 import colors from '../../config/colors';
+import { ReactNativeFile } from 'apollo-upload-client';
 
 import { useMutation,  gql } from '@apollo/client';
 
@@ -48,6 +49,15 @@ let ScreenWidth = Dimensions.get("window").width;
     }
   }`;
 
+  const UPLOAD_FILE = gql`
+  mutation uploadFile ($file: Upload!) {
+    uploadFile(file: $file){
+      url
+    }
+  }
+  `;
+
+
 const General_ADD = () => {
   const [itemName, setitemName] = useState('');
   const [description, setDescription] = useState('');
@@ -60,7 +70,10 @@ const General_ADD = () => {
   const navigation = useNavigation();
   const windowHeight = useWindowDimensions().height;
 
-  const [createItem, { data, error, loading }] = useMutation(CREATE_GENERALITEM);
+  const [createItem] = useMutation(CREATE_GENERALITEM);
+  const [uploadFile, { data }] = useMutation(UPLOAD_FILE, {
+    onCompleted: data => console.log(data)
+  });
 
   useEffect(() => {
     console.log(dummyData);
@@ -94,8 +107,9 @@ const General_ADD = () => {
       //console.log(result);
   
       if (!result.cancelled) {
-        
+        console.log(result);
         setImage([...image, {id: image.length, uri: result.uri}]);
+        console.log(image);
       }
     }
     else
@@ -107,18 +121,18 @@ const General_ADD = () => {
   // console.log(error);
   // console.log(data);
 
-  useEffect(() => {
-    if (error) {
-      console.log(error);
-      Alert.alert(error.message);
-    }
-  }, [error]);
+  // useEffect(() => {
+  //   if (error) {
+  //     console.log(error);
+  //     Alert.alert(error.message);
+  //   }
+  // }, [error]);
 
-  useEffect(() => {
-    if (data) {
-      console.log(data);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     console.log(data);
+  //   }
+  // }, [data]);
 
   useEffect(()=> {
     const _deliveryMethod = deliveryMethodHandler()
@@ -170,14 +184,26 @@ const General_ADD = () => {
     return '0';
   }
 
+  const generateRNImage = (uri, name) => {
+    return uri ? new ReactNativeFile({
+      uri,
+      type:'image/png',
+      name: `image_${name}.png`,
+    }) : null;
+  }
+
   const handlesubmit =() =>{
     
     if(image.length == 0) {
       createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod}});
     } else {
       for (let i = 0; i < image.length; i++) {
-        console.log(typeof(image[i].uri));
-        createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod, image: image[i].uri}});
+        const file = generateRNImage(image[i].uri, Math.random().toString(36).slice(-5));
+        console.log(file.name);
+        uploadFile({variables: { file: file }, uploadFileAsForm: true});
+        console.log(data);
+        //console.log(typeof(image[i].uri));
+        createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod, image: file.name}});
       }
     }
     

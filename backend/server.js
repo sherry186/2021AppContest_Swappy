@@ -1,12 +1,19 @@
-// mongodb
-//require('./config/db');
-const { ApolloServer, gql } = require('apollo-server');
+
+//const { ApolloServer, gql } = require('apollo-server');
+const { createWriteStream } = require('fs');
+const express = require('express');
+const path = require('path');
+const { ApolloServer, gql } = require('apollo-server-express');
+
+
 const { ApolloServerPluginLandingPageGraphQLPlayground } = require('apollo-server-core');
 
 require('dotenv').config();
 //const mongoose = require('mongoose');
 const { MongoClient, ObjectId } = require('mongodb');
 const { GraphQLJSON, GraphQLJSONObject } = require('graphql-type-json');
+const { GraphQLUpload, graphqlUploadExpress } = require('graphql-upload');
+
 var partition = require('lodash.partition');
 
 // Password handler
@@ -39,6 +46,7 @@ const getUserFromToken = async (token, db) => {
 const typeDefs = gql`
     scalar JSON
     scalar JSONObject
+    scalar Upload
     type Query {
         generalItemsList: [GeneralItem]!
         myGeneralItems: [GeneralItem]!
@@ -55,6 +63,8 @@ const typeDefs = gql`
     }
 
     type Mutation {
+        uploadFile(file: Upload!): File!
+
         signUp(input: SignUpInput): AuthUser!
         signIn(input: SignInInput): AuthUser!
 
@@ -103,6 +113,10 @@ const typeDefs = gql`
         category: String!
         exchangeMethod: String!
         image: String
+    }
+
+    type File {
+        url: String!
     }
 
     type AuthUser {
@@ -313,6 +327,16 @@ const resolvers = {
 
     },
     Mutation: {
+        uploadFile: async(_, { file })=> {
+            const {createReadStream, filename, mimetype, encoding } = await file;
+            const stream = createReadStream();
+            const pathName = path.join(__dirname, `/public/images/${filename}`)
+            await stream.pipe(createWriteStream(pathName))
+
+            return {
+                url: `http://swappy.ngrok.io/images/${filename}`
+            }
+        },
         removeFromCollection: async (_, { postId }, { db, user }) => {
             if(!user) {
                 throw new Error('AUthentication Error. Please sign in');
@@ -470,7 +494,7 @@ const resolvers = {
                 groupItems: [],
                 wishList: {}
             }
-
+            console.log(title);
             const result = await db.collection('Groups').insertOne(newGroup);
             return {
                 ...newGroup,
@@ -587,6 +611,7 @@ const resolvers = {
     },
     JSON: GraphQLJSON,
     JSONObject: GraphQLJSONObject,
+    Upload: GraphQLUpload,
   };
 
 
@@ -615,13 +640,30 @@ const start = async () => {
         ] 
     });
 
-    // The `listen` method launches a web server.
-    server.listen().then(({ url }) => {
-    console.log(`🚀  Server ready at ${url}`);
+    // // The `listen` method launches a web server.
+    // server.listen().then(({ url }) => {
+    // console.log(`🚀  Server ready at ${url}`);
+    // });
+
+    // Required logic for integrating with Express
+    await server.start();
+    const app = express();
+    app.use(graphqlUploadExpress());
+    server.applyMiddleware({
+    app,
+
+     // By default, apollo-server hosts its GraphQL endpoint at the
+     // server root. However, *other* Apollo Server packages host it at
+     // /graphql. Optionally provide this to match apollo-server.
+     //path: '/'
     });
+    app.use(express.static('public'))
+    // Modified server startup
+    await new Promise(resolve => app.listen({ port: 4000 }, resolve));
+    console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
 }
 
-console.log(getToken('60fa373b1194a5dc307aae23'));
+//console.log(getToken('60fa373b1194a5dc307aae23'));
 
 start();
 

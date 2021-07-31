@@ -1,11 +1,13 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
+import { createUploadLink } from 'apollo-upload-client';
+
 import { setContext } from '@apollo/client/link/context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-  const URI = 'http://swappy.ngrok.io';
+  const URI = 'https://swappy.ngrok.io/graphql';
 
 
-  const httpLink = createHttpLink({
+  const httpLink = createUploadLink({
     uri: URI,
   });
 
