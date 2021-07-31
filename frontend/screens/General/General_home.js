@@ -110,7 +110,7 @@ const General_HOME = () => {
           style={styles.item}
           onPress={() => navigation.navigate('GeneralDetail', {itemID: item.id, title: item.title, sort: item.category, des: item.description, method: item.exchangeMethod, image: item.image})}>
             <Image
-              source = {require('../../assets/general/商品呈現.png')}
+              source =  {item.image? {url: `http://swappy.ngrok.io/images/${item.image}`} : require('../../assets/general/商品呈現.png')}
               style ={{height: 99, width: 99}}/>
             
             <View style = {{marginLeft: 16}}>
