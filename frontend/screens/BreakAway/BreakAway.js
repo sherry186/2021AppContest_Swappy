@@ -130,11 +130,15 @@ export default class BreakAway extends React.Component {
     
     <TouchableOpacity
       onPress = {() => this.props.navigation.navigate("BreakAwayItemDetail", {itemId: item.id, title: item.title, source: item.image, spaceId: item.spaceName, spaceName: this.state.spaceName, story: item.story, uploadDate: item.uploadDate})} 
-      style={{width:ScreenWidth* 0.3, height: ScreenWidth* 0.3, margin:ScreenWidth* 0.03, backgroundColor:'red'}}
+      style={{width:ScreenWidth* 0.3, height: ScreenWidth* 0.3, margin:ScreenWidth* 0.03}}
       >
       <Image 
-        style={{ width: "100%", height: "100%"  }}
+        style={{ width: "95%", height: "95%", marginLeft: "5%"}}
         source={{uri: item.image}}/>
+
+      <View style = {styles.timeTag}>
+        <Text style = {{color: colors.mono_40, marginHorizontal: "2%", fontSize: ScreenWidth* 0.3*0.1}}>100</Text>
+      </View>
     </TouchableOpacity>
   )};
 
@@ -375,6 +379,15 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
     justifyContent:'center', 
     backgroundColor: 'transparent'
+  },
+  timeTag:{
+    height:"15%",
+    width: "30%", 
+    backgroundColor: colors.function_100, 
+    marginTop: "-7%", 
+    borderRadius: ScreenWidth* 0.3*0.075, 
+    alignItems:'center', 
+    justifyContent:'center'
   },
   button2: {
     margin: 4,

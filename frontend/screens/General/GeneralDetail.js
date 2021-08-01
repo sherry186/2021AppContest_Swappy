@@ -86,28 +86,10 @@ function GeneralDetailsScreen ({ route, navigation }) {
         
         <View style = {{flex: 10, backgroundColor: colors.mono_40, width: "100%", alignItems: 'center' }}>
             <Image
-              style = {{flex: 5, height: "50%", width: "80%"}}
+              style = {{flex: 5, height: "50%", width: "80%", marginBottom: 10}}
               source = {image? {uri: `http://swappy.ngrok.io/images/${image}`} : require('../../assets/general/商品呈現.png')}
             />
-            <View style = {{flex: 0.6, backgroundColor: colors.mono_40, width:"100%", flexDirection: 'row'}}>
-              <View style = {styles.margin}></View>
-              
-              <TouchableOpacity
-                style = {styles.button}
-                >
-                <Image
-                  style = {styles.buttonImage}
-                  source = {require('../../assets/general/heartEmpty.png')}/>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style = {styles.button}
-                >
-                <Image
-                  style = {styles.buttonImage}
-                  source = {require('../../assets/general&group/message.png')}/>
-              </TouchableOpacity>
-            </View>
+           
             <View style = {styles.line}></View>
             
             <View style = {{flex: 4.4, width: "100%"}}>
