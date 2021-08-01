@@ -8,6 +8,7 @@ import { View,
        Text,
        Button, 
        Image, 
+       TextInput,
        FlatList, 
        SafeAreaView, 
        ScrollView, 
@@ -34,6 +35,7 @@ function Notification_waitingDetail ({ route }) {
   // render(){  
     const [image, setImage] = useState(null);
     const [title, setTitle] = useState('');
+
     const { id, mything_title, mything_source, requestFor_title, requestFor_source } = route.params;
     
     const navigation = useNavigation();
@@ -77,11 +79,14 @@ function Notification_waitingDetail ({ route }) {
 
             <View style = {{flex: 1, flexDirection:'row', backgroundColor: colors.mono_40, width: "100%", alignItems: 'center', justifyContent:'center' }}>
                 <View>
-                  <Text>對方的物品</Text>
+                  <View style = {{alignSelf: 'center'}}>
+                    <Text>對方的物品</Text>
+                  </View>
+                  
                   <Image
                     style={{ width: 200, height: 200 }}
                     //source = {requestFor_source}
-                    source = {requestFor_source? {url: `http://swappy.ngrok.io/images/${requestFor_source}`} : require('../../assets/general/商品呈現.png')}
+                    source = {requestFor_source? {uri: `http://swappy.ngrok.io/images/${requestFor_source}`} : require('../../assets/general/商品呈現.png')}
                     />
                   <Text>{requestFor_title}</Text>
                 </View>
@@ -92,19 +97,21 @@ function Notification_waitingDetail ({ route }) {
                     mything_title == null? 
                     (
                         <View>
-                        <TouchableOpacity 
-                            style={styles.buttonAddContainer}
-                            onPress={pickImage}
-                        >
-                            <Image
-                                style={{ width: 200, height: 200 }}
-                                source={image == null ? require("../../assets/notification/點擊上傳圖片.png"): {uri: image}}/>
-                        </TouchableOpacity>
+                            <TouchableOpacity 
+                                style={styles.buttonAddContainer}
+                                onPress={pickImage}
+                            >
+                                <Image
+                                    style={{ width: 200, height: 200 }}
+                                    source={image == null ? require("../../assets/notification/點擊上傳圖片.png"): {uri: image}}/>
+                            </TouchableOpacity>
 
-
-                        {/* <Image 
-                            source={{ uri: image }}
-                            style={{ width: 200, height: 200 }}/> */}
+                            <TextInput
+                                //style={styles.input}
+                                placeholderTextColor = {colors.function_100}
+                                onChangeText={(text) => setTitle(text)}
+                                value={title} /> 
+                  
                         </View>
 
                         

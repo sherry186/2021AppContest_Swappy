@@ -20,10 +20,6 @@ import Notification_requesting from './Notification_requesting';
 /* 2. Get the param */
 function Notification_successDetail ({ route, navigation }) {
 
-    
- 
-
-  
   
   // render(){  
     const { id, mything_title, mything_source, requestFor_title, requestFor_source } = route.params;
@@ -35,6 +31,7 @@ function Notification_successDetail ({ route, navigation }) {
             <View>
               <Text>你的物品</Text>
               <Image
+                style={{ width: 200, height: 200 }}
                 source = {mything_source}/>
               <Text>{mything_title}</Text>
             </View>
@@ -42,7 +39,8 @@ function Notification_successDetail ({ route, navigation }) {
             <View>
               <Text>對方的物品</Text>
               <Image
-                source = {requestFor_source}/>
+                style={{ width: 200, height: 200 }}
+                source = {requestFor_source? {uri: `http://swappy.ngrok.io/images/${requestFor_source}`} : require('../../assets/general/商品呈現.png')}/>
               <Text>{requestFor_title}</Text>
             </View>
 

@@ -73,6 +73,7 @@ const MainDetail = ({ route, navigation }) =>{
 
   const handleAddComment = () => {
     addComment({ variables: {id: id, comment: comment}});
+    setComment('');
   }
 
   const handleCollect = () => {
