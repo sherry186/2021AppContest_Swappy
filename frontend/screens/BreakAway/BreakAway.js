@@ -29,6 +29,7 @@ let ScreenWidth = Dimensions.get("window").width;
 
 const LEVELPOINTS = 20
 
+const defaultDays = -100//just hardData
 
 export default class BreakAway extends React.Component {
 
@@ -136,8 +137,13 @@ export default class BreakAway extends React.Component {
         style={{ width: "95%", height: "95%", marginLeft: "5%"}}
         source={{uri: item.image}}/>
 
-      <View style = {styles.timeTag}>
-        <Text style = {{color: colors.mono_40, marginHorizontal: "2%", fontSize: ScreenWidth* 0.3*0.1}}>100</Text>
+      <View style = {defaultDays>0 ? styles.timeTag: styles.timeTagW }>
+        <Text 
+          style = {{
+            color: colors.mono_40, 
+            marginHorizontal: "2%", 
+            fontSize: ScreenWidth* 0.3*0.1
+            }}>{Math.abs(defaultDays)}</Text>
       </View>
     </TouchableOpacity>
   )};
@@ -384,6 +390,15 @@ const styles = StyleSheet.create({
     height:"15%",
     width: "30%", 
     backgroundColor: colors.function_100, 
+    marginTop: "-7%", 
+    borderRadius: ScreenWidth* 0.3*0.075, 
+    alignItems:'center', 
+    justifyContent:'center'
+  },
+  timeTagW:{
+    height:"15%",
+    width: "30%", 
+    backgroundColor: colors.warning_80, 
     marginTop: "-7%", 
     borderRadius: ScreenWidth* 0.3*0.075, 
     alignItems:'center', 
