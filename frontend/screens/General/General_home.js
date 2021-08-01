@@ -7,6 +7,7 @@ import {
   SafeAreaView,  
   FlatList, 
   StyleSheet,
+  Dimensions,
   useWindowDimensions,
   Alert,
   Image,
@@ -20,6 +21,9 @@ import { useQuery, gql } from '@apollo/client';
 // import GeneralItems from '../../Data/GeneralItems';
 // import * as SQLite from 'expo-sqlite'
 // const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
+
+let ScreenWidth = Dimensions.get("window").width;
+let ScreenHeight = Dimensions.get("window").height;
 
 import colors from '../../config/colors';
 
@@ -111,7 +115,7 @@ const General_HOME = () => {
           onPress={() => navigation.navigate('GeneralDetail', {itemID: item.id, title: item.title, sort: item.category, des: item.description, method: item.exchangeMethod, image: item.image})}>
             <Image
               source =  {item.image? {uri: `http://swappy.ngrok.io/images/${item.image}`} : require('../../assets/general/商品呈現.png')}
-              style ={{height: 99, width: 99}}/>
+              style ={{height: ScreenHeight*0.13, width: ScreenHeight*0.13,}}/>
             
             <View style = {{marginLeft: 16}}>
                 <Text style={styles.title}>{item.title}</Text>
@@ -204,20 +208,22 @@ const styles = StyleSheet.create({
       backgroundColor: colors.mono_40,
     },
     boxContainer: {
-      marginTop: 30,
-      height: 99,
-      width: 352,
+      marginTop: ScreenHeight*0.03,
+      height: ScreenHeight*0.13,
+      width: ScreenWidth*0.85,
       backgroundColor: colors.mono_40,
       //left: 30,
       //alignItems: 'center',
       justifyContent: 'center',
-      bottom: 10,
+      bottom: ScreenHeight*0.03,
+      borderColor: colors.mono_60,
+      borderWidth: 1,
       
-      shadowColor: colors.mono_100,
-      shadowOffset: { width: 10, height: 10 },
-      shadowOpacity: 0.5,
-      shadowRadius: 0,
-      elevation: 3,
+      // shadowColor: colors.mono_100,
+      // shadowOffset: { width: 10, height: 10 },
+      // shadowOpacity: 0.5,
+      // shadowRadius: 0,
+      // elevation: 3,
     },
     item: {
       flexDirection:'row',

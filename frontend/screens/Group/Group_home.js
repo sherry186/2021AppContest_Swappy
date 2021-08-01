@@ -5,6 +5,7 @@ import {
   SafeAreaView,  
   FlatList, 
   StyleSheet,
+  Dimensions,
   ScrollView, 
   useWindowDimensions,
   TouchableOpacity,
@@ -16,6 +17,8 @@ import colors from '../../config/colors';
 import GroupItems from '../../Data/GroupItems';
 import { useQuery,  gql } from '@apollo/client';
 
+let ScreenWidth = Dimensions.get("window").width;
+let ScreenHeight = Dimensions.get("window").height;
 
 
 const contains = (data, tags, query) => {
@@ -174,20 +177,22 @@ const styles = StyleSheet.create({
     backgroundColor: colors.mono_40,
   },
   boxContainer: {
-    marginTop: 30,
-    height: 99,
-    width: 352,
+    marginTop: ScreenHeight*0.03,
+    height: ScreenHeight*0.13,
+    width: ScreenWidth*0.85,
     backgroundColor: colors.mono_40,
     //left: 30,
     //alignItems: 'center',
     justifyContent: 'center',
-    bottom: 10,
+    bottom: ScreenHeight*0.03,
+    borderColor: colors.mono_60,
+    borderWidth: 1,
     
-    shadowColor: colors.mono_100,
-    shadowOffset: { width: 10, height: 10 },
-    shadowOpacity: 0.5,
-    shadowRadius: 0,
-    elevation: 3,
+    // shadowColor: colors.mono_100,
+    // shadowOffset: { width: 10, height: 10 },
+    // shadowOpacity: 0.5,
+    // shadowRadius: 0,
+    // elevation: 3,
   },
   item: {
     backgroundColor: 'transparent',

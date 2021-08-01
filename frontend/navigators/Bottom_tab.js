@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image, ViewPagerAndroidComponent } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Image,  } from 'react-native';
 //import { NavigationContainer } from '@react-navigation/native';
 import { Assets, createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -11,7 +11,8 @@ import BreakAway from '../screens/BreakAway/BreakAway';
 import Home from "./Home_Nav";
 import colors from "../config/colors";
 
-
+let ScreenWidth = Dimensions.get("window").width;
+let ScreenHeight = Dimensions.get("window").height;
 
 const Tab = createBottomTabNavigator();
 
@@ -33,7 +34,7 @@ const Tabs = () => {
               left:0,
               right:0,
               backgroundColor: colors.mono_40,
-              height:65,
+              height: 65,
               }
 
       }}>
