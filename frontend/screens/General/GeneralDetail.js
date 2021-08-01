@@ -60,7 +60,7 @@ function GeneralDetailsScreen ({ route, navigation }) {
     createRequest({ variables: { requestedItemId: itemID } });
     console.log(error);
     console.log(data);
-    naviagation.navigate('Notification');
+    naviagation.navigate('Notification',{ screen: 'requesting' });
     
 };
   

@@ -77,10 +77,13 @@ const Notification_invitation = () => {
 
   const handleYes = (requestId) => {
     updateStatus({variables: {id: requestId,status: "SUCCESS"}});
+    navigation.navigate('Record');
+    //navigation.navigate()
   }
 
   const handleNo = (requestId) => {
     updateStatus({variables: {id: requestId,status: "FAIL"}});
+    navigation.navigate('General');
   }
 
   const renderItem = ({ item }) => (
