@@ -22,6 +22,7 @@ import CircularProgress from 'react-native-circular-progress-indicator';
 import colors from '../../config/colors';
 const LEVELPOINTS = 20;
 let ScreenWidth = Dimensions.get("window").width;
+const defaultDays = -100//just hardData
 
 
 export default class BreakAwaySpaceDetail extends React.Component {
@@ -76,8 +77,17 @@ export default class BreakAwaySpaceDetail extends React.Component {
         onPress = {() => this.props.navigation.navigate("BreakAwayItemDetail", {itemId: item.id, title: item.title, source: item.image, spaceId: item.spaceName, spaceName: this.props.route.params.spaceName, story: item.story, uploadDate: item.reminderDate})}
         >
         <Image 
-          style={styles.image}
-          source={{url:item.image}}/>
+          style={{ width: "95%", height: "95%", marginLeft: "5%"}}
+          source={{uri: item.image}}/>
+
+        <View style = {defaultDays>0 ? styles.timeTag: styles.timeTagW }>
+          <Text 
+            style = {{
+              color: colors.mono_40, 
+              marginHorizontal: "2%", 
+              fontSize: ScreenWidth* 0.3*0.1
+              }}>{Math.abs(defaultDays)}</Text>
+        </View>
     </TouchableOpacity>
     
   )}
@@ -234,15 +244,34 @@ const styles = StyleSheet.create({
     justifyContent:'center',
   },
   image:{
-    width: "100%", 
-    height: "100%"  
+    width: "95%", 
+    height: "95%",
+    marginLeft:"5%",  
   },
   imageC:{
-    flexDirection: 'row', 
+    //flexDirection: 'row', 
     width: ScreenWidth/3 -ScreenWidth*0.06, 
     height: ScreenWidth/3-ScreenWidth*0.06, 
     margin: ScreenWidth*0.03, 
-    alignItems: 'center', 
+    //alignItems: 'center', 
     justifyContent: 'center'
+  },
+  timeTag:{
+    height:"15%",
+    width: "30%", 
+    backgroundColor: colors.function_100, 
+    marginTop: "-7%", 
+    borderRadius: ScreenWidth* 0.3*0.075, 
+    alignItems:'center', 
+    justifyContent:'center'
+  },
+  timeTagW:{
+    height:"15%",
+    width: "30%", 
+    backgroundColor: colors.warning_80, 
+    marginTop: "-7%", 
+    borderRadius: ScreenWidth* 0.3*0.075, 
+    alignItems:'center', 
+    justifyContent:'center'
   },
 });
