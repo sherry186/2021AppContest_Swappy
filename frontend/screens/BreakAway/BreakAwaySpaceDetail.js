@@ -113,13 +113,26 @@ export default class BreakAwaySpaceDetail extends React.Component {
     this.getStoryItemsBySpace(spaceId);
     //console.log(spaceName);
     return (
-      <View style={{ flex: 1, alignItems: 'center'}}>
+      <View style={{ flex: 1, top: "5%", bottom:"20%", alignItems: 'center'}}>
 
-          <View style = {{flexDirection: 'row', height: 30, width: '100%',justifyContent:'center', alignItems:'center', backgroundColor: "transparent"}}>       
-                <Text style = {{ fontSize: 30, fontWeight:'bold', color: colors.function_100}}>{spaceName.toUpperCase()}</Text>
+        <View style = {{flex: 1, flexDirection: 'row', height: "7%", backgroundColor: colors.mono_40}}>
+          <TouchableOpacity
+            style = {{flex:2, width: "20%", backgroundColor: colors.mono_40, alignItems: 'center', justifyContent:'center'}}
+            onPress = {()=>navigation.goBack()}
+            >
+            <Image 
+              style = {{height: "25%", width: "25%"}}
+              source = {require('../../assets/manyneed/xmark.png')}/>
+          </TouchableOpacity>
+
+          <View
+            style ={{flex: 8, justifyContent: 'center', alignItems: 'center'}}>
+              <Text style = {{right: "15%", fontSize: 20, color: colors.function_100}}>{spaceName.toUpperCase()}</Text>
           </View>
+        </View>
 
-          <ScrollView style = {{flex: 9, height: "90%",alignContent:'center', width: "100%", }}>
+        <View style = {{flex: 10, backgroundColor: colors.mono_40, width: "100%", alignItems: 'center' }}>
+          <ScrollView style = {{flex: 10, height: "90%",alignContent:'center', width: "100%"}}>
             <View style = {styles.marginRow}></View>
 
             <View style = {{
@@ -185,7 +198,7 @@ export default class BreakAwaySpaceDetail extends React.Component {
                     </View>  
                     <View style = {styles.flatC2}>
                         <FlatList
-                              style = {{flex: 1}}
+                              style = {{flex: 1,marginBottom:60}}
                               data={this.state.storyItems}
                               renderItem={this.renderStory}
                               numColumns={3}
@@ -197,6 +210,7 @@ export default class BreakAwaySpaceDetail extends React.Component {
                 </View>
             </View>
           </ScrollView>
+          </View>
       </View>
     );
   }
