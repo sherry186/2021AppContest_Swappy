@@ -64,6 +64,7 @@ const typeDefs = gql`
     }
 
     type Mutation {
+        resetUser(username: String!, email: String!, phone: String!, password: String!, avatar: String): Boolean!
         uploadFile(file: Upload!): File!
 
         signUp(input: SignUpInput): AuthUser!
@@ -328,6 +329,26 @@ const resolvers = {
 
     },
     Mutation: {
+        resetUser: async (_, { username, email, phone, password, avatar }, { db, user }) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+
+            //hash password
+            const saltRounds = 10;
+            const salt = bcrypt.genSaltSync(saltRounds);
+            const hashedPassword = bcrypt.hashSync(password, salt);
+
+            await db.collection('Users').updateOne({ _id : ObjectId(user._id) },
+                { $set: { 
+                    username : username, 
+                    email : email, 
+                    password : hashedPassword, 
+                    phone : phone, 
+                    avatar: avatar
+                }});
+            return true;
+        },
         uploadFile: async(_, { file })=> {
             const {createReadStream, filename, mimetype, encoding } = await file;
             const stream = createReadStream();
