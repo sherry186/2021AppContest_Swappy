@@ -23,6 +23,7 @@ const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database o
 import { deleteHesitateItem, deleteSpace } from '../../localStorageApi/api';
 
 import { createMySpacesTable, createSpace } from '../../localStorageApi/api'
+import { parse } from 'fecha';
 
 import { Dimensions } from 'react-native';
 let ScreenWidth = Dimensions.get("window").width;
@@ -127,6 +128,12 @@ export default class BreakAway extends React.Component {
     //console.log('image', item);
     this.getSpaceName(item.id);
 
+    const reminderDate = parse(item.reminderDate, 'isoDate');
+    const todayDate = new Date();
+    const diffDays = Math.round((reminderDate - todayDate) / (24 * 60 * 60 * 1000));
+    //console.log(diffDays);
+
+    console.log(item);
     return (
     
     <TouchableOpacity
@@ -137,13 +144,13 @@ export default class BreakAway extends React.Component {
         style={{ width: "95%", height: "95%", marginLeft: "5%"}}
         source={{uri: item.image}}/>
 
-      <View style = {defaultDays>0 ? styles.timeTag: styles.timeTagW }>
+      <View style = {diffDays>0 ? styles.timeTag: styles.timeTagW }>
         <Text 
           style = {{
             color: colors.mono_40, 
             marginHorizontal: "2%", 
             fontSize: ScreenWidth* 0.3*0.1
-            }}>{Math.abs(defaultDays)}</Text>
+            }}>{diffDays}</Text>
       </View>
     </TouchableOpacity>
   )};

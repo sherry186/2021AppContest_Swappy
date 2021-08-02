@@ -11,8 +11,8 @@ import { View,
        StyleSheet } from "react-native";
 
 import { Dimensions } from 'react-native';
-import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
-
+import _ from "lodash"; 
+import { parse } from 'fecha';
 import * as SQLite from 'expo-sqlite'
 const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
 
@@ -47,7 +47,7 @@ export default class BreakAwaySpaceDetail extends React.Component {
             this.setState({
               hesitateItems: item,
             });
-            console.log(this.state.hesitateItems);
+            //console.log(this.state.hesitateItems);
     },
         (txObj, error) => console.log('Error', error))
     })
@@ -70,7 +70,11 @@ export default class BreakAwaySpaceDetail extends React.Component {
 };
 
   renderHesitate = ({ item }) => {
-    console.log(item);
+    //console.log(item);
+    const reminderDate = parse(item.reminderDate, 'isoDate');
+    const todayDate = new Date();
+    const diffDays = Math.round((reminderDate - todayDate) / (24 * 60 * 60 * 1000));
+    //console.log(diffDays);
     return ( 
     <TouchableOpacity
         style ={styles.imageC}
@@ -80,13 +84,13 @@ export default class BreakAwaySpaceDetail extends React.Component {
           style={{ width: "95%", height: "95%", marginLeft: "5%"}}
           source={{uri: item.image}}/>
 
-        <View style = {defaultDays>0 ? styles.timeTag: styles.timeTagW }>
+        <View style = {diffDays>0 ? styles.timeTag: styles.timeTagW }>
           <Text 
             style = {{
               color: colors.mono_40, 
               marginHorizontal: "2%", 
               fontSize: ScreenWidth* 0.3*0.1
-              }}>{Math.abs(defaultDays)}</Text>
+              }}>{diffDays}</Text>
         </View>
     </TouchableOpacity>
     
