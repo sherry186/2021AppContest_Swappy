@@ -146,7 +146,7 @@ function Root() {
         <RootStack.Screen 
           name="Group_itemDetail" 
           component={Group_itemDetail}
-          options={{headerShown: true }}/>
+          options={{headerShown: false }}/>
         
         {/*social */}
         <RootStack.Screen 
