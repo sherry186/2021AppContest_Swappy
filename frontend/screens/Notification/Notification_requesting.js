@@ -128,12 +128,12 @@ const Notification_requesting = () => {
     return (
     //console.log(this.props.navigation);
     <TouchableOpacity 
-      onPress = {()=>navigation.navigate("NotificationSuccessDetail",{ 
-        id: item.id,
-        mything_title: item.requestersItem == null ? null : item.requestersItem.title, 
-        mything_source: item.requestersItem == null ? null : item.requestersItem.image, 
-        requestFor_title: item.requestedItem.title, 
-        requestFor_source: item.requestedItem.image})} 
+      // onPress = {()=>navigation.navigate("NotificationSuccessDetail",{ 
+      //   id: item.id,
+      //   mything_title: item.requestersItem == null ? null : item.requestersItem.title, 
+      //   mything_source: item.requestersItem == null ? null : item.requestersItem.image, 
+      //   requestFor_title: item.requestedItem.title, 
+      //   requestFor_source: item.requestedItem.image})} 
       style={styles.success}>
       <Text style={styles.title, {color: colors.mono_40}}>{item.requestedItem.title}</Text>
     </TouchableOpacity>
