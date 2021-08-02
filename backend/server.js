@@ -77,8 +77,8 @@ const typeDefs = gql`
         removeRequest(id: ID!): Boolean!
         updateRequestersItem(itemId: ID!, requestId: ID!): Boolean!
 
-        createPost(title: String!, description: String!, hideUser: Boolean!): Post!
-        postComment(postId: ID!, comment: String!): Boolean!
+        createPost(title: String!, description: String!, hideUser: Boolean!, time: String): Post!
+        postComment(postId: ID!, comment: String!, time: String): Boolean!
 
         addToCollection(postId: ID!): Boolean!
         removeFromCollection(postId: ID!): Boolean!
@@ -184,11 +184,13 @@ const typeDefs = gql`
         description: String!
         author: User
         comments: [Comment]!
+        time: String
     }
 
     type Comment {
         user: User!
         comment: String!
+        time: String
     }
 
     enum Status {
@@ -355,18 +357,19 @@ const resolvers = {
             console.log(result);
             return true;
         },
-        postComment:　async (_, { postId, comment }, { db, user }) => {
+        postComment:　async (_, { postId, comment, time }, { db, user }) => {
             if(!user) {
                 throw new Error('AUthentication Error. Please sign in');
             }
             const _comment = {
                 user: user,
-                comment: comment
+                comment: comment,
+                time: time
             }
             await db.collection('Posts').updateOne({ _id : ObjectId(postId) },{ $push: { comments: _comment }});
             return true;
         },
-        createPost: async (_, { title, description, hideUser }, { db, user }) => {
+        createPost: async (_, { title, description, hideUser, time }, { db, user }) => {
             if(!user) {
                 throw new Error('AUthentication Error. Please sign in');
             }
@@ -375,6 +378,7 @@ const resolvers = {
                 description: description,
                 author: hideUser? null : user,
                 comments: [], 
+                time: time
             }
 
             const result = await db.collection('Posts').insertOne(newPost);

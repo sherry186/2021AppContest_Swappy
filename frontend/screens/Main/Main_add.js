@@ -17,12 +17,13 @@ import { offsetLimitPagination } from '@apollo/client/utilities';
 import colors from '../../config/colors';
 import { useQuery, useMutation,  gql } from '@apollo/client';
 import { color } from 'jimp';
+var dateFormat = require("dateformat");
 
 let ScreenWidth = Dimensions.get("window").width;
 
 const CREATE_POST = gql`
-mutation createPost ($title: String!, $description: String!, $hideUser: Boolean!) {
-  createPost(title: $title, description:$description, hideUser: $hideUser) {
+mutation createPost ($title: String!, $description: String!, $hideUser: Boolean!, $time: String) {
+  createPost(title: $title, description:$description, hideUser: $hideUser, time: $time) {
     id
     title
     description
@@ -43,27 +44,12 @@ const Main_ADD = () => {
   const [createPost, { data, error, loading }] = useMutation(CREATE_POST);
 
   const handlesubmit =() =>{
+    const time = new Date();
+    const formatedTime = dateFormat(time, "m/dd/yyyy, h:MM:ss TT");
     
-    createPost({variables: {title: title, description: article, hideUser: hide}});
-    // nextId = SocialItems.length.toString;
-    // if(hide == false)
-    // {
-    //     item = {id: nextId, 
-    //       person: 'Sylvia', 
-    //       title: title,
-    //       post: article }
-        
-    //     SocialItems.push(item)
-    // }
-    // else
-    // {
-    //     item = {id: nextId, 
-    //       person: 'SomeBody', 
-    //       title: title,
-    //       post: article }
-      
-    //     SocialItems.push(item)
-    // }
+    
+    createPost({variables: {title: title, description: article, hideUser: hide, time: formatedTime}});
+
 
     navigation.goBack()
   } 
