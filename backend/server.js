@@ -48,6 +48,7 @@ const typeDefs = gql`
     scalar JSONObject
     scalar Upload
     type Query {
+        getUser: User!
         generalItemsList: [GeneralItem]!
         myGeneralItems: [GeneralItem]!
         getGeneralItem(id: ID!): GeneralItem!
@@ -216,6 +217,10 @@ const typeDefs = gql`
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
     Query: {
+        getUser: async (_, __, {db,user}) => {
+            const _user =  await db.collection('Users').findOne({_id: ObjectId(user._id)});
+            return _user;
+        },
         filterMatchingGroupItems: async (_, { id }, {db,user}) => {
             var group = await db.collection('Groups').findOne({_id: ObjectId(id)});
             var groupItems = group.groupItems;
