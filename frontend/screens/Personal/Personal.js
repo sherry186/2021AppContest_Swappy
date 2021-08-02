@@ -83,9 +83,9 @@ const Personal = () => {
 
           </TouchableOpacity>
           
-          <Text style={{ top: ScreenHeight*0.07, left: ScreenWidth*0.1, fontSize: ScreenWidth*0.06, color:"#629D89", fontWeight: 'bold', }}>{username}</Text>
+          <Text style={{ top: ScreenHeight*0.07, left: ScreenWidth*0.1, fontSize: ScreenWidth*0.06, color:colors.main_100, fontWeight: 'bold', }}>{username}</Text>
           <View style = {{ top: ScreenHeight*0.075, left: ScreenWidth*0.1, flexDirection: 'row', alignItems: 'center'}}>
-            <Text style={{frontSize: ScreenWidth*0.04, color:"#629D89" }}>{stars} </Text>
+            <Text style={{frontSize: ScreenWidth*0.04, color:colors.main_100 }}>{stars} </Text>
             {
               maxstars.map((item, index)=>{
                 return(
@@ -114,6 +114,16 @@ const Personal = () => {
                 style={styles.image}
                 source={require('../../assets/personal/個人資料設定.png')}/>
             <Text style={styles.buttonText}>個人資料設定</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.item}
+            onPress = {() => navigation.navigate("Record")}
+          >
+            <Image 
+                style={styles.image}
+                source={require('../../assets/personal/所有訂單.png')}/>
+            <Text style={styles.buttonText}>所有訂單</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -149,6 +159,7 @@ const styles = StyleSheet.create({
     top:3,
     width: 20, 
     height: 20, 
+    tintColor: colors.main_100,
   },
   boxContainer: {
     margin: 5,
