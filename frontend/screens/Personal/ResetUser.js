@@ -2,6 +2,9 @@ import { styleSheets } from 'min-document';
 import React from 'react';
 import { useEffect, useState } from 'react';
 
+import { useMutation,  gql } from '@apollo/client';
+import { ReactNativeFile } from 'apollo-upload-client';
+
 import {
     Text,
     StyleSheet,
@@ -31,6 +34,18 @@ import colors from '../../config/colors';
 let ScreenWidth = Dimensions.get("window").width;
 let ScreenHeight = Dimensions.get("window").height;
 
+const RESET_USER = gql`
+  mutation resetUser($username: String!, $email: String!, $phone: String!, $password: String!, $avatar: String) {
+    resetUser(username: $username, email: $email, phone: $phone, password: $password, avatar: $avatar) 
+  }`;
+
+const UPLOAD_FILE = gql`
+  mutation uploadFile ($file: Upload!) {
+    uploadFile(file: $file){
+      url
+    }
+  }`;
+
 
 const ResetUser = () => {
     const [username, setUsername] = useState('');
@@ -42,8 +57,26 @@ const ResetUser = () => {
     const [source, setSource] = useState(null);
     const navigation = useNavigation();
 
+    const [resetUser] = useMutation(RESET_USER);
+    const [uploadFile] = useMutation(UPLOAD_FILE, {
+      onCompleted: data => console.log(data)
+    });
+
     const handlesubmit = () => {
-        navigation.goBack();
+      const file = generateRNImage(source.uri, Math.random().toString(36).slice(-10));
+      console.log(file);
+      uploadFile({variables: { file: file }, uploadFileAsForm: true});
+
+      resetUser({variables: {username:username, email:email, phone:phone, password:password, avatar: file.name}});
+      navigation.goBack();
+    }
+
+    const generateRNImage = (uri, name) => {
+      return uri ? new ReactNativeFile({
+        uri,
+        type:'image/png',
+        name: `image_${name}.png`,
+      }) : null;
     }
 
     const pickImage = async () => {

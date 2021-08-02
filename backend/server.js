@@ -48,6 +48,7 @@ const typeDefs = gql`
     scalar JSONObject
     scalar Upload
     type Query {
+        getUser: User!
         generalItemsList: [GeneralItem]!
         myGeneralItems: [GeneralItem]!
         getGeneralItem(id: ID!): GeneralItem!
@@ -64,6 +65,7 @@ const typeDefs = gql`
     }
 
     type Mutation {
+        resetUser(username: String!, email: String!, phone: String!, password: String!, avatar: String): Boolean!
         uploadFile(file: Upload!): File!
 
         signUp(input: SignUpInput): AuthUser!
@@ -215,6 +217,10 @@ const typeDefs = gql`
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
     Query: {
+        getUser: async (_, __, {db,user}) => {
+            const _user =  await db.collection('Users').findOne({_id: ObjectId(user._id)});
+            return _user;
+        },
         filterMatchingGroupItems: async (_, { id }, {db,user}) => {
             var group = await db.collection('Groups').findOne({_id: ObjectId(id)});
             var groupItems = group.groupItems;
@@ -328,6 +334,26 @@ const resolvers = {
 
     },
     Mutation: {
+        resetUser: async (_, { username, email, phone, password, avatar }, { db, user }) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+
+            //hash password
+            const saltRounds = 10;
+            const salt = bcrypt.genSaltSync(saltRounds);
+            const hashedPassword = bcrypt.hashSync(password, salt);
+
+            await db.collection('Users').updateOne({ _id : ObjectId(user._id) },
+                { $set: { 
+                    username : username, 
+                    email : email, 
+                    password : hashedPassword, 
+                    phone : phone, 
+                    avatar: avatar
+                }});
+            return true;
+        },
         uploadFile: async(_, { file })=> {
             const {createReadStream, filename, mimetype, encoding } = await file;
             const stream = createReadStream();

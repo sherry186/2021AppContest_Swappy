@@ -14,13 +14,19 @@ import {
 import colors from '../../config/colors';
 import { useNavigation } from '@react-navigation/core';
 import * as ImagePicker from 'expo-image-picker';
-import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
-//import { ScreenHeight } from 'react-native-elements/dist/helpers';
-// import { Icon, InlineIcon } from '@iconify/react';
-// import collectionItem from '@iconify/icons-zmdi/collection-item';
+import _ from "lodash"; 
+import { useQuery,  gql } from '@apollo/client';
 
 let ScreenWidth = Dimensions.get("window").width;
 let ScreenHeight = Dimensions.get("window").height;
+
+const GET_USER = gql`
+query getUser{
+  getUser {
+    username
+    avatar
+  }
+}`;
 
 
 const Personal = () => {
@@ -32,7 +38,7 @@ const Personal = () => {
   const [defaultImage, setDefaultImage] = useState(null);
   const [source, setSource] = useState(null);
 
-
+  const { data, error, loading } = useQuery(GET_USER, {pollInterval: 500});
   const navigation = useNavigation();
 
   // const pickImage = async () => {
@@ -72,18 +78,21 @@ const Personal = () => {
 
 
     return (
+
       <SafeAreaView style={styles.container}>
+        
+        { data ? ( <>
         <View style={styles.container}>
           <TouchableOpacity 
             style = {{top: ScreenHeight*0.05, left: ScreenWidth*0.1,}}>
             {/* onPress = {pickImage}> */}
             <Image
               style={{ width: ScreenWidth*0.3, height: ScreenWidth*0.3, borderRadius: ScreenWidth*0.15 }}
-              source={source? source: defaultImage} />
+              source={data.getUser.avatar? {uri: `http://swappy.ngrok.io/images/${data.getUser.avatar}`}: defaultImage} />
 
           </TouchableOpacity>
           
-          <Text style={{ top: ScreenHeight*0.07, left: ScreenWidth*0.1, fontSize: ScreenWidth*0.06, color:colors.main_100, fontWeight: 'bold', }}>{username}</Text>
+          <Text style={{ top: ScreenHeight*0.07, left: ScreenWidth*0.1, fontSize: ScreenWidth*0.06, color:colors.main_100, fontWeight: 'bold', }}>{`@${data.getUser.username}`}</Text>
           <View style = {{ top: ScreenHeight*0.075, left: ScreenWidth*0.1, flexDirection: 'row', alignItems: 'center'}}>
             <Text style={{frontSize: ScreenWidth*0.04, color:colors.main_100 }}>{stars} </Text>
             {
@@ -135,7 +144,9 @@ const Personal = () => {
             <Text style={styles.buttonText}>關於swappy</Text>
           </TouchableOpacity>
         </View>
-
+        </> ) : <Text>loading ...</Text>
+      }
+      
       </SafeAreaView>
     )
   

@@ -128,8 +128,8 @@ function GroupDetailsScreen ({route, navigation}) {
 
           <View style = {{flex: 0.1, backgroundColor:colors.mono_40, width:'100%'}}></View>
 
-          <View style = {{flex: 8}}>
-            <View>
+          <View style = {{flex: 8, backgroundColor: colors.mono_40}}>
+            <View style ={{backgroundColor: colors.mono_40}}>
             <View style = {{height: ScreenWidth*0.06, flexDirection:'row', backgroundColor: colors.mono_40, alignItems:'center'}}>
                 <View style = {{width: "5%"}}></View>
                 <ScrollView style = {{width: '95%', backgroundColor: 'transparent'}}>
