@@ -30,6 +30,10 @@ import Notification_invitationDetail from '../screens/Notification/Notification_
 import Message_home from '../screens/Message/Message_home';
 import GroupWishingPoolScreen from '../screens/Group/Group_wishingPool';
 import ResetUser from '../screens/Personal/ResetUser';
+import Record from '../screens/Personal/Record';
+import RecordDetail from '../screens/Personal/RecordDetail';
+import Star from '../screens/Personal/Star';
+import Complete from '../screens/Personal/Complete';
 //import { Text } from 'react-native';
 
 
@@ -370,9 +374,74 @@ function Root() {
             }, 
           }}/>
 
+         {/* personal */}
         <RootStack.Screen 
           name="ResetUser" 
           component={ResetUser}
+          options={{
+            //headerShown: true,
+            title: '',
+            cardStyle: {backgroundColor: colors.mono_40},
+            headerStyle: {
+                backgroundColor: "transparent",
+                elevation: 0,
+                shadowOpacity: 0, 
+            },
+            headerTintColor: colors.warning_80,
+            headerTitleStyle: {
+              backgroundColor:'transparent',
+              fontWeight: 'bold',
+            }, 
+          }}/>
+
+        <RootStack.Screen 
+          name="Record" 
+          component={Record}
+          options={{
+            headerShown: false,
+          }}/>
+
+        <RootStack.Screen 
+          name="RecordDetail" 
+          component={RecordDetail}
+          options={{
+            //headerShown: true,
+            title: '',
+            cardStyle: {backgroundColor: colors.mono_40},
+            headerStyle: {
+                backgroundColor: "transparent",
+                elevation: 0,
+                shadowOpacity: 0, 
+            },
+            headerTintColor: colors.warning_80,
+            headerTitleStyle: {
+              backgroundColor:'transparent',
+              fontWeight: 'bold',
+            }, 
+          }}/>
+        
+        <RootStack.Screen 
+          name="Star" 
+          component={Star}
+          options={{
+            //headerShown: true,
+            title: '',
+            cardStyle: {backgroundColor: colors.mono_40},
+            headerStyle: {
+                backgroundColor: "transparent",
+                elevation: 0,
+                shadowOpacity: 0, 
+            },
+            headerTintColor: colors.warning_80,
+            headerTitleStyle: {
+              backgroundColor:'transparent',
+              fontWeight: 'bold',
+            }, 
+          }}/>
+
+        <RootStack.Screen 
+          name="Complete" 
+          component={Complete}
           options={{
             //headerShown: true,
             title: '',

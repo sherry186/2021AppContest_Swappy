@@ -38,8 +38,8 @@ function GroupAddItem ({route, navigation}) {
   const [Discription, setDiscription] = useState('');
   //const [Ihave, setIhave] = useState([]);
   const [tag, setTag] = useState('');
-  const [dummyData, setDummyData] = useState([{way: 'faceToFace'},
-                                               {way: 'byPost'}]);
+  const [dummyData, setDummyData] = useState([{way: '面交'},
+                                               {way: '寄送'}]);
   const [exchangeMethod, setExchangeMethod] = useState('NOTSELECTED')
   const [image, setImage] = useState([]);
 
@@ -178,26 +178,32 @@ function GroupAddItem ({route, navigation}) {
     return(
       <View style={{flex:1, flexDirection: 'column',  }}>
         <KeyboardAvoidingView style={{height: windowHeight *0.15 ,flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-          <View style = {styles.flatListContainer}>
-              <FlatList
-                data={image}
-                renderItem={renderImage}
-                horizontal = {true}
-              />
-          </View> 
-
-          <View style = {styles.buttonAdd}>
-          <TouchableOpacity 
-              style={styles.buttonAddContainer}
-              onPress={pickImage}
+          <ScrollView 
+              style = {{height: "100%" }}
+              contentContainerStyle ={{alignItems:'center'}}
+              horizontal = {true}
               >
-              <Image
-                style = {{height:ScreenWidth*0.05, width: ScreenWidth*0.05}}
-                source={require("../../assets/breakAway/add.png")}/>
-          </TouchableOpacity>
-          </View>
+              {
+                  image == []? null:(<FlatList
+                    data={image}
+                    renderItem={renderImage}
+                    horizontal = {true}
+                  />)
+              }
+              
+              {/* <View style = {styles.buttonAdd}> */}
+                  <TouchableOpacity 
+                      style={styles.buttonAddContainer}
+                      onPress={pickImage}
+                      >
+                      <Image
+                        style = {{height:ScreenWidth*0.05, width: ScreenWidth*0.05}}
+                        source={require("../../assets/breakAway/add.png")}/>
+                  </TouchableOpacity>
+              {/* </View> */}
+          </ScrollView>
            
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
        {/* duplicate from breakAwayHesitate */} 
 
       <KeyboardAvoidingView style = {styles.line}></KeyboardAvoidingView>
@@ -210,27 +216,31 @@ function GroupAddItem ({route, navigation}) {
           </View>
 
           <View style={{flexDirection: 'row'}}>
+            <View style = {{flex: 0.5}}></View>
+            <View style = {{flex: 9.5, flexDirection: 'row'}}>
             {
               dummyData.map((item, index)=>{
                 return(
                   <TouchableOpacity
                     onPress={()=>selectionHandler(index)}
                     title = 'method'
-                    //onPress={this.handleupload}
-                    style = {{flexDirection:'row',
-                    marginHorizontal: ScreenWidth*0.05,
-                    marginVertical:ScreenWidth*0.03,
-                    backgroundColor: item.isSelected? colors.function_100: colors.mono_60,
-                    width: ScreenWidth*0.3,
-                    height: ScreenWidth*0.1,
-                    alignItems:'center',
-                    justifyContent: 'center',
-                    borderRadius: ScreenWidth*0.02,}}>
+                    style = {item.isSelected ? styles.wayS : styles.waySd}>
+                    {/* //onPress={this.handleupload}
+                    // style = {{flexDirection:'row', */}
+                    {/* // marginHorizontal: ScreenWidth*0.05, */}
+                    {/* // marginVertical:ScreenWidth*0.03,
+                    // backgroundColor: item.isSelected? colors.function_100: colors.mono_60,
+                    // width: ScreenWidth*0.3,
+                    // height: ScreenWidth*0.1,
+                    // alignItems:'center',
+                    // justifyContent: 'center',
+                    // borderRadius: ScreenWidth*0.02,}}> */}
                     <Text style = {styles.buttonText}>{item.way}</Text> 
                   </TouchableOpacity>
                 );
               })
             }
+            </View>
           </View>
           <View style ={styles.textContainer}>
             <Text style={styles.text}>物品說明</Text>
@@ -385,14 +395,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems:'center',      
   },
-  buttonAdd: {
-    flex: 1.2,
-    height: "100%",
-    backgroundColor: "transparent",
-    alignItems: 'center',
-    justifyContent: 'center',
+  wayS: {
+    backgroundColor: colors.function_100,
+    width: "20%",
+    height: 25,
+    margin: 5,
+    borderRadius:2,
+    justifyContent:'center',
+    alignItems:'center', 
   },
+  waySd: {
+    backgroundColor: colors.mono_60,
+    width: "20%",
+    height: 25,
+    margin: 5,
+    borderRadius:2,
+    justifyContent:'center',
+    alignItems:'center',
+  },
+  
   buttonAddContainer: {
+    margin: 20,
     borderColor: colors.mono_80,
     borderWidth: 1,
     width: ScreenWidth*0.2,

@@ -219,24 +219,30 @@ const General_ADD = () => {
     <View style={{flex:1, flexDirection: 'column',  }}>
       {/* <Text style={styles.buttonText}>Item Name</Text> */}
       <KeyboardAvoidingView style={{height: windowHeight *0.15 ,flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-          <View style = {styles.flatListContainer}>
-              <FlatList
-                data={image}
-                renderItem={renderImage}
-                horizontal = {true}
-              />
-          </View> 
-
-          <View style = {styles.buttonAdd}>
-          <TouchableOpacity 
-              style={styles.buttonAddContainer}
-              onPress={pickImage}
+          <ScrollView 
+              style = {{height: "100%" }}
+              contentContainerStyle ={{alignItems:'center'}}
+              horizontal = {true}
               >
-              <Image
-                style = {{height:ScreenWidth*0.05, width: ScreenWidth*0.05}}
-                source={require("../../assets/breakAway/add.png")}/>
-          </TouchableOpacity>
-          </View>
+              {
+                  image == []? null:(<FlatList
+                    data={image}
+                    renderItem={renderImage}
+                    horizontal = {true}
+                  />)
+              }
+              
+              {/* <View style = {styles.buttonAdd}> */}
+                  <TouchableOpacity 
+                      style={styles.buttonAddContainer}
+                      onPress={pickImage}
+                      >
+                      <Image
+                        style = {{height:ScreenWidth*0.05, width: ScreenWidth*0.05}}
+                        source={require("../../assets/breakAway/add.png")}/>
+                  </TouchableOpacity>
+              {/* </View> */}
+          </ScrollView>
            
       </KeyboardAvoidingView>
        {/* duplicate from breakAwayHesitate */} 
@@ -270,13 +276,14 @@ const General_ADD = () => {
                     style={{height: 25,width:200}}
                     selectedValue={dropdown}
                     onValueChange={(value)=>onValueChange(2,value)}>
-                    <Picker.Item label="書籍" value="key0" />
-                    <Picker.Item label="衣服與配件" value="key1" />
-                    <Picker.Item label="玩具" value="key2" />
-                    <Picker.Item label="特色周邊品" value="key3" />
-                    <Picker.Item label="小型生活器具" value="key4" />
-                    <Picker.Item label="家電用品" value="key5" />
-                    <Picker.Item label="其他" value="key6" />
+                    <Picker.Item label="" value="" />
+                    <Picker.Item label="書籍" value="書籍" />
+                    <Picker.Item label="衣服與配件" value="衣服與配件" />
+                    <Picker.Item label="玩具" value="玩具" />
+                    <Picker.Item label="特色周邊品" value="特色周邊品" />
+                    <Picker.Item label="小型生活器具" value="小型生活器具" />
+                    <Picker.Item label="家電用品" value="家電用品" />
+                    <Picker.Item label="其他" value="其他" />
                   </Picker>
             </View>
           <View style = {{flex: 6}}></View>
@@ -350,7 +357,7 @@ const styles = StyleSheet.create({
     borderWidth: 1
   },
   wayS: {
-    backgroundColor: colors.mono_60,
+    backgroundColor: colors.function_100,
     width: "20%",
     height: 25,
     margin: 5,
@@ -359,7 +366,7 @@ const styles = StyleSheet.create({
     alignItems:'center', 
   },
   waySd: {
-    backgroundColor: colors.function_100,
+    backgroundColor: colors.mono_60,
     width: "20%",
     height: 25,
     margin: 5,
@@ -397,14 +404,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems:'center',      
   },
-  buttonAdd: {
-    flex: 1.2,
-    height: "100%",
-    backgroundColor: "transparent",
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   buttonAddContainer: {
+    margin:20,
     borderColor: colors.mono_80,
     borderWidth: 1,
     width: ScreenWidth*0.2,

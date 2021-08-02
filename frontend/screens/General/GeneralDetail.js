@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import * as SQLite from 'expo-sqlite';
 const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
-
+//import { useNavigation } from '@react-navigation/core';
 
 import { View,
        Text,
@@ -44,7 +44,9 @@ const CREATE_REQUEST = gql`
 function GeneralDetailsScreen ({ route, navigation }) {
   const [createRequest, { data, error, loading }] = useMutation(CREATE_REQUEST);
 
-  const { itemID, title, sort, des, method, image } = route.params;  
+  const { itemID, title, sort, des, method, image } = route.params;
+  const naviagation = useNavigation();
+  
   const renderImage = ({ item }) => (
     <SafeAreaView style = {{flex:1, flexDirection: 'row'}}>
       <Image 
@@ -58,12 +60,9 @@ function GeneralDetailsScreen ({ route, navigation }) {
     createRequest({ variables: { requestedItemId: itemID } });
     console.log(error);
     console.log(data);
-    // <SafeAreaView style = {{flex:1, flexDirection: 'row'}}>
-    //   <Image 
-    //   style={{flexDirection: 'row', width: 60, height: 60,  }}
-    //   source={item.source}/>
-    // </SafeAreaView> 
-};// 理論上應該是一個Navigation，還要再改
+    naviagation.navigate('Notification',{ screen: 'requesting' });
+    
+};
   
   // render(){ 
     
@@ -87,28 +86,10 @@ function GeneralDetailsScreen ({ route, navigation }) {
         
         <View style = {{flex: 10, backgroundColor: colors.mono_40, width: "100%", alignItems: 'center' }}>
             <Image
-              style = {{flex: 5, height: "50%", width: "80%"}}
-              source = {image? {url: `http://swappy.ngrok.io/images/${image}`} : require('../../assets/general/商品呈現.png')}
+              style = {{flex: 5, height: "50%", width: "80%", marginBottom: 10}}
+              source = {image? {uri: `http://swappy.ngrok.io/images/${image}`} : require('../../assets/general/商品呈現.png')}
             />
-            <View style = {{flex: 0.6, backgroundColor: colors.mono_40, width:"100%", flexDirection: 'row'}}>
-              <View style = {styles.margin}></View>
-              
-              <TouchableOpacity
-                style = {styles.button}
-                >
-                <Image
-                  style = {styles.buttonImage}
-                  source = {require('../../assets/general/heartEmpty.png')}/>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style = {styles.button}
-                >
-                <Image
-                  style = {styles.buttonImage}
-                  source = {require('../../assets/general&group/message.png')}/>
-              </TouchableOpacity>
-            </View>
+           
             <View style = {styles.line}></View>
             
             <View style = {{flex: 4.4, width: "100%"}}>

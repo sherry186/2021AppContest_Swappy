@@ -79,6 +79,7 @@ const MainDetail = ({ route, navigation }) =>{
     const formatedTime = dateFormat(time, "m/dd/yyyy, h:MM:ss TT");
 
     addComment({ variables: {id: id, comment: comment, time: formatedTime}});
+    setComment('');
   }
 
   const handleCollect = () => {

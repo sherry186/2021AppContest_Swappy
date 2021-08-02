@@ -151,24 +151,30 @@ export default function BreakAwayHesitate () {
      <View style={{flex:1, flexDirection: 'column',  }}>
        {/* <KeyboardAvoidingView style={{flex:0.3}}></KeyboardAvoidingView> */}
        <KeyboardAvoidingView style={{height: windowHeight *0.15 ,flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-          <View style = {styles.flatListContainer}>
-              <FlatList
-                data={image}
-                renderItem={renderImage}
-                horizontal = {true}
-              />
-          </View> 
-
-          <View style = {styles.buttonAdd}>
-          <TouchableOpacity 
-              style={styles.buttonAddContainer}
-              onPress={pickImage}
+          <ScrollView 
+              style = {{height: "100%" }}
+              contentContainerStyle ={{alignItems:'center'}}
+              horizontal = {true}
               >
-              <Image
-                style = {{height:ScreenWidth*0.05, width: ScreenWidth*0.05}}
-                source={require("../../assets/breakAway/add.png")}/>
-          </TouchableOpacity>
-          </View>
+              {
+                  image == []? null:(<FlatList
+                    data={image}
+                    renderItem={renderImage}
+                    horizontal = {true}
+                  />)
+              }
+              
+              {/* <View style = {styles.buttonAdd}> */}
+                  <TouchableOpacity 
+                      style={styles.buttonAddContainer}
+                      onPress={pickImage}
+                      >
+                      <Image
+                        style = {{height:ScreenWidth*0.05, width: ScreenWidth*0.05}}
+                        source={require("../../assets/breakAway/add.png")}/>
+                  </TouchableOpacity>
+              {/* </View> */}
+          </ScrollView>
            
        </KeyboardAvoidingView>
 
@@ -302,14 +308,8 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems:'center',      
     },
-    buttonAdd: {
-      flex: 1.2,
-      height: "100%",
-      backgroundColor: "transparent",
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
     buttonAddContainer: {
+      margin: 20,
       borderColor: colors.mono_80,
       borderWidth: 1,
       width: ScreenWidth*0.2,
