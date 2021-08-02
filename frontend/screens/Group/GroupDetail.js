@@ -66,7 +66,7 @@ function GroupDetailsScreen ({route, navigation}) {
       <Image
         style ={{height: ScreenWidth*0.2, width: ScreenWidth*0.2}}
         source = {item.image? item.image: require('../../assets/general/商品呈現.png')}/>
-      <View style ={{height:'100%', width:"75%", backgroundColor:'transparent'}}>
+      <View style ={{marginLeft:3, height:'100%', width:"75%", backgroundColor:'transparent'}}>
         <Text style={{position:'absolute', top: 0 , color: colors.mono_100, fontWeight:'bold', fontSize:ScreenWidth*0.04}}>{item.description}</Text>
         <Text style={{position:'absolute', top: ScreenWidth*0.15, color: colors.function_100, fontSize:ScreenWidth*0.03}}>#{item.tag}</Text>
       </View>
@@ -81,7 +81,7 @@ function GroupDetailsScreen ({route, navigation}) {
         style ={{height: ScreenWidth*0.2, width: ScreenWidth*0.2}}
         source = {item.image? item.image: require('../../assets/general/商品呈現.png')}/>
       
-      <View style ={{height:'100%', width:"75%", backgroundColor:'transparent'}}>
+      <View style ={{marginLeft:3, height:'100%', width:"75%", backgroundColor:'transparent'}}>
         <Text style={{position:'absolute', top: 0, color: colors.mono_40, fontWeight:'bold', fontSize:ScreenWidth*0.04}}>{item.description}</Text>
         <Text style={{position:'absolute', top: ScreenWidth*0.15, color: colors.function_60, fontSize:ScreenWidth*0.03}}>#{item.tag}</Text>
       </View>
