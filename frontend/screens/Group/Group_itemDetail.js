@@ -81,9 +81,9 @@ function Group_itemDetail ({route, navigation}) {
               
               <View style = {{flex:7, flexDirection: 'row', height: "10%"}}>
                 <View style = {styles.margin}></View>
-                <View style = {styles.desContainer}>
+                <ScrollView style = {styles.desContainer}>
                   <Text>{dis}</Text>
-                </View>
+                </ScrollView>
                 <View style = {styles.margin}></View>
               </View>
 
