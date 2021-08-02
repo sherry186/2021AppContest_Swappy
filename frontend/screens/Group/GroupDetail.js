@@ -63,11 +63,13 @@ function GroupDetailsScreen ({route, navigation}) {
     <TouchableOpacity 
       style={styles.itemN} 
       onPress={() => {navigation.navigate('Group_itemDetail',{dis: item.description, method: item.exchangeMethod, tagname: item.tag, image: item.image})}}>    
-      <Text style={styles.title, {color: colors.mono_80}}>{item.description}</Text>
-     
-      <TouchableOpacity>
-        <Text style={styles.tagT, {color: colors.mono_100}}>#{item.tag}</Text>
-      </TouchableOpacity>
+      <Image
+        style ={{height: ScreenWidth*0.2, width: ScreenWidth*0.2}}
+        source = {item.image? item.image: require('../../assets/general/商品呈現.png')}/>
+      <View style ={{marginLeft:3, height:'100%', width:"75%", backgroundColor:'transparent'}}>
+        <Text style={{position:'absolute', top: 0 , color: colors.mono_100, fontWeight:'bold', fontSize:ScreenWidth*0.04}}>{item.description}</Text>
+        <Text style={{position:'absolute', top: ScreenWidth*0.15, color: colors.function_100, fontSize:ScreenWidth*0.03}}>#{item.tag}</Text>
+      </View>
     </TouchableOpacity>
   );
 
@@ -75,11 +77,14 @@ function GroupDetailsScreen ({route, navigation}) {
     <TouchableOpacity 
       style={styles.item} 
       onPress={() => {navigation.navigate('Group_itemDetail',{dis: item.description, method: item.exchangeMethod, tagname: item.tag, image: item.image})}}>    
-      <Text style={styles.title, {color: colors.mono_40}}>{item.description}</Text>
+      <Image
+        style ={{height: ScreenWidth*0.2, width: ScreenWidth*0.2}}
+        source = {item.image? item.image: require('../../assets/general/商品呈現.png')}/>
       
-      <TouchableOpacity>
-        <Text style={styles.tagT, {color: colors.function_60}}>#{item.tag}</Text>
-      </TouchableOpacity>
+      <View style ={{marginLeft:3, height:'100%', width:"75%", backgroundColor:'transparent'}}>
+        <Text style={{position:'absolute', top: 0, color: colors.mono_40, fontWeight:'bold', fontSize:ScreenWidth*0.04}}>{item.description}</Text>
+        <Text style={{position:'absolute', top: ScreenWidth*0.15, color: colors.function_60, fontSize:ScreenWidth*0.03}}>#{item.tag}</Text>
+      </View>
     </TouchableOpacity>
   );
 
@@ -115,13 +120,13 @@ function GroupDetailsScreen ({route, navigation}) {
 
         </View>
 
-          <View style = {{flex:1.4, alignItems: 'center'}}>
+          <View style = {{flex:1.4, alignItems: 'center',width:"100%", backgroundColor:colors.mono_40}}>
               <ScrollView contentContainerStyle = {{ width: "90%", backgroundColor: colors.mono_40, alignItems:'center'}}>
                     <Text style = {{color: colors.mono_80}}>{discription}</Text>
               </ScrollView>
           </View>
 
-          <View style = {{flex: 0.1}}></View>
+          <View style = {{flex: 0.1, backgroundColor:colors.mono_40, width:'100%'}}></View>
 
           <View style = {{flex: 8}}>
             <View>
@@ -201,34 +206,38 @@ const styles = StyleSheet.create({
     borderRadius: ScreenWidth*0.015,
   },
   item: {
-    
+    flexDirection:'row',
     backgroundColor: colors.function_100,
     height: ScreenWidth*0.2,
     width: ScreenWidth*0.9,
-    padding: 20,
+    //padding: 20,
     justifyContent:'flex-start',
     marginVertical: 8,
     marginHorizontal: 16,
+    borderWidth:1,
+    borderColor: colors.mono_80,
 
-    shadowColor: colors.mono_100,
-    shadowOffset: { width: 10, height: 10 },
-    shadowOpacity: 0.5,
-    shadowRadius: 0,
-    elevation: 3,
+    // shadowColor: colors.mono_100,
+    // shadowOffset: { width: 10, height: 10 },
+    // shadowOpacity: 0.5,
+    // shadowRadius: 0,
+    // elevation: 3,
   },
   itemN: {
+    flexDirection:'row',
     backgroundColor: colors.mono_40,
     height: ScreenWidth*0.2,
     width: ScreenWidth*0.9,
-    padding: 20,
+    //padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
-
-    shadowColor: colors.mono_100,
-    shadowOffset: { width: 10, height: 10 },
-    shadowOpacity: 0.5,
-    shadowRadius: 0,
-    elevation: 3,
+    borderWidth:1,
+    borderColor: colors.mono_80,
+    // shadowColor: colors.mono_100,
+    // shadowOffset: { width: 10, height: 10 },
+    // shadowOpacity: 0.5,
+    // shadowRadius: 0,
+    // elevation: 3,
   },
   button: {
     width: 65,
@@ -243,13 +252,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    top:10,
+    top:2,
     fontWeight:'bold',
     
   },
   tagT: {
     fontSize: 15,
     fontWeight: '300',
+    
   },
   buttonText: {
     fontSize: ScreenWidth*0.03,

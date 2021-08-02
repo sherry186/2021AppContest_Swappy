@@ -47,13 +47,13 @@ function GeneralDetailsScreen ({ route, navigation }) {
   const { itemID, title, sort, des, method, image } = route.params;
   const naviagation = useNavigation();
   
-  const renderImage = ({ item }) => (
-    <SafeAreaView style = {{flex:1, flexDirection: 'row'}}>
-      <Image 
-      style={{flexDirection: 'row', width: 60, height: 60,  }}
-      source={item.source}/>
-    </SafeAreaView> 
-  );
+  // const renderImage = ({ item }) => (
+  //   <SafeAreaView style = {{flex:1, flexDirection: 'row'}}>
+  //     <Image 
+  //     style={{flexDirection: 'row', width: 60, height: 60,  }}
+  //     source={item.source}/>
+  //   </SafeAreaView> 
+  // );
 
   const handleRequest = () => {
     console.log('request pressed');
@@ -112,9 +112,9 @@ function GeneralDetailsScreen ({ route, navigation }) {
               
               <View style = {{flex:7, flexDirection: 'row', height: "10%"}}>
                 <View style = {styles.margin}></View>
-                <View style = {styles.desContainer}>
+                <ScrollView style = {styles.desContainer}>
                   <Text>{des}</Text>
-                </View>
+                </ScrollView>
                 <View style = {styles.margin}></View>
               </View>
 

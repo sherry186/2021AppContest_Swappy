@@ -46,7 +46,7 @@ function RecordDetail ({ route, navigation }) {
         console.log(statusS, statusToMeS);
         if(statusS >= 2)
         {
-            navigation.navigate('Star');
+            navigation.navigate('Star', {mythingImage: mythingImage, requestForImage: requestForImage, requestForTitle: requestForTitle});
         }
         console.log(statusS, statusToMeS);
 
@@ -57,20 +57,6 @@ function RecordDetail ({ route, navigation }) {
         <View style = {{flex: 1, alignItems: 'center'}}>       
             <View style = {{flex: 2, flexDirection:'row', backgroundColor: colors.mono_40, width: "100%", justifyContent:'center', }}>
                 <View style = {{flex:1}}></View>
-                <View style = {styles.itemBox}>  
-                  <Image
-                    style={styles.image}
-                    source = {mythingImage}/>
-                  
-                  <View style ={styles.titleTag}>
-                    <Text style = {styles.tagText}>你的物品</Text>
-                  </View>
-                  <View style ={styles.titleTagB}>
-                    <Text style = {styles.titleText}>{mythingTitle}</Text>
-                  </View>
-                  
-                </View>
-
                 <View style = {styles.itemBox}>
 
                   <Image
@@ -85,6 +71,19 @@ function RecordDetail ({ route, navigation }) {
                   </View>
                   
                 </View>
+                <View style = {styles.itemBox}>  
+                  <Image
+                    style={styles.image}
+                    source = {mythingImage}/>
+                  
+                  <View style ={styles.titleTag}>
+                    <Text style = {styles.tagText}>你的物品</Text>
+                  </View>
+                  <View style ={styles.titleTagB}>
+                    <Text style = {styles.titleText}>{mythingTitle}</Text>
+                  </View>
+                  
+                </View>                
                 <View style = {{flex:1}}></View>
             </View>
 

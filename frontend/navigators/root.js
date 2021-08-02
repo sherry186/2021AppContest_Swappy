@@ -33,6 +33,7 @@ import ResetUser from '../screens/Personal/ResetUser';
 import Record from '../screens/Personal/Record';
 import RecordDetail from '../screens/Personal/RecordDetail';
 import Star from '../screens/Personal/Star';
+import Complete from '../screens/Personal/Complete';
 //import { Text } from 'react-native';
 
 
@@ -145,7 +146,7 @@ function Root() {
         <RootStack.Screen 
           name="Group_itemDetail" 
           component={Group_itemDetail}
-          options={{headerShown: true }}/>
+          options={{headerShown: false }}/>
         
         {/*social */}
         <RootStack.Screen 
@@ -422,6 +423,25 @@ function Root() {
         <RootStack.Screen 
           name="Star" 
           component={Star}
+          options={{
+            //headerShown: true,
+            title: '',
+            cardStyle: {backgroundColor: colors.mono_40},
+            headerStyle: {
+                backgroundColor: "transparent",
+                elevation: 0,
+                shadowOpacity: 0, 
+            },
+            headerTintColor: colors.warning_80,
+            headerTitleStyle: {
+              backgroundColor:'transparent',
+              fontWeight: 'bold',
+            }, 
+          }}/>
+
+        <RootStack.Screen 
+          name="Complete" 
+          component={Complete}
           options={{
             //headerShown: true,
             title: '',

@@ -36,26 +36,26 @@ const Record = () => {
 
   const handleNavigation = (item) => {
     console.log(item);
-    navigation.navigate('RecordDetail', {
-      id: item.id,
-      mythingTitle: item.mythingTitle, 
-      mythingImage: item.mythingImage, 
-      requestForTitle: item.requestForTitle, 
-      requestForTag: item.requestForTag, 
-      requestForImage: item.requestForImage, 
-      status: item.status, 
-      statusToMe: item.statusToMe})
-    // if (status == 2){
-    //   if (statusToMe == 1){
-
-    //   }
-    //   else{
-
-    //   }
-    // }
-    // else{
-      
-    // }
+    
+    if (item.status == 2){
+      if (item.statusToMe == 1){
+        navigation.navigate('Star', {mythingImage: item.mythingImage, requestForImage: item.requestForImage, requestForTitle: item.requestForTitle});
+      }
+      else{
+        navigation.navigate('Complete',{requestForImage: item.requestForImage, requestForTitle: item.requestForTitle});
+      }
+    }
+    else{
+      navigation.navigate('RecordDetail', {
+        id: item.id,
+        mythingTitle: item.mythingTitle, 
+        mythingImage: item.mythingImage, 
+        requestForTitle: item.requestForTitle, 
+        requestForTag: item.requestForTag, 
+        requestForImage: item.requestForImage, 
+        status: item.status, 
+        statusToMe: item.statusToMe})
+    }
   }
 
   const renderItem = ({ item }) => (
@@ -100,8 +100,10 @@ const Record = () => {
 
           <View style = {{flex: 10, backgroundColor: colors.mono_40, width: "100%", alignItems: 'center' }}>
             <FlatList
+              style = {{marginBottom:60}}
               data = {RecordData}
               renderItem = {renderItem}/>
+            
           </View>
       </View>
     )

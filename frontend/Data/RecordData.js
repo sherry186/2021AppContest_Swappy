@@ -96,7 +96,7 @@ export default [
         requestForTitle: '小米音箱',
         requestForTag:'書籍',
         requestForImage: require('../assets/general/商品呈現.png'),
-        status: 1, //0:no one received; 1: only 1 person received; 2: two both received;
-        statusToMe: 1, // 0: I haven't received; 1: I have received but haven't stared; 2: I have received and have stared
+        status: 2, //0:no one received; 1: only 1 person received; 2: two both received;
+        statusToMe: 2, // 0: I haven't received; 1: I have received but haven't stared; 2: I have received and have stared
     },
 ]
