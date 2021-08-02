@@ -28,6 +28,7 @@ const RENDER_POST = gql`
     author{
       username
     }
+    time
   }
 }`;
 
@@ -154,6 +155,7 @@ const Main_HOME = () => {
                 description = {item.description}
                 hideName = {item.hideUser}
                 comments = {item.comments}
+                time = {item.time}
                 navigation = {navigation} />}}
             //renderItem={renderChat}
             keyExtractor={item => item.id}
@@ -219,7 +221,7 @@ function FlatListComponent(props)  {
       <View style={styles.ChatC}>
            <TouchableOpacity
              style={styles.Chat}
-             onPress={() => props.navigation.navigate('MainDetail', {id: props.id, title: props.title, person: props.person, post: props.description, description: props.description, hideName: props.hideName})}
+             onPress={() => props.navigation.navigate('MainDetail', {id: props.id, title: props.title, person: props.person, post: props.description, description: props.description, hideName: props.hideName, time: props.time})}
             >
                   <Text style={styles.post}>{props.title}</Text>
                   <Text style={styles.person}>{props.person}</Text>

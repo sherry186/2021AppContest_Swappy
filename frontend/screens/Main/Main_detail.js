@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { useQuery, useMutation,  gql } from '@apollo/client';
-
+var dateFormat = require("dateformat");
 
 import { View,
        Text,
@@ -27,18 +27,20 @@ query getPost($id: ID!){
     author {
       username
     }
+    time
     comments {
       user {
         username
       }
       comment
+      time
     }
   }
 }`;
 
 const ADD_COMMENT = gql`
-mutation postComment($id: ID!, $comment: String!) {
-  postComment(postId: $id, comment: $comment)
+mutation postComment($id: ID!, $comment: String!, $time: String) {
+  postComment(postId: $id, comment: $comment, time: $time)
 }`;
 
 const COLLECT_POST = gql`
@@ -47,6 +49,7 @@ mutation addToCollection($id: ID!) {
 }`;
 
 const MainDetail = ({ route, navigation }) =>{
+  
   const [comment, setComment] = useState('');
   const [date, setDate] = useState("6/22/2021, 2:59:00 PM");
   const [comments, setComments] = useState([
@@ -56,7 +59,7 @@ const MainDetail = ({ route, navigation }) =>{
     {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree", date: "6/22/2021, 2:59:00 PM"},
     {profile: require('../../assets/Social/profileDefault.png'), name: "sherry", content: "i agree", date: "6/22/2021, 2:59:00 PM"}, ]);
 
-  const { id, title, profile, person, post, hideName, description } = route.params;
+  const { id, title, profile, person, post, hideName, description, time } = route.params;
   console.log(id, title, profile, person, post, hideName, description);
 
   const { data, error, loading } = useQuery(QUERY_POST, {variables: {id:id}});
@@ -72,7 +75,10 @@ const MainDetail = ({ route, navigation }) =>{
  
 
   const handleAddComment = () => {
-    addComment({ variables: {id: id, comment: comment}});
+    const time = new Date();
+    const formatedTime = dateFormat(time, "m/dd/yyyy, h:MM:ss TT");
+
+    addComment({ variables: {id: id, comment: comment, time: formatedTime}});
   }
 
   const handleCollect = () => {
@@ -81,6 +87,7 @@ const MainDetail = ({ route, navigation }) =>{
 
   const renderComment = ({ item }) => (
     //console.log(this.props.navigation);
+    
     <View style = {{
       width:"90%", 
       borderColor: colors.mono_60,
@@ -98,7 +105,7 @@ const MainDetail = ({ route, navigation }) =>{
           />
         <View style ={{left: ScreenWidth*0.01,}}>
           <Text style = {{fontSize:13, color: colors.mono_100}}>{item.user? item.user.username : "匿名"}</Text>
-          <Text style = {{fontSize:8, color: colors.mono_80}}>{date}</Text>
+          <Text style = {{fontSize:8, color: colors.mono_80}}>{item.time ? item.time : 'time hidden'}</Text>
         </View>
         
         
@@ -142,7 +149,7 @@ const MainDetail = ({ route, navigation }) =>{
                   source = {require('../../assets/Social/profileDefault.png')}/>
                 <View style = {{left: ScreenWidth*0.01,}}>
                   <Text style = {{fontSize:15, color: colors.mono_100}}>{hideName? "匿名" : person}</Text>
-                  <Text style = {{fontSize:10, color: colors.mono_80}}>{date}</Text>
+                  <Text style = {{fontSize:10, color: colors.mono_80}}>{time}</Text>
                 </View>
                 
               </View>
