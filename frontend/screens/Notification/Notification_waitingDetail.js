@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import * as SQLite from 'expo-sqlite';
 const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
 import { Paragraph, Dialog, Portal } from 'react-native-paper';
-// import  '../../Data/GeneralItems'
+import GeneralItems from '../../Data/GeneralItems';
 
 
 
@@ -24,13 +24,16 @@ import colors from '../../config/colors';
 import Notification_requesting from './Notification_requesting';
 
 import { useQuery, useMutation,  gql } from '@apollo/client';
-import General_HOME from '../General/General_home';
 
 const REMOVE_REQUEST = gql`
   mutation removeRequest($id: ID!) {
     removeRequest(id: $id)
   }
 `;
+
+let ScreenWidth = Dimensions.get("window").width;
+let ScreenHeight = Dimensions.get("window").height;
+
 
 
 function Notification_waitingDetail ({ route }) {
@@ -67,11 +70,10 @@ function Notification_waitingDetail ({ route }) {
         setImage(result.uri)
     }; 
 
-    const renderItem = ({item}) => (
-      //console.log(this.props.navigation);
+    const renderItem = ({ item }) => (
       <SafeAreaView style={styles.boxContainer}>
         <View style={styles.buttons}>
-          {/* <TouchableOpacity  */}
+          <TouchableOpacity 
             style={styles.item}
             onPress={() => navigation.navigate('GeneralDetail', {itemID: item.id, title: item.title, sort: item.category, des: item.description, method: item.exchangeMethod, image: item.image})}>
               <Image
@@ -82,7 +84,7 @@ function Notification_waitingDetail ({ route }) {
                   <Text style={styles.title}>{item.title}</Text>
                   <Text style = {{marginTop: "5%", color: colors.function_100}}>#{item.category}</Text>
               </View>   
-          {/* </TouchableOpacity> */}
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     );
@@ -139,15 +141,13 @@ function Notification_waitingDetail ({ route }) {
                                 <Dialog visible={visible} onDismiss={hideDialog} style = {{marginTop : 150, marginLeft : 0, width: Dimensions.get("window").width}}>
                                   <Dialog.Title>上傳物品選擇</Dialog.Title>
                                   <ScrollView style = {{top: "5%", alignContent: 'center'}}>
-                                    <Dialog.Content>
-                                      <View>
-                                        {data ? ( <FlatList
-                                            data={search == ''? data.generalItemsList: items}
-                                            renderItem={renderItem}
-                                          /> ) : <Text>loading...</Text>}
-                                      </View>
-                                    </Dialog.Content>
-                                    </ScrollView>
+                                    <View>
+                                      <FlatList
+                                        data={GeneralItems}
+                                        renderItem={renderItem}
+                                      />
+                                    </View>
+                                  </ScrollView>
                                 </Dialog>
                               </Portal>
 
@@ -192,6 +192,59 @@ function Notification_waitingDetail ({ route }) {
 export default Notification_waitingDetail;
 
 const styles = StyleSheet.create({
- 
-
+  margin: {
+    position: 'relative',
+    height: "10%",
+    backgroundColor: colors.mono_40,
+  },
+  boxContainer: {
+    marginTop: ScreenHeight*0.03,
+    height: ScreenHeight*0.13,
+    width: ScreenWidth*0.85,
+    backgroundColor: colors.mono_40,
+    //left: 30,
+    //alignItems: 'center',
+    justifyContent: 'center',
+    bottom: ScreenHeight*0.03,
+    borderColor: colors.mono_60,
+    borderWidth: 1,
+    
+    // shadowColor: colors.mono_100,
+    // shadowOffset: { width: 10, height: 10 },
+    // shadowOpacity: 0.5,
+    // shadowRadius: 0,
+    // elevation: 3,
+  },
+  item: {
+    flexDirection:'row',
+    backgroundColor: 'transparent',
+    //padding: 20,
+    height: "100%",
+    //marginVertical: 8,
+    //marginHorizontal: 16,
+  },
+  title: {
+    fontSize: 33,
+  },
+  buttons: {
+    //flexDirection: 'row'
+    flex:1,
+    backgroundColor: 'transparent',
+  },
+  button: {
+    width: 65,
+    height: 65,
+    position: 'absolute',
+    borderRadius: 31.5,
+    backgroundColor: 'transparent',
+    bottom: "10%",
+    //right: 169,
+    alignSelf: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
 });
