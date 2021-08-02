@@ -120,13 +120,13 @@ function GroupDetailsScreen ({route, navigation}) {
 
         </View>
 
-          <View style = {{flex:1.4, alignItems: 'center'}}>
+          <View style = {{flex:1.4, alignItems: 'center',width:"100%", backgroundColor:colors.mono_40}}>
               <ScrollView contentContainerStyle = {{ width: "90%", backgroundColor: colors.mono_40, alignItems:'center'}}>
                     <Text style = {{color: colors.mono_80}}>{discription}</Text>
               </ScrollView>
           </View>
 
-          <View style = {{flex: 0.1}}></View>
+          <View style = {{flex: 0.1, backgroundColor:colors.mono_40, width:'100%'}}></View>
 
           <View style = {{flex: 8}}>
             <View>

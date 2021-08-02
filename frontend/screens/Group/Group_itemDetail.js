@@ -66,7 +66,7 @@ function Group_itemDetail ({route, navigation}) {
               <View style = {{flex: 1,flexDirection: 'row'}}>
                 <View style = {styles.margin}></View>
                 <Text style = {styles.textT}>交付方式 </Text>
-                <Text>{method}</Text>
+                <Text>{method == "BOTH"? "面交、寄送":null}{method == "FACETOFACE"? "面交": null}{method == "BYPOST"? "寄送": null}</Text>
               </View>
               
               <View style = {{flex: 1, flexDirection: 'row'}}>
