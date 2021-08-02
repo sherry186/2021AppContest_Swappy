@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import * as SQLite from 'expo-sqlite';
 const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
+import { Paragraph, Dialog, Portal } from 'react-native-paper';
+// import  '../../Data/GeneralItems'
+
 
 
 import { View,
@@ -13,13 +16,15 @@ import { View,
        SafeAreaView, 
        ScrollView, 
        TouchableOpacity,
-       StyleSheet } from "react-native";
+       StyleSheet,
+       Dimensions } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/core';
 import colors from '../../config/colors';
 import Notification_requesting from './Notification_requesting';
 
 import { useQuery, useMutation,  gql } from '@apollo/client';
+import General_HOME from '../General/General_home';
 
 const REMOVE_REQUEST = gql`
   mutation removeRequest($id: ID!) {
@@ -62,6 +67,26 @@ function Notification_waitingDetail ({ route }) {
         setImage(result.uri)
     }; 
 
+    const renderItem = ({item}) => (
+      //console.log(this.props.navigation);
+      <SafeAreaView style={styles.boxContainer}>
+        <View style={styles.buttons}>
+          {/* <TouchableOpacity  */}
+            style={styles.item}
+            onPress={() => navigation.navigate('GeneralDetail', {itemID: item.id, title: item.title, sort: item.category, des: item.description, method: item.exchangeMethod, image: item.image})}>
+              <Image
+                source =  {item.image? {uri: `http://swappy.ngrok.io/images/${item.image}`} : require('../../assets/general/商品呈現.png')}
+                style ={{height: ScreenHeight*0.13, width: ScreenHeight*0.13,}}/>
+              
+              <View style = {{marginLeft: 16}}>
+                  <Text style={styles.title}>{item.title}</Text>
+                  <Text style = {{marginTop: "5%", color: colors.function_100}}>#{item.category}</Text>
+              </View>   
+          {/* </TouchableOpacity> */}
+        </View>
+      </SafeAreaView>
+    );
+
     useEffect(() => {
         (async () => {
           if (Platform.OS !== 'web') {
@@ -73,71 +98,92 @@ function Notification_waitingDetail ({ route }) {
         })();
       }, []);
 
+    //pop-up related definition
+    const [visible, setVisible] = React.useState(false);
+    const showDialog = () => setVisible(true);
+    const hideDialog = () => setVisible(false);
+
     return (
-     
-        <View style = {{flex:1, height: "100%"}}>
+        <Portal.Host>
+          <View style = {{flex:1, height: "100%"}}>
 
-            <View style = {{flex: 1, flexDirection:'row', backgroundColor: colors.mono_40, width: "100%", alignItems: 'center', justifyContent:'center' }}>
-                <View>
-                  <View style = {{alignSelf: 'center'}}>
-                    <Text>對方的物品</Text>
+              <View style = {{flex: 1, flexDirection:'row', backgroundColor: colors.mono_40, width: "100%", alignItems: 'center', justifyContent:'center' }}>
+                  <View>
+                    <View style = {{alignSelf: 'center'}}>
+                      <Text>對方的物品</Text>
+                    </View>
+                    
+                    <Image
+                      style={{ width: 200, height: 200 }}
+                      //source = {requestFor_source}
+                      source = {requestFor_source? {uri: `http://swappy.ngrok.io/images/${requestFor_source}`} : require('../../assets/general/商品呈現.png')}
+                      />
+                    <Text>{requestFor_title}</Text>
                   </View>
-                  
-                  <Image
-                    style={{ width: 200, height: 200 }}
-                    //source = {requestFor_source}
-                    source = {requestFor_source? {uri: `http://swappy.ngrok.io/images/${requestFor_source}`} : require('../../assets/general/商品呈現.png')}
-                    />
-                  <Text>{requestFor_title}</Text>
-                </View>
 
-                <View>
-                  <Text>你的物品</Text>
-                  {
-                    mything_title == null? 
-                    (
-                        <View>
-                            <TouchableOpacity 
-                                style={styles.buttonAddContainer}
-                                onPress={pickImage}
-                            >
-                                <Image
-                                    style={{ width: 200, height: 200 }}
-                                    source={image == null ? require("../../assets/notification/點擊上傳圖片.png"): {uri: image}}/>
-                            </TouchableOpacity>
+                  <View>
+                    <Text>你的物品</Text>
+                    {
+                      mything_title == null? 
+                      (
+                          <View>
+                              <TouchableOpacity 
+                                  style={styles.buttonAddContainer}
+                                  onPress={showDialog}
+                              >
+                                  <Image
+                                      style={{ width: 200, height: 200 }}
+                                      source={image == null ? require("../../assets/notification/點擊上傳圖片.png"): {uri: image}}/>
+                              </TouchableOpacity>
+                              <Portal>
+                                <Dialog visible={visible} onDismiss={hideDialog} style = {{marginTop : 150, marginLeft : 0, width: Dimensions.get("window").width}}>
+                                  <Dialog.Title>上傳物品選擇</Dialog.Title>
+                                  <ScrollView style = {{top: "5%", alignContent: 'center'}}>
+                                    <Dialog.Content>
+                                      <View>
+                                        {data ? ( <FlatList
+                                            data={search == ''? data.generalItemsList: items}
+                                            renderItem={renderItem}
+                                          /> ) : <Text>loading...</Text>}
+                                      </View>
+                                    </Dialog.Content>
+                                    </ScrollView>
+                                </Dialog>
+                              </Portal>
 
-                            <TextInput
-                                //style={styles.input}
-                                placeholderTextColor = {colors.function_100}
-                                onChangeText={(text) => setTitle(text)}
-                                value={title} /> 
-                  
-                        </View>
+                              <TextInput
+                                  //style={styles.input}
+                                  placeholderTextColor = {colors.function_100}
+                                  onChangeText={(text) => setTitle(text)}
+                                  value={title} /> 
+                    
+                          </View>
 
-                        
-                    ): 
-                    (
+                          
+                      ): 
+                      (
 
-                        <View>
-                        <Image
-                            source = {mything_source}/>
-                            <Text>{mything_title}</Text>
-                        </View>
-                    )
-                  }
-                </View>
+                          <View>
+                          <Image
+                              source = {mything_source}/>
+                              <Text>{mything_title}</Text>
+                          </View>
+                      )
+                    }
+                  </View>
+                
+              </View>
+
+              <View style = {{flex: 1, alignItems:'center', justifyContent: 'center'}}>
+                  <TouchableOpacity
+                      onPress = {handleDelete}>
+                      <Text style = {{color : colors.warning_100}}>撤回</Text>
+                  </TouchableOpacity>
+              </View>
               
-            </View>
-
-            <View style = {{flex: 1, alignItems:'center', justifyContent: 'center'}}>
-                <TouchableOpacity
-                    onPress = {handleDelete}>
-                    <Text style = {{color : colors.warning_100}}>撤回</Text>
-                </TouchableOpacity>
-            </View>
-            
-              
-         </View>
+                
+          </View>
+        </Portal.Host>
     );
   // }
 
