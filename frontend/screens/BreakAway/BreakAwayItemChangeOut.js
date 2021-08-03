@@ -222,7 +222,7 @@ const BreakAwayItemChangeOut = ({ route, navigation }) => {
         <View style = {{flex:3}}>
             <TextInput
                 style={styles.input}
-                placeholder='second hand, not brandnew'
+                placeholder=''
                 onChangeText={(text) => {setDescription(text); console.log(description)}}
                 value = {description}/>
         </View>
@@ -485,7 +485,7 @@ const styles = StyleSheet.create({
     borderWidth: 1
   },
   wayS: {
-    backgroundColor: colors.mono_60,
+    backgroundColor: colors.function_100,
     width: "20%",
     height: 25,
     margin: 5,
@@ -494,7 +494,7 @@ const styles = StyleSheet.create({
     alignItems:'center', 
   },
   waySd: {
-    backgroundColor: colors.function_100,
+    backgroundColor: colors.mono_60,
     width: "20%",
     height: 25,
     margin: 5,

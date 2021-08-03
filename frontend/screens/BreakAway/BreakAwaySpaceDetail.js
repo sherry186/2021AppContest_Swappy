@@ -168,7 +168,7 @@ export default class BreakAwaySpaceDetail extends React.Component {
             <View style = {styles.marginRow}></View>
             
             <View style = {styles.textC, {alignItems:'center'}}>
-                <Text style = {styles.text, {color: colors.mono_80}}>還差{LEVELPOINTS-(complete % LEVELPOINTS)}點經驗值升級</Text>
+                <Text style = {styles.text, {color: colors.mono_80}}>還差{Math.round((LEVELPOINTS-(complete % LEVELPOINTS))*10)/10}點經驗值升級</Text>
             </View>
 
 
