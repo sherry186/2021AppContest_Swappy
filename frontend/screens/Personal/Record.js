@@ -26,14 +26,37 @@ import { useNavigation } from '@react-navigation/core';
 import colors from '../../config/colors';
 
 
+import { useQuery, gql } from '@apollo/client';
+
 let ScreenWidth = Dimensions.get("window").width;
 let ScreenHeight = Dimensions.get("window").height;
+
+
+const QUERY_MY_REQUESTS = gql`
+query getMySuccessfulRequests {
+  getMySuccessfulRequestingRequests {
+    id
+    requestedItem {
+      title
+      image
+      category
+    }
+  } getMySuccessfulInvitationRequests {
+    id
+    requestersItem {
+      title
+      image
+      category
+    }
+  }
+}`;
 
 
 const Record = () => {
 
   const navigation = useNavigation();
-
+  const { data, error, loading } = useQuery(QUERY_MY_REQUESTS, {pollInterval: 500});
+  console.log(data);
   const handleNavigation = (item) => {
     console.log(item);
     
@@ -58,7 +81,7 @@ const Record = () => {
     }
   }
 
-  const renderItem = ({ item }) => (
+  const renderRequestingItem = ({ item }) => (
     //console.log(this.props.navigation);
     <SafeAreaView style={styles.boxContainer}>
       <View style={styles.buttons}>
@@ -67,17 +90,38 @@ const Record = () => {
           onPress={() => handleNavigation(item)}
           >
             <Image
-              source =  {item.requestForImage}
+              source =  {item.requestedItem.image? {uri: `http://swappy.ngrok.io/images/${item.requestedItem.image}`} : require('../../assets/general/商品呈現.png')}
               style ={{height: ScreenHeight*0.13, width: ScreenHeight*0.13,}}/>
             
             <View style = {{marginLeft: 16}}>
-                <Text style={styles.title}>{item.requestForTitle}</Text>
-                <Text style = {{marginTop: "5%", color: colors.function_100}}>#{item.requestForTag}</Text>
+                <Text style={styles.title}>{item.requestedItem.title}</Text>
+                <Text style = {{marginTop: "5%", color: colors.function_100}}>#{item.requestedItem.category}</Text>
             </View>   
         </TouchableOpacity>
       </View>
     </SafeAreaView>
   );  
+
+  const renderInvitationItem = ({ item }) => (
+    //console.log(this.props.navigation);
+    <SafeAreaView style={styles.boxContainer}>
+      <View style={styles.buttons}>
+        <TouchableOpacity 
+          style={styles.item}
+          onPress={() => handleNavigation(item)}
+          >
+            <Image
+              source =  {item.requestersItem.image? {uri: `http://swappy.ngrok.io/images/${item.requestersItem.image}`} : require('../../assets/general/商品呈現.png')}
+              style ={{height: ScreenHeight*0.13, width: ScreenHeight*0.13,}}/>
+            
+            <View style = {{marginLeft: 16}}>
+                <Text style={styles.title}>{item.requestersItem.title}</Text>
+                <Text style = {{marginTop: "5%", color: colors.function_100}}>#{item.requestersItem.category}</Text>
+            </View>   
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+  ); 
 
     return (
       <View style={{ flex: 1, top: "5%", bottom:"20%", alignItems: 'center'}}>
@@ -99,10 +143,19 @@ const Record = () => {
           </View>
 
           <View style = {{flex: 10, backgroundColor: colors.mono_40, width: "100%", alignItems: 'center' }}>
-            <FlatList
+            {data ? (
+              <>
+              <FlatList
               style = {{marginBottom:60}}
-              data = {RecordData}
-              renderItem = {renderItem}/>
+              data = {data.getMySuccessfulInvitationRequests}
+              renderItem = {renderInvitationItem}/>
+              <FlatList
+              style = {{marginBottom:60}}
+              data = {data.getMySuccessfulRequestingRequests}
+              renderItem = {renderRequestingItem}/>
+              </>
+            ) : <Text>loading ...</Text>}
+            
             
           </View>
       </View>

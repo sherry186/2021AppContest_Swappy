@@ -48,6 +48,8 @@ const typeDefs = gql`
     scalar JSONObject
     scalar Upload
     type Query {
+        getMySuccessfulRequestingRequests: [Request]!
+        getMySuccessfulInvitationRequests: [Request]!
         getUser: User!
         generalItemsList: [GeneralItem]!
         myGeneralItems: [GeneralItem]!
@@ -219,6 +221,12 @@ const typeDefs = gql`
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
     Query: {
+        getMySuccessfulInvitationRequests: async (_, __, {db,user}) => {
+            return await db.collection('Requests').find({"guyWhoseItemIsRequested._id" : user._id }, {status: "SUCCESS"}).toArray();
+        },
+        getMySuccessfulRequestingRequests: async (_, __, {db,user}) => {
+            return await db.collection('Requests').find({"requester._id" : user._id}, {status: "SUCCESS"}).toArray();
+        },
         getUser: async (_, __, {db,user}) => {
             const _user =  await db.collection('Users').findOne({_id: ObjectId(user._id)});
             return _user;
