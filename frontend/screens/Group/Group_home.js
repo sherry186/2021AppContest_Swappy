@@ -142,17 +142,20 @@ const Group_HOME = () => {
       </View>
       
       <ScrollView style = {{top: "5%", alignContent: 'center'}}>
+        
         <View>
           { data ? 
             (<FlatList
+              inverted = {true}
               data={search == ''? data.getGroups : data1}
               renderItem={renderItem}
               keyExtractor={item => item.id}
+
             />) : <Text>loading ...</Text>
           }
         </View>
-        
         <View style = {{height: 78,backgroundColor: colors.mono_40,}}></View>
+        
       </ScrollView>
 
       <TouchableOpacity 
@@ -177,7 +180,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.mono_40,
   },
   boxContainer: {
-    marginTop: ScreenHeight*0.03,
+    marginBottom: ScreenHeight*0.03,
     height: ScreenHeight*0.13,
     width: ScreenWidth*0.85,
     backgroundColor: colors.mono_40,

@@ -60,7 +60,7 @@ function Notification_choiceDetail ({ route, navigation }) {
     createRequest({ variables: { requestedItemId: itemID } });
     console.log(error);
     console.log(data);
-    naviagation.navigate('Notification',{ screen: 'requesting' });
+    naviagation.goBack();
     
 };
   

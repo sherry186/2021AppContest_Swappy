@@ -176,6 +176,7 @@ const General_HOME = () => {
       <ScrollView style = {{top: "5%", alignContent: 'center'}}>
         <View>
           {data ? ( <FlatList
+              inverted = {true}
               data={search == ''? data.generalItemsList: items}
               renderItem={renderItem}
             /> ) : <Text>loading...</Text>}
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
       backgroundColor: colors.mono_40,
     },
     boxContainer: {
-      marginTop: ScreenHeight*0.03,
+      marginBottom: ScreenHeight*0.03,
       height: ScreenHeight*0.13,
       width: ScreenWidth*0.85,
       backgroundColor: colors.mono_40,
