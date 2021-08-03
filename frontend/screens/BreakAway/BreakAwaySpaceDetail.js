@@ -122,7 +122,7 @@ export default class BreakAwaySpaceDetail extends React.Component {
         <View style = {{flex: 1, flexDirection: 'row', height: "7%", backgroundColor: colors.mono_40}}>
           <TouchableOpacity
             style = {{flex:2, width: "20%", backgroundColor: colors.mono_40, alignItems: 'center', justifyContent:'center'}}
-            onPress = {()=>navigation.goBack()}
+            onPress = {()=>this.props.navigation.goBack()}
             >
             <Image 
               style = {{height: "25%", width: "25%"}}
