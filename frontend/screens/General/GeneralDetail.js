@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import * as SQLite from 'expo-sqlite';
 const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
 //import { useNavigation } from '@react-navigation/core';
+import { Paragraph, Dialog, Portal } from 'react-native-paper';
 
 import { View,
        Text,
@@ -9,14 +10,18 @@ import { View,
        Image, 
        FlatList, 
        SafeAreaView, 
+       Dimensions,
        ScrollView, 
        TouchableOpacity,
        StyleSheet } from "react-native";
 import { useNavigation } from '@react-navigation/core';
 import colors from '../../config/colors';
-
+import person_star_comment from '../../Data/person_star_comment';
 import { useMutation,  gql } from '@apollo/client';
+//import { ScreenWidth } from 'react-native-elements/dist/helpers';
 
+let ScreenWidth = Dimensions.get("screen").width;
+let ScreenHeight = Dimensions.get("screen").height;
 
 const CREATE_REQUEST = gql`
   mutation createRequestItem($requestedItemId: ID!){
@@ -43,8 +48,8 @@ const CREATE_REQUEST = gql`
 /* 2. Get the param */
 function GeneralDetailsScreen ({ route, navigation }) {
   const [createRequest, { data, error, loading }] = useMutation(CREATE_REQUEST);
-
   const { itemID, title, sort, des, method, image } = route.params;
+  const [maxstars, setMaxstars] = useState([1, 2, 3, 4, 5]);
   const naviagation = useNavigation();
   
   // const renderImage = ({ item }) => (
@@ -62,12 +67,55 @@ function GeneralDetailsScreen ({ route, navigation }) {
     console.log(data);
     naviagation.navigate('Notification',{ screen: 'requesting' });
     
-};
+  };
+
+  const renderComment = ({ item }) => (
+    //console.log(this.props.navigation);
+    
+    <View style = {{
+      width:"90%", 
+      borderColor: colors.mono_60,
+      borderWidth:1,
+      backgroundColor: colors.mono_40, 
+      alignSelf:'center', 
+      marginVertical: ScreenWidth*0.02, 
+      height: ScreenWidth*0.3, 
+      borderRadius: ScreenWidth*0.02,
+      }}>
+      <View style = {{flexDirection:'row', margin: ScreenWidth*0.02, alignItems:'center'}}>
+        <Image
+          style = {{height: ScreenWidth*0.06, width: ScreenWidth*0.06}}
+          source = {item.profile}
+          />
+        <View style ={{left: ScreenWidth*0.01,}}>
+          <Text style = {{fontSize:13, color: colors.mono_100}}>{item.name}</Text>
+          <Text style = {{fontSize:8, color: colors.mono_80}}>{item.date}</Text>
+        </View>  
+        
+      </View>
+      <View style = {{flexDirection:'row', left: ScreenWidth*0.02}}>
+        {
+            maxstars.map((itemD, index)=>{
+              return(
+                <Image 
+                  source = {Math.round(item.star)>=itemD? require('../../assets/personal/star_full.png') :  require('../../assets/personal/star_empty.png')}
+                  style = {{height: ScreenHeight*0.015, width:ScreenHeight*0.015}}/>
+              );
+            })
+        }
+        </View>
+        <Text style = {{left: ScreenWidth*0.01, color: colors.mono_100}}> {item.comment}</Text>
+    </View>
+    
+  );
   
-  // render(){ 
+    const [visible, setVisible] = React.useState(false);
+    const showDialog = () => setVisible(true);
+    const hideDialog = () => setVisible(false);
     
     return (
-      <View style={{ flex: 1, top: "5%", bottom:"20%", alignItems: 'center'}}>
+    <Portal.Host>
+      <View style={{ flex: 1, top: "5%", bottom:"20%", alignItems: 'center', backgroundColor:colors.mono_40}}>
         <View style = {{flex: 1, flexDirection: 'row', height: "7%", backgroundColor: colors.mono_40}}>
           <TouchableOpacity
             style = {{flex:2, width: "20%", backgroundColor: colors.mono_40, alignItems: 'center', justifyContent:'center'}}
@@ -83,6 +131,54 @@ function GeneralDetailsScreen ({ route, navigation }) {
               <Text style = {{right: "15%", fontSize: 20, color: colors.function_100}}>{title}</Text>
           </View>
         </View>
+
+        <TouchableOpacity
+            onPress = {showDialog}
+            style = {{height:ScreenWidth*0.1, width: "20%", backgroundColor:colors.mono_40, alignSelf:'center'}}>
+            <Text style = {{alignSelf:'center', fontSize: ScreenWidth*0.05, color: colors.mono_80}}>{person_star_comment.personName}</Text>
+        </TouchableOpacity>
+
+        <Portal>
+          <Dialog 
+            visible={visible} 
+            onDismiss={hideDialog} 
+            style = {{
+              marginTop : ScreenHeight*0.3,
+              height: ScreenHeight*0.7, 
+              marginLeft:0, 
+              //alignItems:'center', 
+              width: ScreenWidth,
+              borderTopLeftRadius: ScreenWidth*0.1, 
+              borderTopRightRadius: ScreenWidth*0.1,
+              backgroundColor: colors.mono_40}}>
+          
+            <Image
+              style = {{marginTop: ScreenHeight*0.05, marginLeft: ScreenWidth*0.09, height: ScreenWidth*0.3, width: ScreenWidth*0.3, borderRadius: ScreenWidth*0.15}}
+              source = {person_star_comment.profile}/>
+            <Text style = {{marginTop: ScreenHeight*0.02, color: colors.function_100, fontWeight:'bold', fontSize: ScreenWidth*0.05, marginLeft: ScreenWidth*0.09}}>{person_star_comment.personName}</Text>
+            <View style = {{flexDirection:'row', width: ScreenWidth, height: ScreenHeight*0.02, marginTop: ScreenHeight*0.01, alignItems:'center'}}>
+              <View style = {{width: ScreenWidth*0.09}}></View>
+              <Text style = {{color:colors.function_100}}>{person_star_comment.star} </Text>
+              {
+                  maxstars.map((item, index)=>{
+                    return(
+                      <Image 
+                        source = {Math.round(person_star_comment.star)>=item? require('../../assets/personal/star_full.png') :  require('../../assets/personal/star_empty.png')}
+                        style = {{height: ScreenHeight*0.015, width:ScreenHeight*0.015}}/>
+                    );
+                  })
+              }
+            </View>
+            <View style = {styles.line}></View>
+           
+            <FlatList  
+                data={person_star_comment.comments}
+                renderItem={renderComment}
+                keyExtractor={item => item.id}/>
+            
+          </Dialog>
+        </Portal>
+        
         
         <View style = {{flex: 10, backgroundColor: colors.mono_40, width: "100%", alignItems: 'center' }}>
             <Image
@@ -135,7 +231,8 @@ function GeneralDetailsScreen ({ route, navigation }) {
         </View>
         
       </View>
-    );
+    </Portal.Host>
+  );
   // }
 
 }
@@ -174,6 +271,8 @@ const styles = StyleSheet.create({
     height: 2,
     backgroundColor: colors.mono_60,
     width: "82%",
+    marginTop: ScreenHeight*0.01,
+    alignSelf: 'center',
   },
   buttonImage :{
     width: 23, 
