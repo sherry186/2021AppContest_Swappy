@@ -107,34 +107,34 @@ function Notification_waitingDetail ({ route }) {
 
     return (
         <Portal.Host>
-          <View style = {{flex:1, height: "100%"}}>
+          <View style = {{flex:1, alignItems: 'center'}}>
 
-              <View style = {{flex: 1, flexDirection:'row', backgroundColor: colors.mono_40, width: "100%", alignItems: 'center', justifyContent:'center' }}>
-                  <View>
-                    <View style = {{alignSelf: 'center'}}>
-                      <Text>對方的物品</Text>
-                    </View>
-                    
+            <View style = {{flex: 2, flexDirection:'row', backgroundColor: colors.mono_40, width: "100%", justifyContent:'center', }}>
+                <View style = {{flex:1}}></View>
+                <View style = {styles.itemBox}>
                     <Image
-                      style={{ width: 200, height: 200 }}
-                      //source = {requestFor_source}
-                      source = {requestFor_source? {uri: `http://swappy.ngrok.io/images/${requestFor_source}`} : require('../../assets/general/商品呈現.png')}
-                      />
-                    <Text>{requestFor_title}</Text>
-                  </View>
+                        style={styles.image}
+                        source = {requestFor_source? {uri: `http://swappy.ngrok.io/images/${requestFor_source}`} : require('../../assets/general/商品呈現.png')}/>
 
-                  <View>
-                    <Text>你的物品</Text>
-                    {
+                      <View style ={styles.titleTag}>
+                        <Text style = {styles.tagText}>對方的物品</Text>
+                      </View>
+                      <View style ={styles.titleTagB}>
+                        <Text style = {styles.titleText}>{requestFor_title}</Text>
+                      </View>
+                </View>
+
+                <View style = {styles.itemBox}>  
+                {
                       mything_title == null? 
                       (
-                          <View>
+                          <View style= {styles.image}>
                               <TouchableOpacity 
-                                  style={styles.buttonAddContainer}
+                                  style={{height:"100%", width:"100%"}}
                                   onPress={showDialog}
                               >
                                   <Image
-                                      style={{ width: 200, height: 200 }}
+                                      style={{ height:"100%", width:"100%" }}
                                       source={image == null ? require("../../assets/notification/點擊上傳圖片.png"): {uri: image}}/>
                               </TouchableOpacity>
                               <Portal>
@@ -161,18 +161,34 @@ function Notification_waitingDetail ({ route }) {
                       ): 
                       (
 
-                          <View>
+                          <View style = {styles.image}>
                           <Image
                               source = {mything_source}/>
                               <Text>{mything_title}</Text>
                           </View>
                       )
                     }
+                  
+                  <View style ={styles.titleTag}>
+                    <Text style = {styles.tagText}>你的物品</Text>
                   </View>
-                
-              </View>
+                  {/* <View style ={styles.titleTagB}>
+                    <Text style = {styles.titleText}>{mythingTitle}</Text>
+                  </View> */}
+                  
+                </View>                
+                <View style = {{flex:1}}></View>
 
-              <View style = {{flex: 1, alignItems:'center', justifyContent: 'center'}}>
+            </View>
+            
+            <Image 
+                style = {{position:'absolute', top: ScreenWidth*1.08, height:ScreenWidth*0.1, width: ScreenWidth*0.1}}
+                source = {require('../../assets/notification/漏斗.png')}/>
+            <Image 
+                style = {{position:'absolute', top: ScreenWidth*1.2, height:ScreenWidth*0.1748, width: ScreenWidth*0.608}}
+                source = {require('../../assets/notification/等待回應中.png')}/>
+
+              <View style = {{position:'absolute', top:ScreenWidth*1.4, alignItems:'center', justifyContent: 'center'}}>
                   <TouchableOpacity
                       onPress = {handleDelete}>
                       <Text style = {{color : colors.warning_100}}>撤回</Text>
@@ -245,4 +261,48 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: 'bold',
   },
+
+  itemBox: {
+    flex:5,
+    alignItems:'center',
+    //justifyContent: 'center',
+    //backgroundColor:'yellow',
+},
+image: {
+    width: ScreenWidth*0.4, 
+    height: ScreenWidth*0.4,
+    top:  ScreenWidth*0.44,
+},
+titleTag: {
+    top: ScreenWidth*0.4,
+    position: 'absolute',
+    alignItems:'center',
+    justifyContent: 'center',
+    width: ScreenWidth*0.25,
+    backgroundColor: colors.function_100,
+    height: ScreenWidth*0.08,
+    borderRadius: ScreenWidth*0.02,
+    //marginBottom: -ScreenWidth*0.03,
+    
+},
+titleTagB: {
+    top: ScreenWidth*0.84,
+    position: 'absolute',
+    alignItems:'center',
+    justifyContent: 'center',
+    width: ScreenWidth*0.25,
+    backgroundColor: 'transparent',
+    height: ScreenWidth*0.06,
+    //marginBottom: -ScreenWidth*0.03,
+    
+},
+tagText: {
+    fontSize: ScreenWidth*0.04,
+    color: colors.mono_40,
+},
+titleText:{
+    color: colors.function_100,
+    fontSize: ScreenWidth*0.04,
+    fontWeight: 'bold',
+}
 });
