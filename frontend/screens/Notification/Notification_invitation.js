@@ -42,6 +42,10 @@ const UPDATE_STATUS = gql`
     updateStatus(id: $id, status: $status)
   }`;
 
+const REMOVE_REQUEST = gql`
+mutation removeRequest($id: ID!) {
+  removeRequest(id: $id)
+}`;
 
 const Notification_invitation = () => {
 
@@ -53,6 +57,7 @@ const Notification_invitation = () => {
   const[invitationData, setInvitationData] = useState([]);
   const { data, error, loading } = useQuery(RENDER_INVITATIONS, {pollInterval: 500});
   const [updateStatus, _] = useMutation(UPDATE_STATUS);
+  const [removeRequest] = useMutation(REMOVE_REQUEST);
 
   console.log(data);
   // console.log(loading, data, error);
@@ -77,12 +82,14 @@ const Notification_invitation = () => {
 
   const handleYes = (requestId) => {
     updateStatus({variables: {id: requestId,status: "SUCCESS"}});
+    removeRequest({variables: {id: requestId}});
     navigation.navigate('Record');
     //navigation.navigate()
   }
 
   const handleNo = (requestId) => {
     updateStatus({variables: {id: requestId,status: "FAIL"}});
+    removeRequest({variables: {id: requestId}});
     navigation.navigate('General');
   }
 
