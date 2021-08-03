@@ -28,6 +28,7 @@ import { createMySpacesTable, createSpace } from '../../localStorageApi/api'
 import { parse } from 'fecha';
 
 import { Dimensions } from 'react-native';
+import { fixObservableSubclass } from '@apollo/client/utilities';
 let ScreenWidth = Dimensions.get("window").width;
 
 const LEVELPOINTS = 20
@@ -78,6 +79,13 @@ export default class BreakAway extends React.Component {
     )
   };
 
+
+
+  handleX = () => {
+
+  }
+
+
   getSpaceName = (spaceId) => {
     if (spaceId == 0) {
       this.setState({
@@ -124,7 +132,7 @@ export default class BreakAway extends React.Component {
   handleAddSpace = () => {
     createMySpacesTable();
     createSpace(this.state.newSpaceName);
-    this.setState({ newSpaceName: "" })
+    this.setState({ newSpaceName: "", textinputShow: false });
   }
 
 
@@ -254,7 +262,7 @@ export default class BreakAway extends React.Component {
                           onChangeText={(text) => this.setState({ newSpaceName: text })}
                           value={this.state.newSpaceName} />
                         <TouchableOpacity
-                          onPress={() => this.setState({ newSpaceName: "" })}
+                          onPress={() => this.setState({ newSpaceName: "", textinputShow: false })}
                           style={{
                             right: "1%",
                             width: "7%",
@@ -295,7 +303,7 @@ export default class BreakAway extends React.Component {
                     <View style={styles.inputContainerA}>
                       <TouchableOpacity
                         style = {{width:"100%", height:"100%", alignItems:'center', justifyContent:'center',}}
-                        onPress ={() => this.setState({textinputShow: !textinputShow})}>
+                        onPress ={() => this.setState({textinputShow: true})}>
                           <Image
                             style = {{ height: 20, width:20, tintColor: colors.mono_80}}
                             source = {require('../../assets/breakAway/add.png')}/>
