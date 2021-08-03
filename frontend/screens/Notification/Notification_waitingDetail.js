@@ -31,6 +31,40 @@ const REMOVE_REQUEST = gql`
   }
 `;
 
+// const MY_GENERAL_ITEMS = gql`
+// query myGeneralItems{
+//   myGeneralItems {
+//     id
+//     title
+//     category
+//     image
+//     exchangeMethod
+//     description
+//   }
+// }`;
+
+const BATCHED_QUERY = gql`
+query myGeneralItemsAndGetRequest ($id: ID!){
+  myGeneralItems {
+    id
+    title
+    category
+    image
+    exchangeMethod
+    description
+  } getRequest(id: $id) {
+      requestersItem {
+        title
+        image
+      }
+    }
+}`;
+
+const UPDATE_REQUEST = gql`
+mutation updateRequestersItems($itemId: ID!, $requestId: ID!) {
+  updateRequestersItem(itemId: $itemId, requestId: $requestId)
+}`;
+
 let ScreenWidth = Dimensions.get("window").width;
 let ScreenHeight = Dimensions.get("window").height;
 
@@ -38,22 +72,24 @@ let ScreenHeight = Dimensions.get("window").height;
 
 function Notification_waitingDetail ({ route }) {
 
-  const [removeRequest, { data, error, loading}] = useMutation(REMOVE_REQUEST);
+  const { id, mything_title, mything_source, requestFor_title, requestFor_source } = route.params;
+  console.log(id);
+  const [removeRequest] = useMutation(REMOVE_REQUEST);
+  const [updateRequest] = useMutation(UPDATE_REQUEST);
+  const { data, error, loading } = useQuery(BATCHED_QUERY, {variables: { id: id }, pollInterval: 500});
+  console.log(data, error, loading);
   
   // render(){  
     const [image, setImage] = useState(null);
     const [title, setTitle] = useState('');
-
-    const { id, mything_title, mything_source, requestFor_title, requestFor_source } = route.params;
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedTitle, setSelectedTitle] = useState(null);
     
     const navigation = useNavigation();
 
     const handleDelete = () =>{
       removeRequest({variables: {id: id}});
-      console.log(id);
-      console.log(error);
-      console.log(data);
-      console.log(loading);
+      
 
       navigation.navigate("Notification");
 
@@ -75,7 +111,18 @@ function Notification_waitingDetail ({ route }) {
         <View style={styles.buttons}>
           <TouchableOpacity 
             style={styles.item}
-            onPress={() => navigation.navigate('Notification_choiceDetail', {itemID: item.id, title: item.title, sort: item.category, des: item.description, method: item.exchangeMethod, image: item.image})}>
+            onPress={
+              () => {
+                setSelectedImage(item.image);
+                setSelectedTitle(item.title);
+                console.log(selectedImage);
+                console.log(selectedTitle);
+                updateRequest({variables: {itemId: item.id, requestId: id}})
+                hideDialog();
+              }
+              
+              //() => navigation.navigate('NotificationWaitingDetail', {itemID: item.id, title: item.title, sort: item.category, des: item.description, method: item.exchangeMethod, image: item.image})
+              }>
               <Image
                 source =  {item.image? {uri: `http://swappy.ngrok.io/images/${item.image}`} : require('../../assets/general/商品呈現.png')}
                 style ={{height: ScreenHeight*0.13, width: ScreenHeight*0.13,}}/>
@@ -108,7 +155,7 @@ function Notification_waitingDetail ({ route }) {
     return (
         <Portal.Host>
           <View style = {{flex:1, alignItems: 'center'}}>
-
+          {data ? ( <>
             <View style = {{flex: 2, flexDirection:'row', backgroundColor: colors.mono_40, width: "100%", justifyContent:'center', }}>
                 <View style = {{flex:1}}></View>
                 <View style = {styles.itemBox}>
@@ -126,7 +173,7 @@ function Notification_waitingDetail ({ route }) {
 
                 <View style = {styles.itemBox}>  
                 {
-                      mything_title == null? 
+                      data.getRequest.requestersItem == null? 
                       (
                           <View style= {styles.image}>
                               <TouchableOpacity 
@@ -140,12 +187,13 @@ function Notification_waitingDetail ({ route }) {
                               <Portal>
                                 <Dialog visible={visible} onDismiss={hideDialog} style = {{marginTop : ScreenHeight*0.2, height: ScreenHeight*0.8, marginLeft:0, alignItems:'center', width: ScreenWidth, backgroundColor: colors.mono_40}}>
                                   <Dialog.Title style ={{fontWeight: 'bold', fontSize: ScreenWidth*0.06, color: colors.function_100}}>上傳物件選取</Dialog.Title>
+                                  { data ? (
                                   <FlatList
                                    contentContainerStyle = {{alignItems:'center'}}
-                                   data={GeneralItems}
+                                   data={data.myGeneralItems}
                                    renderItem={renderItem}
-                                  /> 
-                                 
+                                  /> ) : <Text>loading ...</Text>
+                                  }
                                 </Dialog>
                               </Portal>
 
@@ -160,18 +208,29 @@ function Notification_waitingDetail ({ route }) {
                           
                       ): 
                       (
+                        <>
+                            <Image
+                            style={styles.image}
+                            source = {{uri: `http://swappy.ngrok.io/images/${data.getRequest.requestersItem.image}`} }/>
 
-                          <View style = {styles.image}>
-                          <Image
-                              source = {mything_source}/>
-                              <Text>{mything_title}</Text>
+                          <View style ={styles.titleTag}>
+                            <Text style = {styles.tagText}>你的物品</Text>
                           </View>
+                          <View style ={styles.titleTagB}>
+                            <Text style = {styles.titleText}>{data.getRequest.requestersItem.title}</Text>
+                          </View>
+                        </>
+                          // <View style = {styles.image}>
+                          // <Image
+                          //     source = { {uri: `http://swappy.ngrok.io/images/${selectedImage}`}}/>
+                          //     <Text>{selectedTitle}</Text>
+                          // </View>
                       )
                     }
                   
-                  <View style ={styles.titleTag}>
+                  {/* <View style ={styles.titleTag}>
                     <Text style = {styles.tagText}>你的物品</Text>
-                  </View>
+                  </View> */}
                   {/* <View style ={styles.titleTagB}>
                     <Text style = {styles.titleText}>{mythingTitle}</Text>
                   </View> */}
@@ -194,7 +253,8 @@ function Notification_waitingDetail ({ route }) {
                       <Text style = {{color : colors.warning_100}}>撤回</Text>
                   </TouchableOpacity>
               </View>
-              
+              </>) : <Text>loading ...</Text>
+            }
                 
           </View>
         </Portal.Host>

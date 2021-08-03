@@ -25,6 +25,10 @@ import { useQuery, useMutation,  gql } from '@apollo/client';
 
 let ScreenWidth = Dimensions.get("window").width;
 
+const DELETE_FAIL = gql`
+mutation deleteFail {
+  deleteFail
+}`;
 
 const RENDER_REQUESTS = gql`
 query getRequestingRequests{
@@ -67,6 +71,7 @@ const Notification_requesting = () => {
   const[waitingData, setWaitingData] = useState([]);
  
   const { data, error, loading } = useQuery(RENDER_REQUESTS, {pollInterval: 500});
+  const [deleteFail] = useMutation(DELETE_FAIL);
 
   // console.log(loading, data, error);
   
@@ -121,7 +126,8 @@ const Notification_requesting = () => {
       style={styles.fail}>
       <Text style={styles.title, {color: colors.warning_100}}>{item.requestedItem.title}</Text>
     </TouchableOpacity>
-  )};
+  )
+};
 
   const renderSuccess = ({ item }) => {
     console.log(item);
@@ -137,19 +143,24 @@ const Notification_requesting = () => {
       style={styles.success}>
       <Text style={styles.title, {color: colors.mono_40}}>{item.requestedItem.title}</Text>
     </TouchableOpacity>
-  )};
+  )
+
+};
 
   const renderWaiting = ({ item }) => {
   return (
     
     //console.log(this.props.navigation);
     <TouchableOpacity 
-      onPress = {()=>navigation.navigate("NotificationWaitingDetail",{ 
-        id: item.id,
-        mything_title: item.requestersItem == null ? null : item.requestersItem.title, 
-        mything_source: item.requestersItem == null ? null : item.requestersItem.image, 
-        requestFor_title: item.requestedItem.title ? item.requestedItem.title : null , 
-        requestFor_source: item.requestedItem.image})} 
+      onPress = {()=> {
+
+        navigation.navigate("NotificationWaitingDetail",{ 
+          id: item.id,
+          mything_title: item.requestersItem == null ? null : item.requestersItem.title, 
+          mything_source: item.requestersItem == null ? null : item.requestersItem.image, 
+          requestFor_title: item.requestedItem.title ? item.requestedItem.title : null , 
+          requestFor_source: item.requestedItem.image})} 
+        }
       style={styles.waiting}>
       <Text style={styles.title, {color: colors.mono_80}}>{item.requestedItem.title}</Text>
     </TouchableOpacity>

@@ -25,5 +25,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
   export const client = new ApolloClient({
     link: authLink.concat(httpLink),
-    cache: new InMemoryCache()
+    cache: new InMemoryCache(),  
+    shouldBatch: true,
   });

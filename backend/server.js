@@ -65,6 +65,8 @@ const typeDefs = gql`
     }
 
     type Mutation {
+        deleteFail: Boolean!
+
         resetUser(username: String!, email: String!, phone: String!, password: String!, avatar: String): Boolean!
         uploadFile(file: Upload!): File!
 
@@ -334,6 +336,14 @@ const resolvers = {
 
     },
     Mutation: {
+        deleteFail: async (_, __, { db, user }) => {
+            if(!user) {
+                throw new Error('AUthentication Error. Please sign in');
+            }
+
+            await db.collection('Requests').deleteMany({status: "FAIL", "requester._id" : user._id});
+            return true;
+        },
         resetUser: async (_, { username, email, phone, password, avatar }, { db, user }) => {
             if(!user) {
                 throw new Error('AUthentication Error. Please sign in');
@@ -692,7 +702,7 @@ const start = async () => {
     console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
 }
 
-console.log(getToken('60fa373b1194a5dc307aae23'));
+console.log(getToken('60f96984d500fa3e0481725e'));
 
 start();
 
