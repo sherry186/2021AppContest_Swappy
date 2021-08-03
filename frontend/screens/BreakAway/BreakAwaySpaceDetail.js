@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
   flatC:{
       flex:4,
       backgroundColor: 'transparent',
-      alignItems: 'center',
+      //alignItems: 'center',
       justifyContent:'center',
   },
   flatC2:{
