@@ -19,6 +19,7 @@ import * as ImagePicker from 'expo-image-picker';
 import colors from '../../config/colors';
 import { Picker } from '@react-native-picker/picker';
 import { useMutation,  gql } from '@apollo/client';
+import { ReactNativeFile } from 'apollo-upload-client';
 
 const ADD_GROUP_ITEM = gql`
   mutation createGroupItem($groupId:ID!, $tag: String, $description: String!, $exchangeMethod: ExchangeMethod!, $image: String){
@@ -29,6 +30,14 @@ const ADD_GROUP_ITEM = gql`
       image: $image
     })
   }`;
+
+  const UPLOAD_FILE = gql`
+  mutation uploadFile ($file: Upload!) {
+    uploadFile(file: $file){
+      url
+    }
+  }
+  `;
 
 let ScreenWidth = Dimensions.get("window").width;
 
@@ -44,33 +53,23 @@ function GroupAddItem ({route, navigation}) {
   const [image, setImage] = useState([]);
 
   const [createGroupItem, { data, error, loading }] = useMutation(ADD_GROUP_ITEM);
-
+  const [uploadFile] = useMutation(UPLOAD_FILE, {
+    onCompleted: data => console.log(data)
+  });
   const windowHeight = useWindowDimensions().height;
 
   const {tags, id} = route.params;
 
-  // useEffect(()=>{
-  //    let arr = dummyData.map((item, index)=>{
-  //      item.isSelected = false
-  //      return {...item};
-  //    })
-  //    const {tags} = route.params;
-  //    let arr2 = tags.map((item, index)=>{
-  //      item.isSelected = false
-  //      return {...item};
-  //    })
-  //    const tags2 = tags
-  //    let arr3 = tags2.map((item, index)=>{
-  //      item.isSelected = false
-  //      return {...item}
-  //    })
+  
+  const generateRNImage = (uri, name) => {
+    return uri ? new ReactNativeFile({
+      uri,
+      type:'image/png',
+      name: `image_${name}.png`,
+    }) : null;
+  }
 
-  //   setDummyData(arr);
-  //   setIhave(arr2);
 
-  //   // this.setState({dummyData: arr, Ihave: arr2, Iwant: arr3});
-  //    console.log('arr data ==>', arr)
-  // }, []);
 
   const pickImage = async () => {
     if(image.length < 5)
@@ -160,8 +159,12 @@ function GroupAddItem ({route, navigation}) {
       createGroupItem({ variables: { groupId: id, tag: tag, description: Discription, exchangeMethod: exchangeMethod}});
     } else {
       for (let i = 0; i < image.length; i++) {
-        console.log(typeof(image[i].uri));
-        createGroupItem({ variables: { groupId: id, tag: tag, description: Discription, exchangeMethod: exchangeMethod, image: image[i].uri}});
+        //console.log(typeof(image[i].uri));
+        const file = generateRNImage(image[i].uri, Math.random().toString(36).slice(-10));
+        //console.log(file.name);
+        uploadFile({variables: { file: file }, uploadFileAsForm: true});
+        //console.log(data);
+        createGroupItem({ variables: { groupId: id, tag: tag, description: Discription, exchangeMethod: exchangeMethod, image: file.name}});
       }
     }
 
