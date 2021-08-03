@@ -34,6 +34,7 @@ import Record from '../screens/Personal/Record';
 import RecordDetail from '../screens/Personal/RecordDetail';
 import Star from '../screens/Personal/Star';
 import Complete from '../screens/Personal/Complete';
+import Notification_choiceDetail from '../screens/Notification/Notification_choiceDetail';
 //import { Text } from 'react-native';
 
 
@@ -304,6 +305,13 @@ function Root() {
               backgroundColor:'transparent',
               fontWeight: 'bold',
             }, 
+          }}/>
+        
+        <RootStack.Screen 
+          name="Notification_choiceDetail" 
+          component={Notification_choiceDetail}
+          options={{
+            headerShown: false 
           }}/>
 
         {/* <RootStack.Screen 

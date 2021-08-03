@@ -75,7 +75,7 @@ function Notification_waitingDetail ({ route }) {
         <View style={styles.buttons}>
           <TouchableOpacity 
             style={styles.item}
-            onPress={() => navigation.navigate('GeneralDetail', {itemID: item.id, title: item.title, sort: item.category, des: item.description, method: item.exchangeMethod, image: item.image})}>
+            onPress={() => navigation.navigate('Notification_choiceDetail', {itemID: item.id, title: item.title, sort: item.category, des: item.description, method: item.exchangeMethod, image: item.image})}>
               <Image
                 source =  {item.image? {uri: `http://swappy.ngrok.io/images/${item.image}`} : require('../../assets/general/商品呈現.png')}
                 style ={{height: ScreenHeight*0.13, width: ScreenHeight*0.13,}}/>
@@ -138,16 +138,14 @@ function Notification_waitingDetail ({ route }) {
                                       source={image == null ? require("../../assets/notification/點擊上傳圖片.png"): {uri: image}}/>
                               </TouchableOpacity>
                               <Portal>
-                                <Dialog visible={visible} onDismiss={hideDialog} style = {{marginTop : 150, marginLeft : 0, width: Dimensions.get("window").width}}>
-                                  <Dialog.Title>上傳物品選擇</Dialog.Title>
-                                  <ScrollView style = {{top: "5%", alignContent: 'center'}}>
-                                    <View>
-                                      <FlatList
-                                        data={GeneralItems}
-                                        renderItem={renderItem}
-                                      />
-                                    </View>
-                                  </ScrollView>
+                                <Dialog visible={visible} onDismiss={hideDialog} style = {{marginTop : ScreenHeight*0.2, height: ScreenHeight*0.8, marginLeft:0, alignItems:'center', width: ScreenWidth, backgroundColor: colors.mono_40}}>
+                                  <Dialog.Title style ={{fontWeight: 'bold', fontSize: ScreenWidth*0.06, color: colors.function_100}}>上傳物件選取</Dialog.Title>
+                                  <FlatList
+                                   contentContainerStyle = {{alignItems:'center'}}
+                                   data={GeneralItems}
+                                   renderItem={renderItem}
+                                  /> 
+                                 
                                 </Dialog>
                               </Portal>
 
