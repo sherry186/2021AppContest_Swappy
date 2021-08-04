@@ -35,6 +35,7 @@ import RecordDetail from '../screens/Personal/RecordDetail';
 import Star from '../screens/Personal/Star';
 import Complete from '../screens/Personal/Complete';
 import Notification_choiceDetail from '../screens/Notification/Notification_choiceDetail';
+import Message_Detail from '../screens/Message/Message_Detail';
 //import { Text } from 'react-native';
 
 
@@ -355,19 +356,14 @@ function Root() {
           name="MessageHome" 
           component={Message_home}
           options={{
-            //headerShown: true,
-            title: '',
-            cardStyle: {backgroundColor: colors.mono_40},
-            headerStyle: {
-                backgroundColor: "transparent",
-                elevation: 0,
-                shadowOpacity: 0, 
-            },
-            headerTintColor: colors.warning_80,
-            headerTitleStyle: {
-              backgroundColor:'transparent',
-              fontWeight: 'bold',
-            }, 
+            headerShown: false, 
+          }}/>
+
+        <RootStack.Screen 
+          name="MessageDetail" 
+          component={Message_Detail}
+          options={{
+            headerShown: false, 
           }}/>
 
          {/* personal */}

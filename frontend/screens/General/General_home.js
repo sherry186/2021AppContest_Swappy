@@ -87,7 +87,7 @@ const General_HOME = () => {
   }
 
   const toMessage = () => {
-    navigation.navigate("Chat")
+    navigation.navigate("MessageHome")
   }
 
   

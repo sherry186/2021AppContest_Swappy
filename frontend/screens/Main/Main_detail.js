@@ -10,7 +10,8 @@ import { View,
        SafeAreaView, 
        ScrollView, 
        TouchableOpacity,
-       StyleSheet, 
+       StyleSheet,
+       KeyboardAvoidingView, 
        Dimensions,
        TextInput } from "react-native";
 
@@ -175,7 +176,9 @@ const MainDetail = ({ route, navigation }) =>{
         
         
       </ScrollView>
-      <View style = {styles.commentC}>
+      <KeyboardAvoidingView
+         behavior = 'height'
+         style = {styles.commentC}>
               <View style = {styles.comment}>
                   <TextInput
                       placeholder="comment"
@@ -216,7 +219,7 @@ const MainDetail = ({ route, navigation }) =>{
                     }} 
                   source = {require('../../assets/Social/收藏.png')}/>
               </TouchableOpacity>
-          </View>    
+          </KeyboardAvoidingView>    
     </View>
   );
   
