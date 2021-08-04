@@ -39,7 +39,7 @@ export default function Message_Detail ({route, navigation}) {
   );
   
   const handleAddComment = () =>{
-      
+
       setComment("");
   }
   
@@ -57,19 +57,20 @@ export default function Message_Detail ({route, navigation}) {
           </TouchableOpacity>
 
           <View
-            style ={{flex: 8, justifyContent: 'center', alignItems: 'center'}}>
+            style ={{flex: 8, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.mono_40}}>
               <Text style = {{right: "10%", fontSize: ScreenWidth*0.05, color: colors.function_100, fontWeight:'bold'}}>{nameShow}</Text>
           </View>
         </View>
-        <View style = {{flex:11,}}>
+        <KeyboardAvoidingView behavior = 'height' style = {{flex:11,}}>
             <FlatList
-                style ={{width:ScreenWidth, alignSelf:'center'}}
+                style ={{width:ScreenWidth, alignSelf:'center', bottom: "10%"}}
                 data={message}
                 renderItem={renderMessage}
                 keyExtractor={item => item.id}
+                inverted
               />
 
-        </View>
+        </KeyboardAvoidingView>
         <KeyboardAvoidingView
          behavior = 'height'
          style = {styles.commentC}>
@@ -117,7 +118,8 @@ const styles = StyleSheet.create({
     width: ScreenWidth*0.7, 
     borderWidth: 1, 
     borderColor:colors.mono_80, 
-    marginTop:ScreenHeight*0.02, 
+    marginBottom:ScreenHeight*0.03,
+     
     borderRadius: ScreenHeight*0.01,
     left: ScreenWidth*0.02,
    },
@@ -126,7 +128,8 @@ const styles = StyleSheet.create({
     width: ScreenWidth*0.7, 
     borderWidth: 1, 
     borderColor:colors.function_80, 
-    marginTop:ScreenHeight*0.02, 
+    marginBottom:ScreenHeight*0.03, 
+    //marginTop:ScreenHeight*0.02, 
     borderRadius: ScreenHeight*0.01,
     left: ScreenWidth*0.28,
 

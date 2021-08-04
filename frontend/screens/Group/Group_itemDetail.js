@@ -154,6 +154,18 @@ function Group_itemDetail ({route, navigation}) {
               style = {{flex: 5, height: "50%", width: "80%", marginBottom: 10}}
               source = {image? {uri: `http://swappy.ngrok.io/images/${image}`} : require('../../assets/general/商品呈現.png')}
             />
+
+            <View style = {{height: ScreenWidth*0.07, flexDirection: 'row'}}>
+              <View style = {styles.margin}></View>
+              <TouchableOpacity
+                onPress = {()=>navigation.navigate("MessageDetail", {message: [], nameShow : person_star_comment.personName})}
+                style = {styles.margin}>
+                <Image
+                  style = {{height: ScreenWidth*0.07, width:ScreenWidth*0.07}}
+                  source = {require("../../assets/general&group/message.png")}/>
+              </TouchableOpacity>
+              <View style = {{width: ScreenWidth*0.8}}></View>
+            </View>
            
             <View style = {styles.line}></View>
             
