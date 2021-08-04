@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, SafeAreaView, Image, FlatList, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { 
+  View, 
+  Text, 
+  SafeAreaView, 
+  Image, 
+  FlatList, 
+  StyleSheet, 
+  TouchableOpacity, 
+  ScrollView,
+  Dimensions } from "react-native";
 import { SearchBar } from 'react-native-elements';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 import { useNavigation } from '@react-navigation/core';
@@ -8,31 +17,37 @@ import { useNavigation } from '@react-navigation/core';
 
 import MessageData from '../../Data/MessageData';
 import colors from '../../config/colors';
+import { isTypeSystemExtensionNode } from 'graphql';
+//import { ScreenWidth } from 'react-native-elements/dist/helpers';
 //import { isTypeSystemExtensionNode } from 'graphql';
 
-
+let ScreenWidth = Dimensions.get("screen").width;
+let ScreenHeight = Dimensions.get("screen").height;
 
 export default function Message_home () {
 
   const[data, setData] = useState([]);
   //const navigation = useNavigation();
+  const navigation = useNavigation();
 
   const renderItem = ({ item }) => (
       //console.log(this.props.navigation);
-      <SafeAreaView style = {{flexDirection: 'row', height: 100, justifyContent: 'center', alignItems: 'center'}}>
+      <TouchableOpacity 
+        style = {{flexDirection: 'row', height: ScreenHeight*0.08, justifyContent: 'center', borderBottomColor: colors.mono_60, borderBottomWidth:1,  alignItems: 'center'}}
+        onPress = {()=>navigation.navigate("MessageDetail", {message: item.message, nameShow : item.nameShow})}
+        >
             <Image
-                style = {{flex: 1, height: "100%"}}
+                style = {{height: ScreenHeight*0.08, width:ScreenHeight*0.08 }}
                 source = {item.profile}/>
 
-            <View style = { styles.item }>
-              <TouchableOpacity 
-                  style = {styles.item }>
-                  <Text style={styles.title}>{item.nameShow}</Text>
-                  <Text style={styles.title}>{item.message[item.message.length - 1].content} </Text>
-                  
-              </TouchableOpacity>
-            </View>
-      </SafeAreaView>
+           
+            <View style = {styles.item}>
+                <Text style={{marginLeft: 10, marginTop: ScreenHeight*0.005, fontSize: ScreenHeight*0.02, color: colors.mono_100}}>{item.nameShow}</Text>
+                <Text style={{marginLeft: 10, marginTop: ScreenHeight*0.010,fontSize: ScreenHeight*0.015, color: colors.mono_80 }}>{item.message[item.message.length - 1].content} </Text>
+                <Text style={{position:'absolute', bottom:1, right:10,marginLeft: 10, fontSize: ScreenWidth*0.025, color: colors.mono_80 }}>{item.message[item.message.length - 1].time}</Text>
+            </View> 
+
+      </TouchableOpacity>
       
 
   );
@@ -60,21 +75,43 @@ export default function Message_home () {
         }
         return {...item}
     })
+    //nameShow is the one I'm talking to
+
+    console.log(arr)
 
     setData(arr);
     
   },[]);
 
   return(
-    <ScrollView style = {{ height: "100%", width: "100%", backgroundColor: colors.mono_40 }}>
-      {/* <View style={styles.container}> */}
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-        />
-      {/* </View> */}
-    </ScrollView>
+    <View style={{ flex: 1, top: "5%", bottom:"20%", alignItems: 'center', backgroundColor:colors.mono_40, width:"100%"}}>
+        <View style = {{flex: 1, flexDirection: 'row', height: "7%", backgroundColor: colors.mono_40, width:'100%'}}>
+          <TouchableOpacity
+            style = {{flex:2, width: "20%", backgroundColor: colors.mono_40, alignItems: 'center', justifyContent:'center'}}
+            onPress = {()=>navigation.goBack()}
+            >
+            <Image 
+              style = {{height: "25%", width: "25%"}}
+              source = {require('../../assets/manyneed/xmark.png')}/>
+          </TouchableOpacity>
+
+          <View
+            style ={{flex: 8, justifyContent: 'center', alignItems: 'center'}}>
+              <Text style = {{right: "10%", fontSize: ScreenWidth*0.05, color: colors.function_100, fontWeight:'bold'}}>對話紀錄</Text>
+          </View>
+        </View>
+        <View style = {{flex: 11, backgroundColor: colors.mono_40, width: "100%", alignItems: 'center' }}>
+            <ScrollView style = {{ flex: 10, width: "100%", backgroundColor: colors.mono_40 }}>
+              <FlatList
+                style ={{borderWidth:1, borderColor: colors.mono_60, width:ScreenWidth*0.9, alignSelf:'center'}}
+                data={data}
+                renderItem={renderItem}
+                keyExtractor={item => item.id}
+              />
+            </ScrollView>
+        </View>
+        
+      </View>
     
   )
 }
@@ -100,13 +137,13 @@ const styles = StyleSheet.create({
     },
     item: {
       flex: 6,
-      backgroundColor: colors.mono_60,
-      padding: 20,
+      backgroundColor: colors.mono_40,
+      //padding: 20,
       height: "100%",
-      marginVertical: 8,
+      //left:2,
+      //marginVertical: 8,
+      //backgroundColor:'red',
       width: "60%",
     },
-    title: {
-      fontSize: 12,
-    },   
+     
 });

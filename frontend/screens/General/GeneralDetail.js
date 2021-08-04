@@ -180,11 +180,23 @@ function GeneralDetailsScreen ({ route, navigation }) {
         </Portal>
         
         
+        
         <View style = {{flex: 10, backgroundColor: colors.mono_40, width: "100%", alignItems: 'center' }}>
             <Image
               style = {{flex: 5, height: "50%", width: "80%", marginBottom: 10}}
               source = {image? {uri: `http://swappy.ngrok.io/images/${image}`} : require('../../assets/general/商品呈現.png')}
             />
+            <View style = {{height: ScreenWidth*0.07, flexDirection: 'row'}}>
+              <View style = {styles.margin}></View>
+              <TouchableOpacity
+                onPress = {()=>navigation.navigate("MessageDetail", {message: [], nameShow : person_star_comment.personName})}
+                style = {styles.margin}>
+                <Image
+                  style = {{height: ScreenWidth*0.07, width:ScreenWidth*0.07}}
+                  source = {require("../../assets/general&group/message.png")}/>
+              </TouchableOpacity>
+              <View style = {{width: ScreenWidth*0.8}}></View>
+            </View>
            
             <View style = {styles.line}></View>
             
@@ -201,6 +213,7 @@ function GeneralDetailsScreen ({ route, navigation }) {
                 <Text style = {styles.textT}>物品種類 </Text>
                 <Text>{sort}</Text>
               </View>
+
               <View style = {{flex:1, flexDirection: 'row'}}>
                 <View style = {styles.margin}></View>
                 <Text style = {styles.textT}>物品說明 </Text> 
@@ -282,7 +295,7 @@ const styles = StyleSheet.create({
     color: colors.function_100,
   },
   margin: { 
-    width: "10%", 
+    width: ScreenWidth*0.1, 
     backgroundColor: 'transparent', 
     alignItems: 'center', 
     justifyContent:'center'

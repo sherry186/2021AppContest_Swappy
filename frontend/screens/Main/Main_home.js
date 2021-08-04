@@ -8,7 +8,8 @@ import {
   StyleSheet, 
   Image,
   useWindowDimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  Dimensions
  } from "react-native";
 import { SearchBar } from 'react-native-elements';
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
@@ -18,6 +19,9 @@ import { TextInput } from 'react-native';
 import colors from '../../config/colors';
 
 import { useQuery, useMutation,  gql } from '@apollo/client';
+
+let ScreenWidth = Dimensions.get("window").width;
+let ScreenHeight = Dimensions.get("window").height;
 
 const RENDER_POST = gql`
   query getPosts {
@@ -147,6 +151,7 @@ const Main_HOME = () => {
           {data ? (
           <FlatList
             data={search == ''? data.getPosts: data1}
+            inverted ={true}
             renderItem={({item}) => { 
               return <FlatListComponent 
                 id={item.id}
@@ -230,26 +235,7 @@ function FlatListComponent(props)  {
                     ellipsizeMode={'tail'} 
                     numberOfLines={2}>{props.description}</Text>
             </TouchableOpacity>
-            {/* <TouchableOpacity
-                style={{width: 10,
-                   height: 20, 
-                   position:'absolute', 
-                   right: 20, 
-                   top: 0, 
-                   backgroundColor: 'transparent'} }
-                onPress={() => {
-                      const newCollected = !collected;
-                      setCollected(newCollected);
-                      handleCollected(newCollected, props.id);
-                    //console.log('status: ', this.state.st);
-              }}
-            >
-                <Image
-                    style ={{width:10, 
-                      height: 20, 
-                      tintColor: collected? colors.function_100: colors.mono_80}}
-                    source={require('../../assets/Social/collect.png')}/>     
-            </TouchableOpacity> */}
+            
      </View>
     )
   
@@ -273,7 +259,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 16,
       },
     ChatC: {
-      marginTop: 30,
+      marginBottom: 30,
       height: 99,
       width: 352,
       backgroundColor: colors.mono_40,
@@ -281,12 +267,13 @@ const styles = StyleSheet.create({
       //alignItems: 'center',
       justifyContent: 'center',
       bottom: 10,
-      
-      shadowColor: colors.mono_100,
-      shadowOffset: { width: 10, height: 10 },
-      shadowOpacity: 0.5,
-      shadowRadius: 0,
-      elevation: 3,
+      borderColor: colors.mono_60,
+      borderWidth:1,
+      // shadowColor: colors.mono_100,
+      // shadowOffset: { width: 10, height: 10 },
+      // shadowOpacity: 0.5,
+      // shadowRadius: 0,
+      // elevation: 3,
       },
     person: {
         fontSize: 12,
@@ -303,7 +290,7 @@ const styles = StyleSheet.create({
       position: 'absolute',
       borderRadius: 31.5,
       backgroundColor: 'transparent',
-      bottom: "10%",
+      bottom: ScreenHeight*0.07,
       //right: 169,
       alignSelf: 'center',
       justifyContent: 'center',
