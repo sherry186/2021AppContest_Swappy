@@ -17,7 +17,7 @@ import { View,
 import { useNavigation } from '@react-navigation/core';
 import colors from '../../config/colors';
 import person_star_comment from '../../Data/person_star_comment';
-import { useMutation,  gql } from '@apollo/client';
+import { useQuery, useMutation,  gql } from '@apollo/client';
 //import { ScreenWidth } from 'react-native-elements/dist/helpers';
 
 let ScreenWidth = Dimensions.get("screen").width;
@@ -43,12 +43,33 @@ const CREATE_REQUEST = gql`
     }
   }`;
 
+  const GET_USER = gql`
+  query getUserById($id: ID!) {
+    getUserById(id: $id) {
+      avatar
+      username
+      ratingSum
+      totalRatings
+      reviews {
+        user {
+          username
+          avatar
+        }
+        date
+        rating
+        comment
+      }
+    }
+  }`;
+
   
 
 /* 2. Get the param */
 function GeneralDetailsScreen ({ route, navigation }) {
-  const [createRequest, { data, error, loading }] = useMutation(CREATE_REQUEST);
-  const { itemID, title, sort, des, method, image } = route.params;
+  const [createRequest] = useMutation(CREATE_REQUEST);
+  
+  const { userId, itemID, title, sort, des, method, image } = route.params;
+  const { data, error, loading } = useQuery(GET_USER, {variables: {id: userId}});
   const [maxstars, setMaxstars] = useState([1, 2, 3, 4, 5]);
   const naviagation = useNavigation();
   
@@ -59,12 +80,11 @@ function GeneralDetailsScreen ({ route, navigation }) {
   //     source={item.source}/>
   //   </SafeAreaView> 
   // );
+  console.log(data, loading, error);
 
   const handleRequest = () => {
     console.log('request pressed');
     createRequest({ variables: { requestedItemId: itemID } });
-    console.log(error);
-    console.log(data);
     naviagation.navigate('Notification',{ screen: 'requesting' });
     
   };
@@ -85,10 +105,10 @@ function GeneralDetailsScreen ({ route, navigation }) {
       <View style = {{flexDirection:'row', margin: ScreenWidth*0.02, alignItems:'center'}}>
         <Image
           style = {{height: ScreenWidth*0.06, width: ScreenWidth*0.06}}
-          source = {item.profile}
+          source = {{uri: `http://swappy.ngrok.io/images/${item.user.avatar}`}}
           />
         <View style ={{left: ScreenWidth*0.01,}}>
-          <Text style = {{fontSize:13, color: colors.mono_100}}>{item.name}</Text>
+          <Text style = {{fontSize:13, color: colors.mono_100}}>{item.user.username}</Text>
           <Text style = {{fontSize:8, color: colors.mono_80}}>{item.date}</Text>
         </View>  
         
@@ -98,7 +118,7 @@ function GeneralDetailsScreen ({ route, navigation }) {
             maxstars.map((itemD, index)=>{
               return(
                 <Image 
-                  source = {Math.round(item.star)>=itemD? require('../../assets/personal/star_full.png') :  require('../../assets/personal/star_empty.png')}
+                  source = {Math.round(item.rating)>=itemD? require('../../assets/personal/star_full.png') :  require('../../assets/personal/star_empty.png')}
                   style = {{height: ScreenHeight*0.015, width:ScreenHeight*0.015}}/>
               );
             })
@@ -135,7 +155,7 @@ function GeneralDetailsScreen ({ route, navigation }) {
         <TouchableOpacity
             onPress = {showDialog}
             style = {{height:ScreenWidth*0.1, width: "20%", backgroundColor:colors.mono_40, alignSelf:'center'}}>
-            <Text style = {{alignSelf:'center', fontSize: ScreenWidth*0.05, color: colors.mono_80}}>{person_star_comment.personName}</Text>
+            <Text style = {{alignSelf:'center', fontSize: ScreenWidth*0.05, color: colors.mono_80}}>{data? data.getUserById.username : ''}</Text>
         </TouchableOpacity>
 
         <Portal>
@@ -151,19 +171,20 @@ function GeneralDetailsScreen ({ route, navigation }) {
               borderTopLeftRadius: ScreenWidth*0.1, 
               borderTopRightRadius: ScreenWidth*0.1,
               backgroundColor: colors.mono_40}}>
-          
+                { data ? (
+          <>
             <Image
               style = {{marginTop: ScreenHeight*0.05, marginLeft: ScreenWidth*0.09, height: ScreenWidth*0.3, width: ScreenWidth*0.3, borderRadius: ScreenWidth*0.15}}
-              source = {person_star_comment.profile}/>
-            <Text style = {{marginTop: ScreenHeight*0.02, color: colors.function_100, fontWeight:'bold', fontSize: ScreenWidth*0.05, marginLeft: ScreenWidth*0.09}}>{person_star_comment.personName}</Text>
+              source = {{uri: `http://swappy.ngrok.io/images/${data.getUserById.avatar}`}}/>
+            <Text style = {{marginTop: ScreenHeight*0.02, color: colors.function_100, fontWeight:'bold', fontSize: ScreenWidth*0.05, marginLeft: ScreenWidth*0.09}}>{data.getUserById.username}</Text>
             <View style = {{flexDirection:'row', width: ScreenWidth, height: ScreenHeight*0.02, marginTop: ScreenHeight*0.01, alignItems:'center'}}>
               <View style = {{width: ScreenWidth*0.09}}></View>
-              <Text style = {{color:colors.function_100}}>{person_star_comment.star} </Text>
+              <Text style = {{color:colors.function_100}}>{data.getUserById.ratingSum / data.getUserById.totalRatings} </Text>
               {
                   maxstars.map((item, index)=>{
                     return(
                       <Image 
-                        source = {Math.round(person_star_comment.star)>=item? require('../../assets/personal/star_full.png') :  require('../../assets/personal/star_empty.png')}
+                        source = {Math.round(data.getUserById.ratingSum / data.getUserById.totalRatings)>=item? require('../../assets/personal/star_full.png') :  require('../../assets/personal/star_empty.png')}
                         style = {{height: ScreenHeight*0.015, width:ScreenHeight*0.015}}/>
                     );
                   })
@@ -172,10 +193,10 @@ function GeneralDetailsScreen ({ route, navigation }) {
             <View style = {styles.line}></View>
            
             <FlatList  
-                data={person_star_comment.comments}
+                data={data.getUserById.reviews}
                 renderItem={renderComment}
                 keyExtractor={item => item.id}/>
-            
+            </> ) : <Text>loading ...</Text>}
           </Dialog>
         </Portal>
         

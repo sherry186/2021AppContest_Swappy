@@ -48,6 +48,7 @@ const typeDefs = gql`
     scalar JSONObject
     scalar Upload
     type Query {
+        getUserById(id: ID!): User!
         getMySuccessfulRequests: [Request]!
         getUser: User!
         generalItemsList: [GeneralItem]!
@@ -103,7 +104,7 @@ const typeDefs = gql`
     }
 
     input ReviewInput {
-        username: String!,
+        userId: ID!,
         rating: Float!
         comment: String!
         date: String!
@@ -153,7 +154,7 @@ const typeDefs = gql`
     }
 
     type Review {
-        username: String!
+        user: User!
         rating: Float!
         comment: String!
         date: String!
@@ -243,6 +244,9 @@ const typeDefs = gql`
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
     Query: {
+        getUserById: async (_, { id }, {db,user}) => {
+            return await db.collection('Users').findOne({_id: ObjectId(id)});
+        },
         getMySuccessfulRequests: async (_, __, {db,user}) => {
             return await db.collection('Requests').find({ $and: [ { $or: [ {"guyWhoseItemIsRequested._id" : user._id }, {"requester._id" : user._id }]}, {status: "SUCCESS"}]}).toArray();
         },
@@ -364,8 +368,9 @@ const resolvers = {
     },
     Mutation: {
         updateRatingAndReviews: async (_, {userId, input}, {db, user})=>{
+            const commentingUser = await db.collection('Users').findOne({_id: ObjectId(input.userId)});
             const review = {
-                username: input.username,
+                user: commentingUser,
                 rating: input.rating,
                 comment: input.comment,
                 date: input.date

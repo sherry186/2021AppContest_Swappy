@@ -33,6 +33,7 @@ query generalItemsList {
     id
     title
     owner {
+      id
       username
     }
     description
@@ -112,7 +113,7 @@ const General_HOME = () => {
       <View style={styles.buttons}>
         <TouchableOpacity 
           style={styles.item}
-          onPress={() => navigation.navigate('GeneralDetail', {itemID: item.id, title: item.title, sort: item.category, des: item.description, method: item.exchangeMethod, image: item.image})}>
+          onPress={() => navigation.navigate('GeneralDetail', {userId: item.owner.id, itemID: item.id, title: item.title, sort: item.category, des: item.description, method: item.exchangeMethod, image: item.image})}>
             <Image
               source =  {item.image? {uri: `http://swappy.ngrok.io/images/${item.image}`} : require('../../assets/general/商品呈現.png')}
               style ={{height: ScreenHeight*0.13, width: ScreenHeight*0.13,}}/>
