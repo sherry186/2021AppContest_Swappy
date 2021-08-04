@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
       position: 'absolute',
       borderRadius: 31.5,
       backgroundColor: 'transparent',
-      bottom: "10%",
+      bottom: ScreenHeight*0.07,
       //right: 169,
       alignSelf: 'center',
       justifyContent: 'center',

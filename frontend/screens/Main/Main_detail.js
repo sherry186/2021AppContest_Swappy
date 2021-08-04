@@ -83,8 +83,14 @@ const MainDetail = ({ route, navigation }) =>{
     setComment('');
   }
 
+  const handleNavigate = ()=>{
+    navigation.navigate('My Collection');
+  }
   const handleCollect = () => {
     addToCollection({variables: {id: id}});
+    
+    
+    handleNavigate();
   }
 
   const renderComment = ({ item }) => (

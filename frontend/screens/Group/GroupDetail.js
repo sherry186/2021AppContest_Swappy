@@ -14,6 +14,7 @@ import colors from '../../config/colors';
 //import GroupItems from '../../Data/GroupItems';
 
 let ScreenWidth = Dimensions.get("window").width;
+let ScreenHeight = Dimensions.get("window").height;
 
 import { useQuery,  gql } from '@apollo/client';
 
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
     borderWidth:1,
-    borderColor: colors.mono_80,
+    borderColor: colors.mono_60,
 
     // shadowColor: colors.mono_100,
     // shadowOffset: { width: 10, height: 10 },
@@ -232,7 +233,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
     borderWidth:1,
-    borderColor: colors.mono_80,
+    borderColor: colors.mono_60,
     // shadowColor: colors.mono_100,
     // shadowOffset: { width: 10, height: 10 },
     // shadowOpacity: 0.5,
@@ -241,14 +242,14 @@ const styles = StyleSheet.create({
   },
   button: {
     width: 65,
-    height: 65,
-    position: 'absolute',
-    borderRadius: 31.5,
-    backgroundColor: 'transparent',
-    bottom: "10%",
-    //right: 169,
-    alignSelf: 'center',
-    justifyContent: 'center',
+      height: 65,
+      position: 'absolute',
+      borderRadius: 31.5,
+      backgroundColor: 'transparent',
+      bottom: ScreenHeight*0.07,
+      //right: 169,
+      alignSelf: 'center',
+      justifyContent: 'center',
   },
   title: {
     fontSize: 20,

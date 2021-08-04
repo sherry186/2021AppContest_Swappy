@@ -29,11 +29,12 @@ import { parse } from 'fecha';
 
 import { Dimensions } from 'react-native';
 import { fixObservableSubclass } from '@apollo/client/utilities';
-let ScreenWidth = Dimensions.get("window").width;
 
+let ScreenWidth = Dimensions.get("window").width;
+let ScreenHeight = Dimensions.get("window").height;
 const LEVELPOINTS = 20
 
-const defaultDays = -100//just hardData
+
 
 export default class BreakAway extends React.Component {
 
@@ -162,7 +163,7 @@ export default class BreakAway extends React.Component {
               color: colors.mono_40,
               marginHorizontal: "2%",
               fontSize: ScreenWidth * 0.3 * 0.1
-            }}>{diffDays}</Text>
+            }}>{Math.abs(diffDays)}</Text>
         </View>
       </TouchableOpacity>
     )
@@ -464,6 +465,15 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
+    // width: 65,
+    //   height: 65,
+    //   position: 'absolute',
+    //   borderRadius: 31.5,
+    //   backgroundColor: 'transparent',
+    //   bottom: ScreenHeight*0.07,
+    //   //right: 169,
+    //   alignSelf: 'center',
+    //   justifyContent: 'center',
   },
   input: {
     //top: 14,

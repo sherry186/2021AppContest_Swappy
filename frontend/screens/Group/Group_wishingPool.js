@@ -42,6 +42,7 @@ function GroupWishingPoolScreen ({route, navigation}) {
       console.log(data, error, loading);
       navigation.goBack()
     } 
+    
     const handleSelect = (ind)=>{
         let arr1 = itemState.map((item, index)=>{
             if( ind == index){

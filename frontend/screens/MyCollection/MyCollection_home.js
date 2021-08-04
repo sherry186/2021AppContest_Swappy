@@ -190,6 +190,7 @@ const MyCollection_HOME = () => {
       <ScrollView style = {{top: "5%", alignContent: 'center'}}>
         <View>
           {data ? (<FlatList
+            inverted = {true}
             data={search == ''? data.getMyCollections: data1}
             renderItem={renderChat}
             keyExtractor={item => item.id}
@@ -228,7 +229,7 @@ const styles = StyleSheet.create({
       marginHorizontal: 16,
     },
   ChatC: {
-    marginTop: 30,
+    marginBottom: 30,
     height: 99,
     width: 352,
     backgroundColor: colors.mono_40,
@@ -236,12 +237,13 @@ const styles = StyleSheet.create({
     //alignItems: 'center',
     justifyContent: 'center',
     bottom: 10,
-    
-    shadowColor: colors.mono_100,
-    shadowOffset: { width: 10, height: 10 },
-    shadowOpacity: 0.5,
-    shadowRadius: 0,
-    elevation: 3,
+    borderColor: colors.mono_60,
+      borderWidth:1,
+    // shadowColor: colors.mono_100,
+    // shadowOffset: { width: 10, height: 10 },
+    // shadowOpacity: 0.5,
+    // shadowRadius: 0,
+    // elevation: 3,
     },
   person: {
       fontSize: 12,

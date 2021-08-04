@@ -90,7 +90,7 @@ export default class BreakAwaySpaceDetail extends React.Component {
               color: colors.mono_40, 
               marginHorizontal: "2%", 
               fontSize: ScreenWidth* 0.3*0.1
-              }}>{diffDays}</Text>
+              }}>{Math.abs(diffDays)}</Text>
         </View>
     </TouchableOpacity>
     
