@@ -31,7 +31,7 @@ function Complete ({ route, navigation }) {
         <View style = {{flex: 1, alignItems:'center',}}> 
             <Image
                 style = {{width:ScreenWidth*0.6, height:ScreenWidth*0.6, marginTop: ScreenHeight*0.2}}
-                source = {requestForImage}/>
+                source = {{uri: `http://swappy.ngrok.io/images/${requestForImage}`}}/>
             
             <Image
                 style = {{marginTop: ScreenHeight*0.05, width:ScreenWidth*0.1, height:ScreenWidth*0.1}}

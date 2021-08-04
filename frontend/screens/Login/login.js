@@ -66,6 +66,10 @@ const login = () =>  {
     // save token
     console.log(data);
     AsyncStorage
+      .setItem('userId', data.signIn.user.id)
+      .then(()=> console.log("stored user ID!"));
+    
+    AsyncStorage
       .setItem('token', data.signIn.token)
       .then(() => {
         // redirect home

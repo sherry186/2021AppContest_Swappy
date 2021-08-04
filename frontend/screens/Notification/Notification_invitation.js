@@ -82,14 +82,14 @@ const Notification_invitation = () => {
 
   const handleYes = (requestId) => {
     updateStatus({variables: {id: requestId,status: "SUCCESS"}});
-    removeRequest({variables: {id: requestId}});
+    //removeRequest({variables: {id: requestId}});
     navigation.navigate('Record');
     //navigation.navigate()
   }
 
   const handleNo = (requestId) => {
     updateStatus({variables: {id: requestId,status: "FAIL"}});
-    removeRequest({variables: {id: requestId}});
+    //removeRequest({variables: {id: requestId}});
     navigation.navigate('General');
   }
 

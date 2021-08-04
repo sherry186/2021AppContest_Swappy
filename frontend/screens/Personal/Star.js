@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import * as SQLite from 'expo-sqlite';
-const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
+var dateFormat = require("dateformat");
 
 import { View,
        Text,
@@ -17,19 +16,38 @@ import { useNavigation } from '@react-navigation/core';
 import colors from '../../config/colors';
 //import Notification_requesting from './Notification_requesting';
 
+import { useMutation, gql } from '@apollo/client';
+
 let ScreenWidth = Dimensions.get("window").width;
 let ScreenHeight = Dimensions.get("window").height;
+
+const UPDATE_RATING_AND_REVIEW = gql`
+mutation updateRatingAndReviews($userId: ID!, $username: String!, $rating: Float!, $comment: String!, $date: String!) {
+    updateRatingAndReviews(userId: $userId, input: {
+      username: $username,
+      rating: $rating,
+      comment: $comment,
+      date: $date
+    })
+  }`;
+
 /* 2. Get the param */
 function Star ({ route, navigation }) {
 
   
   // render(){  
-    const { mythingImage, requestForImage, requestForTitle } = route.params;
+    const { myUsername, otherGuyId, id, mythingImage, requestForImage, requestForTitle } = route.params;
     const [maxStar, setMaxStar] = useState([1, 2, 3, 4, 5]);
     const [star, setStar] = useState(0);
     const [description, setDescription] = useState("");
 
+    const [updateRatingAndReviews] = useMutation(UPDATE_RATING_AND_REVIEW);
+
     const handlesubmit = () =>{
+        const time = new Date();
+        const formatedTime = dateFormat(time, "isoDate");
+
+        updateRatingAndReviews({variables: {userId: otherGuyId, username: myUsername, rating: star, comment: description, date: formatedTime}});
         navigation.navigate('Complete',{requestForImage: requestForImage, requestForTitle: requestForTitle});
     }
     
@@ -54,11 +72,11 @@ function Star ({ route, navigation }) {
                 
                 <Image
                     style = {styles.image}
-                    source = {mythingImage}/>
+                    source = { {uri: `http://swappy.ngrok.io/images/${mythingImage}`}}/>
 
                 <Image
                     style = {styles.image}
-                    source = {requestForImage}/>
+                    source = { {uri: `http://swappy.ngrok.io/images/${requestForImage}`}}/>
 
                 <Image
                     style = {{position: 'absolute',top: ScreenWidth*0.16, height: ScreenWidth*0.08, width: ScreenWidth*0.08 }}

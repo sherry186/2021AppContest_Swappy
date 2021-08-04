@@ -16,41 +16,57 @@ import { View,
 import { useNavigation } from '@react-navigation/core';
 import colors from '../../config/colors';
 //import Notification_requesting from './Notification_requesting';
+import { useMutation, gql } from '@apollo/client';
 
 let ScreenWidth = Dimensions.get("window").width;
 let ScreenHeight = Dimensions.get("window").height;
+
+
+const RECEIVE_REQUEST = gql `
+mutation receiveRequest($requestId: ID!) {
+  receiveRequest(requestId: $requestId)
+}`;
+
 /* 2. Get the param */
+
+
 function RecordDetail ({ route, navigation }) {
 
   
   // render(){  
-    const { id, mythingTitle, mythingImage, requestForTitle, requestForTag, requestForImage, status, statusToMe} = route.params;
+    const { id, mythingTitle, mythingImage, IRecieved, IScored, requestForTitle, requestForCategory, requestForImage, requestForRecieved, requestForScored} = route.params;
     
-    const [statusS, setStatusS] = useState(status);
-    const [statusToMeS, setStatusToMeS] = useState(statusToMe);
+    // const [statusS, setStatusS] = useState(status);
+    // const [statusToMeS, setStatusToMeS] = useState(statusToMe);
+    const [IRecieved_, setIRecieved_] = useState(IRecieved);
+    const [IScored_, setIScored_] = useState(IScored);
+    const [requestForRecieved_, setRequestForRecieved_] = useState(requestForRecieved);
+    const [requestForScored_, setRequestForScored_] = useState(requestForScored);
 
-   
+    const [receiveRequest] = useMutation(RECEIVE_REQUEST);
 
     const handleReceived = () =>{
-        let nowStatus = statusS + 1;
-        let nowStatusToMe = statusToMeS + 1;
+        // let nowStatus = statusS + 1;
+        // let nowStatusToMe = statusToMeS + 1;
         
-        setStatusS(nowStatus,()=>console.log(statusS));
-        setStatusToMeS(nowStatusToMe,()=>console.log(statusToMeS));
+        // setStatusS(nowStatus,()=>console.log(statusS));
+        // setStatusToMeS(nowStatusToMe,()=>console.log(statusToMeS));
         
-        
+        setIRecieved_(true);
+        receiveRequest({variables: {requestId: id}});
+
     }
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        console.log(statusS, statusToMeS);
-        if(statusS >= 2)
-        {
-            navigation.navigate('Star', {mythingImage: mythingImage, requestForImage: requestForImage, requestForTitle: requestForTitle});
-        }
-        console.log(statusS, statusToMeS);
+    //     console.log(statusS, statusToMeS);
+    //     if(statusS >= 2)
+    //     {
+    //         navigation.navigate('Star', {mythingImage: mythingImage, requestForImage: requestForImage, requestForTitle: requestForTitle});
+    //     }
+    //     console.log(statusS, statusToMeS);
 
-    }, [statusS, statusToMeS])
+    // }, [statusS, statusToMeS])
 
     return (
      
@@ -61,7 +77,7 @@ function RecordDetail ({ route, navigation }) {
 
                   <Image
                     style={styles.image}
-                    source = {requestForImage}/>
+                    source = { {uri: `http://swappy.ngrok.io/images/${requestForImage}`}}/>
                   
                   <View style ={styles.titleTag}>
                     <Text style = {styles.tagText}>對方的物品</Text>
@@ -74,7 +90,7 @@ function RecordDetail ({ route, navigation }) {
                 <View style = {styles.itemBox}>  
                   <Image
                     style={styles.image}
-                    source = {mythingImage}/>
+                    source = { {uri: `http://swappy.ngrok.io/images/${mythingImage}`}}/>
                   
                   <View style ={styles.titleTag}>
                     <Text style = {styles.tagText}>你的物品</Text>
@@ -94,7 +110,7 @@ function RecordDetail ({ route, navigation }) {
                 style = {{position:'absolute', top: ScreenWidth*1.2, height:ScreenWidth*0.16, width: ScreenWidth*0.73}}
                 source = {require('../../assets/personal/成功換物.png')}/>
             {
-                statusToMeS == 0? 
+                !IRecieved_ ? 
                 <TouchableOpacity
                     style = {{position:'absolute', top: ScreenWidth*1.4, alignItems: 'center',}}
                     onPress = {()=>handleReceived()}

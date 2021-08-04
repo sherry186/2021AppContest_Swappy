@@ -48,8 +48,7 @@ const typeDefs = gql`
     scalar JSONObject
     scalar Upload
     type Query {
-        getMySuccessfulRequestingRequests: [Request]!
-        getMySuccessfulInvitationRequests: [Request]!
+        getMySuccessfulRequests: [Request]!
         getUser: User!
         generalItemsList: [GeneralItem]!
         myGeneralItems: [GeneralItem]!
@@ -67,6 +66,8 @@ const typeDefs = gql`
     }
 
     type Mutation {
+        updateRatingAndReviews(userId: ID!, input: ReviewInput!): Boolean!
+        receiveRequest(requestId: ID!):Boolean!
         deleteFail: Boolean!
 
         resetUser(username: String!, email: String!, phone: String!, password: String!, avatar: String): Boolean!
@@ -99,6 +100,13 @@ const typeDefs = gql`
         description: String!, 
         exchangeMethod: ExchangeMethod!, 
         image: String
+    }
+
+    input ReviewInput {
+        username: String!,
+        rating: Float!
+        comment: String!
+        date: String!
     }
 
     input SignUpInput {
@@ -139,6 +147,16 @@ const typeDefs = gql`
         password: String!
         avatar: String
         postsCollection: [Post]
+        ratingSum: Int
+        totalRatings: Int
+        reviews: [Review]
+    }
+
+    type Review {
+        username: String!
+        rating: Float!
+        comment: String!
+        date: String!
     }
 
     type GeneralItem {
@@ -182,6 +200,10 @@ const typeDefs = gql`
         requester: User!
         requestersItem: GeneralItem
         status: Status!
+        guyWhoseItemIsRequestedReceived: Boolean!
+        guyWhoseItemIsRequestedScored: Boolean!
+        requesterReceived: Boolean!
+        requesterScored: Boolean!
     }
 
     type Post {
@@ -221,11 +243,8 @@ const typeDefs = gql`
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
     Query: {
-        getMySuccessfulInvitationRequests: async (_, __, {db,user}) => {
-            return await db.collection('Requests').find({"guyWhoseItemIsRequested._id" : user._id }, {status: "SUCCESS"}).toArray();
-        },
-        getMySuccessfulRequestingRequests: async (_, __, {db,user}) => {
-            return await db.collection('Requests').find({"requester._id" : user._id}, {status: "SUCCESS"}).toArray();
+        getMySuccessfulRequests: async (_, __, {db,user}) => {
+            return await db.collection('Requests').find({ $and: [ { $or: [ {"guyWhoseItemIsRequested._id" : user._id }, {"requester._id" : user._id }]}, {status: "SUCCESS"}]}).toArray();
         },
         getUser: async (_, __, {db,user}) => {
             const _user =  await db.collection('Users').findOne({_id: ObjectId(user._id)});
@@ -344,6 +363,30 @@ const resolvers = {
 
     },
     Mutation: {
+        updateRatingAndReviews: async (_, {userId, input}, {db, user})=>{
+            const review = {
+                username: input.username,
+                rating: input.rating,
+                comment: input.comment,
+                date: input.date
+            }
+            await db.collection('Users').updateOne({_id: ObjectId(userId)},{ $push: { reviews: review }});
+
+            const user_ = await db.collection('Users').findOne({_id: ObjectId(userId)});
+            const newSum = user_.ratingSum + input.rating;
+            const newTotal = user_.totalRatings + 1;
+            await db.collection('Users').updateOne({_id: ObjectId(userId)},{ $set: { ratingSum: newSum, totalRatings: newTotal}});
+            return true;
+        },
+        receiveRequest: async (_, { requestId }, { db, user }) => {
+            const request = await db.collection('Requests').findOne({_id: ObjectId(requestId)});
+            if (request.guyWhoseItemIsRequested._id == user._id) {
+                await db.collection('Requests').updateOne({_id: ObjectId(requestId)},{ $set: { guyWhoseItemIsRequestedReceived: true }});
+            } else {
+                await db.collection('Requests').updateOne({_id: ObjectId(requestId)},{ $set: { requesterReceived: true }});
+            }
+            return true;
+        },
         deleteFail: async (_, __, { db, user }) => {
             if(!user) {
                 throw new Error('AUthentication Error. Please sign in');
@@ -474,7 +517,11 @@ const resolvers = {
                 requestedItem: requestedItem,
                 requester: requester,
                 requestersItem: null, 
-                status: 'WAITING'
+                status: 'WAITING',
+                guyWhoseItemIsRequestedReceived: false, 
+                guyWhoseItemIsRequestedScored: false, 
+                requesterReceived: false, 
+                requesterScored: false
             }
 
             const result = await db.collection('Requests').insertOne(newRequest);
@@ -507,7 +554,10 @@ const resolvers = {
                     username: newUser.username,
                     email: newUser.email,
                     password: newUser.password, 
-                    phone: newUser.phone
+                    phone: newUser.phone,
+                    reviews: [],
+                    ratingSum: 0,
+                    totalRatings: 0
                 },
                 token: getToken(result.insertedId)
             }
@@ -710,7 +760,7 @@ const start = async () => {
     console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
 }
 
-console.log(getToken('60f96984d500fa3e0481725e'));
+console.log(getToken('6109c8f01872d49b6c147eec'));
 
 start();
 

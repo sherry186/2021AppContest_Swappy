@@ -1,7 +1,7 @@
 import { styleSheets } from 'min-document';
 import React from 'react';
 import { useEffect, useState } from 'react';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     Text,
     StyleSheet,
@@ -34,81 +34,101 @@ let ScreenHeight = Dimensions.get("window").height;
 
 const QUERY_MY_REQUESTS = gql`
 query getMySuccessfulRequests {
-  getMySuccessfulRequestingRequests {
+  getMySuccessfulRequests {
     id
     requestedItem {
       title
       image
       category
     }
-  } getMySuccessfulInvitationRequests {
-    id
+    guyWhoseItemIsRequested {
+      username
+      id
+    }
+    requester {
+      username
+			id
+    }
     requestersItem {
       title
       image
       category
     }
+    guyWhoseItemIsRequestedReceived
+    guyWhoseItemIsRequestedScored
+    requesterReceived
+    requesterScored
   }
 }`;
 
 
 const Record = () => {
 
+  const [userId, setUserId] = useState(null);
+
+AsyncStorage.getItem('userId')
+  .then((data) => {
+    console.log(data);
+    setUserId(data);
+  });
+
+
   const navigation = useNavigation();
   const { data, error, loading } = useQuery(QUERY_MY_REQUESTS, {pollInterval: 500});
   console.log(data);
-  const handleNavigation = (item) => {
-    console.log(item);
+  const handleNavigation = (myUsername, otherGuyId, id, mythingImage, mythingTitle, mythingCategory, IRecieved, IScored, requestForImage, requestForTitle, requestForCategory, requestForRecieved, requestForScored) => {
+    //console.log(item);
     
-    if (item.status == 2){
-      if (item.statusToMe == 1){
-        navigation.navigate('Star', {mythingImage: item.mythingImage, requestForImage: item.requestForImage, requestForTitle: item.requestForTitle});
+    if (IRecieved && requestForRecieved){ // 如果雙方都收到 item.status == 2
+      if (!IScored){ // 如果我還沒評分 item.statusToMe == 1
+        navigation.navigate('Star', {myUsername, otherGuyId, id: id, mythingImage: mythingImage, requestForImage: requestForImage, requestForTitle: requestForTitle});
       }
-      else{
-        navigation.navigate('Complete',{requestForImage: item.requestForImage, requestForTitle: item.requestForTitle});
+      else{ //如果我已經評分
+        navigation.navigate('Complete', {requestForImage: requestForImage, requestForTitle: requestForTitle});
       }
     }
-    else{
+    else{ // 如果雙方還沒收到
       navigation.navigate('RecordDetail', {
-        id: item.id,
-        mythingTitle: item.mythingTitle, 
-        mythingImage: item.mythingImage, 
-        requestForTitle: item.requestForTitle, 
-        requestForTag: item.requestForTag, 
-        requestForImage: item.requestForImage, 
-        status: item.status, 
-        statusToMe: item.statusToMe})
+        id: id,
+        mythingTitle: mythingTitle, 
+        mythingImage: mythingImage, 
+        IRecieved: IRecieved,
+        IScored: IScored,
+        requestForTitle: requestForTitle, 
+        requestForTag: requestForCategory, 
+        requestForImage: requestForImage, 
+        requestForRecieved: requestForRecieved, 
+        requestForScored: requestForScored, 
+      })
     }
   }
 
-  const renderRequestingItem = ({ item }) => (
-    //console.log(this.props.navigation);
-    <SafeAreaView style={styles.boxContainer}>
-      <View style={styles.buttons}>
-        <TouchableOpacity 
-          style={styles.item}
-          onPress={() => handleNavigation(item)}
-          >
-            <Image
-              source =  {item.requestedItem.image? {uri: `http://swappy.ngrok.io/images/${item.requestedItem.image}`} : require('../../assets/general/商品呈現.png')}
-              style ={{height: ScreenHeight*0.13, width: ScreenHeight*0.13,}}/>
-            
-            <View style = {{marginLeft: 16}}>
-                <Text style={styles.title}>{item.requestedItem.title}</Text>
-                <Text style = {{marginTop: "5%", color: colors.function_100}}>#{item.requestedItem.category}</Text>
-            </View>   
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
-  );  
+  const renderItem = ({ item }) => {
+    console.log(item);
+    
 
-  const renderInvitationItem = ({ item }) => (
+    return (
     //console.log(this.props.navigation);
     <SafeAreaView style={styles.boxContainer}>
       <View style={styles.buttons}>
-        <TouchableOpacity 
+        { item.guyWhoseItemIsRequested.id == userId ?
+        ( <TouchableOpacity 
           style={styles.item}
-          onPress={() => handleNavigation(item)}
+          onPress={() => handleNavigation(
+            item.guyWhoseItemIsRequested.username, 
+            item.requester.id,
+            item.id,
+            item.requestedItem.image, 
+            item.requestedItem.title, 
+            item.requestedItem.category, 
+            item.guyWhoseItemIsRequestedReceived, 
+            item.guyWhoseItemIsRequestedScored, 
+            item.requestersItem.image, 
+            item.requestersItem.title, 
+            item.requestersItem.category, 
+            item.requesterReceived,
+            item.requesterScored
+          )}
           >
             <Image
               source =  {item.requestersItem.image? {uri: `http://swappy.ngrok.io/images/${item.requestersItem.image}`} : require('../../assets/general/商品呈現.png')}
@@ -118,10 +138,41 @@ const Record = () => {
                 <Text style={styles.title}>{item.requestersItem.title}</Text>
                 <Text style = {{marginTop: "5%", color: colors.function_100}}>#{item.requestersItem.category}</Text>
             </View>   
-        </TouchableOpacity>
+        </TouchableOpacity> ) : (
+          <TouchableOpacity 
+          style={styles.item}
+          onPress={() => handleNavigation(
+            item.requester.username, 
+            item.guyWhoseItemIsRequested.id,
+            item.id,
+            item.requestersItem.image, 
+            item.requestersItem.title, 
+            item.requestersItem.category, 
+            item.requesterReceived,
+            item.requesterScored,
+            item.requestedItem.image, 
+            item.requestedItem.title, 
+            item.requestedItem.category,
+            item.guyWhoseItemIsRequestedReceived, 
+            item.guyWhoseItemIsRequestedScored, 
+          )}
+          >
+            <Image
+              source =  {item.requestedItem.image? {uri: `http://swappy.ngrok.io/images/${item.requestedItem.image}`} : require('../../assets/general/商品呈現.png')}
+              style ={{height: ScreenHeight*0.13, width: ScreenHeight*0.13,}}/>
+            
+            <View style = {{marginLeft: 16}}>
+                <Text style={styles.title}>{item.requestedItem.title}</Text>
+                <Text style = {{marginTop: "5%", color: colors.function_100}}>#{item.requestedItem.category}</Text>
+            </View>   
+          </TouchableOpacity>
+        )
+        }
       </View>
     </SafeAreaView>
-  ); 
+  )};  
+
+
 
     return (
       <View style={{ flex: 1, top: "5%", bottom:"20%", alignItems: 'center'}}>
@@ -147,12 +198,8 @@ const Record = () => {
               <>
               <FlatList
               style = {{marginBottom:60}}
-              data = {data.getMySuccessfulInvitationRequests}
-              renderItem = {renderInvitationItem}/>
-              <FlatList
-              style = {{marginBottom:60}}
-              data = {data.getMySuccessfulRequestingRequests}
-              renderItem = {renderRequestingItem}/>
+              data = {data.getMySuccessfulRequests}
+              renderItem = {renderItem}/>
               </>
             ) : <Text>loading ...</Text>}
             
