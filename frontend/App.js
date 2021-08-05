@@ -8,6 +8,8 @@ import Root from './navigators/root'
 import { client } from './apollo';
 import { ApolloProvider,gql } from '@apollo/client';
 
+import {LogBox} from 'react-native'
+LogBox.ignoreAllLogs(true)
 // client
 //   .query({
 //     query: gql`
@@ -23,6 +25,7 @@ import { ApolloProvider,gql } from '@apollo/client';
 //   .catch(err => console.log(err));
 
 export default function App() {
+  
   return (
     <ApolloProvider client={client}>
       <NavigationContainer>
