@@ -109,6 +109,7 @@ const login = () =>  {
   return (
     <View style={{ flex: 1 , backgroundColor: colors.function_100}}>
       <View style = {{flex: 1, borderTopStartRadius:20, borderTopRightRadius:20, backgroundColor: colors.mono_40, alignItems:'center', justifyContent:'center'}}>
+
         <View style = {styles.inputContainer}>
             <Image
               style={styles.image}
@@ -188,7 +189,6 @@ const styles = StyleSheet.create({
     borderRadius:6,
     borderColor: colors.function_100,
     backgroundColor: 'transparent',
-
   },
   image:{
     marginLeft: 13,
