@@ -86,7 +86,7 @@ const Group_HOME = () => {
             style={styles.item}
             onPress={() => navigation.navigate('GroupDetail', {title: item.title, discription: item.description, tags: item.tags, items: item.items, post: item.post, id: item.id})}>
             <Text style = {styles.title}>{item.title}</Text>
-            <Text style = {{marginTop: "5%", color: colors.function_100}}>#{item.tags[0]} #{item.tags[1]} #{item.tags[2]}</Text>           
+            <Text style = {{marginTop: "5%", color: colors.function_100}}>{item.tags[0]? "#": null}{item.tags[0]} {item.tags[1]? "#": null}{item.tags[1]} {item.tags[2]? "#": null}{item.tags[2]}</Text>           
           </TouchableOpacity>
       </View>
     </SafeAreaView>
