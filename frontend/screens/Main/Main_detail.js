@@ -17,6 +17,9 @@ import { View,
 
 import colors from '../../config/colors';
 
+import KeyboardSpacer from 'react-native-keyboard-spacer';
+
+
 let ScreenWidth = Dimensions.get("window").width;
 let ScreenHeight = Dimensions.get("window").height;
 
@@ -124,7 +127,10 @@ const MainDetail = ({ route, navigation }) =>{
   );
 
   return (
-    <View style={{ flex: 1, top: "5%", bottom:"20%", alignItems: 'center'}}>
+    <View
+       //behavior= 'padding'
+       style={{ flex: 1, top: "5%", bottom:"20%", alignItems: 'center'}}
+       >
        <View style = {{flexDirection: 'row', height: "7%", width:"100%", backgroundColor: colors.mono_40}}>
         <TouchableOpacity
           style = {{flex:2, width: "20%", backgroundColor: colors.mono_40, alignItems: 'center', justifyContent:'center'}}
@@ -142,7 +148,10 @@ const MainDetail = ({ route, navigation }) =>{
             
         </View>
       </View>
-      
+      <KeyboardAvoidingView
+        style = {{ alignItems: 'center', backgroundColor: colors.mono_40}}
+        behavior="padding"
+        enabled>
       <ScrollView style= {{flex: 1, backgroundColor: colors.mono_40, width: "100%"}}>
         
           
@@ -182,8 +191,9 @@ const MainDetail = ({ route, navigation }) =>{
         
         
       </ScrollView>
-      <KeyboardAvoidingView
-         behavior = 'height'
+      <View
+         //behavior = 'padding'
+         
          style = {styles.commentC}>
               <View style = {styles.comment}>
                   <TextInput
@@ -225,7 +235,8 @@ const MainDetail = ({ route, navigation }) =>{
                     }} 
                   source = {require('../../assets/Social/收藏.png')}/>
               </TouchableOpacity>
-          </KeyboardAvoidingView>    
+          </View> 
+        </KeyboardAvoidingView>
     </View>
   );
   
@@ -272,8 +283,9 @@ const styles = StyleSheet.create({
     height:"7%",
     width:"100%",
     alignItems:'center',
-    position:'absolute',
-    bottom: 40,
+    //position:'absolute',
+    bottom: 60,
+    justifyContent: "space-around"
   },
   buttonText: {
     //color: '#fff',

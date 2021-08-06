@@ -5,6 +5,7 @@ import { View,
         StyleSheet, 
         TextInput,
         Alert, 
+        KeyboardAvoidingView,
         ActivityIndicator,
         TouchableOpacity,
         Image } from 'react-native';
@@ -108,7 +109,10 @@ const login = () =>  {
   
   return (
     <View style={{ flex: 1 , backgroundColor: colors.function_100}}>
-      <View style = {{flex: 1, borderTopStartRadius:20, borderTopRightRadius:20, backgroundColor: colors.mono_40, alignItems:'center', justifyContent:'center'}}>
+      <KeyboardAvoidingView 
+        style = {{flex: 1, borderTopStartRadius:20, borderTopRightRadius:20, backgroundColor: colors.mono_40, alignItems:'center', justifyContent:'center'}}
+        behavior='padding'
+        enabled>
 
         <View style = {styles.inputContainer}>
             <Image
@@ -170,7 +174,7 @@ const login = () =>  {
           <Text
             style={styles.buttonText}>登入</Text>
         </TouchableOpacity>
-      </View>
+      </KeyboardAvoidingView>
           </View>
   );
   
