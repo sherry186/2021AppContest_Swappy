@@ -68,7 +68,7 @@ const typeDefs = gql`
 
     type Mutation {
         updateRatingAndReviews(requestId: ID!, userId: ID!, input: ReviewInput!): Boolean!
-        receiveRequest(requestId: ID!):Boolean!
+        receiveRequest(requestId: ID!):Request!
         deleteFail: Boolean!
 
         resetUser(username: String!, email: String!, phone: String!, password: String!, avatar: String): Boolean!
@@ -398,7 +398,8 @@ const resolvers = {
             } else {
                 await db.collection('Requests').updateOne({_id: ObjectId(requestId)},{ $set: { requesterReceived: true }});
             }
-            return true;
+            const request_ = await db.collection('Requests').findOne({_id: ObjectId(requestId)});
+            return request_;
         },
         deleteFail: async (_, __, { db, user }) => {
             if(!user) {

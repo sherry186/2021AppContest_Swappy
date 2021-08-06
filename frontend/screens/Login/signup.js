@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useMutation, gql } from '@apollo/client';
 
-import { auth } from '../../firebase'
+
 
 const SIGN_UP_MUTATION = gql`
 mutation signUp($email: String!, $password: String!, $phone: String!, $username: String!) {
