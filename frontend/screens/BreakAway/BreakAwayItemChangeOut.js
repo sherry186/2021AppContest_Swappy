@@ -15,6 +15,8 @@ import {
 import { Picker } from '@react-native-picker/picker';
 import colors from '../../config/colors';
 let ScreenWidth = Dimensions.get("window").width;
+import { ReactNativeFile } from 'apollo-upload-client';
+
 
 import * as SQLite from 'expo-sqlite'
 const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
@@ -28,38 +30,48 @@ import { createMyStoriesTable, createStoryItem, updateProgress } from '../../loc
 //   {way:'byPost'}
 // ];
 
-const CREATE_GENERALITEM = gql`
-  mutation createGeneralItem ($title: String!, $description: String!, $category: String!, $exchangeMethod: String!, $image: String) {
-    createGeneralItem(input: {
-      title: $title
-      description: $description
-      category: $category
-      exchangeMethod: $exchangeMethod
-      image: $image
-    }) {
+const CREATE_GENERALITEM_ = gql`
+mutation createGeneralItem ($title: String!, $description: String!, $category: String!, $exchangeMethod: String!, $image: String) {
+  createGeneralItem(input: {
+    title: $title
+    description: $description
+    category: $category
+    exchangeMethod: $exchangeMethod
+    image: $image
+  }) {
+    id
+    owner {
+      username
       id
-      owner {
-        username
-        id
-      }
-      description
     }
-  }`;
+    description
+  }
+}`;
+
+
+const UPLOAD_FILE = gql`
+mutation uploadFile ($file: Upload!) {
+  uploadFile(file: $file){
+    url
+  }
+}
+`;
 
 const BreakAwayItemChangeOut = ({ route, navigation }) => {
   const [itemName, setItemName] = useState('');
   const [description, setDescription] = useState('');
   const [dropdown, setDropdown] = useState('');
-  const [deliveryMethod, setDeliveryMethod] = useState(0);
+  const [deliveryMethod, setDeliveryMethod] = useState('');
   const [dummyData, setdummyData] = useState([ {way: '面交'}, {way: '郵寄'}]);
   const [data1, setData1] = useState([]);
 
-  const [createItem, { data, error, loading }] = useMutation(CREATE_GENERALITEM);
+  const [createItem, { data, error, loading }] = useMutation(CREATE_GENERALITEM_);
+  const [uploadFile] = useMutation(UPLOAD_FILE);
 
   const { source, title, itemId, spaceId, story } = route.params;  
 
   useEffect(() => {
-    console.log(dummyData);
+    //console.log(dummyData);
     let arr = dummyData.map((item, index)=>{
       item.isSelected = false
       return {...item};
@@ -75,26 +87,26 @@ const BreakAwayItemChangeOut = ({ route, navigation }) => {
   useEffect(()=> {
     const _deliveryMethod = deliveryMethodHandler()
     setDeliveryMethod(_deliveryMethod);
-    console.log(deliveryMethod);
+    //console.log(deliveryMethod);
   }, [dummyData])
 
   const deliveryMethodHandler = () => {
     let facetoFace = dummyData[0].isSelected;
     let byPost = dummyData[1].isSelected;
     if(facetoFace == true && byPost == true) {
-      return 3;
+      return '3';
     } 
     if(facetoFace == true) {
-      return 2;
+      return '2';
     }
     if(byPost == true) {
-      return 1;
+      return '1';
     }
-    return 0;
+    return '0';
   }
 
   const selectionHandler = (ind) => {
-    console.log(dummyData);
+    //console.log(dummyData);
     let arr = dummyData.map((item, index)=>{
       if(ind == index){
         item.isSelected = !item.isSelected;
@@ -105,6 +117,14 @@ const BreakAwayItemChangeOut = ({ route, navigation }) => {
     setdummyData(arr);
   };
 
+  const generateRNImage = (uri, name) => {
+    return uri ? new ReactNativeFile({
+      uri,
+      type:'image/png',
+      name: `image_${name}.png`,
+    }) : null;
+  }
+
   const addToStory = (title, source, story, spaceId) =>{
     createStoryItem(title, story, source, spaceId);
 
@@ -113,10 +133,17 @@ const BreakAwayItemChangeOut = ({ route, navigation }) => {
   }
 
   const handlesubmit =(itemId) =>{
-    console.log(itemName, description, dropdown, deliveryMethod, source);
+    console.log('itemName',typeof itemName);
+    console.log('description',typeof description);
+    console.log('dropdown',typeof dropdown);
+    console.log('deliveryMethod',typeof deliveryMethod);
+    console.log('source',source);
     //add to general Items
-    createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod, image: source}});
+    const file = generateRNImage(source, Math.random().toString(36).slice(-10));
+    uploadFile({variables: { file: file }, uploadFileAsForm: true});
 
+    createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod, image: file.name}});
+    //console.log(data, error, loading);
     //add to stroy collection
     addToStory(title, source, story, spaceId);
     deleteHesitateItem(itemId);
@@ -144,7 +171,7 @@ const BreakAwayItemChangeOut = ({ route, navigation }) => {
             <TextInput
                 style={styles.input}
                 //placeholder='ItemName'
-                onChangeText={(text) => setItemName(text)}
+                onChangeText={setItemName}
                 value = {itemName}/>
           </View>
           <View style ={styles.textContainer}>
@@ -159,13 +186,13 @@ const BreakAwayItemChangeOut = ({ route, navigation }) => {
                       //style={{height: 25,width:200}}
                       selectedValue={dropdown}
                       onValueChange={(value)=>onValueChange(2,value)}>
-                      <Picker.Item label="書籍" value="key0" />
-                      <Picker.Item label="衣服與配件" value="key1" />
-                      <Picker.Item label="玩具" value="key2" />
-                      <Picker.Item label="特色周邊品" value="key3" />
-                      <Picker.Item label="小型生活器具" value="key4" />
-                      <Picker.Item label="家電用品" value="key5" />
-                      <Picker.Item label="其他" value="key6" />
+                      <Picker.Item label="書籍" value="書籍" />
+                      <Picker.Item label="衣服與配件" value="衣服與配件" />
+                      <Picker.Item label="玩具" value="玩具" />
+                      <Picker.Item label="特色周邊品" value="特色周邊品" />
+                      <Picker.Item label="小型生活器具" value="小型生活器具" />
+                      <Picker.Item label="家電用品" value="家電用品" />
+                      <Picker.Item label="其他" value="其他" />
                     </Picker>
             </View>
             <View style = {{flex: 6}}></View>
@@ -223,7 +250,7 @@ const BreakAwayItemChangeOut = ({ route, navigation }) => {
             <TextInput
                 style={styles.input}
                 placeholder=''
-                onChangeText={(text) => {setDescription(text); console.log(description)}}
+                onChangeText={(text) => {setDescription(text); }}
                 value = {description}/>
         </View>
 

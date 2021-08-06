@@ -195,14 +195,11 @@ const General_ADD = () => {
   const handlesubmit =() =>{
     
     if(image.length == 0) {
-      createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod}});
+      createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod, image: ''}});
     } else {
       for (let i = 0; i < image.length; i++) {
         const file = generateRNImage(image[i].uri, Math.random().toString(36).slice(-10));
-        console.log(file.name);
         uploadFile({variables: { file: file }, uploadFileAsForm: true});
-        console.log(data);
-        //console.log(typeof(image[i].uri));
         createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod, image: file.name}});
       }
     }
