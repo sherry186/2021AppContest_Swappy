@@ -280,9 +280,8 @@ const resolvers = {
                         return false;
                     }
                 };
-
                 partitionedGroupItems = partition(groupItems, function(item) {
-                    if(item.owner == undefined || item.owner._id == user._id) {
+                    if(item.owner == undefined || item.owner._id.equals(user._id)) {
                         return false
                     } else {
                         return isWhatTheUserWants(item) && canOfferWhatTheOwnerWants(item);
