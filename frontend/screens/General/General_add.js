@@ -20,12 +20,15 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import * as ImagePicker from 'expo-image-picker';
-import { Picker } from '@react-native-picker/picker';
+//import { Picker } from '@react-native-picker/picker';
+import { Picker } from 'react-native-woodpicker';
 // import * as SQLite from "expo-sqlite";
 import colors from '../../config/colors';
 import { ReactNativeFile } from 'apollo-upload-client';
 
 import { useMutation,  gql } from '@apollo/client';
+import { PickerIOSComponent } from 'react-native';
+import { PickerIOSBase } from 'react-native';
 
 let ScreenWidth = Dimensions.get("window").width;
 
@@ -57,8 +60,35 @@ let ScreenWidth = Dimensions.get("window").width;
   }
   `;
 
+  // <Picker
+  //                   mode={'dropdown'}
+  //                   style={{height: 25,width:200}}
+  //                   selectedValue={dropdown}
+  //                   onValueChange={(value)=>onValueChange(2,value)}>
+  //                   <Picker.Item label="" value="" />
+  //                   <Picker.Item label="書籍" value="書籍" />
+  //                   <Picker.Item label="衣服與配件" value="衣服與配件" />
+  //                   <Picker.Item label="玩具" value="玩具" />
+  //                   <Picker.Item label="特色周邊品" value="特色周邊品" />
+  //                   <Picker.Item label="小型生活器具" value="小型生活器具" />
+  //                   <Picker.Item label="家電用品" value="家電用品" />
+  //                   <Picker.Item label="其他" value="其他" />
+  //                 </Picker>
+  //           </View>
 
 const General_ADD = () => {
+  const [pickedData, setPickedData] = useState();
+
+  const dropdownData = [
+    { label: "書籍", value: "書籍" },
+    { label: "衣服與配件", value: "衣服與配件" },
+    { label: "玩具", value: "玩具" },
+    { label: "特色周邊品", value: "特色周邊品" },
+    { label: "小型生活器具", value: "小型生活器具" },
+    { label: "家電用品", value: "家電用品" },
+    { label: "其他", value: "其他" }
+  ];
+
   const [itemName, setitemName] = useState('');
   const [description, setDescription] = useState('');
   const [dropdown, setDropdown] = useState('');
@@ -118,21 +148,6 @@ const General_ADD = () => {
     }
     
   }; 
-  // console.log(error);
-  // console.log(data);
-
-  // useEffect(() => {
-  //   if (error) {
-  //     console.log(error);
-  //     Alert.alert(error.message);
-  //   }
-  // }, [error]);
-
-  // useEffect(() => {
-  //   if (data) {
-  //     console.log(data);
-  //   }
-  // }, [data]);
 
   useEffect(()=> {
     const _deliveryMethod = deliveryMethodHandler()
@@ -193,7 +208,7 @@ const General_ADD = () => {
   }
 
   const handlesubmit =() =>{
-    
+    console.log(dropdown);
     if(image.length == 0) {
       createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod, image: ''}});
     } else {
@@ -207,8 +222,10 @@ const General_ADD = () => {
     navigation.navigate('General');
   } 
 
-  const onValueChange = (flag,value) => {
-    setDropdown(value);
+  const selectCategory = (pickedData) => {
+    setPickedData(pickedData)
+    setDropdown(pickedData.value);
+    console.log(dropdown);
   };  
 
 
@@ -246,8 +263,7 @@ const General_ADD = () => {
 
       <KeyboardAvoidingView style = {styles.line}></KeyboardAvoidingView>
       
-        <KeyboardAwareScrollView //style = {{flex: 1}}
-        >
+        <KeyboardAwareScrollView>
           <View style ={styles.textContainer}>
               <Text style = {styles.text}>物品標題</Text>
           </View>
@@ -269,7 +285,7 @@ const General_ADD = () => {
         <View style ={styles.textInputContainer}>
           <View style = {{flex: 0.5}}></View>
             <View style = {{flex: 3.5, justifyContent: 'center'}}>
-                <Picker
+                {/* <Picker
                     mode={'dropdown'}
                     style={{height: 25,width:200}}
                     selectedValue={dropdown}
@@ -282,7 +298,21 @@ const General_ADD = () => {
                     <Picker.Item label="小型生活器具" value="小型生活器具" />
                     <Picker.Item label="家電用品" value="家電用品" />
                     <Picker.Item label="其他" value="其他" />
-                  </Picker>
+                  </Picker> */}
+                  <Picker
+                      //textInputStyle = {}
+                      //containerStyle = {}
+                      item={pickedData}
+                      items={dropdownData}
+                      onItemChange={selectCategory}
+                      title="Data Picker"
+                      placeholder="選擇物品種類"
+                      isNullable
+                    //backdropAnimation={{ opactity: 0 }}
+                    //mode="dropdown"
+                    //isNullable
+                    //disable
+                  />
             </View>
           <View style = {{flex: 6}}></View>
         </View>
@@ -347,7 +377,6 @@ export default General_ADD;
 
 
 const styles = StyleSheet.create({
- 
   input: {
     flex: 1,
     marginHorizontal:"5%",
