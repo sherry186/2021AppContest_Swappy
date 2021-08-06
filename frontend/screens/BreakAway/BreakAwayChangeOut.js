@@ -27,6 +27,9 @@ import * as SQLite from 'expo-sqlite';
 import { useMutation,  gql } from '@apollo/client';
 import { createMyStoriesTable, createStoryItem, updateProgress } from '../../localStorageApi/api';
 
+import KeyboardSpacer from 'react-native-keyboard-spacer';
+
+
 let ScreenWidth = Dimensions.get("window").width;
 
 
@@ -263,7 +266,7 @@ const BreakAwayChangeOut = () => {
   return(
     <View style={{flex:1, flexDirection: 'column',  }}>
       {/* <Text style={styles.buttonText}>Item Name</Text> */}
-      <KeyboardAvoidingView style={{backgroundColor: colors.mono_40 ,height: windowHeight *0.15 ,flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+      {/* <KeyboardAvoidingView style={{backgroundColor: colors.mono_40 ,height: windowHeight *0.15 ,flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}> */}
           <ScrollView 
               style = {{height: "100%" }}
               contentContainerStyle ={{alignItems:'center'}}
@@ -288,8 +291,9 @@ const BreakAwayChangeOut = () => {
                   </TouchableOpacity>
               {/* </View> */}
           </ScrollView>
+          <KeyboardSpacer/>
            
-      </KeyboardAvoidingView>
+      {/* </KeyboardAvoidingView> */}
        {/* duplicate from breakAwayHesitate */} 
 
       <KeyboardAvoidingView style = {styles.line}></KeyboardAvoidingView>

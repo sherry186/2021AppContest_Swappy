@@ -16,7 +16,7 @@ import {
     ScrollView, 
     KeyboardAvoidingView,
     } from 'react-native';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import * as ImagePicker from 'expo-image-picker';
@@ -249,7 +249,8 @@ const General_ADD = () => {
 
       <KeyboardAvoidingView style = {styles.line}></KeyboardAvoidingView>
       
-        <ScrollView >
+        <KeyboardAwareScrollView //style = {{flex: 1}}
+        >
           <View style ={styles.textContainer}>
               <Text style = {styles.text}>物品標題</Text>
           </View>
@@ -338,7 +339,8 @@ const General_ADD = () => {
               </TouchableOpacity>
           </View>
 
-        </ScrollView>
+        </KeyboardAwareScrollView>
+        
     </View>
   )
 
@@ -422,7 +424,7 @@ const styles = StyleSheet.create({
   },
   textContainer:{
     flex:1,
-    justifyContent:'center',
+    justifyContent: "space-around",
     backgroundColor:'transparent',      
   },
   textInputContainer:{
