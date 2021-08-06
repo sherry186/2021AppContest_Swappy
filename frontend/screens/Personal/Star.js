@@ -22,14 +22,15 @@ let ScreenWidth = Dimensions.get("window").width;
 let ScreenHeight = Dimensions.get("window").height;
 
 const UPDATE_RATING_AND_REVIEW = gql`
-mutation updateRatingAndReviews($userId: ID!, $username: String!, $rating: Float!, $comment: String!, $date: String!) {
-    updateRatingAndReviews(userId: $userId, input: {
-      username: $username,
+mutation updateRatingAndReviews($requestId: ID!, $userId: ID!, $rating: Float!, $comment: String!, $date: String!) {
+    updateRatingAndReviews(
+      requestId: $requestId,
+      userId: $userId, input: {
       rating: $rating,
       comment: $comment,
       date: $date
     })
-  }`;
+  } `;
 
 /* 2. Get the param */
 function Star ({ route, navigation }) {
@@ -41,13 +42,14 @@ function Star ({ route, navigation }) {
     const [star, setStar] = useState(0);
     const [description, setDescription] = useState("");
 
-    const [updateRatingAndReviews] = useMutation(UPDATE_RATING_AND_REVIEW);
+    const [updateRatingAndReviews, {data, loading, error}] = useMutation(UPDATE_RATING_AND_REVIEW);
+    console.log(data, loading, error);
 
     const handlesubmit = () =>{
         const time = new Date();
         const formatedTime = dateFormat(time, "isoDate");
 
-        updateRatingAndReviews({variables: {userId: otherGuyId, username: myUsername, rating: star, comment: description, date: formatedTime}});
+        updateRatingAndReviews({variables: {requestId: id, userId: otherGuyId, rating: star, comment: description, date: formatedTime}});
         navigation.navigate('Complete',{requestForImage: requestForImage, requestForTitle: requestForTitle});
     }
     

@@ -67,7 +67,7 @@ const typeDefs = gql`
     }
 
     type Mutation {
-        updateRatingAndReviews(userId: ID!, input: ReviewInput!): Boolean!
+        updateRatingAndReviews(requestId: ID!, userId: ID!, input: ReviewInput!): Boolean!
         receiveRequest(requestId: ID!):Boolean!
         deleteFail: Boolean!
 
@@ -104,7 +104,6 @@ const typeDefs = gql`
     }
 
     input ReviewInput {
-        userId: ID!,
         rating: Float!
         comment: String!
         date: String!
@@ -367,8 +366,8 @@ const resolvers = {
 
     },
     Mutation: {
-        updateRatingAndReviews: async (_, {userId, input}, {db, user})=>{
-            const commentingUser = await db.collection('Users').findOne({_id: ObjectId(input.userId)});
+        updateRatingAndReviews: async (_, {requestId, userId, input}, {db, user})=>{
+            const commentingUser = await db.collection('Users').findOne({_id: ObjectId(user._id)});
             const review = {
                 user: commentingUser,
                 rating: input.rating,
@@ -381,11 +380,21 @@ const resolvers = {
             const newSum = user_.ratingSum + input.rating;
             const newTotal = user_.totalRatings + 1;
             await db.collection('Users').updateOne({_id: ObjectId(userId)},{ $set: { ratingSum: newSum, totalRatings: newTotal}});
+
+            const request = await db.collection('Requests').findOne({_id: ObjectId(requestId)});
+            console.log(request.guyWhoseItemIsRequested._id.equals(user._id));
+            if (request.guyWhoseItemIsRequested._id.equals(user._id)) {
+                await db.collection('Requests').updateOne({_id: ObjectId(requestId)},{ $set: { guyWhoseItemIsRequestedScored: true }});
+            } else {
+                await db.collection('Requests').updateOne({_id: ObjectId(requestId)},{ $set: { requesterScored: true }});
+            }
+
             return true;
         },
         receiveRequest: async (_, { requestId }, { db, user }) => {
             const request = await db.collection('Requests').findOne({_id: ObjectId(requestId)});
-            if (request.guyWhoseItemIsRequested._id == user._id) {
+            console.log(request.guyWhoseItemIsRequested._id.equals(user._id));
+            if (request.guyWhoseItemIsRequested._id.equals(user._id)) {
                 await db.collection('Requests').updateOne({_id: ObjectId(requestId)},{ $set: { guyWhoseItemIsRequestedReceived: true }});
             } else {
                 await db.collection('Requests').updateOne({_id: ObjectId(requestId)},{ $set: { requesterReceived: true }});
@@ -765,7 +774,7 @@ const start = async () => {
     console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
 }
 
-console.log(getToken('6109c8f01872d49b6c147eec'));
+console.log(getToken('610b8b305e8ce09c3a672276'));
 
 start();
 
