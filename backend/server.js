@@ -664,6 +664,7 @@ const resolvers = {
             return true;
         },
         createGeneralItem: async (_, { input }, { db, user }) => {
+            console.log('create Gen item!');
             if(!user) {
                 throw new Error('AUthentication Error. Please sign in');
             }
@@ -675,7 +676,7 @@ const resolvers = {
                 image: input.image,
                 owner: user,
             }
-
+            
             const result = await db.collection('GeneralItems').insertOne(newGeneralItem);
             return {
                 ...newGeneralItem,
@@ -774,7 +775,7 @@ const start = async () => {
     console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
 }
 
-console.log(getToken('610b8b305e8ce09c3a672276'));
+console.log(getToken('610cda0e2469da7666d0d67e'));
 
 start();
 

@@ -40,6 +40,7 @@ export default class BreakAwayItemDetail extends React.Component {
   } 
 
   handleChangeOut = (itemId, title, source, story, spaceId) =>{
+    
     // createStoryItem(title, story, source, spaceId);
     // const changeOutPoints = 2.0;
     // updateProgress(spaceId, changeOutPoints);
@@ -85,8 +86,9 @@ componentDidMount() {
   
   render(){  
     const { itemId, title, source, spaceId, story, uploadDate, spaceName} = this.props.route.params;
-    console.log(spaceName);
+    //console.log(spaceName);
     console.log('source', source);
+    console.log('itemId', itemId);
     return (
       <View style={{ flex: 1, top: "5%", bottom:"20%", alignItems: 'center'}}>
         
