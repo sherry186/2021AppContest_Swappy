@@ -11,8 +11,8 @@ import {
     KeyboardAvoidingView,
     Dimensions,
     } from 'react-native';
-
-import { Picker } from '@react-native-picker/picker';
+import { Picker } from 'react-native-woodpicker';
+//import { Picker } from '@react-native-picker/picker';
 import colors from '../../config/colors';
 let ScreenWidth = Dimensions.get("window").width;
 import { ReactNativeFile } from 'apollo-upload-client';
@@ -25,10 +25,7 @@ import { useMutation,  gql } from '@apollo/client';
 import { deleteHesitateItem } from '../../localStorageApi/api';
 import { createMyStoriesTable, createStoryItem, updateProgress } from '../../localStorageApi/api';
 
-// const dummyData = [
-//   {way:'faceToFace'},
-//   {way:'byPost'}
-// ];
+
 
 const CREATE_GENERALITEM_ = gql`
 mutation createGeneralItem ($title: String!, $description: String!, $category: String!, $exchangeMethod: String!, $image: String) {
@@ -58,6 +55,18 @@ mutation uploadFile ($file: Upload!) {
 `;
 
 const BreakAwayItemChangeOut = ({ route, navigation }) => {
+  const [pickedData, setPickedData] = useState();
+
+  const dropdownData = [
+    { label: "書籍", value: "書籍" },
+    { label: "衣服與配件", value: "衣服與配件" },
+    { label: "玩具", value: "玩具" },
+    { label: "特色周邊品", value: "特色周邊品" },
+    { label: "小型生活器具", value: "小型生活器具" },
+    { label: "家電用品", value: "家電用品" },
+    { label: "其他", value: "其他" }
+  ];
+
   const [itemName, setItemName] = useState('');
   const [description, setDescription] = useState('');
   const [dropdown, setDropdown] = useState('');
@@ -89,6 +98,12 @@ const BreakAwayItemChangeOut = ({ route, navigation }) => {
     setDeliveryMethod(_deliveryMethod);
     //console.log(deliveryMethod);
   }, [dummyData])
+
+  const selectCategory = (pickedData) => {
+    setPickedData(pickedData)
+    setDropdown(pickedData.value);
+    console.log(dropdown);
+  };  
 
   const deliveryMethodHandler = () => {
     let facetoFace = dummyData[0].isSelected;
@@ -181,7 +196,7 @@ const BreakAwayItemChangeOut = ({ route, navigation }) => {
           <View style ={styles.textInputContainer}>
             <View style = {{flex: 0.5}}></View>
             <View style = {{flex: 3.5, justifyContent: 'center'}}>
-                  <Picker
+                  {/* <Picker
                       mode={'dropdown'}
                       //style={{height: 25,width:200}}
                       selectedValue={dropdown}
@@ -193,7 +208,21 @@ const BreakAwayItemChangeOut = ({ route, navigation }) => {
                       <Picker.Item label="小型生活器具" value="小型生活器具" />
                       <Picker.Item label="家電用品" value="家電用品" />
                       <Picker.Item label="其他" value="其他" />
-                    </Picker>
+                    </Picker> */}
+                    <Picker
+                      //textInputStyle = {}
+                      //containerStyle = {}
+                      item={pickedData}
+                      items={dropdownData}
+                      onItemChange={selectCategory}
+                      title="Data Picker"
+                      placeholder="選擇物品種類"
+                      isNullable
+                    //backdropAnimation={{ opactity: 0 }}
+                    //mode="dropdown"
+                    //isNullable
+                    //disable
+                  />
             </View>
             <View style = {{flex: 6}}></View>
           </View>

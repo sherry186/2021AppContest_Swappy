@@ -16,11 +16,13 @@ import {
     KeyboardAvoidingView,
     } from 'react-native';
 
+import { ReactNativeFile } from 'apollo-upload-client';
+
 import { Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import * as ImagePicker from 'expo-image-picker';
-import { Picker } from '@react-native-picker/picker';
-// import * as SQLite from "expo-sqlite";
+import { Picker } from 'react-native-woodpicker';
+//import { Picker } from '@react-native-picker/picker';
 import colors from '../../config/colors';
 import * as SQLite from 'expo-sqlite';
 
@@ -53,7 +55,30 @@ const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database o
     }
   }`;
 
+  const UPLOAD_FILE = gql`
+  mutation uploadFile ($file: Upload!) {
+    uploadFile(file: $file){
+      url
+    }
+  }
+  `;
+
 const BreakAwayChangeOut = () => {
+  const [pickedData, setPickedData] = useState();
+  const [spacePickedData, setSpacePickedData] = useState();
+
+  
+
+  const dropdownData = [
+    { label: "書籍", value: "書籍" },
+    { label: "衣服與配件", value: "衣服與配件" },
+    { label: "玩具", value: "玩具" },
+    { label: "特色周邊品", value: "特色周邊品" },
+    { label: "小型生活器具", value: "小型生活器具" },
+    { label: "家電用品", value: "家電用品" },
+    { label: "其他", value: "其他" }
+  ];
+
   const [itemName, setitemName] = useState('');
   const [description, setDescription] = useState('');
   const [dropdown, setDropdown] = useState('');
@@ -68,7 +93,7 @@ const BreakAwayChangeOut = () => {
 
   const [createItem, { data, error, loading }] = useMutation(CREATE_GENERALITEM);
   //from general ADD
-
+  const [uploadFile] = useMutation(UPLOAD_FILE);
   const [spaceData, setSpaceData] = useState([]);
   const [story, setStory] = useState('');
   const [space, setSpace] = useState(0);
@@ -101,6 +126,14 @@ const BreakAwayChangeOut = () => {
       (txObj, error) => console.log('Error', error))
   });
   }, []);
+
+  const generateRNImage = (uri, name) => {
+    return uri ? new ReactNativeFile({
+      uri,
+      type:'image/png',
+      name: `image_${name}.png`,
+    }) : null;
+  }
 
   const addToStory = (title, source, story, spaceId) =>{
     createStoryItem(title, story, source, spaceId);
@@ -208,15 +241,30 @@ const BreakAwayChangeOut = () => {
     return '0';
   }
 
+  const selectCategory = (pickedData) => {
+    setPickedData(pickedData)
+    setDropdown(pickedData.value);
+    //console.log(dropdown);
+  }; 
+
+  const selectSpace = (value, index)=> {
+    setSpacePickedData(value);
+    setSpace(value);
+  }
+
   const handlesubmit =() =>{
     const dummyImageURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAMFBMVEX09PTMzMzJycnPz8/d3d3V1dXi4uLo6Ojw8PDx8fH39/ft7e3Y2NjQ0NDp6enb29uHE20LAAACaklEQVR4nO3b6W6CQBhGYUTWD9T7v9uylLIN6jCk8Cbn+deEGo6DMOAYRQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIJyFiuzshLesStJAdVZdufEV38LFydkZm6w+IrBJrK86itkxgU1ifnaKmz363QvUvsbjmoNYdjuXPPMQz6R7lfLsGKeq3bd76LvfHwnFIXt0tOKYwjuF51kVtjMUbzqFVmR1/cpK30idwv7qH98yz0SVwvI+XP19JygqhY9xehMnXokihfl0/hZ77a5I4WM2zXz5DKJI4XwKvjHLNGeGRmE1L7w7N7fKeRLSKCy+KGwCnedZjcJofruXuo7SbpwdiRqFlk4D42y9rf0eyOtEjcL5BzFeb2rV5oRApNAmj6QcjyRs8g4sE0UKJ4nxemJq8yGeJ6oURpY/uic26frppy0uJvNEmcI2JM/yovlz8cxlGbhIFCrcsA6cX0/kC52Bt3hMlC90Bk5HUbzQPYL9KA6b6BXmk8/YZuCYqFdYj/f47wL/EtUKrR6/LXsfOCSKFbaBQ+KnwGa79sqpVWjp7x1Ec6B+DhQsHAK7xM+BeoVjYLPzr499eoXTwO+IFfoHihXuWbWgVVh792kV7lt3IlRoe0ZQqvCLax+FZ8c4UUghheebFu6jU1gk++gU7l3t3f2rRmGAyxcGr329cuEh60stunBh2Z3y6yxM/wX52S1u/bf3Ryzzdq9tuIDnYWv1q7NTNlhy0O8t/Nb6/SfLbnHoYbpjSep/sjLfOZ0ZXfTXJKPgH69deAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDyA0uAKIxQw0bjAAAAAElFTkSuQmCC'
     if(image.length == 0) {
-      createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod}});
+      createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod, image: ''}});
       addToStory(itemName, dummyImageURI, story, space)
     } else {
       for (let i = 0; i < image.length; i++) {
-        console.log(typeof(image[i].uri));
-        createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod, image: image[i].uri}});
+        //console.log(typeof(image[i].uri));
+
+        const file = generateRNImage(image[i].uri, Math.random().toString(36).slice(-10));
+        uploadFile({variables: { file: file }, uploadFileAsForm: true});
+
+        createItem({variables: { title: itemName, description: description, category: dropdown, exchangeMethod: deliveryMethod, image: file.name}});
         addToStory(itemName, image[i].uri, story, space)
       }
     }
@@ -242,6 +290,12 @@ const BreakAwayChangeOut = () => {
               //console.log('Success', resultSet);
               let spacesData = resultSet.rows._array;
               setSpaceData(spacesData);
+              const spacePickerItems = spaceData.map(item => {
+                return {
+                  label: item.spaceName,
+                  value: item.id
+                }}
+              );
               //console.log(data);
       },
           (txObj, error) => console.log('Error', error))
@@ -320,7 +374,7 @@ const BreakAwayChangeOut = () => {
         <View style ={styles.textInputContainer}>
           <View style = {{flex: 0.5}}></View>
             <View style = {{flex: 3.5, justifyContent: 'center'}}>
-                <Picker
+                {/* <Picker
                     mode={'dropdown'}
                     style={{height: 25,width:200}}
                     selectedValue={dropdown}
@@ -332,7 +386,21 @@ const BreakAwayChangeOut = () => {
                     <Picker.Item label="小型生活器具" value="key4" />
                     <Picker.Item label="家電用品" value="key5" />
                     <Picker.Item label="其他" value="key6" />
-                  </Picker>
+                  </Picker> */}
+                  <Picker
+                      //textInputStyle = {}
+                      //containerStyle = {}
+                      item={pickedData}
+                      items={dropdownData}
+                      onItemChange={selectCategory}
+                      title="Data Picker"
+                      placeholder="選擇物品種類"
+                      isNullable
+                    //backdropAnimation={{ opactity: 0 }}
+                    //mode="dropdown"
+                    //isNullable
+                    //disable
+                  />
             </View>
           <View style = {{flex: 6}}></View>
         </View>
@@ -344,7 +412,7 @@ const BreakAwayChangeOut = () => {
           <View style ={styles.textInputContainer}>
           <View style = {{flex: 0.5}}></View>
             <View style = {{flex: 3.5, justifyContent: 'center'}}>
-                <Picker
+                {/* <Picker
                   mode={'dropdown'}
                   style={{height: 25,width:200}}
                   //style={styles.input3}
@@ -358,7 +426,29 @@ const BreakAwayChangeOut = () => {
                       );
                     })
                   }
-                </Picker>
+                </Picker> */}
+
+                <Picker
+                      //textInputStyle = {}
+                      //containerStyle = {}
+                      item={spacePickedData}
+                      items={
+                        spaceData != [] ? (spaceData.map(item => {
+                          return {
+                            label: item.spaceName,
+                            value: item.id
+                          }}
+                        ) ) : []
+                      }
+                      onItemChange={selectSpace}
+                      title="Data Picker"
+                      placeholder="選擇所屬空間"
+                      isNullable
+                    //backdropAnimation={{ opactity: 0 }}
+                    //mode="dropdown"
+                    //isNullable
+                    //disable
+                  />
             </View>
             <View style = {{flex: 6}}></View>
           </View>
