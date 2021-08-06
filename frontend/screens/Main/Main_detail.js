@@ -11,11 +11,15 @@ import { View,
        ScrollView, 
        TouchableOpacity,
        StyleSheet,
+       //KeyboardAwareScrollView,
        KeyboardAvoidingView, 
        Dimensions,
        TextInput } from "react-native";
 
+
 import colors from '../../config/colors';
+
+import { KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
 let ScreenWidth = Dimensions.get("window").width;
 let ScreenHeight = Dimensions.get("window").height;
@@ -143,7 +147,7 @@ const MainDetail = ({ route, navigation }) =>{
         </View>
       </View>
       
-      <ScrollView style= {{flex: 1, backgroundColor: colors.mono_40, width: "100%"}}>
+      <KeyboardAwareScrollView style= {{flex: 1, backgroundColor: colors.mono_40, width: "100%"}}>
         
           
 
@@ -181,9 +185,10 @@ const MainDetail = ({ route, navigation }) =>{
           <View style = {{height: ScreenHeight*0.13}}></View>
         
         
-      </ScrollView>
-      <KeyboardAvoidingView
+      </KeyboardAwareScrollView>
+      <View
          behavior = 'height'
+
          style = {styles.commentC}>
               <View style = {styles.comment}>
                   <TextInput
@@ -225,7 +230,7 @@ const MainDetail = ({ route, navigation }) =>{
                     }} 
                   source = {require('../../assets/Social/收藏.png')}/>
               </TouchableOpacity>
-          </KeyboardAvoidingView>    
+          </View>    
     </View>
   );
   
@@ -254,13 +259,14 @@ const styles = StyleSheet.create({
   },
   comment: {
     flexDirection:'row',
-    flex:8,
-    //backgroundColor:colors.mono_80,
+    //flex:8,
+    backgroundColor:colors.mono_40,
     borderRadius:ScreenWidth*0.02,
     height:ScreenWidth*0.1,
-    width:"70%",
+    width:"80%",
     borderWidth:1,
     borderColor: colors.function_100,
+
     marginLeft:"5%",
     //position:'absolute',
     bottom: 0,
@@ -268,7 +274,7 @@ const styles = StyleSheet.create({
   commentC: {
     flexDirection:'row',
     //flex:1,
-    backgroundColor:colors.mono_40,
+    backgroundColor: colors.mono_40,
     height:"7%",
     width:"100%",
     alignItems:'center',
