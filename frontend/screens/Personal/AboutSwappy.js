@@ -17,6 +17,7 @@ import * as ImagePicker from 'expo-image-picker';
 import _ from "lodash"; 
 import { useQuery,  gql } from '@apollo/client';
 import { ScrollView } from 'react-native-gesture-handler';
+
 //import { ScreenWidth } from 'react-native-elements/dist/helpers';
 
 let ScreenWidth = Dimensions.get("screen").width;
@@ -25,7 +26,7 @@ let ScreenHeight = Dimensions.get("screen").height;
 
 const AboutSwappy = () => {
 
-
+    const navigation = useNavigation();
 
     return (
         <View style={{ flex: 1, top: "5%", bottom:"20%", alignItems: 'center', backgroundColor:colors.mono_40}}>
