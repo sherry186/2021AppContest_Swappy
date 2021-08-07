@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { View, Text } from "react-native";
+import { View, Text, Dimensions } from "react-native";
 
 import Notification_invitation from "../screens/Notification/Notification_invitation";
 import Notification_requesting from "../screens/Notification/Notification_requesting";
 import colors from "../config/colors";
 
 const Tab = createMaterialTopTabNavigator();
-
+let ScreenWidth = Dimensions.get("window").width;
 function Notification() {
         
     return(  
@@ -36,8 +36,8 @@ function Notification() {
                 component = {Notification_requesting}
                 options={{ 
                     tabBarIcon:({focused})=>(
-                        <View style =  {{right: 40,  width: 120,}}>
-                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20 }}>Requests</Text>
+                        <View style =  {{flex: 1, alignItems: 'center', alignSelf: 'center', width: ScreenWidth*0.3, }}>
+                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20}}>Requests</Text>
                         </View>
                       )}}
             
@@ -47,8 +47,8 @@ function Notification() {
                 component = {Notification_invitation}
                 options={{ 
                     tabBarIcon:({focused})=>(
-                        <View style =  {{ right: 30, width:120}}>
-                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20 }}>Invitations</Text>
+                        <View style =  {{ flex: 1, alignItems: 'center', alignSelf: 'center', width: ScreenWidth*0.3,}}>
+                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20}}>Invitations</Text>
                         </View>
                     )}}
             />

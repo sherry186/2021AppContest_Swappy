@@ -51,6 +51,9 @@ const AboutSwappy = () => {
                     <Text style = {styles.title}>為什麼要用Swappy？</Text>
                     <Text></Text>
                     <Text style = {styles.content}>時下交換平台，常存在著換物不夠有效率、用戶猶豫換出物品時間過長、以及缺乏歸屬感的問題。Swappy針對此三點做分析，打造了其他換物平台所沒有的獨家功能：群組換物、斷捨離、社群發文機制，讓您在換物上有更良好的體驗</Text>
+                    <Text style = {styles.title}></Text>
+                    <Text></Text>
+                    <Text style = {styles.content}></Text>
                 </ScrollView>
             </View>
             
@@ -68,6 +71,10 @@ const styles = StyleSheet.create({
     title:{
         fontSize:ScreenWidth*0.04,
         color: colors.function_100,
+    },
+    title2:{
+        fontSize:ScreenWidth*0.04,
+        color: colors.function_80,
     },
     content:{
         color: colors.mono_100,

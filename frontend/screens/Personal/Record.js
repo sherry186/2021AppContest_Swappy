@@ -139,7 +139,7 @@ AsyncStorage.getItem('userId')
             <View style = {{marginLeft: 16}}>
                 <Text style={styles.title}>{item.requestersItem.title}</Text>
                 <Text style = {{marginTop: "5%", color: colors.function_100}}>#{item.requestersItem.category}</Text>
-                <Text style = {{marginLeft: "60%", color: colors.function_100}}>{(item.guyWhoseItemIsRequestedReceived && item.requesterReceived)? (item.guyWhoseItemIsRequestedScored?"已評價": "已收到"):"運送中"}</Text>
+                <Text style = {{marginLeft: "60%", color: colors.function_100}}>{(item.guyWhoseItemIsRequestedReceived)? (item.guyWhoseItemIsRequestedScored?"已評價": "已收到"):"運送中"}</Text>
             </View>   
         </TouchableOpacity> ) : (
           <TouchableOpacity 
@@ -167,6 +167,7 @@ AsyncStorage.getItem('userId')
             <View style = {{marginLeft: 16}}>
                 <Text style={styles.title}>{item.requestedItem.title}</Text>
                 <Text style = {{marginTop: "5%", color: colors.function_100}}>#{item.requestedItem.category}</Text>
+                <Text style = {{marginLeft: "60%", color: colors.function_100}}>{(item.requesterReceived)? (item.requesterScored?"已評價": "已收到"):"運送中"}</Text>
             </View>   
           </TouchableOpacity>
         )
