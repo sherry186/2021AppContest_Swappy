@@ -11,12 +11,15 @@ import { View,
        ScrollView, 
        TouchableOpacity,
        StyleSheet,
+       //KeyboardAwareScrollView,
        KeyboardAvoidingView, 
        Dimensions,
        TextInput } from "react-native";
 
+
 import colors from '../../config/colors';
 
+import { KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 
@@ -265,13 +268,14 @@ const styles = StyleSheet.create({
   },
   comment: {
     flexDirection:'row',
-    flex:8,
-    //backgroundColor:colors.mono_80,
+    //flex:8,
+    backgroundColor:colors.mono_40,
     borderRadius:ScreenWidth*0.02,
     height:ScreenWidth*0.1,
-    width:"70%",
+    width:"80%",
     borderWidth:1,
     borderColor: colors.function_100,
+
     marginLeft:"5%",
     //position:'absolute',
     bottom: 0,
@@ -279,7 +283,7 @@ const styles = StyleSheet.create({
   commentC: {
     flexDirection:'row',
     //flex:1,
-    backgroundColor:colors.mono_40,
+    backgroundColor: colors.mono_40,
     height:"7%",
     width:"100%",
     alignItems:'center',

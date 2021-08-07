@@ -215,7 +215,7 @@ const BreakAwayItemChangeOut = ({ route, navigation }) => {
                       item={pickedData}
                       items={dropdownData}
                       onItemChange={selectCategory}
-                      title="Data Picker"
+                      title="物品種類"
                       placeholder="選擇物品種類"
                       isNullable
                     //backdropAnimation={{ opactity: 0 }}
