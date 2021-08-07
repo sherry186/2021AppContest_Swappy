@@ -25,7 +25,7 @@ let ScreenHeight = Dimensions.get("screen").height;
 
 
 const CREATE_REQUEST = gql`
-  mutation createRequestItem($requestedItemId: ID!){
+  mutation createRequestItem($requestedItemId: ID!, $groupId: ID){
     createRequestItem(requestedItemId: $requestedItemId, groupId: $groupId) {
       id
       guyWhoseItemIsRequested{
@@ -51,7 +51,7 @@ function Group_itemDetail ({route, navigation}) {
   const naviagation = useNavigation();
   const [createRequest] = useMutation(CREATE_REQUEST);
 
-  const { title, dis, method, tagname, image} = route.params;
+  const { groupId, itemId, title, dis, method, tagname, image} = route.params;
   const [Gname, setGname] = useState('');
   const [maxstars, setMaxstars] = useState([1, 2, 3, 4, 5]);
   const [Tags, setTags] = useState('');
@@ -98,7 +98,7 @@ function Group_itemDetail ({route, navigation}) {
 
   const handleRequest = () =>{
     //TODO: store request in database
-    createRequest({ variables: { requestedItemId: null, groupId: null } });
+    createRequest({ variables: { requestedItemId: itemId, groupId: groupId } });
     naviagation.navigate('Notification',{ screen: 'requesting' });
   };
   

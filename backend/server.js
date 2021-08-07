@@ -525,7 +525,13 @@ const resolvers = {
                 throw new Error('AUthentication Error. Please sign in');
             }
 
-            const requestedItem = await db.collection('GeneralItems').findOne({_id: ObjectId(requestedItemId)});
+            let requestedItem;
+            if(groupId == null) {
+                requestedItem = await db.collection('GeneralItems').findOne({_id: ObjectId(requestedItemId)});
+            } else {
+                requestedItem = await db.collection('GroupItems').findOne({_id: ObjectId(requestedItemId)});
+            }
+            
             console.log(requestedItem);
             const guyWhoseItemIsRequested = await db.collection('Users').findOne({_id: ObjectId(requestedItem.owner._id)});
             const requester = user;
