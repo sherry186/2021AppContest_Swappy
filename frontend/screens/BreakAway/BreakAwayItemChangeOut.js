@@ -24,7 +24,7 @@ const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database o
 import { useMutation,  gql } from '@apollo/client';
 import { deleteHesitateItem } from '../../localStorageApi/api';
 import { createMyStoriesTable, createStoryItem, updateProgress } from '../../localStorageApi/api';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 
 const CREATE_GENERALITEM_ = gql`
@@ -172,11 +172,15 @@ const BreakAwayItemChangeOut = ({ route, navigation }) => {
 
   return(
     <View style={{ flex: 1, alignItems: 'center', backgroundColor: 'transparent'}}>
-      <KeyboardAvoidingView style = {{height: "50%", width: "100%", alignItems: 'center'}}>
+      
+      <View style = {{height: "50%", width: "100%", alignItems: 'center'}}>
+      {/* <KeyboardAvoidingView style = {{height: "50%", width: "100%", alignItems: 'center'}}> */}
           <Image 
               style = {{flex: 5, height: "50%", width: "80%"}}
               source={{uri: source}}/>
-      </KeyboardAvoidingView>
+      </View>
+      {/* </KeyboardAvoidingView> */}
+      <KeyboardAwareScrollView style={{width: "100%"}}>
       <ScrollView style = {{width: "100%", backgroundColor: 'transparent'}}>
           <View style ={styles.textContainer}>
             <Text style = {styles.text}>物品標題</Text>
@@ -294,6 +298,7 @@ const BreakAwayItemChangeOut = ({ route, navigation }) => {
               </TouchableOpacity>
         </View>
       </ScrollView>
+      </KeyboardAwareScrollView>
       {/* <Button
           title = 'Go to home screen'
           onPress={() => navigate('Home')}/> */}

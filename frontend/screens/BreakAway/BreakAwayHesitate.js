@@ -9,7 +9,9 @@ import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/core';
 import { Dimensions } from 'react-native';
 import colors from '../../config/colors';
-import * as SQLite from 'expo-sqlite'
+import * as SQLite from 'expo-sqlite';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 const database = SQLite.openDatabase('db.SwappyDataBase'); // returns Database object
 
 
@@ -162,8 +164,10 @@ export default function BreakAwayHesitate () {
   return(
     // minHeight: Math.round(windowHeight)
      <View style={{flex:1, flexDirection: 'column',  }}>
+       <KeyboardAwareScrollView>
        {/* <KeyboardAvoidingView style={{flex:0.3}}></KeyboardAvoidingView> */}
        <KeyboardAvoidingView style={{height: windowHeight *0.15 ,flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+       
           <ScrollView 
               style = {{height: "100%" }}
               contentContainerStyle ={{alignItems:'center'}}
@@ -293,7 +297,7 @@ export default function BreakAwayHesitate () {
           </View>
           
        </ScrollView>
-
+       </KeyboardAwareScrollView>
      </View>
        
       
