@@ -15,6 +15,7 @@ const { GraphQLJSON, GraphQLJSONObject } = require('graphql-type-json');
 const { GraphQLUpload, graphqlUploadExpress } = require('graphql-upload');
 
 var partition = require('lodash.partition');
+var filter = require('lodash.filter');
 
 // Password handler
 const bcrypt = require("bcrypt");
@@ -48,6 +49,7 @@ const typeDefs = gql`
     scalar JSONObject
     scalar Upload
     type Query {
+        getMyGroupItems(groupId: ID!): [GroupItem]!
         getUserById(id: ID!): User!
         getMySuccessfulRequests: [Request]!
         getUser: User!
@@ -83,7 +85,7 @@ const typeDefs = gql`
         createRequestItem(requestedItemId: ID!, groupId: ID): Request!
         updateStatus(id: ID!, status: Status!): Boolean!
         removeRequest(id: ID!): Boolean!
-        updateRequestersItem(itemId: ID!, requestId: ID!): Boolean!
+        updateRequestersItem(groupId: ID!, itemId: ID!, requestId: ID!): Boolean!
 
         createPost(title: String!, description: String!, hideUser: Boolean!, time: String): Post!
         postComment(postId: ID!, comment: String!, time: String): Boolean!
@@ -247,6 +249,15 @@ const typeDefs = gql`
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
     Query: {
+        getMyGroupItems: async (_, { groupId }, {db,user}) => {
+            var group = await db.collection('Groups').findOne({_id: ObjectId(groupId)});
+            var groupItems = group.groupItems;
+            var myGroupItems = filter(groupItems, function(item) { 
+                return item.owner._id.equals(user._id); 
+             });
+            
+            return myGroupItems;
+        },
         getUserById: async (_, { id }, {db,user}) => {
             return await db.collection('Users').findOne({_id: ObjectId(id)});
         },
@@ -493,11 +504,18 @@ const resolvers = {
                 id: result.insertedId
             }
         },
-        updateRequestersItem: async (_, { itemId, requestId }, { db, user }) => {
+        updateRequestersItem: async (_, { groupId, itemId, requestId }, { db, user }) => {
             if(!user) {
                 throw new Error('AUthentication Error. Please sign in');
             }
-            const item = await db.collection('GeneralItems').findOne({_id: ObjectId(itemId)});
+
+            var item;
+            if( groupId == null) {
+                item = await db.collection('GeneralItems').findOne({_id: ObjectId(itemId)});
+            } else {
+                item = await db.collection('GroupItems').findOne({_id: ObjectId(itemId)});
+            }
+            
             await db.collection('Requests').updateOne({ _id : ObjectId(requestId) },{ $set: { requestersItem: item }});
 
             return true;
@@ -745,6 +763,9 @@ const resolvers = {
         id: ({ _id, id }) => _id || id,
     },
     Group: {
+        id: ({ _id, id }) => _id || id,
+    },
+    GroupItem: {
         id: ({ _id, id }) => _id || id,
     },
     JSON: GraphQLJSON,
