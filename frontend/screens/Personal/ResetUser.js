@@ -1,7 +1,7 @@
 import { styleSheets } from 'min-document';
 import React from 'react';
 import { useEffect, useState } from 'react';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useMutation,  gql } from '@apollo/client';
 import { ReactNativeFile } from 'apollo-upload-client';
 
@@ -117,7 +117,9 @@ const ResetUser = () => {
 
 
     return (
-        <View style ={{ flex: 1 , alignItems: 'center', justifyContent: 'center', backgroundColor: colors.mono_40}}>
+        <KeyboardAwareScrollView 
+          style ={{ flex: 1 , backgroundColor: colors.mono_40}}
+          contentContainerStyle ={{alignItems: 'center', justifyContent: 'center',}}>
 
         <ScrollView></ScrollView>
           <TouchableOpacity 
@@ -164,7 +166,7 @@ const ResetUser = () => {
               <Text
                 style = {styles.buttonText}>重設</Text>
           </TouchableOpacity>
-        </View>
+        </KeyboardAwareScrollView>
     )
     
 
