@@ -38,9 +38,9 @@ export default function BreakAwayHesitate () {
 
   var dropdownData = [];
   for(var i = 0; i< data.length; i++){
-    dropdownData[i] = {label: data[i].spaceName, value: data[i].spaceName}
+    dropdownData[i] = {label: data[i].spaceName, value: data[i].id}
   }
-  //console.log(dropdownData);
+  console.log(dropdownData);
   
 
   const getDate = () => {
@@ -67,7 +67,7 @@ export default function BreakAwayHesitate () {
       createHesitateItem(title, story, DUMMY_IMAGE, reminderDate, space);
     } else {
       for (let i = 0; i < image.length; i++) {
-        //console.log(typeof(image[i].uri));
+        console.log(space);
         createHesitateItem(title, story, image[i].uri, reminderDate, space);
       }
     }

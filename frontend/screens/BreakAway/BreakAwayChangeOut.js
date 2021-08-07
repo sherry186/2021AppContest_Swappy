@@ -137,11 +137,11 @@ const BreakAwayChangeOut = () => {
     }) : null;
   }
 
-  const addToStory = (title, source, story, spaceId) =>{
-    createStoryItem(title, story, source, spaceId);
+  const addToStory = (title, source, story, space) =>{
+    createStoryItem(title, story, source, space);
 
     const keepPoints = 2.0
-    updateProgress(spaceId, keepPoints);
+    updateProgress(space, keepPoints);
   }
 
   const renderImage = ({ item }) => (
@@ -249,9 +249,10 @@ const BreakAwayChangeOut = () => {
     //console.log(dropdown);
   }; 
 
-  const selectSpace = (value, index)=> {
-    setSpacePickedData(value);
-    setSpace(value);
+  const selectSpace = (data)=> {
+    setSpacePickedData(data);
+    setSpace(data.value);
+    console.log(data.value);
   }
 
   const handlesubmit =() =>{
@@ -271,7 +272,7 @@ const BreakAwayChangeOut = () => {
       }
     }
 
-    
+    console.log(space);
     navigation.navigate('General');
   } 
 
