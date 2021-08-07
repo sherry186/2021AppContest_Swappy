@@ -227,7 +227,7 @@ function GeneralDetailsScreen ({ route, navigation }) {
               <View style = {{flex: 1,flexDirection: 'row'}}>
                 <View style = {styles.margin}></View>
                 <Text style = {styles.textT}>交付方式 </Text>
-                <Text>{method == 1 || method == 3? '面交' : ''}{method == 3? "/": ""}{method == 2 || method == 3? '寄送' : ''}</Text>
+                <Text>{method == 2 || method == 3? '面交' : ''}{method == 3? "/": ""}{method == 1 || method == 3? '寄送' : ''}</Text>
               </View>
               
               <View style = {{flex: 1, flexDirection: 'row'}}>
