@@ -52,8 +52,8 @@ function GroupAddItem ({route, navigation}) {
   const [pickedData, setPickedData] = useState();
   const [tag, setTag] = useState('');
   
-  const [dummyData, setDummyData] = useState([{way: '面交'},
-                                               {way: '寄送'}]);
+  const [dummyData, setDummyData] = useState([{way: '面交', isSelected: false},
+                                               {way: '寄送', isSelected: false}]);
   const [exchangeMethod, setExchangeMethod] = useState('NOTSELECTED')
   const [image, setImage] = useState([]);
 
@@ -169,6 +169,7 @@ function GroupAddItem ({route, navigation}) {
     console.log(id, typeof(tag), typeof(Discription), typeof(exchangeMethod));
     if(image.length == 0) {
       createGroupItem({ variables: { title: title, groupId: id, tag: tag, description: Discription, exchangeMethod: exchangeMethod, image: ''}});
+      
     } else {
       for (let i = 0; i < image.length; i++) {
         //console.log(typeof(image[i].uri));
