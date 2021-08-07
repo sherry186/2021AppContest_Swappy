@@ -16,7 +16,7 @@ import { View,
 import { useNavigation } from '@react-navigation/core';
 import colors from '../../config/colors';
 //import Notification_requesting from './Notification_requesting';
-import { useMutation, gql } from '@apollo/client';
+import { useQuery, useMutation, gql } from '@apollo/client';
 
 let ScreenWidth = Dimensions.get("window").width;
 let ScreenHeight = Dimensions.get("window").height;
@@ -24,7 +24,19 @@ let ScreenHeight = Dimensions.get("window").height;
 
 const RECEIVE_REQUEST = gql `
 mutation receiveRequest($requestId: ID!) {
-  receiveRequest(requestId: $requestId)
+  receiveRequest(requestId: $requestId) {
+    id
+    guyWhoseItemIsRequestedReceived
+    requesterReceived
+  }
+}`;
+
+const GET_REQUEST = gql `
+query getRequest($id: ID!) {
+  getRequest(id: $id) {
+    guyWhoseItemIsRequestedReceived,
+    requesterReceived
+  }
 }`;
 
 /* 2. Get the param */
@@ -34,16 +46,24 @@ function RecordDetail ({ route, navigation }) {
 
   
   // render(){  
-    const { id, mythingTitle, mythingImage, IRecieved, IScored, requestForTitle, requestForCategory, requestForImage, requestForRecieved, requestForScored} = route.params;
+    const { myUsername, otherGuyId, id, mythingTitle, mythingImage, IRecieved, IScored, requestForTitle, requestForCategory, requestForImage, requestForRecieved, requestForScored} = route.params;
     
     // const [statusS, setStatusS] = useState(status);
     // const [statusToMeS, setStatusToMeS] = useState(statusToMe);
+    const [bothReceived, setBothReceived] = useState(false);
     const [IRecieved_, setIRecieved_] = useState(IRecieved);
     const [IScored_, setIScored_] = useState(IScored);
     const [requestForRecieved_, setRequestForRecieved_] = useState(requestForRecieved);
     const [requestForScored_, setRequestForScored_] = useState(requestForScored);
 
-    const [receiveRequest] = useMutation(RECEIVE_REQUEST);
+    const [receiveRequest, { data }] = useMutation(RECEIVE_REQUEST, {onCompleted: (data) => {
+      console.log(data);
+      console.log(data.guyWhoseItemIsRequestedReceived);
+      if(data.receiveRequest.guyWhoseItemIsRequestedReceived && data.receiveRequest.requesterReceived) {
+        navigation.navigate('Star', {myUsername: myUsername, otherGuyId: otherGuyId, id: id, mythingImage: mythingImage, requestForImage: requestForImage, requestForTitle: requestForTitle});
+      }
+    }});
+
 
     const handleReceived = () =>{
         // let nowStatus = statusS + 1;
@@ -54,19 +74,16 @@ function RecordDetail ({ route, navigation }) {
         
         setIRecieved_(true);
         receiveRequest({variables: {requestId: id}});
-
     }
 
     // useEffect(()=>{
-
-    //     console.log(statusS, statusToMeS);
-    //     if(statusS >= 2)
-    //     {
-    //         navigation.navigate('Star', {mythingImage: mythingImage, requestForImage: requestForImage, requestForTitle: requestForTitle});
-    //     }
-    //     console.log(statusS, statusToMeS);
-
-    // }, [statusS, statusToMeS])
+    //     console.log(bothReceived);
+    //     if(data) {
+    //       if(data.getRequest.guyWhoseItemIsRequestedReceived && data.getRequest.requesterReceived) {
+    //         navigation.navigate('Star', {myUsername: myUsername, otherGuyId: otherGuyId, id: id, mythingImage: mythingImage, requestForImage: requestForImage, requestForTitle: requestForTitle});
+    //       }
+    //     } //myUsername, otherGuyId, id: id, mythingImage: mythingImage, requestForImage: requestForImage, requestForTitle: requestForTitle
+    // }, [bothReceived])
 
     return (
      

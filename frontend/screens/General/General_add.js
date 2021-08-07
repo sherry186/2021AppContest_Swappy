@@ -271,7 +271,6 @@ const General_ADD = () => {
           <View style ={styles.textInputContainer}>
               <TextInput
                   style={styles.input}
-                  //placeholder='ItemName'
                   onChangeText={setitemName}
                   value = {itemName}/>
           </View>

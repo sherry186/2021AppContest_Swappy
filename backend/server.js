@@ -68,7 +68,7 @@ const typeDefs = gql`
 
     type Mutation {
         updateRatingAndReviews(requestId: ID!, userId: ID!, input: ReviewInput!): Boolean!
-        receiveRequest(requestId: ID!):Boolean!
+        receiveRequest(requestId: ID!):Request!
         deleteFail: Boolean!
 
         resetUser(username: String!, email: String!, phone: String!, password: String!, avatar: String): Boolean!
@@ -80,7 +80,7 @@ const typeDefs = gql`
         createGeneralItem(input: GeneralItemInput): GeneralItem!
         deleteGeneralItem(id: ID!): Boolean!
 
-        createRequestItem(requestedItemId: ID!): Request!
+        createRequestItem(requestedItemId: ID!, groupId: ID): Request!
         updateStatus(id: ID!, status: Status!): Boolean!
         removeRequest(id: ID!): Boolean!
         updateRequestersItem(itemId: ID!, requestId: ID!): Boolean!
@@ -97,6 +97,7 @@ const typeDefs = gql`
     }
 
     input GroupItemInput {
+        title: String,
         tag: String, 
         description: String!, 
         exchangeMethod: ExchangeMethod!, 
@@ -169,6 +170,16 @@ const typeDefs = gql`
         image: String
     }
 
+    type GroupItem {
+        id: ID!
+        owner: User!
+        title: String!
+        description: String!
+        category: String!
+        exchangeMethod: String!
+        image: String
+    }
+
     type Group {
         id: ID!
         title: String!
@@ -176,14 +187,6 @@ const typeDefs = gql`
         tags: [String]!
         groupItems: [GroupItem]!
         wishList: JSONObject! 
-    }
-
-    type GroupItem {
-        description: String!
-        exchangeMethod: ExchangeMethod!
-        tag: String
-        image: String
-        owner: User!
     }
 
     type wishListItem {
@@ -204,6 +207,7 @@ const typeDefs = gql`
         guyWhoseItemIsRequestedScored: Boolean!
         requesterReceived: Boolean!
         requesterScored: Boolean!
+        groupId: ID
     }
 
     type Post {
@@ -280,9 +284,8 @@ const resolvers = {
                         return false;
                     }
                 };
-
                 partitionedGroupItems = partition(groupItems, function(item) {
-                    if(item.owner == undefined || item.owner._id == user._id) {
+                    if(item.owner == undefined || item.owner._id.equals(user._id)) {
                         return false
                     } else {
                         return isWhatTheUserWants(item) && canOfferWhatTheOwnerWants(item);
@@ -399,7 +402,8 @@ const resolvers = {
             } else {
                 await db.collection('Requests').updateOne({_id: ObjectId(requestId)},{ $set: { requesterReceived: true }});
             }
-            return true;
+            const request_ = await db.collection('Requests').findOne({_id: ObjectId(requestId)});
+            return request_;
         },
         deleteFail: async (_, __, { db, user }) => {
             if(!user) {
@@ -516,12 +520,18 @@ const resolvers = {
             return true;
 
         }, 
-        createRequestItem: async (_, { requestedItemId }, { db, user }) => {
+        createRequestItem: async (_, { requestedItemId, groupId }, { db, user }) => {
             if(!user) {
                 throw new Error('AUthentication Error. Please sign in');
             }
 
-            const requestedItem = await db.collection('GeneralItems').findOne({_id: ObjectId(requestedItemId)});
+            let requestedItem;
+            if(groupId == null) {
+                requestedItem = await db.collection('GeneralItems').findOne({_id: ObjectId(requestedItemId)});
+            } else {
+                requestedItem = await db.collection('GroupItems').findOne({_id: ObjectId(requestedItemId)});
+            }
+            
             console.log(requestedItem);
             const guyWhoseItemIsRequested = await db.collection('Users').findOne({_id: ObjectId(requestedItem.owner._id)});
             const requester = user;
@@ -535,7 +545,8 @@ const resolvers = {
                 guyWhoseItemIsRequestedReceived: false, 
                 guyWhoseItemIsRequestedScored: false, 
                 requesterReceived: false, 
-                requesterScored: false
+                requesterScored: false,
+                groupId: groupId
             }
 
             const result = await db.collection('Requests').insertOne(newRequest);
@@ -636,6 +647,16 @@ const resolvers = {
             //console.log(group);
             console.log(group.wishList[user._id]);
 
+            // type GroupItem {
+            //     id: ID!
+            //     owner: User!
+            //     title: String!
+            //     description: String!
+            //     category: String!
+            //     exchangeMethod: String!
+            //     image: String
+            // }
+
             if(group.wishList[user._id] == undefined || group.wishList[user._id] == null) {
                 let tagsObject = {};
                 tagsObject[input.tag] = true;
@@ -654,13 +675,18 @@ const resolvers = {
             await db.collection('Groups').updateOne({_id: ObjectId(groupId)}, { $set: { wishList: group.wishList }});
 
             const newGroupItem = {
+                title: input.title,
                 description: input.description,
-                tag: input.tag,
+                category: input.tag,
                 exchangeMethod: input.exchangeMethod,
                 image: input.image,
                 owner: user
             }
-            await db.collection('Groups').updateOne({ _id : ObjectId(groupId) },{ $push: { groupItems: newGroupItem }});
+            const result = await db.collection('GroupItems').insertOne(newGroupItem);
+            const newGroupItemWithId = {
+                ...newGroupItem
+            }
+            await db.collection('Groups').updateOne({ _id : ObjectId(groupId) },{ $push: { groupItems: newGroupItemWithId }});
             return true;
         },
         createGeneralItem: async (_, { input }, { db, user }) => {

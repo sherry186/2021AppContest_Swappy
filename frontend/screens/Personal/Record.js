@@ -81,7 +81,7 @@ AsyncStorage.getItem('userId')
     
     if (IRecieved && requestForRecieved){ // 如果雙方都收到 item.status == 2
       if (!IScored){ // 如果我還沒評分 item.statusToMe == 1
-        navigation.navigate('Star', {myUsername, otherGuyId, id: id, mythingImage: mythingImage, requestForImage: requestForImage, requestForTitle: requestForTitle});
+        navigation.navigate('Star', {myUsername: myUsername, otherGuyId: otherGuyId, id: id, mythingImage: mythingImage, requestForImage: requestForImage, requestForTitle: requestForTitle});
       }
       else{ //如果我已經評分
         navigation.navigate('Complete', {requestForImage: requestForImage, requestForTitle: requestForTitle});
@@ -89,6 +89,8 @@ AsyncStorage.getItem('userId')
     }
     else{ // 如果雙方還沒收到
       navigation.navigate('RecordDetail', {
+        myUsername: myUsername, 
+        otherGuyId: otherGuyId,
         id: id,
         mythingTitle: mythingTitle, 
         mythingImage: mythingImage, 
