@@ -59,12 +59,25 @@ query myGeneralItemsAndGetRequest ($id: ID!){
         title
         image
       }
+      groupId
     }
 }`;
 
+const GET_GROUP_ITEMS = gql`
+query getMyGroupItems($groupId: ID!) {
+  getMyGroupItems(groupId: $groupId) {
+    id
+    title
+    category
+    image
+    exchangeMethod
+    description
+  }
+}`;
+
 const UPDATE_REQUEST = gql`
-mutation updateRequestersItems($itemId: ID!, $requestId: ID!) {
-  updateRequestersItem(itemId: $itemId, requestId: $requestId)
+mutation updateRequestersItems($groupId: ID!, $itemId: ID!, $requestId: ID!) {
+  updateRequestersItem(groupId: $groupId, itemId: $itemId, requestId: $requestId)
 }`;
 
 let ScreenWidth = Dimensions.get("window").width;
@@ -78,8 +91,11 @@ function Notification_waitingDetail ({ route }) {
   console.log(id);
   const [removeRequest] = useMutation(REMOVE_REQUEST);
   const [updateRequest] = useMutation(UPDATE_REQUEST);
-  const { data, error, loading } = useQuery(BATCHED_QUERY, {variables: { id: id }, pollInterval: 500});
-  console.log(data, error, loading);
+  const { data: batchedData  } = useQuery(BATCHED_QUERY, {variables: { id: id }, pollInterval: 500});
+
+  const groupId = batchedData?.getRequest?.groupId;
+  const { data: groupData } = useQuery(GET_GROUP_ITEMS, {skip: groupId==null, variables: { groupId: groupId }});
+  
   
   // render(){  
     const [image, setImage] = useState(null);
@@ -119,7 +135,8 @@ function Notification_waitingDetail ({ route }) {
                 setSelectedTitle(item.title);
                 console.log(selectedImage);
                 console.log(selectedTitle);
-                updateRequest({variables: {itemId: item.id, requestId: id}})
+                console.log(groupId);
+                updateRequest({variables: {groupId: groupId, itemId: item.id, requestId: id}})
                 hideDialog();
               }
               
@@ -157,7 +174,7 @@ function Notification_waitingDetail ({ route }) {
     return (
         <Portal.Host>
           <View style = {{flex:1, alignItems: 'center'}}>
-          {data ? ( <>
+          {batchedData ? ( <>
             <View style = {{flex: 2, flexDirection:'row', backgroundColor: colors.mono_40, width: "100%", justifyContent:'center', }}>
                 <View style = {{flex:1}}></View>
                 <View style = {styles.itemBox}>
@@ -175,7 +192,7 @@ function Notification_waitingDetail ({ route }) {
 
                 <View style = {styles.itemBox}>  
                 {
-                      data.getRequest.requestersItem == null? 
+                      batchedData.getRequest.requestersItem == null? 
                       (
                           <View style= {styles.image}>
                               <TouchableOpacity 
@@ -189,13 +206,14 @@ function Notification_waitingDetail ({ route }) {
                               <Portal>
                                 <Dialog visible={visible} onDismiss={hideDialog} style = {{marginTop : ScreenHeight*0.2, height: ScreenHeight*0.8, marginLeft:0, alignItems:'center', width: ScreenWidth, backgroundColor: colors.mono_40}}>
                                   <Dialog.Title style ={{fontWeight: 'bold', fontSize: ScreenWidth*0.06, color: colors.function_100}}>上傳物件選取</Dialog.Title>
-                                  { data ? (
+                                  { (batchedData?.groupId || groupData) ? (
                                   <FlatList
                                    contentContainerStyle = {{alignItems:'center'}}
                                    // TODO: is group? groupdata else data 
-                                   data={data.myGeneralItems}
+                                   data={ !(batchedData?.groupId  == null) ? batchedData.myGeneralItems : groupData.getMyGroupItems }
                                    renderItem={renderItem}
-                                  /> ) : <Text>loading ...</Text>
+                                  /> ) : <Text>loading ...</Text> 
+                                    
                                   }
                                 </Dialog>
                               </Portal>
@@ -214,13 +232,14 @@ function Notification_waitingDetail ({ route }) {
                         <>
                             <Image
                             style={styles.image}
-                            source = {{uri: `http://swappy.ngrok.io/images/${data.getRequest.requestersItem.image}`} }/>
+                            source = {{uri: `http://swappy.ngrok.io/images/${batchedData.getRequest.requestersItem.image}`} }/> 
+                            {/* data.getRequest.requestersItem.image */}
 
                           <View style ={styles.titleTag}>
                             <Text style = {styles.tagText}>你的物品</Text>
                           </View>
                           <View style ={styles.titleTagB}>
-                            <Text style = {styles.titleText}>{data.getRequest.requestersItem.title}</Text>
+                            <Text style = {styles.titleText}>{batchedData.getRequest.requestersItem.title}</Text>
                           </View>
                         </>
                           // <View style = {styles.image}>
