@@ -24,6 +24,7 @@ export default function BreakAwayHesitate () {
   const [data, setData] = useState([]);
   const [Limit, setLimit] = useState(0);
   const [image, setImage] = useState([]);
+  const [pickedData, setPickedData] = useState();
 
   const [story, setStory] = useState('');
   const [title, setTitle] = useState('');
@@ -32,8 +33,12 @@ export default function BreakAwayHesitate () {
   const windowHeight = useWindowDimensions().height;
   const navigation = useNavigation();
 
-  var dropdownData = [];
 
+  var dropdownData = [];
+  for(var i = 0; i< data.length; i++){
+    dropdownData[i] = {label: data[i].spaceName, value: data[i].spaceName}
+  }
+  //console.log(dropdownData);
   
 
   const getDate = () => {
@@ -132,10 +137,7 @@ export default function BreakAwayHesitate () {
               let spacesData = resultSet.rows._array;
               setData(spacesData);
               console.log(data);
-              for(var i = 0; i< data.length; i++){
-                dropdownData[i] = {label: data[i].spaceName, value: data[i].spaceName}
-              }
-              console.log(dropdownData);
+              
       },
           (txObj, error) => console.log('Error', error))
       });
@@ -152,9 +154,10 @@ export default function BreakAwayHesitate () {
     
   },[data]);
 
-  // const selectSpace = (pickedData) =>{
-  //   setSpace(pickedData.value);
-  // }
+  const selectSpace = (pickedData) =>{
+    setPickedData(pickedData);
+    setSpace(pickedData.value);
+  }
 
   return(
     // minHeight: Math.round(windowHeight)
@@ -249,6 +252,16 @@ export default function BreakAwayHesitate () {
                     })
                   }
                 </Picker> */}
+              <Picker
+                  //textInputStyle = {}
+                  //containerStyle = {}
+                  item={pickedData}
+                  items={dropdownData}
+                  onItemChange={selectSpace}
+                  title="目前現有空間"
+                  placeholder="選擇所屬空間"
+                  isNullable
+                  />
             </View>
             <View style = {{flex: 6}}></View>
           </View>

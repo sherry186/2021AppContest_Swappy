@@ -320,7 +320,7 @@ const BreakAwayChangeOut = () => {
   return(
     <View style={{flex:1, flexDirection: 'column',  }}>
       {/* <Text style={styles.buttonText}>Item Name</Text> */}
-      {/* <KeyboardAvoidingView style={{backgroundColor: colors.mono_40 ,height: windowHeight *0.15 ,flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}> */}
+      <View style={{backgroundColor: colors.mono_40 ,height: windowHeight *0.15 ,flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
           <ScrollView 
               style = {{height: "100%" }}
               contentContainerStyle ={{alignItems:'center'}}
@@ -347,7 +347,7 @@ const BreakAwayChangeOut = () => {
           </ScrollView>
           <KeyboardSpacer/>
            
-      {/* </KeyboardAvoidingView> */}
+      </View>
        {/* duplicate from breakAwayHesitate */} 
 
       <KeyboardAvoidingView style = {styles.line}></KeyboardAvoidingView>
@@ -393,7 +393,7 @@ const BreakAwayChangeOut = () => {
                       item={pickedData}
                       items={dropdownData}
                       onItemChange={selectCategory}
-                      title="Data Picker"
+                      title="物品種類"
                       placeholder="選擇物品種類"
                       isNullable
                     //backdropAnimation={{ opactity: 0 }}
@@ -441,7 +441,7 @@ const BreakAwayChangeOut = () => {
                         ) ) : []
                       }
                       onItemChange={selectSpace}
-                      title="Data Picker"
+                      title="目前現有空間"
                       placeholder="選擇所屬空間"
                       isNullable
                     //backdropAnimation={{ opactity: 0 }}

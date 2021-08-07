@@ -265,7 +265,7 @@ function GroupAddItem ({route, navigation}) {
           <View style = {styles.textInputContainer}>
             <TextInput
                 style={styles.titleInputBox}
-                multiline ={true}
+                //multiline ={true}
                 onChangeText={(text) => {setTitle(text)}}
                 value = {title}/>
           </View>
@@ -338,7 +338,7 @@ function GroupAddItem ({route, navigation}) {
                       item={pickedData}
                       items={dropdownData}
                       onItemChange={onValueChange}
-                      title="Data Picker"
+                      title="群組物品種類"
                       placeholder="選擇物品種類"
                       isNullable
                       />
