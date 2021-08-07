@@ -117,7 +117,9 @@ const ResetUser = () => {
 
 
     return (
-        <KeyboardAwareScrollView style ={{ flex: 1 , alignItems: 'center', justifyContent: 'center', backgroundColor: colors.mono_40}}>
+        <KeyboardAwareScrollView 
+          style ={{ flex: 1 , backgroundColor: colors.mono_40}}
+          contentContainerStyle ={{alignItems: 'center', justifyContent: 'center',}}>
 
         
           <TouchableOpacity 
