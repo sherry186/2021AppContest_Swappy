@@ -20,6 +20,7 @@ import colors from '../../config/colors';
 // import { Picker } from '@react-native-picker/picker';
 import { useMutation,  gql } from '@apollo/client';
 import { ReactNativeFile } from 'apollo-upload-client';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const ADD_GROUP_ITEM = gql`
   mutation createGroupItem($title:String!, $groupId:ID!, $tag: String, $description: String!, $exchangeMethod: ExchangeMethod!, $image: String){
@@ -224,8 +225,8 @@ function GroupAddItem ({route, navigation}) {
       <KeyboardAvoidingView style = {styles.line}></KeyboardAvoidingView>
 
 
-
-      <ScrollView >
+      <KeyboardAwareScrollView>
+      {/* <ScrollView > */}
           <View style ={styles.textContainer}>
               <Text style={styles.text}>交付方式 </Text>
           </View>
@@ -359,7 +360,8 @@ function GroupAddItem ({route, navigation}) {
               </TouchableOpacity>
           </View>
 
-      </ScrollView>
+      {/* </ScrollView> */}
+      </KeyboardAwareScrollView>
     </View>
   )
   // }
