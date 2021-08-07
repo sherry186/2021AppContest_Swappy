@@ -14,10 +14,10 @@ import {
     Dimensions,
     KeyboardAvoidingView,
     } from 'react-native';
-
+import { Picker } from 'react-native-woodpicker';
 import * as ImagePicker from 'expo-image-picker';
 import colors from '../../config/colors';
-import { Picker } from '@react-native-picker/picker';
+// import { Picker } from '@react-native-picker/picker';
 import { useMutation,  gql } from '@apollo/client';
 import { ReactNativeFile } from 'apollo-upload-client';
 
@@ -44,11 +44,13 @@ let ScreenWidth = Dimensions.get("window").width;
 
 function GroupAddItem ({route, navigation}) {
 
-  const [Gname, setGname] = useState('');
+  // const [Gname, setGname] = useState('');
   const [title, setTitle] = useState('');
   const [Discription, setDiscription] = useState('');
   //const [Ihave, setIhave] = useState([]);
+  const [pickedData, setPickedData] = useState();
   const [tag, setTag] = useState('');
+  
   const [dummyData, setDummyData] = useState([{way: '面交'},
                                                {way: '寄送'}]);
   const [exchangeMethod, setExchangeMethod] = useState('NOTSELECTED')
@@ -61,6 +63,11 @@ function GroupAddItem ({route, navigation}) {
   const windowHeight = useWindowDimensions().height;
 
   const {tags, id} = route.params;
+
+  const dropdownData = [];
+  for(var i = 0; i< tags.length; i++){
+    dropdownData[i] = {label: tags[i], value:tags[i]};
+  }
 
   
   const generateRNImage = (uri, name) => {
@@ -76,6 +83,7 @@ function GroupAddItem ({route, navigation}) {
   const pickImage = async () => {
     if(image.length < 5)
     {
+      console.log(tags);
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
@@ -92,7 +100,7 @@ function GroupAddItem ({route, navigation}) {
     {
       alert("最多只能5張照片喔qq")
     }
-    
+    console.log(dropdownData)
   };
 
   const renderImage = ({ item }) => (
@@ -113,8 +121,9 @@ function GroupAddItem ({route, navigation}) {
         }
       }
     })();
-    
   },[]);
+
+  
 
   const selectionHandlerSort = (ind) => {
     
@@ -173,9 +182,10 @@ function GroupAddItem ({route, navigation}) {
     navigation.goBack()
   } 
 
-  const onValueChange = (flag, value) =>{
-    //setTag(tags[value]);
-    setTag(value);
+  const onValueChange = (pickedData) => {
+    setPickedData(pickedData)
+    setTag(pickedData.value);
+    //setTag(value);
     console.log(tag);
   }
 
@@ -306,7 +316,7 @@ function GroupAddItem ({route, navigation}) {
             <View style ={styles.textInputContainer}>
               <View style = {{flex: 0.5}}></View>
                 <View style = {{flex: 3.5, justifyContent: 'center'}}>
-                    <Picker
+                    {/* <Picker
                       mode={'dropdown'}
                       //style={styles.input3}
                       style={{height: 25,width:200}}
@@ -321,7 +331,17 @@ function GroupAddItem ({route, navigation}) {
                           );
                         })
                       }
-                    </Picker>
+                    </Picker> */}
+                    <Picker
+                      //textInputStyle = {}
+                      //containerStyle = {}
+                      item={pickedData}
+                      items={dropdownData}
+                      onItemChange={onValueChange}
+                      title="Data Picker"
+                      placeholder="選擇物品種類"
+                      isNullable
+                      />
                 </View>
                 <View style = {{flex: 6}}></View>
             </View>

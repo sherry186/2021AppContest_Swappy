@@ -2,7 +2,8 @@ import React, { useState, useEffect }  from 'react';
 import {Platform, KeyboardAvoidingView, useWindowDimensions, ScrollView, TextInput, View, Text, SafeAreaView,  FlatList, StyleSheet, TouchableOpacity, Image } from "react-native";
 import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 import BreakAwaySpace from '../../Data/BreakAwaySpace';
-import { Picker } from '@react-native-picker/picker';
+//import { Picker } from '@react-native-picker/picker';
+import { Picker } from 'react-native-woodpicker';
 import { createMyHesitatingItemsTable, createHesitateItem, updateProgress } from '../../localStorageApi/api';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/core';
@@ -31,9 +32,9 @@ export default function BreakAwayHesitate () {
   const windowHeight = useWindowDimensions().height;
   const navigation = useNavigation();
 
-  // static navigationOptions = {
-  //   title: 'BreakAway_Hesitate',
-  // }
+  var dropdownData = [];
+
+  
 
   const getDate = () => {
     //add date function
@@ -53,13 +54,13 @@ export default function BreakAwayHesitate () {
   }
 
   const handlesubmit = () =>{
-    console.log(image);
+    //console.log(image);
     const reminderDate = getDate();
     if(image.length == 0) {
       createHesitateItem(title, story, DUMMY_IMAGE, reminderDate, space);
     } else {
       for (let i = 0; i < image.length; i++) {
-        console.log(typeof(image[i].uri));
+        //console.log(typeof(image[i].uri));
         createHesitateItem(title, story, image[i].uri, reminderDate, space);
       }
     }
@@ -112,6 +113,7 @@ export default function BreakAwayHesitate () {
       alert("最多只能5張照片喔qq")
     }
     
+    
   }; 
   
   useEffect(()=> {
@@ -129,7 +131,11 @@ export default function BreakAwayHesitate () {
               //console.log('Success', resultSet);
               let spacesData = resultSet.rows._array;
               setData(spacesData);
-              //console.log(data);
+              console.log(data);
+              for(var i = 0; i< data.length; i++){
+                dropdownData[i] = {label: data[i].spaceName, value: data[i].spaceName}
+              }
+              console.log(dropdownData);
       },
           (txObj, error) => console.log('Error', error))
       });
@@ -145,6 +151,10 @@ export default function BreakAwayHesitate () {
     })();
     
   },[data]);
+
+  // const selectSpace = (pickedData) =>{
+  //   setSpace(pickedData.value);
+  // }
 
   return(
     // minHeight: Math.round(windowHeight)
@@ -225,7 +235,7 @@ export default function BreakAwayHesitate () {
           <View style ={styles.textInputContainer}>
           <View style = {{flex: 0.5}}></View>
             <View style = {{flex: 3.5, justifyContent: 'center'}}>
-                <Picker
+                {/* <Picker
                   mode={'dropdown'}
                   //style={styles.input3}
                   selectedValue={space}
@@ -238,7 +248,7 @@ export default function BreakAwayHesitate () {
                       );
                     })
                   }
-                </Picker>
+                </Picker> */}
             </View>
             <View style = {{flex: 6}}></View>
           </View>
