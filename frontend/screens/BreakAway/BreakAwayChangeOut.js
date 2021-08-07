@@ -28,6 +28,8 @@ import * as SQLite from 'expo-sqlite';
 
 import { useMutation,  gql } from '@apollo/client';
 import { createMyStoriesTable, createStoryItem, updateProgress } from '../../localStorageApi/api';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
@@ -320,7 +322,9 @@ const BreakAwayChangeOut = () => {
   return(
     <View style={{flex:1, flexDirection: 'column',  }}>
       {/* <Text style={styles.buttonText}>Item Name</Text> */}
+      <KeyboardAwareScrollView>
       <View style={{backgroundColor: colors.mono_40 ,height: windowHeight *0.15 ,flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+      
           <ScrollView 
               style = {{height: "100%" }}
               contentContainerStyle ={{alignItems:'center'}}
@@ -517,6 +521,7 @@ const BreakAwayChangeOut = () => {
           </View>
 
         </ScrollView>
+        </KeyboardAwareScrollView>
     </View>
   )
 

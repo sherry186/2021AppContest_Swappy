@@ -13,6 +13,7 @@ import {
 import * as SQLite from "expo-sqlite";
 import { useNavigation } from '@react-navigation/core';
 import colors from '../../config/colors';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { useMutation,  gql } from '@apollo/client';
 
@@ -68,8 +69,10 @@ function Group_ADD () {
   
     //const{ navigate } = this.props.navigation; 
   return(
+    
     <View style={{flex:1, flexDirection: 'column'}}>
-      <ScrollView>
+      <KeyboardAwareScrollView>
+      {/* <ScrollView> */}
       <View style ={styles.textContainer}>
           <Text style={styles.text}>群組名稱</Text>
       </View>
@@ -154,10 +157,7 @@ function Group_ADD () {
           }
        </ScrollView>  
        
-      
-      </ScrollView>
-      
-      <View style = {styles.uploadContainer}>
+       <View style = {styles.uploadContainer}>
           <TouchableOpacity
               title = 'Submit'
               onPress={handlesubmit}
@@ -167,10 +167,16 @@ function Group_ADD () {
                 source = {require('../../assets/breakAway/upload.png')}/>
           </TouchableOpacity>
       </View>
+      </KeyboardAwareScrollView>
+      {/* </ScrollView> */}
+      
+     
+      
       {/* <Button
           title = 'Go to home screen'
           onPress={() => navigate('Home')}/> */}
     </View>
+    
   )
 
 
@@ -202,12 +208,13 @@ const styles = StyleSheet.create({
     height:"100%",
     backgroundColor:"transparent",  
     alignItems:'center',
-    justifyContent:'center',    
+    justifyContent:'center',  
+    paddingTop: "35%"  
   },
   
   item: {
-    position: 'absolute',
-    bottom: 60,
+    //position: 'absolute',
+    //bottom: 60,
     height:70,
     width:70,
     alignItems: 'center',
