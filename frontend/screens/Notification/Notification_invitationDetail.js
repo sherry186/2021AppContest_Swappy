@@ -127,7 +127,7 @@ function Notification_invitationDetail ({ route, navigation }) {
                 source = {require('../../assets/notification/漏斗.png')}/>
             <Image 
                 style = {{position:'absolute', top: ScreenWidth*1.2, height:ScreenWidth*0.1748, width: ScreenWidth*0.608}}
-                source = {require('../../assets/notification/等待回應中.png')}/>
+                source = {require('../../assets/notification/選擇要不要交換.png')}/>
 
 
             {/* <View style = {{flex: 1, alignItems:'center', justifyContent: 'center'}}>
