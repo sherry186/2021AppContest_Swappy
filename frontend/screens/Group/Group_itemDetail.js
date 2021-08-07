@@ -15,24 +15,47 @@ import { View,
        TouchableOpacity,
        StyleSheet } from "react-native";
 import { useNavigation } from '@react-navigation/core';
+import { useMutation,  gql } from '@apollo/client';
 import colors from '../../config/colors';
 import person_star_comment from '../../Data/person_star_comment';
 let ScreenWidth = Dimensions.get("screen").width;
 let ScreenHeight = Dimensions.get("screen").height;
-/* 2. Get the param */
+
+
+
+
+const CREATE_REQUEST = gql`
+  mutation createRequestItem($requestedItemId: ID!){
+    createRequestItem(requestedItemId: $requestedItemId, groupId: $groupId) {
+      id
+      guyWhoseItemIsRequested{
+        id
+        username
+      },
+      requestedItem{
+        id
+        title
+      }
+      requester {
+        id
+        username
+      }
+      status
+      groupId
+    }
+  }`;
+
+
 function Group_itemDetail ({route, navigation}) {
   
-  // constructor(props) {
-  //   super(props);
-  //   this.state = { Gname: '', Tags: '', };
-  // }
   const naviagation = useNavigation();
-  const { dis, method, tagname, image} = route.params;
+  const [createRequest] = useMutation(CREATE_REQUEST);
+
+  const { title, dis, method, tagname, image} = route.params;
   const [Gname, setGname] = useState('');
   const [maxstars, setMaxstars] = useState([1, 2, 3, 4, 5]);
   const [Tags, setTags] = useState('');
 
- 
   const renderComment = ({ item }) => (
     //console.log(this.props.navigation);
     
@@ -74,8 +97,10 @@ function Group_itemDetail ({route, navigation}) {
   );
 
   const handleRequest = () =>{
+    //TODO: store request in database
+    createRequest({ variables: { requestedItemId: null, groupId: null } });
     naviagation.navigate('Notification',{ screen: 'requesting' });
-  };// 理論上應該是一個Navigation，還要再改
+  };
   
   // render(){  
     const [visible, setVisible] = React.useState(false);
@@ -97,7 +122,7 @@ function Group_itemDetail ({route, navigation}) {
 
           <View
             style ={{flex: 8, justifyContent: 'center', alignItems: 'center'}}>
-              {/* <Text style = {{right: "15%", fontSize: 20, color: colors.function_100}}></Text> */}
+              <Text style = {{right: "15%", fontSize: 20, color: colors.function_100}}>{title}</Text>
           </View>
         </View>
         <TouchableOpacity

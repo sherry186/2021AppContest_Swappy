@@ -25,7 +25,7 @@ let ScreenHeight = Dimensions.get("screen").height;
 
 const CREATE_REQUEST = gql`
   mutation createRequestItem($requestedItemId: ID!){
-    createRequestItem(requestedItemId: $requestedItemId) {
+    createRequestItem(requestedItemId: $requestedItemId, groupId: $groupId) {
       id
       guyWhoseItemIsRequested{
         id
@@ -40,6 +40,7 @@ const CREATE_REQUEST = gql`
         username
       }
       status
+      groupId
     }
   }`;
 
@@ -84,7 +85,7 @@ function GeneralDetailsScreen ({ route, navigation }) {
 
   const handleRequest = () => {
     console.log('request pressed');
-    createRequest({ variables: { requestedItemId: itemID } });
+    createRequest({ variables: { requestedItemId: itemID, groupId: null } });
     naviagation.navigate('Notification',{ screen: 'requesting' });
     
   };

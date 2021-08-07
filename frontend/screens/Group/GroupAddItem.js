@@ -22,8 +22,9 @@ import { useMutation,  gql } from '@apollo/client';
 import { ReactNativeFile } from 'apollo-upload-client';
 
 const ADD_GROUP_ITEM = gql`
-  mutation createGroupItem($groupId:ID!, $tag: String, $description: String!, $exchangeMethod: ExchangeMethod!, $image: String){
+  mutation createGroupItem($title:String!, $groupId:ID!, $tag: String, $description: String!, $exchangeMethod: ExchangeMethod!, $image: String){
     createGroupItem(groupId:$groupId, input: {
+      title: $title
       tag: $tag
       description: $description
       exchangeMethod: $exchangeMethod
@@ -44,6 +45,7 @@ let ScreenWidth = Dimensions.get("window").width;
 function GroupAddItem ({route, navigation}) {
 
   const [Gname, setGname] = useState('');
+  const [title, setTitle] = useState('');
   const [Discription, setDiscription] = useState('');
   //const [Ihave, setIhave] = useState([]);
   const [tag, setTag] = useState('');
@@ -156,7 +158,7 @@ function GroupAddItem ({route, navigation}) {
   const handlesubmit =() =>{
     console.log(id, typeof(tag), typeof(Discription), typeof(exchangeMethod));
     if(image.length == 0) {
-      createGroupItem({ variables: { groupId: id, tag: tag, description: Discription, exchangeMethod: exchangeMethod}});
+      createGroupItem({ variables: { title: title, groupId: id, tag: tag, description: Discription, exchangeMethod: exchangeMethod, image: ''}});
     } else {
       for (let i = 0; i < image.length; i++) {
         //console.log(typeof(image[i].uri));
@@ -164,7 +166,7 @@ function GroupAddItem ({route, navigation}) {
         //console.log(file.name);
         uploadFile({variables: { file: file }, uploadFileAsForm: true});
         //console.log(data);
-        createGroupItem({ variables: { groupId: id, tag: tag, description: Discription, exchangeMethod: exchangeMethod, image: file.name}});
+        createGroupItem({ variables: { title: title, groupId: id, tag: tag, description: Discription, exchangeMethod: exchangeMethod, image: file.name}});
       }
     }
 
@@ -245,6 +247,19 @@ function GroupAddItem ({route, navigation}) {
             }
             </View>
           </View>
+
+          <View style ={styles.textContainer}>
+            <Text style={styles.text}>物品標題</Text>
+          </View>
+
+          <View style = {styles.textInputContainer}>
+            <TextInput
+                style={styles.titleInputBox}
+                multiline ={true}
+                onChangeText={(text) => {setTitle(text)}}
+                value = {title}/>
+          </View>
+
           <View style ={styles.textContainer}>
             <Text style={styles.text}>物品說明</Text>
           </View>
@@ -459,6 +474,13 @@ const styles = StyleSheet.create({
     margin: "5%",
     color: colors.mono_80,
     fontWeight: "bold",
+  },
+  titleInputBox: {
+    flex: 1,
+    marginHorizontal:"5%",
+    height: 40,
+    borderColor: colors.mono_80,
+    borderWidth: 1
   },
   input:{
     margin: "5%",

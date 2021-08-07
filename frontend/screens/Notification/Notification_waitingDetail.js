@@ -43,6 +43,8 @@ const REMOVE_REQUEST = gql`
 //   }
 // }`;
 
+//TODO: query my items from a group
+
 const BATCHED_QUERY = gql`
 query myGeneralItemsAndGetRequest ($id: ID!){
   myGeneralItems {
@@ -190,6 +192,7 @@ function Notification_waitingDetail ({ route }) {
                                   { data ? (
                                   <FlatList
                                    contentContainerStyle = {{alignItems:'center'}}
+                                   // TODO: is group? groupdata else data 
                                    data={data.myGeneralItems}
                                    renderItem={renderItem}
                                   /> ) : <Text>loading ...</Text>

@@ -63,13 +63,14 @@ function GroupDetailsScreen ({route, navigation}) {
   const renderPostN = ({ item }) => (
     <TouchableOpacity 
       style={styles.itemN} 
-      onPress={() => {navigation.navigate('Group_itemDetail',{dis: item.description, method: item.exchangeMethod, tagname: item.tag, image: item.image})}}>    
+      onPress={() => {navigation.navigate('Group_itemDetail',{title: item.title, dis: item.description, method: item.exchangeMethod, tagname: item.category, image: item.image})}}>    
       <Image
         style ={{height: ScreenWidth*0.2, width: ScreenWidth*0.2}}
         source = {item.image? {uri: `http://swappy.ngrok.io/images/${item.image}`} : require('../../assets/general/商品呈現.png')}/>
       <View style ={{marginLeft:3, height:'100%', width:"75%", backgroundColor:'transparent'}}>
-        <Text style={{position:'absolute', top: 0 , color: colors.mono_100, fontWeight:'bold', fontSize:ScreenWidth*0.04}}>{item.description}</Text>
-        <Text style={{position:'absolute', top: ScreenWidth*0.15, color: colors.function_100, fontSize:ScreenWidth*0.03}}>#{item.tag}</Text>
+        <Text style={{position:'absolute', top: 0 , color: colors.mono_100, fontWeight:'bold', fontSize:ScreenWidth*0.04}}>{item.title}</Text>
+        <Text style={{position:'absolute', top: ScreenWidth*0.05, color: colors.mono_100, fontWeight:'normal', fontSize:ScreenWidth*0.03}}>{item.description}</Text>
+        <Text style={{position:'absolute', top: ScreenWidth*0.15, color: colors.function_100, fontSize:ScreenWidth*0.03}}>#{item.category}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -77,14 +78,15 @@ function GroupDetailsScreen ({route, navigation}) {
   const renderPost = ({ item }) => (
     <TouchableOpacity 
       style={styles.item} 
-      onPress={() => {navigation.navigate('Group_itemDetail',{dis: item.description, method: item.exchangeMethod, tagname: item.tag, image: item.image})}}>    
+      onPress={() => {navigation.navigate('Group_itemDetail',{title: item.title, dis: item.description, method: item.exchangeMethod, tagname: item.category, image: item.image})}}>    
       <Image
         style ={{height: ScreenWidth*0.2, width: ScreenWidth*0.2}}
         source = {item.image? {uri: `http://swappy.ngrok.io/images/${item.image}`}: require('../../assets/general/商品呈現.png')}/>
       
       <View style ={{marginLeft:3, height:'100%', width:"75%", backgroundColor:'transparent'}}>
-        <Text style={{position:'absolute', top: 0, color: colors.mono_40, fontWeight:'bold', fontSize:ScreenWidth*0.04}}>{item.description}</Text>
-        <Text style={{position:'absolute', top: ScreenWidth*0.15, color: colors.function_60, fontSize:ScreenWidth*0.03}}>#{item.tag}</Text>
+        <Text style={{position:'absolute', top: 0, color: colors.mono_40, fontWeight:'bold', fontSize:ScreenWidth*0.04}}>{item.title}</Text>
+        <Text style={{position:'absolute', top: ScreenWidth*0.05, color: colors.mono_100, fontWeight:'normal', fontSize:ScreenWidth*0.03}}>{item.description}</Text>
+        <Text style={{position:'absolute', top: ScreenWidth*0.15, color: colors.function_60, fontSize:ScreenWidth*0.03}}>#{item.category}</Text>
       </View>
     </TouchableOpacity>
   );
