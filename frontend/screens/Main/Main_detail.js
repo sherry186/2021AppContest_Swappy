@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
     height:"7%",
     width:"100%",
     alignItems:'center',
-    //position:'absolute',
+    position:'absolute',
     bottom: 60,
     justifyContent: "space-around"
   },

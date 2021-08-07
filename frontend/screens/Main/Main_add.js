@@ -5,11 +5,13 @@ import {
     View, 
     TextInput,
     TouchableOpacity,
+    KeyboardAvoidingView,
     Dimensions,
     Image,
     Switch} from 'react-native';
 import { useState, useEffect } from 'react';
 import  { useNavigation } from '@react-navigation/core';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import SocialItems from '../../Data/SocialItems';
 import Social from '../../navigators/SocialNav';
@@ -17,6 +19,7 @@ import { offsetLimitPagination } from '@apollo/client/utilities';
 import colors from '../../config/colors';
 import { useQuery, useMutation,  gql } from '@apollo/client';
 import { color } from 'jimp';
+import { ScrollView } from 'react-native';
 var dateFormat = require("dateformat");
 
 let ScreenWidth = Dimensions.get("window").width;
@@ -58,6 +61,7 @@ const Main_ADD = () => {
 
   return(
     <View style={styles.container}>
+      {/* <KeyboardAwareScrollView> */}
       <TextInput
           style={styles.title}
           placeholderTextColor ={colors.mono_80}
@@ -94,7 +98,8 @@ const Main_ADD = () => {
             style = {{height: 70, width:70,}} 
             source = {require('../../assets/breakAway/upload.png')}/>
       </TouchableOpacity>
-     
+
+      {/* </KeyboardAwareScrollView> */}
     </View>
   )
 }
