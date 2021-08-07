@@ -281,7 +281,7 @@ const resolvers = {
                 }
             } else {
                 const isWhatTheUserWants = (item) => {
-                    return group.wishList[user._id].wishTags[item.tag];
+                    return group.wishList[user._id].wishTags[item.category];
                 };
                 const canOfferWhatTheOwnerWants = (item) => {
                     if(group.wishList[item.owner._id].wishTags == undefined) {

@@ -121,7 +121,7 @@ const ResetUser = () => {
           style ={{ flex: 1 , backgroundColor: colors.mono_40}}
           contentContainerStyle ={{alignItems: 'center', justifyContent: 'center',}}>
 
-        
+        <ScrollView></ScrollView>
           <TouchableOpacity 
             style = {{marginBottom: 30}}
             onPress = {pickImage}> 

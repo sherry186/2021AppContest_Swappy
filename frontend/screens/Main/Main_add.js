@@ -5,6 +5,7 @@ import {
     View, 
     TextInput,
     TouchableOpacity,
+    KeyboardAvoidingView,
     Dimensions,
     Image,
     Switch} from 'react-native';
