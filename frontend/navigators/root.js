@@ -36,6 +36,7 @@ import Star from '../screens/Personal/Star';
 import Complete from '../screens/Personal/Complete';
 import Notification_choiceDetail from '../screens/Notification/Notification_choiceDetail';
 import Message_Detail from '../screens/Message/Message_Detail';
+import AboutSwappy from '../screens/Personal/AboutSwappy';
 //import { Text } from 'react-native';
 
 
@@ -389,6 +390,13 @@ function Root() {
         <RootStack.Screen 
           name="Record" 
           component={Record}
+          options={{
+            headerShown: false,
+          }}/>
+        
+        <RootStack.Screen 
+          name="AboutSwappy" 
+          component={AboutSwappy}
           options={{
             headerShown: false,
           }}/>

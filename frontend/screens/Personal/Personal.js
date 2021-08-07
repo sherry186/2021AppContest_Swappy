@@ -137,6 +137,7 @@ const Personal = () => {
 
           <TouchableOpacity
             style={styles.item}
+            onPress = {()=> navigation.navigate("AboutSwappy")}
           >
             <Image 
                 style={styles.image}
