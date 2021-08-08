@@ -65,7 +65,7 @@ function GroupDetailsScreen ({route, navigation}) {
     return (
     <TouchableOpacity 
       style={styles.itemN} 
-      onPress={() => {navigation.navigate('Group_itemDetail',{groupId: id, itemId: item._id, title: item.title, dis: item.description, method: item.exchangeMethod, tagname: item.category, image: item.image})}}>    
+      onPress={() => {navigation.navigate('Group_itemDetail',{userId: item.owner._id, groupId: id, itemId: item._id, title: item.title, dis: item.description, method: item.exchangeMethod, tagname: item.category, image: item.image})}}>    
       <Image
         style ={{height: ScreenWidth*0.2, width: ScreenWidth*0.2}}
         source = {item.image? {uri: `http://swappy.ngrok.io/images/${item.image}`} : require('../../assets/general/商品呈現.png')}/>
