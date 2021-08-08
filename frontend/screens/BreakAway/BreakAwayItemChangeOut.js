@@ -173,10 +173,10 @@ const BreakAwayItemChangeOut = ({ route, navigation }) => {
   return(
     <View style={{ flex: 1, alignItems: 'center', backgroundColor: 'transparent'}}>
       
-      <View style = {{height: "50%", width: "100%", alignItems: 'center'}}>
+      <View style = {{height: "25%", width: "100%", alignItems: 'center'}}>
       {/* <KeyboardAvoidingView style = {{height: "50%", width: "100%", alignItems: 'center'}}> */}
           <Image 
-              style = {{flex: 5, height: "50%", width: "80%"}}
+              style = {{flex: 5, height: ScreenWidth * 0.5, width: ScreenWidth * 0.5}}
               source={{uri: source}}/>
       </View>
       {/* </KeyboardAvoidingView> */}
