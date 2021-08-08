@@ -125,9 +125,9 @@ const Notification_invitation = () => {
                     mything_method: item.requestedItem.exchangeMethod ? item.requestedItem.exchangeMethod : null, 
                     mything_source: item.requestedItem.image ? item.requestedItem.image : null})}
                   style = {{ backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center', borderRadius: ScreenWidth*0.2}}>
-                  <Text style={styles.title}>{item.requester.username} </Text>
+                  {/* <Text style={styles.title}>{item.requester.username} </Text> */}
                   <Text style={styles.title}>{item.requestedItem.title}</Text>
-                  <Text style={styles.title}>{'general'}</Text>
+                  {/* <Text style={styles.title}>{'general'}</Text> */}
               </TouchableOpacity>
             </View>
             <View style = {styles.yn}>
@@ -226,8 +226,8 @@ const styles = StyleSheet.create({
       justifyContent:'center'
     },
     title: {
-      justifyContent:'center',
-      fontSize: 12,
+      // justifyContent:'center',
+      // fontSize: 12,
       color: colors.mono_100,
       fontWeight: 'bold',
     },
