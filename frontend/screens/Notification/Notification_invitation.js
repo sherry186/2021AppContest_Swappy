@@ -17,6 +17,8 @@ const RENDER_INVITATIONS = gql`
       id
       requestedItem {
         title
+        category
+        exchangeMethod
         image
         id
       }
@@ -30,10 +32,13 @@ const RENDER_INVITATIONS = gql`
       }
       requestersItem {
         title
+        category
+        exchangeMethod
         image
         id
       }
       status
+      groupId
     }
   }`;
 
@@ -102,15 +107,27 @@ const Notification_invitation = () => {
             <View style = { styles.item }>
               <TouchableOpacity 
                   onPress = {()=>navigation.navigate("NotificationInvatationDetail",{ 
-                    id: item.id,  
+                    id: item.id,
+                    groupId: item.groupId,
+                    requestFor_id: item.requestersItem == null ? null : item.requestersItem.id, 
                     requestFor_title: item.requestersItem == null ? null : item.requestersItem.title, 
+                    requestFor_category: item.requestersItem == null ? null : item.requestersItem.category, 
+                    requestFor_description: item.requestersItem == null ? null : item.requestersItem.description, 
+                    requestFor_method: item.requestersItem == null ? null : item.requestersItem.exchangeMethod, 
                     requestFor_source: item.requestersItem == null ? null : item.requestersItem.image, 
-                    mything_title: item.requestedItem.title ? item.requestedItem.title : null, 
+                    requestFor_userId: item.guyWhoseItemIsRequested.id== null ? null :item.guyWhoseItemIsRequested.id,
+                    mything_id: item.requestedItem.id ? item.requestedItem.id : null,
+                    mything_title: item.requestedItem.title ? item.requestedItem.title : null,
+                    mything_userId: item.requester.id == null ? null : item.requester.id,
+                    mything_image: item.requestedItem.image ? item.requestedItem.image : null, 
+                    mything_category: item.requestedItem.category ? item.requestedItem.category : null, 
+                    mything_description: item.requestedItem.description ? item.requestedItem.description : null,
+                    mything_method: item.requestedItem.exchangeMethod ? item.requestedItem.exchangeMethod : null, 
                     mything_source: item.requestedItem.image ? item.requestedItem.image : null})}
                   style = {{ backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center', borderRadius: ScreenWidth*0.2}}>
-                  {/* <Text style={styles.title}>{item.requester.username} </Text> */}
+                  <Text style={styles.title}>{item.requester.username} </Text>
                   <Text style={styles.title}>{item.requestedItem.title}</Text>
-                  {/* <Text style={styles.title}>{'general'}</Text> */}
+                  <Text style={styles.title}>{'general'}</Text>
               </TouchableOpacity>
             </View>
             <View style = {styles.yn}>
@@ -210,7 +227,7 @@ const styles = StyleSheet.create({
     },
     title: {
       justifyContent:'center',
-      
+      fontSize: 12,
       color: colors.mono_100,
       fontWeight: 'bold',
     },

@@ -34,9 +34,11 @@ function Notification_invitationDetail ({ route, navigation }) {
   // render(){  
     const [image, setImage] = useState(null);
     const [title, setTitle] = useState('');
-    const { id, mything_title, mything_source, requestFor_title, requestFor_source } = route.params;
+    const { groupId, id, mything_id, mything_title, mything_source, mything_category, mything_description, mything_exchangeMethod, mything_userId,
+      requestFor_id, requestFor_title, requestFor_category, requestFor_description, requestFor_exchangeMethod, requestFor_source, requestFor_userId } = route.params;
     
-    console.log(mything_title);
+    console.log(groupId, id, mything_id, mything_title, mything_source, mything_category, mything_description, mything_exchangeMethod, mything_userId,
+      requestFor_id, requestFor_title, requestFor_category, requestFor_description, requestFor_exchangeMethod, requestFor_source, requestFor_userId);
     const navigation1 = useNavigation();
 
     const handleDelete = () =>(
@@ -53,6 +55,18 @@ function Notification_invitationDetail ({ route, navigation }) {
         });
         setImage(result.uri)
     }; 
+
+    const goToItemDetail = () => {
+      //console.log('pressed!');
+      //if groupId is null
+      if(groupId == null) {
+        navigation.navigate('GeneralDetail', {userId: requestFor_userId, itemID: requestFor_id, title: requestFor_title, sort: requestFor_category, des: requestFor_description, method: requestFor_exchangeMethod, image: requestFor_source});
+      } else {
+        navigation.navigate('Group_itemDetail',{groupId: groupId, userId: requestFor_userId, itemId: requestFor_id, title: requestFor_title, dis: requestFor_description, method: requestFor_exchangeMethod, tagname: requestFor_category, image: requestFor_source});
+      }
+      
+      //else groupdetail
+    }
 
     useEffect(() => {
         (async () => {
@@ -90,9 +104,14 @@ function Notification_invitationDetail ({ route, navigation }) {
                     (
 
                         <View style = {styles.itemBox}>
+                          <TouchableOpacity 
+                                  style={{height:"100%", width:"100%"}}
+                                  onPress={goToItemDetail}
+                              >
                           <Image
                               style={styles.image}
                               source = {{uri: `http://swappy.ngrok.io/images/${requestFor_source}`}}/>
+                            </TouchableOpacity>
                           <View style ={styles.titleTag}>
                             <Text style = {styles.tagText}>對方的物品</Text>
                           </View>
@@ -204,7 +223,7 @@ const styles = StyleSheet.create({
   },
 
   itemBox: {
-    flex:5,
+    //flex:5,
     alignItems:'center',
     //justifyContent: 'center',
     //backgroundColor:'yellow',

@@ -79,7 +79,7 @@ function Group_itemDetail ({route, navigation}) {
   console.log(userId);
 
   const [createRequest] = useMutation(CREATE_REQUEST);
-  const { data, error, loading } = useQuery(GET_USER, {variables: {id: userId}});
+  const { data, error, loading } = useQuery(GET_USER, {variables: {id: userId}, pollInterval: 500});
 
   const renderComment = ({ item }) => (
     //console.log(this.props.navigation);
