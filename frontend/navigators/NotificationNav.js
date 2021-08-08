@@ -48,7 +48,7 @@ function Notification() {
                 options={{ 
                     tabBarIcon:({focused})=>(
                         <View style =  {{ flex: 1, alignItems: 'center', alignSelf: 'center', width: ScreenWidth*0.3,}}>
-                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20}}>換物清單</Text>
+                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20}}>邀請清單</Text>
                         </View>
                     )}}
             />

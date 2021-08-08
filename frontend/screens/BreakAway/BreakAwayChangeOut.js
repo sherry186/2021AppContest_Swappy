@@ -541,7 +541,7 @@ const styles = StyleSheet.create({
     borderWidth: 1
   },
   wayS: {
-    backgroundColor: colors.mono_60,
+    backgroundColor: colors.function_100,
     width: "20%",
     height: 25,
     margin: 5,
@@ -550,7 +550,7 @@ const styles = StyleSheet.create({
     alignItems:'center', 
   },
   waySd: {
-    backgroundColor: colors.function_100,
+    backgroundColor: colors.mono_60,
     width: "20%",
     height: 25,
     margin: 5,
