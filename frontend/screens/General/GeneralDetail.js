@@ -24,25 +24,25 @@ let ScreenWidth = Dimensions.get("screen").width;
 let ScreenHeight = Dimensions.get("screen").height;
 
 const CREATE_REQUEST = gql`
-  mutation createRequestItem($requestedItemId: ID!){
-    createRequestItem(requestedItemId: $requestedItemId, groupId: $groupId) {
+mutation createRequestItem($requestedItemId: ID!, $groupId: ID){
+  createRequestItem(requestedItemId: $requestedItemId, groupId: $groupId) {
+    id
+    guyWhoseItemIsRequested{
       id
-      guyWhoseItemIsRequested{
-        id
-        username
-      },
-      requestedItem{
-        id
-        title
-      }
-      requester {
-        id
-        username
-      }
-      status
-      groupId
+      username
+    },
+    requestedItem{
+      id
+      title
     }
-  }`;
+    requester {
+      id
+      username
+    }
+    status
+    groupId
+  }
+}`;
 
   const GET_USER = gql`
   query getUserById($id: ID!) {
