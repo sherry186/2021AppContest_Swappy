@@ -278,18 +278,18 @@ const styles = StyleSheet.create({
 
     marginLeft:"5%",
     //position:'absolute',
-    bottom: 0,
+    bottom: ScreenHeight * 0.01,
   },
   commentC: {
     flexDirection:'row',
     //flex:1,
     backgroundColor: colors.mono_40,
-    height:"7%",
+    height:"10%",
     width:"100%",
     alignItems:'center',
-    position:'absolute',
-    bottom: 60,
-    justifyContent: "space-around"
+    // position:'absolute',
+    bottom: ScreenHeight * 0.1,
+    justifyContent: "flex-start"
   },
   buttonText: {
     //color: '#fff',
