@@ -85,7 +85,7 @@ const typeDefs = gql`
         createRequestItem(requestedItemId: ID!, groupId: ID): Request!
         updateStatus(id: ID!, status: Status!): Boolean!
         removeRequest(id: ID!): Boolean!
-        updateRequestersItem(groupId: ID!, itemId: ID!, requestId: ID!): Boolean!
+        updateRequestersItem(groupId: ID, itemId: ID!, requestId: ID!): Boolean!
 
         createPost(title: String!, description: String!, hideUser: Boolean!, time: String): Post!
         postComment(postId: ID!, comment: String!, time: String): Boolean!
@@ -510,7 +510,7 @@ const resolvers = {
             }
 
             var item;
-            if( groupId == null) {
+            if( groupId == null || groupId == undefined) {
                 item = await db.collection('GeneralItems').findOne({_id: ObjectId(itemId)});
             } else {
                 item = await db.collection('GroupItems').findOne({_id: ObjectId(itemId)});
@@ -586,6 +586,9 @@ const resolvers = {
             const newUser = {
                 ...input,
                 password: hashedPassword,
+                reviews: [],
+                ratingSum: 0,
+                totalRatings: 0,
             }
             console.log("signed up!");
             //save to database

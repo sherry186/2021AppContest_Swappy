@@ -76,7 +76,7 @@ query getMyGroupItems($groupId: ID!) {
 }`;
 
 const UPDATE_REQUEST = gql`
-mutation updateRequestersItems($groupId: ID!, $itemId: ID!, $requestId: ID!) {
+mutation updateRequestersItems($groupId: ID, $itemId: ID!, $requestId: ID!) {
   updateRequestersItem(groupId: $groupId, itemId: $itemId, requestId: $requestId)
 }`;
 
@@ -92,7 +92,7 @@ function Notification_waitingDetail ({ route }) {
   const [removeRequest] = useMutation(REMOVE_REQUEST);
   const [updateRequest] = useMutation(UPDATE_REQUEST);
   const { data: batchedData  } = useQuery(BATCHED_QUERY, {variables: { id: id }, pollInterval: 500});
-
+  console.log(batchedData);
   const groupId = batchedData?.getRequest?.groupId;
   const { data: groupData } = useQuery(GET_GROUP_ITEMS, {skip: groupId==null, variables: { groupId: groupId }});
   
@@ -206,11 +206,11 @@ function Notification_waitingDetail ({ route }) {
                               <Portal>
                                 <Dialog visible={visible} onDismiss={hideDialog} style = {{marginTop : ScreenHeight*0.2, height: ScreenHeight*0.8, marginLeft:0, alignItems:'center', width: ScreenWidth, backgroundColor: colors.mono_40}}>
                                   <Dialog.Title style ={{fontWeight: 'bold', fontSize: ScreenWidth*0.06, color: colors.function_100}}>上傳物件選取</Dialog.Title>
-                                  { (batchedData?.groupId || groupData) ? (
+                                  { (!batchedData?.getRequest.groupId || (batchedData?.getRequest.groupId && groupData)) ? (
                                   <FlatList
                                    contentContainerStyle = {{alignItems:'center'}}
                                    // TODO: is group? groupdata else data 
-                                   data={ !(batchedData?.groupId  == null) ? batchedData.myGeneralItems : groupData.getMyGroupItems }
+                                   data={ (batchedData?.getRequest?.groupId  == null) ? batchedData.myGeneralItems : groupData.getMyGroupItems }
                                    renderItem={renderItem}
                                   /> ) : <Text>loading ...</Text> 
                                     
