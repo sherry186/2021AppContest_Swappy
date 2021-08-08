@@ -26,7 +26,8 @@ export default function BreakAwayHesitate () {
   const [data, setData] = useState([]);
   const [Limit, setLimit] = useState(0);
   const [image, setImage] = useState([]);
-  const [pickedData, setPickedData] = useState();
+  // const [pickedData, setPickedData] = useState();
+  const [spacePickedData, setSpacePickedData] = useState();
 
   const [story, setStory] = useState('');
   const [title, setTitle] = useState('');
@@ -36,11 +37,11 @@ export default function BreakAwayHesitate () {
   const navigation = useNavigation();
 
 
-  var dropdownData = [];
-  for(var i = 0; i< data.length; i++){
-    dropdownData[i] = {label: data[i].spaceName, value: data[i].id}
-  }
-  console.log(dropdownData);
+  // var dropdownData = [];
+  // for(var i = 0; i< data.length; i++){
+  //   dropdownData[i] = {label: data[i].spaceName, value: data[i].id}
+  // }
+  // console.log(dropdownData);
   
 
   const getDate = () => {
@@ -139,7 +140,12 @@ export default function BreakAwayHesitate () {
               let spacesData = resultSet.rows._array;
               setData(spacesData);
               console.log(data);
-              
+              const spacePickerItems = data.map(item => {
+                return {
+                  label: item.spaceName,
+                  value: item.id
+                }}
+              );
       },
           (txObj, error) => console.log('Error', error))
       });
@@ -156,9 +162,10 @@ export default function BreakAwayHesitate () {
     
   },[data]);
 
-  const selectSpace = (pickedData) =>{
-    setPickedData(pickedData);
-    setSpace(pickedData.value);
+  const selectSpace = (data)=> {
+    setSpacePickedData(data);
+    setSpace(data.value);
+    console.log(data.value);
   }
 
   return(
@@ -256,7 +263,7 @@ export default function BreakAwayHesitate () {
                     })
                   }
                 </Picker> */}
-              <Picker
+              {/* <Picker
                   //textInputStyle = {}
                   //containerStyle = {}
                   item={pickedData}
@@ -265,6 +272,27 @@ export default function BreakAwayHesitate () {
                   title="目前現有空間"
                   placeholder="選擇所屬空間"
                   isNullable
+                  /> */}
+                  <Picker
+                      //textInputStyle = {}
+                      //containerStyle = {}
+                      item={spacePickedData}
+                      items={
+                        data != [] ? (data.map(item => {
+                          return {
+                            label: item.spaceName,
+                            value: item.id
+                          }}
+                        ) ) : []
+                      }
+                      onItemChange={selectSpace}
+                      title="目前現有空間"
+                      placeholder="選擇所屬空間"
+                      isNullable
+                    //backdropAnimation={{ opactity: 0 }}
+                    //mode="dropdown"
+                    //isNullable
+                    //disable
                   />
             </View>
             <View style = {{flex: 6}}></View>
