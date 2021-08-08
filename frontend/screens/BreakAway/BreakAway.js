@@ -100,9 +100,12 @@ export default class BreakAway extends React.Component {
             console.log('Success', resultSet);
             let spaceName = resultSet.rows._array[0]?.spaceName;
             console.log('spaceName', spaceName);
+            
             this.setState({
               spaceName,
             });
+            return (spaceName)
+
           },
           (txObj, error) => console.log('Error', error))
       })
@@ -139,8 +142,9 @@ export default class BreakAway extends React.Component {
 
   renderImage = ({ item }) => {
     //console.log('image', item);
-    this.getSpaceName(item.id);
-
+    // this.getSpaceName(item.id);
+    // this.getSpaceName(item.spaceName)
+    const spaceName1 = this.getSpaceName(item.spaceName)
     const reminderDate = parse(item.reminderDate, 'isoDate');
     const todayDate = new Date();
     const diffDays = Math.round((reminderDate - todayDate) / (24 * 60 * 60 * 1000));
@@ -150,7 +154,7 @@ export default class BreakAway extends React.Component {
     return (
 
       <TouchableOpacity
-        onPress={() => this.props.navigation.navigate("BreakAwayItemDetail", { itemId: item.id, title: item.title, source: item.image, spaceId: item.spaceName, spaceName: this.state.spaceName, story: item.story, uploadDate: item.uploadDate })}
+        onPress={() => this.props.navigation.navigate("BreakAwayItemDetail", { itemId: item.id, title: item.title, source: item.image, spaceId: item.spaceName, spaceName: spaceName1, story: item.story, uploadDate: item.uploadDate })}
         style={{ width: ScreenWidth * 0.3, height: ScreenWidth * 0.3, marginHorizontal: ScreenWidth * 0.03, alignSelf: 'center' }}
       >
         <Image
