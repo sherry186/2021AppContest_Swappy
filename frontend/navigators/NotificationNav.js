@@ -37,7 +37,7 @@ function Notification() {
                 options={{ 
                     tabBarIcon:({focused})=>(
                         <View style =  {{flex: 1, alignItems: 'center', alignSelf: 'center', width: ScreenWidth*0.3, }}>
-                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20}}>Requests</Text>
+                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20}}>要求物品</Text>
                         </View>
                       )}}
             
@@ -48,7 +48,7 @@ function Notification() {
                 options={{ 
                     tabBarIcon:({focused})=>(
                         <View style =  {{ flex: 1, alignItems: 'center', alignSelf: 'center', width: ScreenWidth*0.3,}}>
-                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20}}>Invitations</Text>
+                            <Text style = {{ bottom: 8, color: focused? colors.function_100 : colors.mono_60, fontSize: 20}}>換物清單</Text>
                         </View>
                     )}}
             />
