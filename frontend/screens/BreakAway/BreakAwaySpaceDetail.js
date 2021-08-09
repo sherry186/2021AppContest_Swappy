@@ -78,7 +78,7 @@ export default class BreakAwaySpaceDetail extends React.Component {
     return ( 
     <TouchableOpacity
         style ={styles.imageC}
-        onPress = {() => this.props.navigation.navigate("BreakAwayItemDetail", {itemId: item.id, title: item.title, source: item.image, spaceId: item.spaceName, spaceName: this.props.route.params.spaceName, story: item.story, uploadDate: item.reminderDate})}
+        onPress = {() => this.props.navigation.navigate("BreakAwayItemDetail", {itemId: item.id, title: item.title, source: item.image, spaceId: item.spaceId, spaceName: this.props.route.params.spaceName, story: item.story, uploadDate: item.reminderDate})}
         >
         <Image 
           style={{ width: "95%", height: "95%", marginLeft: "5%"}}
