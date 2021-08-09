@@ -180,7 +180,7 @@ function GeneralDetailsScreen ({ route, navigation }) {
             <Text style = {{marginTop: ScreenHeight*0.02, color: colors.function_100, fontWeight:'bold', fontSize: ScreenWidth*0.05, marginLeft: ScreenWidth*0.09}}>{data.getUserById.username}</Text>
             <View style = {{flexDirection:'row', width: ScreenWidth, height: ScreenHeight*0.02, marginTop: ScreenHeight*0.01, alignItems:'center'}}>
               <View style = {{width: ScreenWidth*0.09}}></View>
-              <Text style = {{color:colors.function_100}}>{data.getUserById.ratingSum / data.getUserById.totalRatings} </Text>
+              <Text style = {{color:colors.function_100}}>{(data.getUserById.totalRatings == 0 ? 0 : (data.getUserById.ratingSum / data.getUserById.totalRatings))} </Text>
               {
                   maxstars.map((item, index)=>{
                     return(
