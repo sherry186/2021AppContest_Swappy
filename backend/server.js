@@ -66,6 +66,7 @@ const typeDefs = gql`
         getGroups: [Group]!
         getGroup(id: ID!): Group!
         filterMatchingGroupItems(id: ID!): JSONObject!
+        getUsersWishTags(userId: ID!, groupId: ID!): JSONObject
     }
 
     type Mutation {
@@ -249,6 +250,11 @@ const typeDefs = gql`
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
     Query: {
+        getUsersWishTags: async (_, { userId, groupId }, {db,user}) => {
+            var group = await db.collection('Groups').findOne({_id: ObjectId(groupId)});
+            return group?.wishList[userId]?.wishTags;
+            //group.wishList[user._id].wishTags
+        },
         getMyGroupItems: async (_, { groupId }, {db,user}) => {
             var group = await db.collection('Groups').findOne({_id: ObjectId(groupId)});
             var groupItems = group.groupItems;
@@ -825,7 +831,7 @@ const start = async () => {
     console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
 }
 
-console.log(getToken('610cda0e2469da7666d0d67e'));
+console.log(getToken('610fd7870294df9abcb7c61c'));
 
 start();
 

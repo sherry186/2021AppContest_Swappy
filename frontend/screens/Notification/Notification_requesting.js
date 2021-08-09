@@ -158,6 +158,7 @@ const Notification_requesting = () => {
           id: item.id,
           mything_title: item.requestersItem == null ? null : item.requestersItem.title, 
           mything_source: item.requestersItem == null ? null : item.requestersItem.image, 
+          requestFor_user: item.guyWhoseItemIsRequested.id,
           requestFor_title: item.requestedItem.title ? item.requestedItem.title : null , 
           requestFor_source: item.requestedItem.image})} 
         }

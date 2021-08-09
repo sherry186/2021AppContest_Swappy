@@ -64,7 +64,7 @@ query myGeneralItemsAndGetRequest ($id: ID!){
 }`;
 
 const GET_GROUP_ITEMS = gql`
-query getMyGroupItems($groupId: ID!) {
+query getMyGroupItemsAndUsersWishTags($userId:ID!, $groupId: ID!) {
   getMyGroupItems(groupId: $groupId) {
     id
     title
@@ -72,7 +72,7 @@ query getMyGroupItems($groupId: ID!) {
     image
     exchangeMethod
     description
-  }
+  } getUsersWishTags(userId: $userId, groupId:$groupId) 
 }`;
 
 const UPDATE_REQUEST = gql`
@@ -87,14 +87,14 @@ let ScreenHeight = Dimensions.get("window").height;
 
 function Notification_waitingDetail ({ route }) {
 
-  const { id, mything_title, mything_source, requestFor_title, requestFor_source } = route.params;
+  const { id, requestFor_user, mything_title, mything_source, requestFor_title, requestFor_source } = route.params;
   console.log(id);
   const [removeRequest] = useMutation(REMOVE_REQUEST);
   const [updateRequest] = useMutation(UPDATE_REQUEST);
   const { data: batchedData  } = useQuery(BATCHED_QUERY, {variables: { id: id }, pollInterval: 500});
   console.log(batchedData);
   const groupId = batchedData?.getRequest?.groupId;
-  const { data: groupData } = useQuery(GET_GROUP_ITEMS, {skip: groupId==null, variables: { groupId: groupId }});
+  const { data: groupData } = useQuery(GET_GROUP_ITEMS, {skip: groupId==null, variables: { userId: requestFor_user, groupId: groupId }});
   
   
   // render(){  
@@ -128,14 +128,14 @@ function Notification_waitingDetail ({ route }) {
       <SafeAreaView style={styles.boxContainer}>
         <View style={styles.buttons}>
           <TouchableOpacity 
-            style={styles.item}
+            style={styles.item} // if item.tag is in other users wish tags 
             onPress={
               () => {
                 setSelectedImage(item.image);
                 setSelectedTitle(item.title);
-                console.log(selectedImage);
-                console.log(selectedTitle);
-                console.log(groupId);
+                // console.log(selectedImage);
+                // console.log(selectedTitle);
+                // console.log(groupId);
                 updateRequest({variables: {groupId: groupId, itemId: item.id, requestId: id}})
                 hideDialog();
               }
@@ -145,11 +145,18 @@ function Notification_waitingDetail ({ route }) {
               <Image
                 source =  {item.image? {uri: `http://swappy.ngrok.io/images/${item.image}`} : require('../../assets/general/商品呈現.png')}
                 style ={{height: ScreenHeight*0.13, width: ScreenHeight*0.13,}}/>
-              
+
+              {/* 如果是group，又有在對方的wishlist裡面 */}
+              { (groupData?.getUsersWishTags != null && groupData?.getUsersWishTags[item.category]) ? (
+              <View style = {{marginLeft: 16, backgroundColor:'gray'}}>
+                  <Text style={styles.title}>{item.title}</Text>
+                  <Text style = {{marginTop: "5%", color: colors.function_100}}>#{item.category}</Text>
+              </View>  ) : 
               <View style = {{marginLeft: 16}}>
                   <Text style={styles.title}>{item.title}</Text>
                   <Text style = {{marginTop: "5%", color: colors.function_100}}>#{item.category}</Text>
-              </View>   
+              </View> 
+              } 
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -320,6 +327,10 @@ const styles = StyleSheet.create({
     //marginHorizontal: 16,
   },
   title: {
+    fontSize: 33,
+  },
+  titleMatched: {
+    color: colors.mono_40,
     fontSize: 33,
   },
   buttons: {
