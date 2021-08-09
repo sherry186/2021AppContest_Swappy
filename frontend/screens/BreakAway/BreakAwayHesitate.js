@@ -436,5 +436,6 @@ const styles = StyleSheet.create({
       height: 150,
       borderColor: colors.mono_80,
       borderWidth: 1,
+      textAlignVertical: 'top',
     },
   });
