@@ -150,7 +150,7 @@ export default class BreakAwaySpaceDetail extends React.Component {
                 <CircularProgress
                   value={(complete % LEVELPOINTS)}
                   radius={120}
-                  activeStrokeColor={colors.warning_100}
+                  activeStrokeColor={colors.function_100}
                   inActiveStrokeColor={colors.mono_60}
                   inActiveStrokeWidth={20}
                   activeStrokeWidth={20}

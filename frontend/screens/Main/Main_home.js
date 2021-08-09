@@ -231,7 +231,7 @@ function FlatListComponent(props)  {
                   <Text style={styles.post}>{props.title}</Text>
                   <Text style={styles.person}>{props.person}</Text>
                   <Text 
-                    style={styles.person}
+                    style={styles.description}
                     ellipsizeMode={'tail'} 
                     numberOfLines={2}>{props.description}</Text>
             </TouchableOpacity>
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
       backgroundColor: colors.mono_40,
       //left: 30,
       //alignItems: 'center',
-      justifyContent: 'center',
+      //justifyContent: 'center',
       bottom: 10,
       borderColor: colors.mono_60,
       borderWidth:1,
@@ -277,12 +277,20 @@ const styles = StyleSheet.create({
       },
     person: {
         fontSize: 12,
+        color: colors.mono_100
       },
+    description: {
+      fontSize: 12,
+      marginTop: 7,
+      color: colors.mono_80
+    },
     post: {
         fontSize: 16,
+        
     },
     title: {
       fontSize: 32,
+      color: colors.mono_100
     },
     button: {
       width: 65,

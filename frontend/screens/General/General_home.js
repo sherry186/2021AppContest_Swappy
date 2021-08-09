@@ -156,20 +156,20 @@ const General_HOME = () => {
               />
           </View>
           
-          <TouchableOpacity 
+          {/* <TouchableOpacity 
              style={{flex: 1, width: 60, height: 60, alignItems:'center', justifyContent:'center', backgroundColor: 'transparent'}}
              onPress={toMessage}>
             <Image
               style = {{width: 24, height: 21.99}}
               source = {require("../../assets/general&group/message.png")}/>
             
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
          <TouchableOpacity 
              style={{flex: 1, left: 0,alignItems:'center', justifyContent:'center',  width: 60, height: 60, backgroundColor: 'transparent'}}
              onPress={toNotification}>
             <Image
-              style = {{width: 24, height: 21.99}}
+              style = {{height: "40%"}}
               source = {require("../../assets/general&group/notification.png")}/>
           </TouchableOpacity>   
       </View>

@@ -155,7 +155,7 @@ function GeneralDetailsScreen ({ route, navigation }) {
 
         <TouchableOpacity
             onPress = {showDialog}
-            style = {{height:ScreenWidth*0.1, width: "20%", backgroundColor:colors.mono_40, alignSelf:'center'}}>
+            style = {{height:ScreenWidth*0.1, backgroundColor:colors.mono_40, alignSelf:'center'}}>
             <Text style = {{alignSelf:'center', fontSize: ScreenWidth*0.05, color: colors.mono_80}}>{data? data.getUserById.username : ''}</Text>
         </TouchableOpacity>
 
