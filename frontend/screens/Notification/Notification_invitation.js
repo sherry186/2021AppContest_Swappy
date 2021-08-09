@@ -113,7 +113,7 @@ const Notification_invitation = () => {
                     requestFor_title: item.requestersItem == null ? null : item.requestersItem.title, 
                     requestFor_category: item.requestersItem == null ? null : item.requestersItem.category, 
                     requestFor_description: item.requestersItem == null ? null : item.requestersItem.description, 
-                    requestFor_method: item.requestersItem == null ? null : item.requestersItem.exchangeMethod, 
+                    requestFor_exchangeMethod: item.requestersItem == null ? null : item.requestersItem.exchangeMethod, 
                     requestFor_source: item.requestersItem == null ? null : item.requestersItem.image, 
                     requestFor_userId: item.guyWhoseItemIsRequested.id== null ? null :item.guyWhoseItemIsRequested.id,
                     mything_id: item.requestedItem.id ? item.requestedItem.id : null,
@@ -122,7 +122,7 @@ const Notification_invitation = () => {
                     mything_image: item.requestedItem.image ? item.requestedItem.image : null, 
                     mything_category: item.requestedItem.category ? item.requestedItem.category : null, 
                     mything_description: item.requestedItem.description ? item.requestedItem.description : null,
-                    mything_method: item.requestedItem.exchangeMethod ? item.requestedItem.exchangeMethod : null, 
+                    mything_exchangeMethod: item.requestedItem.exchangeMethod ? item.requestedItem.exchangeMethod : null, 
                     mything_source: item.requestedItem.image ? item.requestedItem.image : null})}
                   style = {{ backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center', borderRadius: ScreenWidth*0.2}}>
                   {/* <Text style={styles.title}>{item.requester.username} </Text> */}
