@@ -4,7 +4,7 @@ import _ from "lodash"; //MUST include for filtering lists (i.e. searching)
 import BreakAwaySpace from '../../Data/BreakAwaySpace';
 //import { Picker } from '@react-native-picker/picker';
 import { Picker } from 'react-native-woodpicker';
-import { createMyHesitatingItemsTable, createHesitateItem, updateProgress } from '../../localStorageApi/api';
+import { createMyHesitatingItemsTable_, createHesitateItem_, updateProgress } from '../../localStorageApi/api';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/core';
 import { Dimensions } from 'react-native';
@@ -32,6 +32,7 @@ export default function BreakAwayHesitate () {
   const [story, setStory] = useState('');
   const [title, setTitle] = useState('');
   const [space, setSpace] = useState(0);
+  const [spaceName, setSpaceName] = useState('');
 
   const windowHeight = useWindowDimensions().height;
   const navigation = useNavigation();
@@ -65,11 +66,11 @@ export default function BreakAwayHesitate () {
     //console.log(image);
     const reminderDate = getDate();
     if(image.length == 0) {
-      createHesitateItem(title, story, DUMMY_IMAGE, reminderDate, space);
+      createHesitateItem_(title, story, DUMMY_IMAGE, reminderDate, space, spaceName);
     } else {
       for (let i = 0; i < image.length; i++) {
         console.log(space);
-        createHesitateItem(title, story, image[i].uri, reminderDate, space);
+        createHesitateItem_(title, story, image[i].uri, reminderDate, space, spaceName);
       }
     }
 
@@ -125,7 +126,7 @@ export default function BreakAwayHesitate () {
   }; 
   
   useEffect(()=> {
-    createMyHesitatingItemsTable();
+    createMyHesitatingItemsTable_();
   }, [])
 
   useEffect(() => {
@@ -165,6 +166,7 @@ export default function BreakAwayHesitate () {
   const selectSpace = (data)=> {
     setSpacePickedData(data);
     setSpace(data.value);
+    setSpaceName(data.label)
     console.log(data.value);
   }
 

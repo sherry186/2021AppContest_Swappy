@@ -30,6 +30,25 @@ export const createMyHesitatingItemsTable = () => {
     })
 };
 
+export const createMyHesitatingItemsTable_ = () => {
+    database.transaction(tx => {
+      tx.executeSql(
+        `CREATE TABLE IF NOT EXISTS MyHesitatingItems1 (
+          id INTEGER PRIMARY KEY AUTOINCREMENT, 
+          title TEXT, 
+          story TEXT, 
+          image TEXT default "no image",
+          reminderDate DATE,
+          spaceId INTEGER,
+          spaceName TEXT
+          )`,
+          null,
+          (txObj, resultSet) => console.log('Success', resultSet),
+          (txObj, error) => console.log('Error', error)
+        )
+    })
+};
+
 export const createSpace = (spaceName) => {
     database.transaction(tx => { 
       tx.executeSql(
@@ -49,7 +68,7 @@ export const deleteSpace = (id) => {
     })
 
     database.transaction(tx => {
-        tx.executeSql('DELETE FROM MyHesitatingItems WHERE spaceId = ?', 
+        tx.executeSql('DELETE FROM MyHesitatingItems1 WHERE spaceId = ?', 
         [id],
         (txObj, resultSet) => console.log('Success', resultSet),
         (txObj, error) => console.log('Error', error))
@@ -77,9 +96,20 @@ export const createHesitateItem = (title, story, image, reminderDate, space) => 
       })
 }
 
+export const createHesitateItem_ = (title, story, image, reminderDate, spaceId, spaceName) => {
+    console.log('creating item');
+    database.transaction(tx => { 
+        tx.executeSql(
+          `INSERT INTO MyHesitatingItems1 (title, story, image, reminderDate, spaceId, spaceName) VALUES (?, ?, ?, ?, ?, ?)`, 
+          [title, story, image, reminderDate, spaceId, spaceName],
+          (txObj, resultSet) => console.log('Success', resultSet),
+          (txObj, error) => console.log('Error', error))
+      })
+}
+
 export const deleteHesitateItem = (id) => {
     database.transaction(tx => {
-        tx.executeSql('DELETE FROM MyHesitatingItems WHERE id = ?', 
+        tx.executeSql('DELETE FROM MyHesitatingItems1 WHERE id = ?', 
         [id],
         (txObj, resultSet) => console.log('Success', resultSet),
         (txObj, error) => console.log('Error', error))
@@ -88,7 +118,7 @@ export const deleteHesitateItem = (id) => {
 
 export const getHesitateItems = () => {
     database.transaction(tx => {
-        tx.executeSql('SELECT * FROM MyHesitatingItems', 
+        tx.executeSql('SELECT * FROM MyHesitatingItems1', 
         null,
         (txObj, resultSet) => {
             //console.log('Success', resultSet);
@@ -104,7 +134,7 @@ export const getHesitateItems = () => {
 
 export const getHesitateItemByID = (id) => {
     database.transaction(tx => {
-        tx.executeSql('SELECT * FROM MyHesitatingItems WHERE id = ? LIMIT 1', 
+        tx.executeSql('SELECT * FROM MyHesitatingItems1 WHERE id = ? LIMIT 1', 
         [id],
         (txObj, resultSet) => {
             //console.log('Success', resultSet);
