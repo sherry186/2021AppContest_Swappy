@@ -37,10 +37,10 @@ export default class BreakAwaySpaceDetail extends React.Component {
     };
   }
 
-  getHesitateItemsBySpace = (spaceName) => {
+  getHesitateItemsBySpace = (spaceId) => {
     database.transaction(tx => {
-        tx.executeSql('SELECT * FROM MyHesitatingItems WHERE spaceName = ?', 
-        [spaceName],
+        tx.executeSql('SELECT * FROM MyHesitatingItems1 WHERE spaceId = ?', 
+        [spaceId],
         (txObj, resultSet) => {
             //console.log('Success', resultSet);
             let item = resultSet.rows._array;

@@ -154,7 +154,7 @@ export default class BreakAway extends React.Component {
     return (
 
       <TouchableOpacity
-        onPress={() => this.props.navigation.navigate("BreakAwayItemDetail", { itemId: item.id, title: item.title, source: item.image, spaceId: item.spaceName, spaceName: this.state.spaceName, story: item.story, uploadDate: item.uploadDate })}
+        onPress={() => this.props.navigation.navigate("BreakAwayItemDetail", { itemId: item.id, title: item.title, source: item.image, spaceId: item.spaceId, spaceName: item.spaceName, story: item.story, uploadDate: item.uploadDate })}
         style={{ width: ScreenWidth * 0.3, height: ScreenWidth * 0.3, marginHorizontal: ScreenWidth * 0.03, alignSelf: 'center' }}
       >
         <Image
@@ -196,7 +196,7 @@ export default class BreakAway extends React.Component {
 
   getHesitateItems = () => {
     database.transaction(tx => {
-      tx.executeSql('SELECT * FROM MyHesitatingItems',
+      tx.executeSql('SELECT * FROM MyHesitatingItems1',
         null,
         (txObj, resultSet) => {
           //console.log('Success', resultSet);
