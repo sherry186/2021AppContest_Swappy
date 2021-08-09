@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
     },
     post: {
         fontSize: 16,
-        
+        color: colors.mono_100
     },
     title: {
       fontSize: 32,

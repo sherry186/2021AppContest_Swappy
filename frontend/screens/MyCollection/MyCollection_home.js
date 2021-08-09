@@ -114,7 +114,7 @@ const MyCollection_HOME = () => {
           <Text style={styles.post}>{item.title}</Text>
           <Text style={styles.person}>{item.author?item.author.username : "匿名"}</Text>
           <Text 
-              style={styles.person} 
+              style={styles.description} 
               ellipsizeMode={'tail'} 
               numberOfLines={2}>{item.description}</Text>
         </TouchableOpacity>
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.mono_40,
     //left: 30,
     //alignItems: 'center',
-    justifyContent: 'center',
+    //justifyContent: 'center',
     bottom: 10,
     borderColor: colors.mono_60,
       borderWidth:1,
@@ -245,11 +245,18 @@ const styles = StyleSheet.create({
     // shadowRadius: 0,
     // elevation: 3,
     },
-  person: {
+    person: {
       fontSize: 12,
+      color: colors.mono_100
     },
+  description: {
+    fontSize: 12,
+    marginTop: 7,
+    color: colors.mono_80
+  },
   post: {
       fontSize: 16,
+      color: colors.mono_100
   },
   title: {
     fontSize: 32,
