@@ -37,10 +37,10 @@ export default class BreakAwaySpaceDetail extends React.Component {
     };
   }
 
-  getHesitateItemsBySpace = (spaceName) => {
+  getHesitateItemsBySpace = (spaceId) => {
     database.transaction(tx => {
-        tx.executeSql('SELECT * FROM MyHesitatingItems WHERE spaceName = ?', 
-        [spaceName],
+        tx.executeSql('SELECT * FROM MyHesitatingItems1 WHERE spaceId = ?', 
+        [spaceId],
         (txObj, resultSet) => {
             //console.log('Success', resultSet);
             let item = resultSet.rows._array;
@@ -78,7 +78,7 @@ export default class BreakAwaySpaceDetail extends React.Component {
     return ( 
     <TouchableOpacity
         style ={styles.imageC}
-        onPress = {() => this.props.navigation.navigate("BreakAwayItemDetail", {itemId: item.id, title: item.title, source: item.image, spaceId: item.spaceName, spaceName: this.props.route.params.spaceName, story: item.story, uploadDate: item.reminderDate})}
+        onPress = {() => this.props.navigation.navigate("BreakAwayItemDetail", {itemId: item.id, title: item.title, source: item.image, spaceId: item.spaceId, spaceName: this.props.route.params.spaceName, story: item.story, uploadDate: item.reminderDate})}
         >
         <Image 
           style={{ width: "95%", height: "95%", marginLeft: "5%"}}
