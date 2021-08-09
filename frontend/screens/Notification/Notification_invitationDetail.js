@@ -59,6 +59,7 @@ function Notification_invitationDetail ({ route, navigation }) {
     const goToItemDetail = () => {
       //console.log('pressed!');
       //if groupId is null
+      console.log(requestFor_exchangeMethod);
       if(groupId == null) {
         console.log(requestFor_exchangeMethod)
         navigation.navigate('GeneralDetail', {userId: requestFor_userId, itemID: requestFor_id, title: requestFor_title, sort: requestFor_category, des: requestFor_description, method: requestFor_exchangeMethod, image: requestFor_source});
