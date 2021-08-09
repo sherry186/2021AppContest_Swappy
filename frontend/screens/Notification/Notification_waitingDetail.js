@@ -148,13 +148,13 @@ function Notification_waitingDetail ({ route }) {
 
               {/* 如果是group，又有在對方的wishlist裡面 */}
               { (groupData?.getUsersWishTags != null && groupData?.getUsersWishTags[item.category]) ? (
-              <View style = {{marginLeft: 16, backgroundColor:'gray'}}>
-                  <Text style={styles.title}>{item.title}</Text>
-                  <Text style = {{marginTop: "5%", color: colors.function_100}}>#{item.category}</Text>
+              <View style = {{ backgroundColor:colors.function_100, width: '100%'}}>
+                  <Text style={styles.titleMatched}>{item.title}</Text>
+                  <Text style = {{marginLeft: 16, marginTop: "5%", color: colors.function_60}}>#{item.category}</Text>
               </View>  ) : 
-              <View style = {{marginLeft: 16}}>
+              <View style = {{ backgroundColor:'transparent', width: '100%'}}>
                   <Text style={styles.title}>{item.title}</Text>
-                  <Text style = {{marginTop: "5%", color: colors.function_100}}>#{item.category}</Text>
+                  <Text style = {{marginLeft: 16, marginTop: "5%", color: colors.function_100}}>#{item.category}</Text>
               </View> 
               } 
           </TouchableOpacity>
@@ -327,11 +327,16 @@ const styles = StyleSheet.create({
     //marginHorizontal: 16,
   },
   title: {
+    marginLeft: 16,
     fontSize: 33,
+    color: colors.mono_100,
+    fontWeight: '900',
   },
   titleMatched: {
+    marginLeft: 16,
     color: colors.mono_40,
     fontSize: 33,
+    fontWeight: '900',
   },
   buttons: {
     //flexDirection: 'row'
