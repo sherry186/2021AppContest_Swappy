@@ -60,8 +60,10 @@ function Notification_invitationDetail ({ route, navigation }) {
       //console.log('pressed!');
       //if groupId is null
       if(groupId == null) {
+        console.log(requestFor_exchangeMethod)
         navigation.navigate('GeneralDetail', {userId: requestFor_userId, itemID: requestFor_id, title: requestFor_title, sort: requestFor_category, des: requestFor_description, method: requestFor_exchangeMethod, image: requestFor_source});
       } else {
+        console.log(requestFor_exchangeMethod)
         navigation.navigate('Group_itemDetail',{groupId: groupId, userId: requestFor_userId, itemId: requestFor_id, title: requestFor_title, dis: requestFor_description, method: requestFor_exchangeMethod, tagname: requestFor_category, image: requestFor_source});
       }
       

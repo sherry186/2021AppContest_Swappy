@@ -233,6 +233,7 @@ const MainDetail = ({ route, navigation }) =>{
               >
                 <Image
                   style ={{
+                  
                     width: ScreenWidth*0.06, 
                     height: ScreenWidth*0.06,
                     }} 
